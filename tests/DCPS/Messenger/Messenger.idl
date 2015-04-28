@@ -12,10 +12,15 @@ module Messenger {
 #pragma DCPS_DATA_KEY "Messenger::Message subject_id"
 
   struct Message {
-    string from;
-    string subject;
+    //    string from;
+    //    string subject;
     long subject_id;
-    string text;
+    //    string text;
     long   count;
+    long l3;
+    double d1;
+    long l4;
+    long l5;
+    long l6;
   };
 };

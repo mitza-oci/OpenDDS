@@ -100,10 +100,15 @@ Writer::svc()
 
     DDS::InstanceHandle_t handle = message_dw->register_instance(message);
 
-    message.from         = "Comic Book Guy";
-    message.subject      = "Review";
-    message.text         = "Worst. Movie. Ever.";
+    //    message.from         = "Comic Book Guy";
+    //    message.subject      = "Review";
+    //    message.text         = "Worst. Movie. Ever.";
     message.count        = 0;
+    message.l3 = 24;
+    message.d1 = 128;
+    message.l4 = 8;
+    message.l5 = 16;
+    message.l6 = 24;
 
     for (int i = 0; i < num_messages; i++) {
       DDS::ReturnCode_t error;

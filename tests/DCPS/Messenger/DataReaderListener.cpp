@@ -69,29 +69,33 @@ throw(CORBA::SystemException)
           valid_ = false;
         }
 
-        std::cout << "Message: subject    = " << message.subject.in() << std::endl
+        std::cout << "Message: "//subject    = " << message.subject.in() << std::endl
                   << "         subject_id = " << message.subject_id   << std::endl
-                  << "         from       = " << message.from.in()    << std::endl
+          //                  << "         from       = " << message.from.in()    << std::endl
                   << "         count      = " << message.count        << std::endl
-                  << "         text       = " << message.text.in()    << std::endl;
+                  << "         l3         = " << message.l3    << std::endl
+                  << "         d1         = " << message.d1    << std::endl
+                  << "         l4         = " << message.l4    << std::endl
+                  << "         l5         = " << message.l5    << std::endl
+                  << "         l6         = " << message.l6    << std::endl;
 
-        if (std::string("Comic Book Guy") != message.from.in() &&
-            std::string("OpenDDS-Java") != message.from.in()) {
-          std::cout << "ERROR: Invalid message.from" << std::endl;
-          valid_ = false;
-        }
-        if (std::string("Review") != message.subject.in()) {
-          std::cout << "ERROR: Invalid message.subject" << std::endl;
-          valid_ = false;
-        }
-        if (std::string("Worst. Movie. Ever.") != message.text.in()) {
-          std::cout << "ERROR: Invalid message.text" << std::endl;
-          valid_ = false;
-        }
-        if (message.subject_id != 99) {
-          std::cout << "ERROR: Invalid message.subject_id" << std::endl;
-          valid_ = false;
-        }
+        // if (std::string("Comic Book Guy") != message.from.in() &&
+        //     std::string("OpenDDS-Java") != message.from.in()) {
+        //   std::cout << "ERROR: Invalid message.from" << std::endl;
+        //   valid_ = false;
+        // }
+        // if (std::string("Review") != message.subject.in()) {
+        //   std::cout << "ERROR: Invalid message.subject" << std::endl;
+        //   valid_ = false;
+        // }
+        // if (std::string("Worst. Movie. Ever.") != message.text.in()) {
+        //   std::cout << "ERROR: Invalid message.text" << std::endl;
+        //   valid_ = false;
+        // }
+        // if (message.subject_id != 99) {
+        //   std::cout << "ERROR: Invalid message.subject_id" << std::endl;
+        //   valid_ = false;
+        // }
       } else if (si.instance_state == DDS::NOT_ALIVE_DISPOSED_INSTANCE_STATE) {
         ACE_DEBUG((LM_DEBUG, ACE_TEXT("%N:%l: INFO: instance is disposed\n")));
 
