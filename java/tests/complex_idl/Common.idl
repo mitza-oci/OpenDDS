@@ -1,0 +1,18 @@
+
+module Complex_Idl {
+
+    struct CastMember {
+        string python;
+        string role;
+    };
+
+    struct Quote {
+        string skit_name;
+        string episode_name;
+
+        CastMember cast_member;
+
+        string line;
+    };
+
+};

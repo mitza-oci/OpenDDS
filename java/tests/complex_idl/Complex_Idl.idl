@@ -8,24 +8,11 @@
 #pragma DCPS_DATA_TYPE "Complex_Idl::Data"
 #pragma DCPS_DATA_KEY "Complex_Idl::Data id"
 
+#include "Common.idl"
+
 #include "tao/OctetSeq.pidl"
-#include "tao/StringSeq.pidl"
 
 module Complex_Idl {
-
-    struct CastMember {
-        string python;
-        string role;
-    };
-
-    struct Quote {
-        string skit_name;
-        string episode_name;
-
-        CastMember cast_member;
-
-        string line;
-    };
 
     enum DataType { DATA_IDL, DATA_STREAM };
 

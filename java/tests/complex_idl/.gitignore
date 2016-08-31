@@ -19,3 +19,12 @@
 /Complex_IdlS.cpp
 /Complex_IdlS.inl
 /Complex_IdlTypeSupportS.h
+/CommonC.cpp
+/CommonC.h
+/CommonC.inl
+/CommonJC.cpp
+/CommonJC.h
+/CommonS.cpp
+/CommonS.h
+/CommonTypeSupportImpl.cpp
+/CommonTypeSupportImpl.h

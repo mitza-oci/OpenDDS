@@ -10,15 +10,13 @@ project: dcpslib, dcps_tcp, dcps_test_java {
 
     dynamicflags    += COMPLEX_IDL_TEST_BUILD_DLL
 
-    // Older versions of Visual Studio will create the intermediate directories
-    // in all-lowercase, so we have to create them first to get the correct case.
-    specific(vc71, vc8) {
-        prebuild    += <%mkdir%> Complex_Idl 2<%gt%> <%nul%> <%or%> <%cat%> <%nul%> <%gt%> <%nul%>
-        prebuild    += <%mkdir%> classes<%slash%>Complex_Idl 2<%gt%> <%nul%> <%or%> <%cat%> <%nul%> <%gt%> <%nul%>
+    TypeSupport_Files {
+        Complex_Idl.idl
     }
 
     TypeSupport_Files {
-        Complex_Idl.idl
+        dcps_ts_flags += -SI
+        Common.idl
     }
 
     verbatim(gnuace, bottom, 1) {
