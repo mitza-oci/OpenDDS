@@ -40,7 +40,6 @@ add_ace_exe(DDS_BuiltInTopicTest_Subscriber
   SOURCE_FILES subscriber.cpp
                DataReaderListener.cpp
   HEADER_FILES DataReaderListener.h
-  REQUIRES BUILT_IN_TOPICS
   FOLDER tests/DCPS/BuiltInTopicTest
   LINK_LIBRARIES DDS_BuiltInTopicTest_idl
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
@@ -51,7 +50,6 @@ add_ace_exe(DDS_BuiltInTopicTest_Subscriber
 add_ace_exe(DDS_BuiltInTopicTest_Monitor
   OUTPUT_NAME monitor
   SOURCE_FILES monitor.cpp
-  REQUIRES BUILT_IN_TOPICS
   FOLDER tests/DCPS/BuiltInTopicTest
   LINK_LIBRARIES DDS_BuiltInTopicTest_idl
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}

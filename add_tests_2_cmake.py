@@ -111,17 +111,44 @@ for filename, test_group in testcases.iteritems():
       case._requires = case._requires - test_group_requires
   file_content = ""
   requires_written = False
+  in_target_requires_clause = False
+  target_requires = []
+  if filename == "performance-tests/DCPS/InfoRepo_population/CMakeLists.txt":
+    debug=True
+  else:
+    debug=False
   with open(filename, "r") as myfile:
     for line in myfile:
       match = re.match("^requires\(([^\)]+)\)",line)
       if match:
-        new_requires = set.union(test_group_requires, shlex.split(match.group(1)))
+        matched_requires = []
+        for x in shlex.split(match.group(1)):
+          if x.find(' ') > 0: ## this requirement contains space, we need to put the quotes back
+            matched_requires.append('"%s"' % x)
+          else:
+            matched_requires.append(x)
+
+        new_requires = set.union(test_group_requires, matched_requires)
         file_content += "requires(%s)\n" % " ".join(new_requires)
         requires_written = True
       elif not requires_written and line.startswith("add_ace") and len(test_group_requires):
+        new_requires = test_group_requires
         requires_written = True
         file_content += "requires(%s)\n\n" % " ".join(test_group_requires)
         file_content += line
+      elif line.startswith("  REQUIRES "):
+        in_target_requires_clause = True
+        target_requires.append(line[len("  REQUIRES "):].strip())
+      elif in_target_requires_clause:
+        if line.startswith("   "): ## if this line starts with more than 2 spaces, it's a continuation of the previous requires statement
+          target_requires.append(line.strip())
+        else:
+          target_requires = set(target_requires) - new_requires
+          if len(target_requires):
+            file_content += "  REQUIRES " + "\n           ".join(target_requires) + "\n"
+          file_content += line
+          in_target_requires_clause = False
+          target_requires = []
       elif line.startswith("include(${DDS_ROOT}/cmake/AddDdsTest.cmake)"):
         break
       else:

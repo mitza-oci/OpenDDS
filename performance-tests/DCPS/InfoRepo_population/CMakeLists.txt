@@ -1,10 +1,10 @@
+requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(InfoRepo_population_SyncServer
   OUTPUT_NAME syncServer
   SOURCE_FILES SyncServer.cpp
                SyncExt_i.cpp
   HEADER_FILES SyncExt_i.h
-  REQUIRES "NOT MINIMUM_CORBA"
   FOLDER performance-tests/DCPS/InfoRepo_population
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync

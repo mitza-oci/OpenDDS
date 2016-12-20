@@ -23,8 +23,6 @@ add_ace_exe(SubscriberCycle_subscriber
                ProgressIndicator.cpp
   HEADER_FILES SubscriberListenerImpl.h
                ProgressIndicator.h
-  REQUIRES CONTENT_FILTERED_TOPIC
-           CONTENT_SUBSCRIPTION
   FOLDER tests/DCPS/SubscriberCycle
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType

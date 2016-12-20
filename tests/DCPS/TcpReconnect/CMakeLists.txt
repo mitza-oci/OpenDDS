@@ -10,7 +10,6 @@ requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_lib(DDS_TcpReconnect_idl
   OUTPUT_NAME DDS_TcpReconnect_idl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER tests/DCPS/TcpReconnect
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
@@ -28,7 +27,6 @@ add_ace_exe(DDS_TcpReconnect_Publisher
   SOURCE_FILES publisher.cpp
                Writer.cpp
   HEADER_FILES Writer.h
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER tests/DCPS/TcpReconnect
   LINK_LIBRARIES OpenDDS_Shmem
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
@@ -45,7 +43,6 @@ add_ace_exe(DDS_TcpReconnect_Subscriber
   SOURCE_FILES subscriber.cpp
                DataReaderListener.cpp
   HEADER_FILES DataReaderListener.h
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER tests/DCPS/TcpReconnect
   LINK_LIBRARIES OpenDDS_Shmem
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
