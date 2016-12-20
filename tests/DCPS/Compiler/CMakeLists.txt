@@ -1,0 +1,13 @@
+
+project(Compiler CXX)
+cmake_minimum_required(VERSION 3.1)
+
+if (NOT DDS_ROOT)
+  find_package(OpenDDS REQUIRED CONFIG)
+endif()
+add_subdirectory(idl_test3_lib)
+add_subdirectory(namespace_conflict)
+add_subdirectory(idl_test3_main)
+add_subdirectory(idl_test2_lib)
+add_subdirectory(idl_test1_lib)
+add_subdirectory(idl_test1_main)

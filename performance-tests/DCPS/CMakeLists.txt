@@ -1,0 +1,18 @@
+
+project(DCPS CXX)
+cmake_minimum_required(VERSION 3.1)
+
+if (NOT DDS_ROOT)
+  find_package(OpenDDS REQUIRED CONFIG)
+endif()
+add_subdirectory(TCPProfilingTest)
+add_subdirectory(TypeNoKeyBounded)
+add_subdirectory(UDPListenerTest)
+add_subdirectory(SimpleLatency)
+add_subdirectory(Priority)
+add_subdirectory(Sync)
+add_subdirectory(UDPNoKeyTest)
+add_subdirectory(InfoRepo_population)
+add_subdirectory(TCPListenerTest)
+add_subdirectory(MulticastListenerTest)
+add_subdirectory(SimpleE2ETest)
