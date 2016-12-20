@@ -15,7 +15,7 @@ PerlDDS::add_lib_path('../FooType');
 my $test = new PerlDDS::TestFramework();
 
 $test->setup_discovery();
-$test->process('test', 'test');
+$test->process('test', 'tester');
 $test->start_process('test');
 
 exit $test->finish(300);

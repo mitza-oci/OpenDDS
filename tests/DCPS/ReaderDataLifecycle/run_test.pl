@@ -18,7 +18,7 @@ $test->setup_discovery();
 $test->enable_console_logging();
 $test->{dcps_debug_level} = 1;
 
-$test->process('test', 'test');
+$test->process('test', 'tester');
 $test->start_process('test');
 
 exit $test->finish(300);

@@ -22,7 +22,7 @@ unlink $dcpsrepo_ior;
 $DCPSREPO = PerlDDS::create_process("$ENV{DDS_ROOT}/bin/DCPSInfoRepo",
                                     "-o $dcpsrepo_ior ");
 
-$Test = PerlDDS::create_process("test", "$test_opts");
+$Test = PerlDDS::create_process("tester", "$test_opts");
 
 print $DCPSREPO->CommandLine() . "\n";
 $DCPSREPO->Spawn();

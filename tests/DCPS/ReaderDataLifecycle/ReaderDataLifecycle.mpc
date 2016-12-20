@@ -2,11 +2,11 @@
 //
 
 project: dcpsexe, dcps_transports_for_test {
-  exename   = test
-  
+  exename   = tester
+
   after    += DcpsFooType
   libs     += DcpsFooType
-  
+
   includes += ../FooType
   libpaths += ../FooType
 

@@ -17,7 +17,7 @@ $test->setup_discovery();
 
 $test->enable_console_logging();
 
-$test->process('test', 'test', "@ARGV");
+$test->process('test', 'tester', "@ARGV");
 $test->start_process('test');
 
 exit $test->finish(300);

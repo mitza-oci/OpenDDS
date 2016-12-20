@@ -49,7 +49,7 @@ unlink $dcpsrepo_ior;
 my $DCPSREPO = PerlDDS::create_process("$DDS_ROOT/bin/DCPSInfoRepo",
                                        "-o $dcpsrepo_ior ");
 
-my $Test = PerlDDS::create_process("test", $test_opts);
+my $Test = PerlDDS::create_process("tester", $test_opts);
 
 unless ($is_rtps_disc) {
   print $DCPSREPO->CommandLine() . "\n";

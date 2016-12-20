@@ -2,13 +2,13 @@
 //
 
 project: dcpsexe, dcps_tcp {
-  exename   = test
+  exename   = tester
 
   requires += object_model_profile
-  
+
   after    += DcpsFooType
   libs     += DcpsFooType
-  
+
   includes += ../FooType
   libpaths += ../FooType
 
