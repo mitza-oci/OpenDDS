@@ -10,6 +10,7 @@ import textwrap
 override_cmakefiles = False
 project_directory = ""
 root = None
+package = ""
 cmake_file_preemble = '''
 project({0} CXX)
 cmake_minimum_required(VERSION 3.1)
@@ -18,7 +19,7 @@ if (NOT {1})
   find_package({2} REQUIRED CONFIG)
 endif()
 '''
-common_target_properties = ["output_name", "source_files", "compile_definitions", "header_files", "inline_files", "template_files", "requires", "folder"]
+common_target_properties = ["output_name", "package", "compile_definitions", "requires", "folder"]
 common_exe_properties = common_target_properties + ["include_directories", "link_libraries"]
 common_lib_properties = common_target_properties + ["define_symbol", "public_include_directories", "public_link_libraries"]
 
@@ -100,6 +101,7 @@ class MPCNode:
       self.generated_files = set()
       self.compile_definitions = set()
       self.is_face = False
+      self.install_this_target =False
       if root:
         self.folder = os.path.relpath(self.parent().dir, root)
 
@@ -130,91 +132,189 @@ class MPCNode:
       sys.stderr.write("%s doesnot match project_pattern\n"% self.content)
       exit(1)
 
-  def handle_mpc_project_bases(self):
-    ignore_set = set(['avoids_ace_for_tao', 'dds_macros', 'dcps_ts_defaults', 'taolib_with_idl', 'coverage_optional', 'taoidldefaults', 'face_idl_test_config'])
+  def handle_mpb_ace_mc(self):
+    self.requires.add('"TARGET ACE_Monitor"')
+    self.link_targets.add('ACE_Monitor')
 
-    bases = list(self.target_bases)
-    for base in bases:
-      if 'ace_mc' == base:
-        self.requires.add('"TARGET ACE_Monitor"')
-        self.link_targets.add('ACE_Monitor')
-      elif 'qos' == base:
-        self.requires.add('"TARGET ACE_QoS"')
-        self.link_targets.add('ACE_QoS')
-      elif 'ssl' == base:
-        self.requires.add('"TARGET ACE_SSL"')
-        self.link_targets.add('ACE_SSL')
-      elif 'wfmo' == base or 'winregistry' == base:
-        self.requires.add('WIN32')
-      elif 'ace_xtreactor' == base:
-        self.requires.add('"TARGET ACE_XtReactor"')
-        self.link_targets.add('ACE_XtReactor')
-      elif 'ace_mfc' == base:
-        self.requires.add('MFC_FOUND')
-        self.parent().find_packages.add('MFC')
-      elif 'aceexe' == base:
-        self.is_exe = True
-      elif 'acelib' == base:
-        pass
-      elif 'orbsvcsexe' == base:
-        self.is_exe = True
-        self.link_targets.add('TAO_Codeset')
-        self.compile_definitions.add('TAO_EXPLICIT_NEGOTIATE_CODESETS')
-        self.parent().find_packages.add('TAO_orbsvcs REQUIRED CONFIG')
-      elif 'ftorb' == base:
-        self.link_targets.add('TAO_FT_ClientORB')
-        self.link_targets.add('TAO_FT_ServerORB')
-        self.parent().find_packages.add('TAO_orbsvcs REQUIRED CONFIG')
-      elif 'iormanip' == base:
-        self.link_targets.add('TAO_IORManip')
-      elif 'svc_utils' == base:
-        self.link_targets.add('TAO_Svc_Utils')
-        self.parent().find_packages.add('TAO_orbsvcs REQUIRED CONFIG')
-      elif 'iortable' == base:
-        self.link_targets.add('TAO_IORTable')
-      elif 'portableserver' == base:
-        self.link_targets.add('TAO_PortableServer')
-      elif base in ['dcps', 'dcpslib']:
-        pass
-      elif 'dcps_test_lib' == base:
-        self.source_files = []
-        self.header_files = []
-        self.template_files = []
-        self.inline_files = []
-      elif 'dcpsexe' == base:
-        self.link_targets.add("${DCPS_DEFAULT_DISCOVERY_LIBS}")
-        self.is_exe = True
-      elif 'dcps_transports_for_test' == base:
-        self.link_targets.add('${DCPS_TRANSPORTS_FOR_TEST}')
-      elif 'mc_test_utils' == base:
-        self.libs.append('MC_Test_Utilities')
+  def handle_mpb_qos(self):
+    self.requires.add('"TARGET ACE_QoS"')
+    self.link_targets.add('ACE_QoS')
+
+  def handle_mpb_ssl(self):
+    self.requires.add('"TARGET ACE_SSL"')
+    self.link_targets.add('ACE_SSL')
+
+  def handle_mpb_wfmo(self):
+    self.requires.add('WIN32')
+
+  def handle_mpb_winreistry(self):
+    self.requires.add('WIN32')
+
+  def handle_mpb_ace_xtreactor(self):
+    self.requires.add('"TARGET ACE_XtReactor"')
+    self.link_targets.add('ACE_XtReactor')
+
+  def handle_mpb_ace_mfc(self):
+    self.requires.add('MFC_FOUND')
+    self.parent().find_packages.add('MFC')
+
+  def handle_mpb_aceexe(self):
+    self.is_exe = True
+
+  def handle_mpb_negotiate_codesets(self):
+    self.link_targets.add('TAO_Codeset')
+    self.compile_definitions.add('TAO_EXPLICIT_NEGOTIATE_CODESETS')
+
+  def handle_mpb_orbsvcsexe(self):
+    self.handle_mpb_taoexe()
+    self.handle_mpb_negotiate_codesets()
+    self.handle_mpb_anytypecode()
+    self.parent().find_packages.add('TAO_orbsvcs REQUIRED CONFIG')
+
+  def handle_mpb_orbsvcslib(self):
+    self.handle_mpb_anytypecode()
+    self.tao_idl_flags.append("-I${TAO_ROOT}/orbsvcs")
+    self.parent().find_packages.add('TAO_orbsvcs REQUIRED CONFIG')
+
+  def handle_mpb_anytypecode():
+    self.link_targets.add('TAO_AnyTypeCode')
+
+  def handle_mpb_ftorb(self):
+    self.handle_mpb_orbsvcslib()
+    self.link_targets.add('TAO_FT_ClientORB')
+    self.link_targets.add('TAO_FT_ServerORB')
+
+  def handle_mpb_conv_lib(self):
+    self.install_this_target = True
+
+  def handle_mpb_install_bin(self):
+    self.install_this_target = True
+
+  def handle_mpb_install_lib(self):
+    self.install_this_target = True
+
+  def handle_mpb_valuetype(self):
+    self.link_targets.add('TAO_Valuetype')
+    self.handle_avoid_corba_e_micro()
+
+  def handle_avoid_corba_e_micro(self):
+    self.requires.add('"NOT CORBA_E_COMPACT"')
+
+  def handle_avoid_minimum_corba(self):
+    self.requires.add('"NOT MINIMUM_CORBA"')
+
+  def handle_avoid_corba_e_compact(self):
+    self.requires.add('"NOT CORBA_E_MICRO"')
+
+  def handle_mpb_iormanip(self):
+    self.link_targets.add('TAO_IORManip')
+
+  def handle_mpb_svc_utils(self):
+    self.handle_mpb_orbsvcslib()
+    self.link_targets.add('TAO_Svc_Utils')
+
+  def handle_mpb_iortable(self):
+    self.link_targets.add('TAO_IORTable')
+
+  def handle_mpb_portableserver(self):
+    self.link_targets.add('TAO_PortableServer')
+
+  def handle_mpb_corba_messaging(self):
+    self.requires.add('CORBA_MESSAGING')
+
+  def handle_mpb_messaging_optional(self):
+    self.link_targets.add('${OPTIONAL_Messaging}')
+
+  def handle_mpb_messaging(self):
+    self.link_targets.add('TAO_Messaging')
+
+  def handle_mpb_tao_versioning_idl_defaults(self):
+    self.tao_idl_flags.append("${TAO_VERSIONING_IDL_FLAGS}")
+
+  def handle_mpb_dynamicinterface(self):
+    self.handle_mpb_avoids_minimum_corba()
+    self.handle_mpb_avoids_corba_e_compact()
+    self.handle_mpb_messaging()
+
+  def handle_mpb_dcps_test_lib(self):
+    self.source_files = []
+    self.header_files = []
+    self.template_files = []
+    self.inline_files = []
+
+  def hanle_mpb_acexml(self):
+    self.link_targets.add('ACEXML_Parser')
+    self.requires('"TARGET ACEXML"')
+
+  def handle_mpb_pi_server(self):
+    self.link_targets.add('TAO_PI_Server')
+
+  def handle_mpb_dcpsexe(self):
+    self.link_targets.add("${DCPS_DEFAULT_DISCOVERY_LIBS}")
+    self.is_exe = True
+
+  def handle_mpb_dcps_transports_for_test(self):
+    self.link_targets.add('${DCPS_TRANSPORTS_FOR_TEST}')
+
+  def handle_mpb_mc_test_utils(self):
+    self.libs.append('MC_Test_Utilities')
+
+  def handle_mpb_dcps_monitor(self):
+    self.link_targets.add("OpenDDS_monitor")
+
+  def handle_mpb_dcps_test(self):
+    self.libs.append("TestFramework")
+
+  def handle_mpb_dcps_inforepodiscovery(self):
+    self.link_targets.add("OpenDDS_InfoRepoDiscovery")
+
+  def handle_mpb_dcps_rtpsexe(self):
+    self.link_targets.add("OpenDDS_Rtps")
+    self.is_exe = True
+
+  def handle_mpb_dcps_default_discovery(self):
+    self.link_targets.add("${DCPS_DEFAULT_DISCOVERY_LIBS}")
+
+  def handle_mpb_content_subscription(self):
+    self.requires.add('CONTENT_SUBSCRIPTION')
+
+  def handle_mpb_content_subscription_core(self):
+    self.requires.add('CONTENT_SUBSCRIPTION_CORE')
+
+  def handle_mpb_opendds_face(self):
+    self.link_targets.add('OpenDDS_FACE')
+    self.is_face = True
+
+  def handle_mpb_dds_model(self):
+    self.link_targets.add('OpenDDS_Model')
+
+  def handle_mpb_dcps_qos_xml_handler(self):
+    self.link_targets.add('OpenDDS_QOS_XML_XSC_Handler')
+    self.requires.add('"TARGET OpenDDS_QOS_XML_XSC_Handler"')
+
+  def handle_mpb_taoexe(self):
+    self.is_exe = True
+
+  def handle_mpb_dcps_transports(self, base):
+    self.link_targets.add("OpenDDS" + base[4:].title())
+
+
+  def handle_mpc_project_bases(self):
+    ignore_set = set(['avoids_ace_for_tao',
+                     'dds_macros',
+                     'dcps_ts_defaults',
+                     'taolib_with_idl',
+                     'coverage_optional',
+                     'taoidldefaults',
+                     'face_idl_test_config',
+                     'ace_lib', 'dcps', 'dcpslib'])
+
+    for base in list(self.target_bases):
+      handler = getattr(self, 'handle_mpb_'+ base, None)
+      if handler:
+        handler()
       elif base in ['dcps_tcp', 'dcps_udp', 'dcps_multicast', 'dcps_shmem', 'dcps_rtps_udp', 'dcps_rtps']:
-        self.link_targets.add("OpenDDS" + base[4:].title())
-      elif 'dcps_monitor' == base:
-        self.link_targets.add("OpenDDS_monitor")
-      elif 'dcps_test' == base:
-        self.libs.append("TestFramework")
-      elif 'dcps_inforepodiscovery' == base:
-        self.link_targets.add("OpenDDS_InfoRepoDiscovery")
-      elif 'dcps_rtpsexe' == base:
-        self.link_targets.add("OpenDDS_Rtps")
-        self.is_exe = True
-      elif 'dcps_default_discovery' == base:
-        self.link_targets.add("${DCPS_DEFAULT_DISCOVERY_LIBS}")
-      elif 'content_subscription' == base:
-        self.requires.add('CONTENT_SUBSCRIPTION')
-      elif 'content_subscription_core' == base:
-        self.requires.add('CONTENT_SUBSCRIPTION_CORE')
-      elif 'opendds_face' == base:
-        self.link_targets.add('OpenDDS_FACE')
-        self.is_face = True
-      elif 'dds_model' == base:
-        self.link_targets.add('OpenDDS_Model')
-      elif 'dcps_qos_xml_handler' == base:
-        self.link_targets.add('OpenDDS_QOS_XML_XSC_Handler')
-        self.requires.add('"TARGET OpenDDS_QOS_XML_XSC_Handler"')
-      elif 'taoexe' == base:
-        self.is_exe = True
+        self.handle_mpb_dcps_transports(base)
       elif base not in ignore_set:
         sys.stderr.write("Warining: %s : the base project %s is not translated\n" % (self.name, base))
 
@@ -467,9 +567,9 @@ class MPCNode:
       if self.is_face:
         return "add_face_idl_files(\n{0})\n".format(properties_text)
       else:
-        return "add_dds_idl_files(\n{0})\n".format(properties_text)
+        return "dds_idl_sources(\n{0})\n".format(properties_text)
     elif len(self.idl_files):
-      return "add_tao_idl_files(\n{0})\n".format(self.format_target_properties_in_list([ "targets", "stub_targets", "skel_targets", "idl_flags", "idl_files" ]))
+      return "tao_idl_sources(\n{0})\n".format(self.format_target_properties_in_list([ "targets", "stub_targets", "skel_targets", "idl_flags", "idl_files" ]))
     return ""
 
   def remove_generated_files_from_sources(self):
@@ -513,13 +613,25 @@ class MPCNode:
     if num_tao_libs > 0:
       self.link_targets.discard('ACE')
 
+
+    if package and self.install_this_target:
+      self.package = package
+      package_or_ace = 'package'
+    else:
+      package_or_ace = 'ace'
+
     if self.is_exe:
       self.link_libraries = self.link_targets
-      result =  "add_ace_exe(%s\n" %  self.name + self.format_target_properties_in_list(common_exe_properties)+ ")\n"
+      result =  "add_%s_exe(%s\n" %  (package_or_ace, self.name) + self.format_target_properties_in_list(common_exe_properties)+ ")\n"
     elif not self.custom_only:
       self.public_link_libraries = self.link_targets
       self.public_include_directories = self.include_directories
-      result = "add_ace_lib(%s\n" % self.name + self.format_target_properties_in_list(common_lib_properties)+ ")\n"
+      result = "add_%s_lib(%s\n" %  (package_or_ace, self.name) + self.format_target_properties_in_list(common_lib_properties)+ ")\n"
+
+    if len(self.source_files) + len(self.header_files) + len(self.inlin_files) + len(self.tempalte_files):
+      result += "target_cxx_sources(%s\n" % self.name + self.format_target_properties_in_list(["source_files", "header_files", "inline_files", "template_files"])+ ")\n";
+
+    result + self.format_idl_files_text()
 
     if hasattr(self, 'msvc'):
       for line in  self.msvc:
@@ -530,7 +642,7 @@ class MPCNode:
         else:
           print("Warning: In {0} ({1}): {2} is not translated".format( self.parent().path, self.name, line ) )
 
-    return result + self.format_idl_files_text()
+    return result
 
 
 class CMakeProjectNode:
@@ -798,15 +910,18 @@ def main():
   parser = argparse.ArgumentParser(description='Convert MPC files into CMake files.')
   parser.add_argument('-o', '--override',action='store_true', default=False, help='override existing CMakefile.txt')
   parser.add_argument('-r', '--root', default=False, help='project root')
+  parser.add_argument('-p', '--package', default="", help='default package')
   parser.add_argument('path', nargs='?', default=os.getcwd(), help='the directory to convert')
   args = parser.parse_args()
   global override_cmakefiles
   global project_directory
   global root
+  global package
 
   override_cmakefiles = args.override
   project_directory = os.path.abspath(args.path)
   root = os.path.abspath(args.root)
+  package = args.package
 
   proj = cmake_project(args.path)
   proj.generate_cmake_files()

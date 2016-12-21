@@ -35,7 +35,7 @@ function(prepend_if_relative result prepend_string)
   set(${result} ${_result} PARENT_SCOPE)
 endfunction()
 
-##  add_target_files(<target> [SOURCE_FILE <cpp_file> ...]
+##  target_cxx_sources(<target> [SOURCE_FILE <cpp_file> ...]
 ##                            [HEADER_FILES <h_file> ...]
 ##                            [INLINE_FILES <inl_file> ...]
 ##                            [TEMPLATE_FILES <template_file> ...]
@@ -53,7 +53,7 @@ endfunction()
 ##
 ##  All files specified should be absolute path or relative to CMAKE_CURRENT_LIST_DIR
 ##
-function(add_target_files target)
+function(target_cxx_sources target)
   set(oneValueArgs SUBGROUP)
   set(multiValueArgs SOURCE_FILES HEADER_FILES INLINE_FILES TEMPLATE_FILES)
   cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -90,20 +90,20 @@ function(add_target_files target)
   endif()
 endfunction()
 
-##  glob_target_files(<target> [SUBGROUP <subgroup>])
+##  glob_target_cxx_sources(<target> [SUBGROUP <subgroup>])
 ##  -----------------
 ##  glob ${CMAKE_CURRENT_LIST_DIR} for the patterns *.cpp *.h *.inl *_T.cpp
 ##  and add them to the target with groups SOURCE_FILES, HEADER_FILES, INLINE_FILES
 ##  and TEMPLATE_FILES respectively.
 ##
-function(glob_target_files target)
+function(glob_target_cxx_sources target)
   file(GLOB sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp)
   file(GLOB headers ${CMAKE_CURRENT_LIST_DIR}/*.h)
   file(GLOB inlines ${CMAKE_CURRENT_LIST_DIR}/*.inl)
   file(GLOB templates ${CMAKE_CURRENT_LIST_DIR}/*_T.cpp)
   list(REMOVE_ITEM sources "${templates}")
 
-  add_target_files(${target}
+  target_cxx_sources(${target}
     SOURCE_FILES ${sources}
     HEADER_FILES ${headers}
     INLINE_FILES ${inlines}

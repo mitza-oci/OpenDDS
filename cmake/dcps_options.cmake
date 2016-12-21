@@ -63,8 +63,13 @@ endif()
 
 if (NO_OPENDDS_SAFETY_PROFILE)
   set(DCPS_TRANSPORTS_FOR_TEST
-    OpenDDS_Tcp OpenDDS_Udp OpenDDS_Multicast OpenDDS_Rtps_Udp OpenDDS_Shmem
+    OpenDDS_Tcp OpenDDS_Udp OpenDDS_Multicast OpenDDS_Rtps_Udp
   )
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(TEST_EXCLUDE_LABELS SHMEM CACHE INTERNAL "")
+  else()
+    list(APPEND DCPS_TRANSPORTS_FOR_TEST OpenDDS_Shmem)
+  endif()
 else()
   set(DCPS_TRANSPORTS_FOR_TEST OpenDDS_Rtps_Udp)
 endif()
