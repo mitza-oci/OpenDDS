@@ -24,12 +24,16 @@ add_package(OpenDDS
 
 set(DDS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
+enable_testing()
+
+
 add_subdirectory(dds)
 add_subdirectory(tools/modeling/codegen/model)
 add_subdirectory(examples/DCPS)
 add_subdirectory(tests)
 add_subdirectory(performance-tests)
 add_subdirectory(DevGuideExamples)
+add_subdirectory(bin/PerlDDS)
 
 
 install_package(OpenDDS

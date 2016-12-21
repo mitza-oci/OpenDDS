@@ -57,7 +57,7 @@ add_ace_exe(ishapes
                  OpenDDS_Rtps_Udp
                  Qt4::QtGui
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS ishapes
   IDL_FILES ShapeType.idl
 )

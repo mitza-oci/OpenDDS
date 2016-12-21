@@ -35,7 +35,7 @@ add_ace_exe(BenchProcess
                  ${DCPS_TRANSPORTS_FOR_TEST}
 )
 
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS BenchProcess
   IDL_FILES Test.idl
 )

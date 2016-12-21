@@ -18,7 +18,7 @@ add_ace_exe(Serializer_wstring_Publisher
                  OpenDDS_Dcps
                  ${DCPS_TRANSPORTS_FOR_TEST}
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS Serializer_wstring_Publisher
   IDL_FILES Messenger.idl
 )
@@ -33,13 +33,13 @@ add_ace_exe(Serializer_wstring_Subscriber
                  OpenDDS_Dcps
                  ${DCPS_TRANSPORTS_FOR_TEST}
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS Serializer_wstring_Subscriber
   IDL_FILES Messenger.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/Serializer_wstring/run_test.pl"

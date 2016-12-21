@@ -19,7 +19,7 @@ add_ace_exe(DCPS_Perf_TCPProfiling_Pub
   LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DCPS_Perf_TCPProfiling_Pub
   IDL_FILES testMessage.idl
 )
@@ -35,7 +35,7 @@ add_ace_exe(DCPS_Perf_TCPProfiling_Sub
   LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DCPS_Perf_TCPProfiling_Sub
   IDL_FILES testMessage.idl
 )

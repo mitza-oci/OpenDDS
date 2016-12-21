@@ -100,7 +100,7 @@ function(add_dds_idl_command Name)
 endfunction()
 
 
-function(add_dds_idl_files)
+function(dds_idl_sources)
   set(multiValueArgs TARGETS TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES)
   cmake_parse_arguments(_arg "NO_TAO_IDL" "" "${multiValueArgs}" ${ARGN})
 
@@ -161,7 +161,7 @@ endfunction()
 function(add_face_idl_files)
   set(multiValueArgs TARGETS TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES)
   cmake_parse_arguments(_arg "NO_TAO_IDL" "" "${multiValueArgs}" ${ARGN})
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS ${_arg_TARGETS}
     TAO_IDL_FLAGS ${_arg_TAO_IDL_FLAGS} ${FACE_TAO_IDL_FLAGS}
     DDS_IDL_FLAGS ${_arg_DDS_IDL_FLAGS} ${FACE_DDS_IDL_FLAGS}

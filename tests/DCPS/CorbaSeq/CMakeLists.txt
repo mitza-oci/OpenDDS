@@ -14,7 +14,7 @@ add_ace_lib(CorbaSeq_Idl
   DEFINE_SYMBOL CORBASEQ_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS CorbaSeq_Idl
   DDS_IDL_FLAGS -Wb,export_macro=CorbaSeq_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=CorbaSeq_export.h
@@ -48,7 +48,7 @@ add_ace_exe(CorbaSeq_Subscriber
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/CorbaSeq/run_test.pl"

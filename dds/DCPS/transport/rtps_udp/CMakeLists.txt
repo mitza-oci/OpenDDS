@@ -6,4 +6,4 @@ add_package_lib(OpenDDS_Rtps_Udp
   PUBLIC_LINK_LIBRARIES OpenDDS_Rtps
 )
 
-glob_target_files(OpenDDS_Rtps_Udp)
+glob_target_cxx_sources(OpenDDS_Rtps_Udp)

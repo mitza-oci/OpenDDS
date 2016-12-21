@@ -15,7 +15,7 @@ add_ace_lib(DDS_Messenger_IOGR_Imr_idl
   DEFINE_SYMBOL MESSENGER_IOGR_IMR_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DDS_Messenger_IOGR_Imr_idl
   DDS_IDL_FLAGS -Wb,export_macro=Messenger_IOGR_Imr_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Messenger_IOGR_Imr_export.h
@@ -61,5 +61,3 @@ add_ace_exe(DDS_Messenger_IOGR_Imr_Subscriber
                  DDS_Messenger_IOGR_Imr_idl
                  OpenDDS_Dcps
 )
-#####################################
-link_test_files_to_build_tree()

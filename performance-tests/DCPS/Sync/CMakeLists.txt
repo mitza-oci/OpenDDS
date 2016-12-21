@@ -34,7 +34,7 @@ add_ace_exe(Sync_Server
                  TAO_IORTable
 )
 
-add_tao_idl_files(
+tao_idl_sources(
   TARGETS Sync_ServerLib
           Sync_ClientLib
   IDL_FLAGS -Wb,export_macro=Sync_Export

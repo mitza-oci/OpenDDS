@@ -16,13 +16,13 @@ add_ace_exe(DdsDcps_UnitTest
                  OpenDDS_Dcps
                  ${DCPS_TRANSPORTS_FOR_TEST}
 )
-add_tao_idl_files(
+tao_idl_sources(
   TARGETS DdsDcps_UnitTest
   IDL_FILES MyTypeSupport.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/unit/run_test.pl"

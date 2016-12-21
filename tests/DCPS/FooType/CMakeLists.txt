@@ -7,7 +7,7 @@ add_ace_lib(DcpsFooType
   FOLDER tests/DCPS/FooType
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DcpsFooType
   DDS_IDL_FLAGS -Wb,export_macro=FooType_Export
   TAO_IDL_FLAGS -Wb,export_macro=FooType_Export

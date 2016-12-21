@@ -14,7 +14,7 @@ add_ace_exe(DDS_namespace_conflict
   LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DDS_namespace_conflict
   TAO_IDL_FLAGS -SS
   IDL_FILES Nsc.idl

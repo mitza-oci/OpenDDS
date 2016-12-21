@@ -156,7 +156,7 @@ for filename, test_group in testcases.iteritems():
 
   file_content = file_content.strip()
   file_content += "\n\ninclude(${DDS_ROOT}/cmake/AddDdsTest.cmake)\n"
-  file_content += "link_test_files_to_build_tree()\n"
+  file_content += "configure_dds_test_files()\n"
   for case in test_group:
     file_content += add_test_text.format(
         name = case.name(),

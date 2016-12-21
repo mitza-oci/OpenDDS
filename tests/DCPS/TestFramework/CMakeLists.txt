@@ -10,7 +10,7 @@ add_ace_lib(TestFramework
   DEFINE_SYMBOL TESTFRAMEWORK_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS TestFramework
   DDS_IDL_FLAGS -Wb,export_macro=TestFramework_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=TestFramework_Export.h

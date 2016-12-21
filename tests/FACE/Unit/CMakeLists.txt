@@ -45,7 +45,7 @@ add_ace_lib(FaceUnitTests_Sequences
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/FACE/Unit/run_test.pl qossettings"

@@ -15,7 +15,7 @@ add_ace_exe(RtpsMessages
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/RtpsMessages/run_test.pl"

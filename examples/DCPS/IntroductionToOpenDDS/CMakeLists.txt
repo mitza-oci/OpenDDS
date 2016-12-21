@@ -16,7 +16,7 @@ add_ace_lib(StockQuoter_Common
   PUBLIC_LINK_LIBRARIES TAO_Svc_Utils
                         OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS StockQuoter_Common
   DDS_IDL_FLAGS -Wb,export_macro=StockQuoterCommon_Export
   TAO_IDL_FLAGS -I${TAO_ROOT}/orbsvcs
@@ -53,5 +53,3 @@ add_ace_exe(StockQuoter_Subscriber
                  StockQuoter_Common
                  OpenDDS_Dcps
 )
-#####################################
-link_test_files_to_build_tree()

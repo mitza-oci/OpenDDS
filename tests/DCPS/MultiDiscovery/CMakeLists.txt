@@ -16,14 +16,14 @@ add_ace_exe(MultiDiscoveryTest
                  OpenDDS_Dcps
                  ${DCPS_TRANSPORTS_FOR_TEST}
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS MultiDiscoveryTest
   TAO_IDL_FLAGS -SS
   IDL_FILES TestMsg.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/MultiDiscovery/run_test.pl"

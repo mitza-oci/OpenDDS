@@ -19,7 +19,7 @@ add_package_exe(opendds_idl
   COMPILE_DEFINITIONS TAO_IDL_PREPROCESSOR=\"${CMAKE_CXX_COMPILER}\"
 )
 
-add_target_files(opendds_idl
+target_cxx_sources(opendds_idl
   SOURCE_FILES  be_global.cpp
                 be_init.cpp
                 be_produce.cpp

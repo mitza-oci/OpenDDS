@@ -33,7 +33,7 @@ add_ace_exe(MessengerMinimal_subscriber
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
 
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS MessengerMinimal_publisher
           MessengerMinimal_subscriber
   IDL_FILES Messenger.idl

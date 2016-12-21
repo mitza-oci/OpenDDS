@@ -28,7 +28,7 @@ add_ace_exe(DCPS_Perf_TCPListener_Sub
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 1"

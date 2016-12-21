@@ -5,4 +5,4 @@ add_package_lib(OpenDDS_Model
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
 )
 
-glob_target_files(OpenDDS_Model)
+glob_target_cxx_sources(OpenDDS_Model)

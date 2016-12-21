@@ -3,7 +3,7 @@ add_subdirectory(Subscriber)
 add_subdirectory(Publisher)
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/FACE/Messenger/run_test.pl"

@@ -25,7 +25,7 @@ add_ace_exe(DDS_ManyToMany_Subscriber
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/ManyToMany/run_test.pl tcp 12to12 small"

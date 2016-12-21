@@ -8,7 +8,7 @@ set(dcps_flags
 
 set(dcps_tao_flags ${dcps_flags} -SS)
 
-add_tao_idl_files(
+tao_idl_sources(
   TARGETS OpenDDS_Dcps
   IDL_FLAGS ${dcps_tao_flags}
   IDL_FILES   DdsDcps.idl
@@ -23,7 +23,7 @@ add_tao_idl_files(
 if (NO_OPENDDS_SAFETY_PROFILE)
   if (BUILT_IN_TOPICS)
 
-    add_dds_idl_files(
+    dds_idl_sources(
       TARGETS OpenDDS_Dcps
       DDS_IDL_FLAGS ${dcps_flags}
       TAO_IDL_FLAGS ${dcps_tao_flags}
@@ -31,14 +31,14 @@ if (NO_OPENDDS_SAFETY_PROFILE)
                  DdsDcpsCore.idl
                  DdsDcpsInfrastructure.idl
     )
-    add_dds_idl_files(
+    dds_idl_sources(
       TARGETS OpenDDS_Dcps
       DDS_IDL_FLAGS -SI ${dcps_flags}
       TAO_IDL_FLAGS ${dcps_tao_flags}
       IDL_FILES DdsDcpsInfoUtils.idl
     )
   else(BUILT_IN_TOPICS)
-    add_dds_idl_files(
+    dds_idl_sources(
       TARGETS OpenDDS_Dcps
       DDS_IDL_FLAGS ${dcps_flags} -SI
       TAO_IDL_FLAGS ${dcps_tao_flags}
@@ -47,7 +47,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
                 DdsDcpsInfoUtils.idl
     )
 
-   add_dds_idl_files(
+   dds_idl_sources(
       TARGETS OpenDDS_Dcps
       DDS_IDL_FLAGS ${dcps_flags}
       TAO_IDL_FLAGS ${dcps_tao_flags}
@@ -55,7 +55,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     )
   endif(BUILT_IN_TOPICS)
 
-  add_tao_idl_files(
+  tao_idl_sources(
     TARGETS OpenDDS_Dcps
     IDL_FLAGS ${dcps_flags}
     IDL_FILES  DdsDcpsConditionSeq.idl
@@ -64,7 +64,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
 
 else(NO_OPENDDS_SAFETY_PROFILE)
 
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp
     TAO_IDL_FLAGS ${dcps_tao_flags}
@@ -72,27 +72,27 @@ else(NO_OPENDDS_SAFETY_PROFILE)
               DdsDcpsInfoUtils.idl
   )
 
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp -ZC DdsDcpsInfrastructureC.h
     IDLS DdsDcpsConditionSeq.idl
   )
 
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp -ZC DdsDcpsSubscriptionC.h
     TAO_IDL_FLAGS ${dcps_tao_flags}
     IDL_FILES DdsDcpsDataReaderSeq.idl
   )
 
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -Lspcpp
     TAO_IDL_FLAGS ${dcps_tao_flags}
     IDL_FILES DdsDcpsCore.idl
   )
 
-  add_tao_idl_files(
+  tao_idl_sources(
     TARGETS OpenDDS_Dcps
     IDL_FLAGS ${dcps_tao_flags}
     IDL_FILES DdsDcpsCoreTypeSupport.idl

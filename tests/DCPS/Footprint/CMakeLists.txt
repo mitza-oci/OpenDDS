@@ -13,7 +13,7 @@ add_ace_lib(DDS_Footprint_idl
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DDS_Footprint_idl
   DDS_IDL_FLAGS -Wb,export_macro=Messenger_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Messenger_export.h

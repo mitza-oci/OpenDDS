@@ -13,14 +13,14 @@ add_ace_exe(WriteDataContainer
   LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS WriteDataContainer
   TAO_IDL_FLAGS -SS
   IDL_FILES Simple.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/WriteDataContainer/run_test.pl"

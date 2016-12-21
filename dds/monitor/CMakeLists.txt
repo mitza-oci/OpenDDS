@@ -7,14 +7,14 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
   )
 
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS OpenDDS_monitor
     DDS_IDL_FLAGS -Wb,export_macro=OpenDDS_monitor_Export
     TAO_IDL_FLAGS -Wb,export_macro=OpenDDS_monitor_Export -Wb,export_include=dds/monitor/monitor_export.h
     IDL_FILES monitor.idl
   )
 
-  glob_target_files(OpenDDS_monitor)
+  glob_target_cxx_sources(OpenDDS_monitor)
 
   if (MSVC)
     target_compile_options(OpenDDS_monitor /bigobj)

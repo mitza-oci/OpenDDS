@@ -8,7 +8,7 @@ add_ace_exe(register_instance_topic
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/RegisterInstance/run_test.pl"

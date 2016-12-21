@@ -7,9 +7,9 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     PUBLIC_LINK_LIBRARIES OpenDDS_Dcps OpenDDS_Tcp
   )
 
-  glob_target_files(OpenDDS_InfoRepoDiscovery)
+  glob_target_cxx_sources(OpenDDS_InfoRepoDiscovery)
 
-  add_tao_idl_files(
+  tao_idl_sources(
     TARGETS OpenDDS_InfoRepoDiscovery
     IDL_FLAGS -Wb,export_macro=OpenDDS_InfoRepoDiscovery_Export -Wb,export_include=dds/DCPS/InfoRepoDiscovery/InfoRepoDiscovery_Export.h
     IDL_FILES Info.idl

@@ -33,7 +33,7 @@ add_ace_exe(SubscriberCycle_subscriber
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/SubscriberCycle/run_test.pl"

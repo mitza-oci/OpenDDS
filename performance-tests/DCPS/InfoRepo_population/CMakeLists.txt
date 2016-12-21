@@ -44,7 +44,7 @@ add_ace_exe(InfoRepo_population_Subscriber
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
 
-add_tao_idl_files(
+tao_idl_sources(
   TARGETS InfoRepo_population_SyncServer
           InfoRepo_population_Publisher
           InfoRepo_population_Subscriber
@@ -52,7 +52,7 @@ add_tao_idl_files(
   IDL_FILES SyncExt.idl
 )
 
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS InfoRepo_population_Publisher
           InfoRepo_population_Subscriber
   TAO_IDL_FLAGS -I../Sync
@@ -60,7 +60,7 @@ add_dds_idl_files(
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("performance-tests/DCPS/InfoRepo_population/run_test.pl"

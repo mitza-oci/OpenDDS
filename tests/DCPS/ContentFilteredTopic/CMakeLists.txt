@@ -16,13 +16,13 @@ add_ace_exe(ContentFilteredTopic
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Rtps_Udp
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS ContentFilteredTopic
   IDL_FILES Messenger.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/ContentFilteredTopic/run_test.pl"

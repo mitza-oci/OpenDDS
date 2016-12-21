@@ -8,7 +8,7 @@ add_ace_lib(idl_test3_lib
 if (MSVC)
   target_compile_options(idl_test3_lib /bigobj)
 endif()
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS idl_test3_lib
   DDS_IDL_FLAGS -Wb,export_macro=FooLib_Export
                 -Wb,export_include=foolib_export.h

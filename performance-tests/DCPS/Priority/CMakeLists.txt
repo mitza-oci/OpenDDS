@@ -15,7 +15,7 @@ add_ace_lib(perf_Priority_idl
   DEFINE_SYMBOL PRIORITY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS perf_Priority_idl
   DDS_IDL_FLAGS -Wb,export_macro=Priority_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Priority_export.h

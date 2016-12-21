@@ -1,1 +1,1 @@
-glob_target_files(OpenDDS_FACE)
+glob_target_cxx_sources(OpenDDS_FACE)

@@ -15,7 +15,7 @@ add_ace_lib(DDS_KeyTest_idl
 if (MSVC)
   target_compile_options(DDS_KeyTest_idl /bigobj)
 endif()
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DDS_KeyTest_idl
   DDS_IDL_FLAGS -Wb,export_macro=KeyTest_Export
   TAO_IDL_FLAGS -Wb,export_include=KeyTest_export.h
@@ -55,7 +55,7 @@ add_ace_exe(KeyTest_MD5
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/KeyTest/run_test.pl keymarshalling"

@@ -14,13 +14,13 @@ add_ace_lib(MetaStructTest
   FOLDER tests/DCPS/MetaStruct
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS MetaStructTest
   IDL_FILES MetaStructTest.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/MetaStruct/run_test.pl"

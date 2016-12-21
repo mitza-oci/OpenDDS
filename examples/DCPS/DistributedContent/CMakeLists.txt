@@ -20,9 +20,7 @@ add_ace_exe(DDS_DistributedContent_Node
   LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS DDS_DistributedContent_Node
   IDL_FILES FileInfo.idl
 )
-#####################################
-link_test_files_to_build_tree()

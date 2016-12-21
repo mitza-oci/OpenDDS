@@ -14,7 +14,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     PUBLIC_LINK_LIBRARIES TAO_IORTable OpenDDS_InfoRepoDiscovery TAO_ImR_Client TAO_Svc_Utils ${optional_build_in_topic_library}
   )
 
-  add_target_files(OpenDDS_InfoRepoLib
+  target_cxx_sources(OpenDDS_InfoRepoLib
     SOURCE_FILES  DCPSInfo_i.cpp
                   DcpsInfo_pch.cpp
                   DCPS_IR_Domain.cpp
@@ -50,7 +50,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     PUBLIC_LINK_LIBRARIES OpenDDS_InfoRepoLib
   )
 
-  add_target_files(OpenDDS_Federator
+  target_cxx_sources(OpenDDS_Federator
     SOURCE_FILES  FederatorConfig.cpp
                   FederatorManagerImpl.cpp
                   FederatorManagerImpl_updates.cpp
@@ -69,7 +69,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
                   UpdateProcessor_T.cpp
   )
 
-  add_dds_idl_files(
+  dds_idl_sources(
     TARGETS OpenDDS_Federator
     DDS_IDL_FLAGS -Wb,export_macro=OpenDDS_Federator_Export -Wb,export_include=federator_export.h -Wb,pch_include=DcpsInfo_pch.h
     TAO_IDL_FLAGS -Wb,export_macro=OpenDDS_Federator_Export -Wb,export_include=federator_export.h -Wb,pch_include=DcpsInfo_pch.h
@@ -83,7 +83,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     PUBLIC_LINK_LIBRARIES OpenDDS_Federator
   )
 
-  add_target_files(OpenDDS_InfoRepoServ
+  target_cxx_sources(OpenDDS_InfoRepoServ
     SOURCE_FILES DCPSInfoRepoServ.cpp
     HEADER_FILES DCPSInfoRepoServ.h
   )
@@ -94,7 +94,7 @@ if (NO_OPENDDS_SAFETY_PROFILE)
     LINK_LIBRARIES OpenDDS_InfoRepoServ
   )
 
-  add_target_files(DCPSInfoRepo
+  target_cxx_sources(DCPSInfoRepo
     SOURCE_FILES DCPSInfoRepo.cpp
   )
 

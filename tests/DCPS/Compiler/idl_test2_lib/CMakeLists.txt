@@ -12,7 +12,7 @@ add_ace_lib(idl_test2_lib
   FOLDER tests/DCPS/Compiler/idl_test2_lib
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS idl_test2_lib
   DDS_IDL_FLAGS -Wb,export_macro=FooLib_Export
   TAO_IDL_FLAGS -Wb,export_macro=FooLib_Export

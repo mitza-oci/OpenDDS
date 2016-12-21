@@ -26,14 +26,14 @@ add_ace_exe(Messenger_subscriber
                  ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
 
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS Messenger_publisher
           Messenger_subscriber
   IDL_FILES Messenger.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("DevGuideExamples/DCPS/Messenger/run_test.pl"

@@ -1,3 +1,3 @@
-glob_target_files(OpenDDS_Dcps
+glob_target_cxx_sources(OpenDDS_Dcps
   SUBGROUP "\\transport\\framework"
 )

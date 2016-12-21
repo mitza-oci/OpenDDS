@@ -14,13 +14,13 @@ add_ace_exe(FilterExpressionTest
   FOLDER tests/DCPS/FilterExpression
   LINK_LIBRARIES OpenDDS_Dcps
 )
-add_dds_idl_files(
+dds_idl_sources(
   TARGETS FilterExpressionTest
   IDL_FILES FilterStruct.idl
 )
 
 include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
-link_test_files_to_build_tree()
+configure_dds_test_files()
 
 
 add_dds_test("tests/DCPS/FilterExpression/run_test.pl"
