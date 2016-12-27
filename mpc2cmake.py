@@ -11,7 +11,9 @@ override_cmakefiles = False
 project_directory = ""
 root = None
 package = ""
+requires_dict = {}
 cmake_file_preemble = '''
+
 project({0} CXX)
 cmake_minimum_required(VERSION 3.1)
 
@@ -19,7 +21,7 @@ if (NOT {1})
   find_package({2} REQUIRED CONFIG)
 endif()
 '''
-common_target_properties = ["output_name", "package", "compile_definitions", "requires", "folder"]
+common_target_properties = ["output_name", "package", "compile_definitions", "requires", "folder", "features"]
 common_exe_properties = common_target_properties + ["include_directories", "link_libraries"]
 common_lib_properties = common_target_properties + ["define_symbol", "public_include_directories", "public_link_libraries"]
 
@@ -36,6 +38,20 @@ def string_in_files(str, files):
     if str in open(f).read():
       return True
   return False
+  
+  
+def list_difference(a,b):
+  return [x for x in a if x not in b]
+  
+def flatten_list(lists):
+  return [item for sublist in lists for item in sublist]
+
+  
+class IdlFileGroup:
+  def __init__(self):
+    self.idlflags_plus = []
+    self.idlflags_minus= []
+    self.files = []
 
 class MPCNode:
   patterns = {
@@ -65,25 +81,35 @@ class MPCNode:
     node.parent = weakref.ref(self)
 
   def expand_target_name(self, target_name):
-    result = target_name.replace('*', "_" + self.parent().prefix + "_")
+    names = target_name.split('*')
+    if len(names) == 2:
+      names[1] = names[1].capitalize() 
+    result = ("_" + self.parent().prefix + "_").join(names)
+      
     if target_name.startswith('*'):
       result=result[1:]
     if target_name.endswith('*'):
       result=result[0:-1]
     return result
+    
+  def add_lib(self, libname):
+    if libname.startswith(package+"_"):
+      self.internal_libs.add(libname)
+    else:
+      self.external_libs.add(libname)
 
   def normalize_mpc_project(self):
     project_pattern = re.compile("project\s*(\([^\)]*\))?\s*(:(.+))?")
     match = project_pattern.match(self.content)
     if match:
       self.after = []
-      self.libs = []
+      self.internal_libs = []
       self.source_files = None # None means GLOB, [] means empty
       self.header_files = []
       self.inline_files = []
       self.template_files = []
       self.define_symbol= ""
-      self.link_targets = set()
+      self.external_libs = set()
       self.dependents = []
       self.requires = set()
       self.skip_when_unavailable_libs = set()
@@ -95,13 +121,18 @@ class MPCNode:
       self.typesupports = []
       self.tao_idl_flags = []
       self.dds_idl_flags = []
-      self.libs = []
+      self.internal_libs = set()
       self.includes = []
       self.custom_only = False
       self.generated_files = set()
       self.compile_definitions = set()
       self.is_face = False
       self.install_this_target =False
+      self.idl_file_groups = []
+      self.features = set()
+      self.conditional_sources = {}
+      self.install_only_files = []
+      
       if root:
         self.folder = os.path.relpath(self.parent().dir, root)
 
@@ -131,18 +162,30 @@ class MPCNode:
     else:
       sys.stderr.write("%s doesnot match project_pattern\n"% self.content)
       exit(1)
+      
+  def handle_mpb_ace_tkreactor(self):
+      self.add_lib('ACE_TkReactor')
+      
+  def handle_mpb_ace_xtreactor(self):
+    self.add_lib('ACE_XtReactor')
 
   def handle_mpb_ace_mc(self):
-    self.requires.add('"TARGET ACE_Monitor"')
-    self.link_targets.add('ACE_Monitor')
+    self.add_lib('ACE_Monitor')
+    
+  def handle_mpb_ace_flreactor(self):
+    self.add_lib('ACE_FlReactor')
+    
+  def handle_mpb_ace_foxreactor(self):
+    self.add_lib('ADE_FoxReactor')
+    
+  def handle_mpb_ace_etcl(self):
+    self.add_lib('ADE_ETCL')
 
   def handle_mpb_qos(self):
-    self.requires.add('"TARGET ACE_QoS"')
-    self.link_targets.add('ACE_QoS')
+    self.add_lib('ACE_QoS')
 
   def handle_mpb_ssl(self):
-    self.requires.add('"TARGET ACE_SSL"')
-    self.link_targets.add('ACE_SSL')
+    self.add_lib('ACE_SSL')
 
   def handle_mpb_wfmo(self):
     self.requires.add('WIN32')
@@ -151,8 +194,7 @@ class MPCNode:
     self.requires.add('WIN32')
 
   def handle_mpb_ace_xtreactor(self):
-    self.requires.add('"TARGET ACE_XtReactor"')
-    self.link_targets.add('ACE_XtReactor')
+    self.add_lib('ACE_XtReactor')
 
   def handle_mpb_ace_mfc(self):
     self.requires.add('MFC_FOUND')
@@ -160,10 +202,9 @@ class MPCNode:
 
   def handle_mpb_aceexe(self):
     self.is_exe = True
-
-  def handle_mpb_negotiate_codesets(self):
-    self.link_targets.add('TAO_Codeset')
-    self.compile_definitions.add('TAO_EXPLICIT_NEGOTIATE_CODESETS')
+    
+  def handle_mpb_acelib(self):
+    pass
 
   def handle_mpb_orbsvcsexe(self):
     self.handle_mpb_taoexe()
@@ -176,13 +217,16 @@ class MPCNode:
     self.tao_idl_flags.append("-I${TAO_ROOT}/orbsvcs")
     self.parent().find_packages.add('TAO_orbsvcs REQUIRED CONFIG')
 
-  def handle_mpb_anytypecode():
-    self.link_targets.add('TAO_AnyTypeCode')
+  def handle_mpb_anytypecode(self):
+    self.handle_mpb_taolib()
+    self.handle_mpb_taoidldefaults()
+    self.add_lib('TAO_AnyTypeCode')
+    self.tao_idl_flags_minus.append(['-Sa', '-St'])
 
   def handle_mpb_ftorb(self):
     self.handle_mpb_orbsvcslib()
-    self.link_targets.add('TAO_FT_ClientORB')
-    self.link_targets.add('TAO_FT_ServerORB')
+    self.add_lib('TAO_FT_ClientORB')
+    self.add_lib('TAO_FT_ServerORB')
 
   def handle_mpb_conv_lib(self):
     self.install_this_target = True
@@ -192,49 +236,96 @@ class MPCNode:
 
   def handle_mpb_install_lib(self):
     self.install_this_target = True
+    
+  def handle_mpb_install(self):
+    self.install_this_target = True
+    
+  def handle_mpb_threads(self):
+    self.requires.add('ACE_HAS_THREADS')
 
   def handle_mpb_valuetype(self):
-    self.link_targets.add('TAO_Valuetype')
-    self.handle_avoid_corba_e_micro()
+    self.handle_mpb_anytypecode() 
+    self.handle_mpb_avoids_corba_e_micro()
+    self.add_lib('TAO_Valuetype')
+    
+  def handle_mpb_ifr_client(self):
+    self.handle_mpb_anytypecode()
+    self.add_lib('TAO_IFR_Client')
+    
+  def handle_mpb_rtcorba(self):
+    self.handle_mpb_pi()
+    self.requires.add('RT_CORBA')
+    self.add_lib('TAO_RTCORBA')
 
-  def handle_avoid_corba_e_micro(self):
+  def handle_mpb_avoids_corba_e_micro(self):
     self.requires.add('"NOT CORBA_E_COMPACT"')
 
-  def handle_avoid_minimum_corba(self):
+  def handle_mpb_avoids_minimum_corba(self):
     self.requires.add('"NOT MINIMUM_CORBA"')
 
-  def handle_avoid_corba_e_compact(self):
+  def handle_mpb_avoids_corba_e_compact(self):
     self.requires.add('"NOT CORBA_E_MICRO"')
 
   def handle_mpb_iormanip(self):
-    self.link_targets.add('TAO_IORManip')
+    self.handle_mpb_portableserver()
+    self.handle_mpb_valuetype()
+    self.add_lib('TAO_IORManip')
+    
+  def handle_mpb_objreftemplate(self):
+    self.add_lib('TAO_ObjRefTemplate')
 
   def handle_mpb_svc_utils(self):
     self.handle_mpb_orbsvcslib()
-    self.link_targets.add('TAO_Svc_Utils')
+    self.add_lib('TAO_Svc_Utils')
 
   def handle_mpb_iortable(self):
-    self.link_targets.add('TAO_IORTable')
+    self.add_lib('TAO_IORTable')
 
   def handle_mpb_portableserver(self):
-    self.link_targets.add('TAO_PortableServer')
+    self.add_lib('TAO_PortableServer')
 
   def handle_mpb_corba_messaging(self):
     self.requires.add('CORBA_MESSAGING')
 
   def handle_mpb_messaging_optional(self):
-    self.link_targets.add('${OPTIONAL_Messaging}')
+    self.external_libs.add('${OPTIONAL_Messaging}')
 
-  def handle_mpb_messaging(self):
-    self.link_targets.add('TAO_Messaging')
-
+  def handle_mpb_taoidldefaults(self):
+    self.tao_idl_flags= ["-Sa", "-St"] + self.tao_idl_flags
+    
+  def handle_mpb_taolib_with_idl(self):
+    self.handle_mpb_taolib()
+    self.handle_mpb_taoidldefaults()
+    
   def handle_mpb_tao_versioning_idl_defaults(self):
-    self.tao_idl_flags.append("${TAO_VERSIONING_IDL_FLAGS}")
+    self.tao_idl_flags= ["${TAO_VERSIONING_IDL_FLAGS}", "-Sa", "-St"] + self.tao_idl_flags
 
   def handle_mpb_dynamicinterface(self):
     self.handle_mpb_avoids_minimum_corba()
     self.handle_mpb_avoids_corba_e_compact()
     self.handle_mpb_messaging()
+    
+  def handle_mpb_pi(self):
+    self.handle_mpb_taolib()
+    self.handle_mpb_codecfactory() 
+    self.add_lib('TAO_PI')
+    
+  def handle_mpb_csd_framework(self):
+    self.handle_mpb_portableserver()
+    self.handle_mpb_pi()
+    self.handle_mpb_avoids_corba_e_micro()
+    self.add_lib('TAO_CSD_Framework')
+    
+  def handle_mpb_csd_threadpool(self):
+    self.handle_mpb_csd_framework()
+    self.handle_mpb_threads()
+    self.add_lib('TAO_CSD_ThreadPool')
+    
+  def handle_mpb_gen_ostream(self):
+    self.features.add('GEN_OSTREAM')
+    
+  def handle_mpb_core_minimum_corba(self):
+    self.features.add('MINIMUM_CORBA')
 
   def handle_mpb_dcps_test_lib(self):
     self.source_files = []
@@ -243,37 +334,36 @@ class MPCNode:
     self.inline_files = []
 
   def hanle_mpb_acexml(self):
-    self.link_targets.add('ACEXML_Parser')
-    self.requires('"TARGET ACEXML"')
+    self.add_lib('ACEXML_Parser')
 
   def handle_mpb_pi_server(self):
-    self.link_targets.add('TAO_PI_Server')
+    self.add_lib('TAO_PI_Server')
 
   def handle_mpb_dcpsexe(self):
-    self.link_targets.add("${DCPS_DEFAULT_DISCOVERY_LIBS}")
+    self.features.add("DCPS_DEFAULT_DISCOVERY")
     self.is_exe = True
 
   def handle_mpb_dcps_transports_for_test(self):
-    self.link_targets.add('${DCPS_TRANSPORTS_FOR_TEST}')
+    self.features.add("DCPS_TRANSPORTS_FOR_TEST")
 
   def handle_mpb_mc_test_utils(self):
-    self.libs.append('MC_Test_Utilities')
+    self.internal_libs.add('MC_Test_Utilities')
 
   def handle_mpb_dcps_monitor(self):
-    self.link_targets.add("OpenDDS_monitor")
+    self.add_lib("OpenDDS_monitor")
 
   def handle_mpb_dcps_test(self):
-    self.libs.append("TestFramework")
+    self.internal_libs.add("TestFramework")
 
   def handle_mpb_dcps_inforepodiscovery(self):
-    self.link_targets.add("OpenDDS_InfoRepoDiscovery")
+    self.add_lib("OpenDDS_InfoRepoDiscovery")
 
   def handle_mpb_dcps_rtpsexe(self):
-    self.link_targets.add("OpenDDS_Rtps")
+    self.add_lib("OpenDDS_Rtps")
     self.is_exe = True
 
   def handle_mpb_dcps_default_discovery(self):
-    self.link_targets.add("${DCPS_DEFAULT_DISCOVERY_LIBS}")
+    self.features.add("DCPS_DEFAULT_DISCOVERY")
 
   def handle_mpb_content_subscription(self):
     self.requires.add('CONTENT_SUBSCRIPTION')
@@ -282,23 +372,76 @@ class MPCNode:
     self.requires.add('CONTENT_SUBSCRIPTION_CORE')
 
   def handle_mpb_opendds_face(self):
-    self.link_targets.add('OpenDDS_FACE')
+    self.add_lib('OpenDDS_FACE')
     self.is_face = True
 
   def handle_mpb_dds_model(self):
-    self.link_targets.add('OpenDDS_Model')
+    self.add_lib('OpenDDS_Model')
 
   def handle_mpb_dcps_qos_xml_handler(self):
-    self.link_targets.add('OpenDDS_QOS_XML_XSC_Handler')
-    self.requires.add('"TARGET OpenDDS_QOS_XML_XSC_Handler"')
+    self.add_lib('OpenDDS_QOS_XML_XSC_Handler')
 
   def handle_mpb_taoexe(self):
+    self.handle_mpb_link_codecfactory()
+    self.internal_libs.add("TAO")
     self.is_exe = True
+    
+  def handle_mpb_taolib(self):
+    self.handle_mpb_link_codecfactory()
+    self.internal_libs.add("TAO")
+    
+  def handle_mpb_nolink_codecfactory(self):
+    # self.features.remove('LINK_CODECFACTORY')
+    pass
+    
+  def handle_mpb_link_codecfactory(self):
+    # self.features.add('LINK_CODECFACTORY')
+    pass
+    
+  def handle_mpb_codecfactory(self):
+    self.handle_mpb_taolib()
+    self.handle_mpb_anytypecode()
+    self.add_lib('TAO_CodecFactory')
 
   def handle_mpb_dcps_transports(self, base):
-    self.link_targets.add("OpenDDS" + base[4:].title())
-
-
+    self.external_libs.add("OpenDDS" + base[4:].title())
+    
+  def handle_mpb_ace_bzip2(self):
+    self.external_libs.add("${BZIP2_LIBRARIES}")
+    self.parent().find_packages.add('BZip2')
+    requires_dict['BZIP2'] = '${BZIP2_FOUND}'
+    
+  def handle_mpb_compression(self):
+    self.add_lib("TAO_Compression")
+    
+  def handle_mpb_ace_rlecompressionlib(self):
+    self.add_lib('ACE_RLECompression')
+    
+  def handle_mpb_ace_zlib(self):
+    self.external_libs.add("${ZLIB_LIBRARIES}")
+    self.parent().find_packages.add('ZLib')
+    requires_dict['ZLIB'] = '${ZLIB_FOUND}'
+    
+  def handle_mpb_ace_qt4reactor(self):
+    self.add_lib('ACE_QtReactor')
+    
+  def handle_mpb_extra_core(self):
+    self.conditional_sources['NOT MINIMUM_CORBA'] = ['Dynamic_Adapter.cpp']
+    self.conditional_sources['CORBA_MESSAGING'] = ['Policy_Manager.cpp']
+    
+  def handle_mpb_extra_anytypecode(self):
+    self.conditional_sources['NOT MINIMUM_CORBA'] = ['ServicesA.cpp']
+    
+  def handle_mpb_corba_messaging(self):
+    self.requires.add('CORMBA_MESSAGING')
+    self.add_lib('TAO_Messaging')
+    
+  def handle_mpb_messaging(self):
+    self.handle_mpb_corba_messaging()
+    
+  def handle_mpb_messaging_optional(self):
+    self.featires.add('CORBA_MESSAGING')
+    
   def handle_mpc_project_bases(self):
     ignore_set = set(['avoids_ace_for_tao',
                      'dds_macros',
@@ -307,7 +450,13 @@ class MPCNode:
                      'coverage_optional',
                      'taoidldefaults',
                      'face_idl_test_config',
-                     'ace_lib', 'dcps', 'dcpslib'])
+                     'ace_lib', 'dcps', 'dcpslib', 'tao_output', 'taodefaults',
+                     'pidl_install', 'pidl'])
+                     
+    feature_set = set([
+      'corba_e_micro', 'corba_e_compact', 'minimum_corba', 'valuetype_out_indirection', 'tao_no_iiop', 
+      'optimize_collocated_invocations', 'negotiate_codesets'
+    ])
 
     for base in list(self.target_bases):
       handler = getattr(self, 'handle_mpb_'+ base, None)
@@ -315,25 +464,57 @@ class MPCNode:
         handler()
       elif base in ['dcps_tcp', 'dcps_udp', 'dcps_multicast', 'dcps_shmem', 'dcps_rtps_udp', 'dcps_rtps']:
         self.handle_mpb_dcps_transports(base)
+      elif base in feature_set:
+        self.features.add(base.upper())
       elif base not in ignore_set:
         sys.stderr.write("Warining: %s : the base project %s is not translated\n" % (self.name, base))
 
       if base.startswith('dcps') or base.startswith('opendds'):
         self.parent().project_base = max([ProjectBase.OpenDDS,self.parent().project_base])
         self.project_base = max([ProjectBase.OpenDDS,self.project_base])
-        self.link_targets.add('OpenDDS_Dcps')
+        self.add_lib('OpenDDS_Dcps')
 
       elif base.startswith('tao') or base.startswith('orbsvcs'):
         self.parent().project_base = max([ProjectBase.TAO,self.parent().project_base])
         self.project_base = max([ProjectBase.TAO,self.project_base])
-        self.link_targets.add('TAO')
 
   def expand_file_list(self, list):
-    return list
-
+    result = []
+    for x in list:
+      if x.find('*') != -1:
+        result.extend(glob.glob(x))
+      else:
+        result.append(x)
+    return result
+    
+  def handle_idl_files(self, child):    
+    group = IdlFileGroup()
+    
+    for f in self.expand_file_list([ f.content for f in child.children ]):
+      match =  MPCNode.patterns['idlflags'].match(f)
+      if match:
+        group.idlflags_plus = self.parse_idlflags(match)
+        continue
+      match = MPCNode.patterns['idlflags_minus'].match(f)
+      if match:
+        group.idlflags_minus = self.parse_idlflags(match)
+        continue
+      ## ignore every thing after ">>" which is only used by tao.mpc
+      f = f.split(">>")[0].strip()
+      target = self.parent().custom_only_target_contains_idl(f)
+      if target:
+        target.set_idl_target('targets', self)
+      else:
+        group.files.append(f)
+    if 0 == len(group.idlflags_plus) + len(group.idlflags_minus):
+      self.idl_files = group.files
+    else:
+      self.idl_file_groups.append(group)
+              
   def parse_mpc_project_content(self):
+    
     for child in self.children:
-      if child.content == "Source_Files":
+      if re.match("Source_Files(\([^\)]+\))*",child.content):
         if not self.source_files:
           self.source_files = []
         self.source_files += self.expand_file_list([ f.content for f in child.children ])
@@ -352,15 +533,17 @@ class MPCNode:
             self.typesupports.append(f)
 
       elif child.content == 'Idl_Files' or child.content == 'IDL_Files':
-        for f in self.expand_file_list([ f.content for f in child.children ]):
-          target = self.parent().custom_only_target_contains_idl(f)
-          if target:
-            target.set_idl_target('targets', self)
-          else:
-            self.idl_files.append(f)
-
+        self.handle_idl_files(child)
+      elif child.content == 'PidlInstallWithoutBuilding_Files':
+        self.install_only_files = [ f.content for f in child.children ]
+      elif child.content == 'PIDL_Files':
+        pass
       elif child.content == "specific (vc9, vc10, vc11, vc12, vc14)":
         self.msvc = [ f.content for f in child.children ]
+      elif child.content == 'specific':
+        for x in child.children:
+          if not x.content.startswith("install_dir"):
+            print("Warning: In {0} ({1}): {2} is not translated".format( self.parent().path, self.name, x.content ) )
       else:
         for name, value in MPCNode.patterns.iteritems():
           match = value.match(child.content)
@@ -393,37 +576,19 @@ class MPCNode:
       if file in inl_files and file not in self.inline_files:
         self.inline_files.append(file)
 
-    if len(self.typesupports) == 0:
-      self.dds_idl_flags = []
-      self.tao_idl_flags = []
+    self.post_process_idl_files()
 
-    self.post_process_custom_only()
-
-  def post_process_custom_only(self):
+  def post_process_idl_files(self):    
     if self.custom_only:
-      self.targets = []
-      self.skel_targets = []
-      self.stub_targets = []
+      self.targets = set()
+      self.skel_targets = set()
+      self.stub_targets = set()
       self.parent().add_custom_only_target(self)
     else:
-      # new_tao_idl_flags = []
-      # for flag in  self.tao_idl_flags:
-      #   if flag.startswith("-Wb,stub_export_include=") or flag.startswith("-Wb,export_include="):
-      #     self.export_file = flag.split('=',1)[1]
-      #   elif not flag.startswith("-Wb,stub_export_macro=") and not  flag.startswith("-Wb,export_macro="):
-      #     new_tao_idl_flags.append(flag)
-      # self.tao_idl_flags = new_tao_idl_flags
-      #
-      # new_dds_idl_flags = []
-      # for flag in  self.dds_idl_flags:
-      #   if not (flag.startswith("-Wb,stub_export_include=") or flag.startswith("-Wb,export_include=") or  flag.startswith("-Wb,stub_export_macro=") or  flag.startswith("-Wb,export_macro=")):
-      #     self.dds_idl_flags.append(flag)
-      # self.dds_idl_flags= new_dds_idl_flags
-
       self.resolve_dependent_idls()
 
   def set_idl_target(self, target_type, target):
-    self.__dict__[target_type].append(target.name)
+    self.__dict__[target_type].add(target.name)
 
 
   def resolve_dependent_idls(self):
@@ -431,34 +596,43 @@ class MPCNode:
 
     # the key of idls is the idl filename, type value contains the set of associated skel file in the source files list
     idls = {}
-
     for file in self.source_files:
-      if file.endswith("C.cpp") or file.endswith("S.cpp"):
-        idl_file = file[0:-5] + ".idl"
-        if idls.get(idl_file):
-          idls[idl_file].add( file )
-        else:
-          idls[idl_file] = set([idl_file])
+      if file.endswith("C.cpp") or file.endswith("S.cpp") or file.endswith("A.cpp"):
+        idls.setdefault(file[0:-5], set()).add(file)
+      
+    ignore_files_in_tao = set([
+      'InterfaceDef',
+      'InvalidName',
+      'Object_Key',
+      'Typecode_types',
+      'WrongTransaction',
+      'orb',
+      'Muxed_TM',
+      'Exclusive_TM'
+    ])
 
     if len(idls):
       sources = set(self.source_files)
-
-      for idl_file, cpp_files in idls.iteritems():
-        dep_target =  self.parent().custom_only_target_contains_idl(idl_file)
+      for idl_file_base, cpp_files in idls.iteritems():
+        dep_target =  self.parent().custom_only_target_contains_idl(idl_file_base)
         if dep_target:
-          sources = sources - cpp_files
+          self.remove_generated_files_for_idl(idl_file_base)
           self.includes.append("${CMAKE_CURRENT_BINARY_DIR}")
-          if len(cpp_files) ==2:
+          if len(cpp_files) >=2:
             dep_target.set_idl_target('targets', self)
-          elif cpp_files.pop().endswith("C.cpp"):
-            dep_target.set_idl_target('stub_targets', self)
-          elif cpp_files.pop().endswith("S.cpp"):
-            dep_target.set_idl_target('skel_targets', self)
-
-      self.source_files = list(sources)
-
-  def contains_idl_file(file):
-    return self.idl_files != None and file in self.idl_files
+          else:
+            f = cpp_files.pop()
+            if f.endswith("C.cpp"):
+              dep_target.set_idl_target('stub_targets', self)
+            elif f.endswith("S.cpp"):
+              dep_target.set_idl_target('skel_targets', self)
+            elif f.endswith("A.cpp"):
+              dep_target.set_idl_target('anyop_targets', self)
+        elif not (idl_file_base in ignore_files_in_tao):
+            print("Warning: cannot find target processing {}.idl".format(idl_file_base))
+      
+  def all_idl_files(self):
+    return self.idl_files + flatten_list([ x.files for x in self.idl_file_groups]) + self.typesupports
 
   def handle_exename_pattern(self, match):
     if match.group(1) != "*":
@@ -476,17 +650,15 @@ class MPCNode:
     self.after += [self.expand_target_name(name) for name in match.group(1).split()]
 
   def handle_libs_pattern(self, match):
-    self.libs.extend([self.expand_target_name(lib) for lib in match.group(1).split()])
-
-  def handle_idlflags_pattern(self, match):
-    self.tao_idl_flags += match.group(1).split()
-    try:
-      self.tao_idl_flags.remove("-I$(DDS_ROOT)")
-    except:
-      pass
+    self.internal_libs |= set([self.expand_target_name(lib) for lib in match.group(1).split()])
+    
+  def parse_idlflags(self, match):
+    flags = [f for f in match.group(1).split() if f != "-I$(DDS_ROOT)"]
     # replace every occurance of "$(ABC)" to "${ABC}"
-    self.tao_idl_flags = [re.sub(r'\$\((\w+)\)', r'${\1}', flag) for flag in self.tao_idl_flags ]
-    self.idl_flags = self.tao_idl_flags
+    return [re.sub(r'\$\((\w+)\)', r'${\1}', flag) for flag in flags ]
+    
+  def handle_idlflags_pattern(self, match):
+    self.tao_idl_flags += self.parse_idlflags(match)
 
   def handle_idlflags_minus_pattern(self, match):
     self.tao_idl_flags_minus = match.group(1).split()
@@ -527,14 +699,28 @@ class MPCNode:
     self.path = path
 
   def resolve_libs(self, project):
-    for lib in self.libs:
+    for lib in self.internal_libs:
       if lib in project.libs_index_by_output_name:
         dependee = project.find_target_by_output_name(lib, self.path)
-        self.link_targets.add(dependee.name)
+        self.external_libs.add(dependee.name)
         dependee.dependents.append(self)
         project.set_dependency(self, dependee)
       else:
-        sys.stderr.write("%s has an unresolved dependency on lib %s\n" % (self.name, lib))
+        sys.stderr.write("Warining: %s has an unresolved dependency on lib %s, treated as imported target\n" % (self.name, lib))
+        self.external_libs.add(lib)
+        
+    # if 'TAO_CodecFactory' not self.internal_libs:
+    #   # TAO_CodecFactory is only added when codefactory.mpb is inherited,
+    #   # in this case, LINK_CODEFACTORY feature should be ignored
+    #   self.feature.discard('LINK_CODECFACTORY')
+    #
+    # if 'LINK_CODECFACTORY' in self.features:
+    #   if package == 'TAO':
+    #     dependee = project.find_target_by_output_name('TAO_CodecFacotry', self.path)
+    #     if dependee:
+    #       dependee.dependents.append(self)
+    #       project.set_dependency(self, dependee)
+      
 
   def format_target_properties_in_list(self, properties):
     result = ""
@@ -557,7 +743,6 @@ class MPCNode:
     return result
 
   def format_idl_files_text(self):
-
     if not self.custom_only:
       self.targets = [self.name]
 
@@ -569,23 +754,40 @@ class MPCNode:
       else:
         return "dds_idl_sources(\n{0})\n".format(properties_text)
     elif len(self.idl_files):
-      return "tao_idl_sources(\n{0})\n".format(self.format_target_properties_in_list([ "targets", "stub_targets", "skel_targets", "idl_flags", "idl_files" ]))
-    return ""
+      self.idl_flags = self.tao_idl_flags
+      return "tao_idl_sources(\n{0})\n".format(self.format_target_properties_in_list([ "targets", "stub_targets", "skel_targets", "anyop_targets", "idl_flags", "idl_files" ]))
+    elif len(self.idl_file_groups):
+      
+      all_idlflags_minus = self.tao_idl_flags_minus + flatten_list([g.idlflags_minus for g in self.idl_file_groups])
+      all_idlflags_plus =  list_difference(self.tao_idl_flags, all_idlflags_minus)
+    
+      for group in self.idl_file_groups:
+        group.idlflags_plus = list_difference(all_idlflags_minus, self.tao_idl_flags_minus + group.idlflags_minus) + group.idlflags_plus
+      
+      result = "set({}_FLAGS {})\n".format(self.name, " ".join(all_idlflags_plus))
+      for group in self.idl_file_groups:
+        self.idl_flags = ["${%s_FLAGS}"%(self.name)] + group.idlflags_plus
+        self.idl_files = group.files
+        result += "tao_idl_sources(\n{0})\n".format(self.format_target_properties_in_list([ "targets", "stub_targets", "skel_targets", "idl_flags", "idl_files" ]))
+      self.idl_files = []
+      return result
+    else:
+      return ""
+      
+  def remove_generated_files_for_idl(self, idl_file):
+    name_we = os.path.splitext(idl_file)[0]
+    stub_file = name_we + "C.cpp"
+    skel_file = name_we + "S.cpp"
+    self.source_files = list_difference(self.source_files, [name_we + "C.cpp", name_we + "S.cpp",name_we + "S_T.cpp", name_we + "A.cpp"])
+    self.header_files = list_difference(self.header_files, [name_we + "C.h", name_we + "S.h", name_we + "A.h"])
+    self.inline_files = list_difference(self.inline_files, [name_we + "C.inl"])
+    self.template_files = list_difference(self.template_files, [name_we + "S_T.cpp"])
 
   def remove_generated_files_from_sources(self):
     if self.project_base >= ProjectBase.TAO:
       for idl_file in self.idl_files:
-        name_we = os.path.splitext(idl_file)[0]
-        stub_file = name_we + "C.cpp"
-        skel_file = name_we + "S.cpp"
-        has_stub = stub_file in self.source_files
-        has_skel = skel_file in self.source_files
-
-        if has_stub:
-          self.source_files.remove(stub_file)
-        if has_skel:
-          self.source_files.remove(skel_file)
-
+        remove_generated_files_for_idl(idl_file)
+        
   def cmake_text(self):
     result = ""
 
@@ -600,39 +802,45 @@ class MPCNode:
 
     self.remove_generated_files_from_sources()
 
-    num_opendds_libs = sum(1 for lib in self.link_targets if  lib.startswith('OpenDDS'))
+    num_opendds_libs = sum(1 for lib in self.external_libs if  lib.startswith('OpenDDS'))
     if num_opendds_libs > 1:
-      self.link_targets.discard('OpenDDS_Dcps')
+      self.external_libs.discard('OpenDDS_Dcps')
     if num_opendds_libs  > 0:
-      self.link_targets.discard('TAO')
-      self.link_targets.discard('ACE')
+      self.external_libs.discard('TAO')
+      self.external_libs.discard('ACE')
 
-    num_tao_libs = sum(1 for lib in self.link_targets if  lib.startswith('TAO'))
+    num_tao_libs = sum(1 for lib in self.external_libs if  lib.startswith('TAO'))
     if num_tao_libs > 1:
-      self.link_targets.discard('TAO')
+      self.external_libs.discard('TAO')
     if num_tao_libs > 0:
-      self.link_targets.discard('ACE')
+      self.external_libs.discard('ACE')
 
 
     if package and self.install_this_target:
       self.package = package
-      package_or_ace = 'package'
-    else:
-      package_or_ace = 'ace'
+      
+    if self.name == 'TAO':
+      self.public_compile_definitions = ["${TAO_COMPILE_DEFINITIONS}"]
 
     if self.is_exe:
-      self.link_libraries = self.link_targets
-      result =  "add_%s_exe(%s\n" %  (package_or_ace, self.name) + self.format_target_properties_in_list(common_exe_properties)+ ")\n"
+      self.link_libraries = self.external_libs
+      result =  "add_ace_exe(%s\n" %  (self.name) + self.format_target_properties_in_list(common_exe_properties)+ ")\n"
     elif not self.custom_only:
-      self.public_link_libraries = self.link_targets
+      self.public_link_libraries = self.external_libs
       self.public_include_directories = self.include_directories
-      result = "add_%s_lib(%s\n" %  (package_or_ace, self.name) + self.format_target_properties_in_list(common_lib_properties)+ ")\n"
+      result = "add_ace_lib(%s\n" %  (self.name) + self.format_target_properties_in_list(common_lib_properties)+ ")\n"
 
-    if len(self.source_files) + len(self.header_files) + len(self.inlin_files) + len(self.tempalte_files):
+    if len(self.source_files) + len(self.header_files) + len(self.inline_files) + len(self.template_files):
       result += "target_cxx_sources(%s\n" % self.name + self.format_target_properties_in_list(["source_files", "header_files", "inline_files", "template_files"])+ ")\n";
+      
+    for cond, sources in self.conditional_sources:
+      result += "if({0})\n  target_cxx_sources({1}\n. SOURCE_FILES {2}\n. )\nendif()\n".format(cond, self.name,"\n               ".join(sources))
 
-    result + self.format_idl_files_text()
-
+    result += self.format_idl_files_text()
+    
+    if len(self.install_only_files):
+      result += "install_package_files({}\n  {}\n)\n".format(self.package, "\n  ".join(self.install_only_files))
+    
     if hasattr(self, 'msvc'):
       for line in  self.msvc:
         pattern = re.compile("compile_flags\s*\+=\s*(.+)$")
@@ -679,7 +887,7 @@ class CMakeProjectNode:
           elif line == '}':
             cur = cur.parent()
           elif line.endswith('\\'):
-            line = line[:-1]
+            line = line[:-1] + " "
             continue
           else:
             cur.add_child(MPCNode(line))
@@ -706,16 +914,23 @@ class CMakeProjectNode:
       for target in self.children:
         target.resolve_libs(project)
 
-      custom_only_targets = self.idl_to_target.values()
+      custom_only_targets = set(self.idl_to_target.values())
       reordered_children = []
       for target in self.children:
         if target not in custom_only_targets:
           reordered_children.append(target)
       reordered_children.extend(custom_only_targets)
       self.children = reordered_children
+      
 
+  
   def requires_text(self):
-    condition_text = " ".join(self.requires)
+    def translate_require(cond):
+      print("translate %s" % cond)
+      return requires_dict[cond] if cond in requires_dict else cond
+      
+    condition_text=" ".join([ translate_require(cond) for cond in self.requires] )
+    
     if len(condition_text):
       return '\nrequires(%s)\n' % condition_text
     return ""
@@ -739,11 +954,12 @@ class CMakeProjectNode:
   def set_dependency(self, dependent, dependee):
     pass
 
-  def custom_only_target_contains_idl(self, file):
-    return self.idl_to_target.get(file)
+  def custom_only_target_contains_idl(self, file_base):
+    return self.idl_to_target.get(file_base + ".idl") or self.idl_to_target.get(file_base + ".pidl")
 
   def add_custom_only_target(self,target):
-    for idl in target.idl_files + target.typesupports:
+    for idl in target.all_idl_files():
+      print("add_custom_only_target %s" % idl)
       self.idl_to_target[idl] = target
       # print("add_custom_only_target   %s -> %s" % (idl, target.name))
 
@@ -831,8 +1047,8 @@ class cmake_project:
   def __init__(self, path):
     if path:
       os.chdir(path)
-    self.libs_index_by_name = {}
-    self.libs_index_by_output_name = {}
+    self.internal_libs_index_by_name = {}
+    self.internal_libs_index_by_output_name = {}
     self.hierarchy = CMakeDirNode("", self)
     leaves = [ self.parse_mpc_file(mpc_file) for mpc_file in glob2.glob("**/*.mpc")]
     leaves = [x for x in leaves if x is not None]
@@ -840,11 +1056,11 @@ class cmake_project:
       leaf.resolve_dependencies(self)
 
   def add_lib_target(self, lib):
-    self.libs_index_by_name[lib.name] = lib
-    self.libs_index_by_output_name.setdefault(lib.output_name, []).append(lib)
+    self.internal_libs_index_by_name[lib.name] = lib
+    self.internal_libs_index_by_output_name.setdefault(lib.output_name, []).append(lib)
 
   def find_target_by_output_name(self, output_name, caller_path):
-    r = self.libs_index_by_output_name[output_name]
+    r = self.internal_libs_index_by_output_name[output_name]
     if len(r):
       return r[0]
     else:
@@ -865,7 +1081,7 @@ class cmake_project:
 
     if node.mpc_child:
       sys.stderr.write("We don't support more than one MPC files in a directory, %s is ignored\n" % node.path)
-      node.remove(mpc_child)
+      exit(1)
     else:
       node.mpc_child = mpc_child
     return mpc_child
