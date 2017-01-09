@@ -8,14 +8,14 @@ endif()
 
 requires(OWNERSHIP_PROFILE)
 
-add_ace_lib(DDS_Lifespan_idl
-  OUTPUT_NAME DDS_Lifespan_idl
+add_ace_lib(DDS_Lifespan_Idl
+  OUTPUT_NAME DDS_Lifespan_Idl
   FOLDER tests/DCPS/Lifespan
   DEFINE_SYMBOL LIFESPAN_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_Lifespan_idl
+  TARGETS DDS_Lifespan_Idl
   DDS_IDL_FLAGS -Wb,export_macro=Lifespan_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Lifespan_export.h
                 -Wb,stub_export_macro=Lifespan_Export
@@ -23,33 +23,39 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(DDS_Lifespan_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-               DataWriterListenerImpl.cpp
-  HEADER_FILES Writer.h
-               DataWriterListenerImpl.h
   FOLDER tests/DCPS/Lifespan
-  LINK_LIBRARIES DDS_Lifespan_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_Lifespan_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(DDS_Lifespan_Publisher
+  SOURCE_FILES DataWriterListenerImpl.cpp
+               Writer.cpp
+               publisher.cpp
+  HEADER_FILES DataWriterListenerImpl.h
+               Writer.h
+)
+
 
 add_ace_exe(DDS_Lifespan_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/Lifespan
-  LINK_LIBRARIES DDS_Lifespan_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_Lifespan_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(DDS_Lifespan_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

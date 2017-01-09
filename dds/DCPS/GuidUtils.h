@@ -170,9 +170,10 @@ to_string(const GUID_t& guid);
 
 #ifndef OPENDDS_SAFETY_PROFILE
 // Serialize to ASCII Hex string: "xxxx.xxxx.xxxx.xxxx"
+#ifndef GEN_OSTREAM_OPS
 OpenDDS_Dcps_Export std::ostream&
 operator<<(std::ostream& os, const GUID_t& rhs);
-
+#endif // GEN_OSTREAM_OPS
 // Deserialize from ASCII Hex string: "xxxx.xxxx.xxxx.xxxx"
 OpenDDS_Dcps_Export std::istream&
 operator>>(std::istream& is, GUID_t& rhs);

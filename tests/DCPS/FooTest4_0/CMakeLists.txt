@@ -2,6 +2,14 @@ requires(OWNERSHIP_PROFILE)
 
 add_ace_exe(DcpsFooTest4_0
   OUTPUT_NAME FooTest4_0
+  FOLDER tests/DCPS/FooTest4_0
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DcpsFooType4
+                 common
+                 OpenDDS_Dcps
+)
+target_cxx_sources(DcpsFooTest4_0
   SOURCE_FILES DataReaderListener.cpp
                Reader.cpp
                Writer.cpp
@@ -9,15 +17,9 @@ add_ace_exe(DcpsFooTest4_0
   HEADER_FILES DataReaderListener.h
                Reader.h
                Writer.h
-  FOLDER tests/DCPS/FooTest4_0
-  LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 common
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

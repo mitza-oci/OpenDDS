@@ -10,17 +10,20 @@ requires(MULTI_TOPIC CONTENT_SUBSCRIPTION)
 
 add_ace_exe(MultiTopicTest
   OUTPUT_NAME MultiTopicTest
-  SOURCE_FILES MultiTopicTest.cpp
   FOLDER tests/DCPS/MultiTopic
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
+target_cxx_sources(MultiTopicTest
+  SOURCE_FILES MultiTopicTest.cpp
+)
+
 dds_idl_sources(
   TARGETS MultiTopicTest
   IDL_FILES MultiTopicTest.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

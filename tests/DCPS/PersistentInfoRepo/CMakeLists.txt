@@ -2,29 +2,34 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(PersistentInfoRepo_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
   FOLDER tests/DCPS/PersistentInfoRepo
-  LINK_LIBRARIES TestUtils
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Model
+                 TestUtils
                  DcpsFooType4
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-                 OpenDDS_Model
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
+target_cxx_sources(PersistentInfoRepo_Publisher
+  SOURCE_FILES Publisher.cpp
+)
+
 
 add_ace_exe(PersistentInfoRepo_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES Subscriber.cpp
-               Listener.cpp
-  HEADER_FILES Listener.h
   FOLDER tests/DCPS/PersistentInfoRepo
-  LINK_LIBRARIES TestUtils
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Model
+                 TestUtils
                  DcpsFooType4
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-                 OpenDDS_Model
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+)
+target_cxx_sources(PersistentInfoRepo_Subscriber
+  SOURCE_FILES Listener.cpp
+               Subscriber.cpp
+  HEADER_FILES Listener.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

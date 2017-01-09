@@ -6,14 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_Inconsistent_Qos_idl
-  OUTPUT_NAME DDS_Inconsistent_Qos_idl
+add_ace_lib(DDS_Inconsistent_Qos_Idl
+  OUTPUT_NAME DDS_Inconsistent_Qos_Idl
   FOLDER tests/DCPS/Inconsistent_Qos
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_Inconsistent_Qos_idl
+  TARGETS DDS_Inconsistent_Qos_Idl
   DDS_IDL_FLAGS -Wb,export_macro=Messenger_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Messenger_export.h
                 -Wb,stub_export_macro=Messenger_Export
@@ -21,18 +21,20 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
-add_ace_exe(DDS_Inconsistent_Qos_Inconsistent_Qos
+
+add_ace_exe(DDS_Inconsistent_Qos_Inconsistent_qos
   OUTPUT_NAME inconsistent_qos
-  SOURCE_FILES inconsistent_qos.cpp
-  REQUIRES "TARGET OpenDDS_QOS_XML_XSC_Handler"
   FOLDER tests/DCPS/Inconsistent_Qos
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_QOS_XML_XSC_Handler
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DDS_Inconsistent_Qos_idl
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+                 DDS_Inconsistent_Qos_Idl
+)
+target_cxx_sources(DDS_Inconsistent_Qos_Inconsistent_qos
+  SOURCE_FILES inconsistent_qos.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

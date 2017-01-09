@@ -1,7 +1,7 @@
 add_subdirectory(Publisher)
 add_subdirectory(Subscriber)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

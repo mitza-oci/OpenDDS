@@ -6,14 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_DPFactoryQos_idl
-  OUTPUT_NAME DDS_DPFactoryQos_idl
+add_ace_lib(DDS_DPFactoryQos_Idl
+  OUTPUT_NAME DDS_DPFactoryQos_Idl
   FOLDER tests/DCPS/DPFactoryQos
   DEFINE_SYMBOL DPFACTORYQOS_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_DPFactoryQos_idl
+  TARGETS DDS_DPFactoryQos_Idl
   DDS_IDL_FLAGS -Wb,export_macro=DPFactoryQos_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=DPFactoryQos_export.h
                 -Wb,stub_export_macro=DPFactoryQos_Export
@@ -21,31 +21,37 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(DDS_DPFactoryQos_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES Writer.h
   FOLDER tests/DCPS/DPFactoryQos
-  LINK_LIBRARIES DDS_DPFactoryQos_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_DPFactoryQos_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(DDS_DPFactoryQos_Publisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+)
+
 
 add_ace_exe(DDS_DPFactoryQos_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/DPFactoryQos
-  LINK_LIBRARIES DDS_DPFactoryQos_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_DPFactoryQos_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(DDS_DPFactoryQos_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

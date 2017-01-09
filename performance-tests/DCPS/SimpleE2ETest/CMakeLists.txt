@@ -2,27 +2,33 @@
 
 add_ace_exe(DCPS_Perf_SimpleE2E_Pub
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES common.h
-               TestException.h
-               Writer.h
   FOLDER performance-tests/DCPS/SimpleE2ETest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
+target_cxx_sources(DCPS_Perf_SimpleE2E_Pub
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES TestException.h
+               Writer.h
+               common.h
+)
+
 
 add_ace_exe(DCPS_Perf_SimpleE2E_Sub
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               Reader.cpp
-  HEADER_FILES common.h
-               TestStats.h
-               TestException.h
-               Reader.h
   FOLDER performance-tests/DCPS/SimpleE2ETest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
+target_cxx_sources(DCPS_Perf_SimpleE2E_Sub
+  SOURCE_FILES Reader.cpp
+               subscriber.cpp
+  HEADER_FILES Reader.h
+               TestException.h
+               TestStats.h
+               common.h
+)
+

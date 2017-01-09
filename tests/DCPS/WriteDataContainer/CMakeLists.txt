@@ -8,18 +8,21 @@ endif()
 
 add_ace_exe(WriteDataContainer
   OUTPUT_NAME WriteDataContainerTest
-  SOURCE_FILES WriteDataContainerTest.cpp
   FOLDER tests/DCPS/WriteDataContainer
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(WriteDataContainer
+  SOURCE_FILES WriteDataContainerTest.cpp
+)
+
 dds_idl_sources(
   TARGETS WriteDataContainer
   TAO_IDL_FLAGS -SS
   IDL_FILES Simple.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -1,11 +1,11 @@
-add_ace_lib(DDS_ManyTopicMultiProcess_idl
-  OUTPUT_NAME DDS_ManyTopicMultiProcess_idl
+add_ace_lib(DDS_ManyTopicMultiProcess_Idl
+  OUTPUT_NAME DDS_ManyTopicMultiProcess_Idl
   FOLDER tests/DCPS/ManyTopicMultiProcess
   DEFINE_SYMBOL MANYFOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_ManyTopicMultiProcess_idl
+  TARGETS DDS_ManyTopicMultiProcess_Idl
   DDS_IDL_FLAGS -Wb,export_macro=ManyFooLib_Export
   TAO_IDL_FLAGS -Wb,export_macro=ManyFooLib_Export
                 -Wb,export_include=manyfoolib_export.h
@@ -14,45 +14,51 @@ dds_idl_sources(
             Foo4Def.idl
 )
 
+
 add_ace_exe(ManyTopicMultiProcessPublisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               DataReaderListener.cpp
+  FOLDER tests/DCPS/ManyTopicMultiProcess
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Model
+                 common
+                 DDS_ManyTopicMultiProcess_Idl
+)
+target_cxx_sources(ManyTopicMultiProcessPublisher
+  SOURCE_FILES DataReaderListener.cpp
                DataReaderListener1.cpp
                Writer.cpp
-  HEADER_FILES common.h
-               DataReaderListener.h
+               publisher.cpp
+  HEADER_FILES DataReaderListener.h
                DataReaderListener1.h
                Writer.h
-  FOLDER tests/DCPS/ManyTopicMultiProcess
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-                 common
-                 DDS_ManyTopicMultiProcess_idl
-                 OpenDDS_Model
+               common.h
 )
+
 
 add_ace_exe(ManyTopicMultiProcessSubscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
+  FOLDER tests/DCPS/ManyTopicMultiProcess
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Model
+                 common
+                 DDS_ManyTopicMultiProcess_Idl
+)
+target_cxx_sources(ManyTopicMultiProcessSubscriber
+  SOURCE_FILES DataReaderListener.cpp
                DataReaderListener1.cpp
                DataReaderListener4.cpp
                Writer.cpp
-  HEADER_FILES common.h
-               DataReaderListener.h
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
                DataReaderListener1.h
                DataReaderListener4.h
                Writer.h
-  FOLDER tests/DCPS/ManyTopicMultiProcess
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-                 common
-                 DDS_ManyTopicMultiProcess_idl
-                 OpenDDS_Model
+               common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

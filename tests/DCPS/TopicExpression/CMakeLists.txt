@@ -10,12 +10,14 @@ requires(MULTI_TOPIC CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION)
 
 add_ace_exe(TopicExpressionTest
   OUTPUT_NAME TopicExpressionTest
-  SOURCE_FILES TopicExpression.cpp
   FOLDER tests/DCPS/TopicExpression
   LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(TopicExpressionTest
+  SOURCE_FILES TopicExpression.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

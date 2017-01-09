@@ -10,13 +10,15 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(error_handling
   OUTPUT_NAME error_handling
-  SOURCE_FILES main.cpp
   FOLDER tests/transport/error_handling
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+)
+target_cxx_sources(error_handling
+  SOURCE_FILES main.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

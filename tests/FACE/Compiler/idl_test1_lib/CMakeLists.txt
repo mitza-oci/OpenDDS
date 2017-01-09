@@ -3,11 +3,13 @@
 add_ace_lib(FACE_idl_test1_lib
   OUTPUT_NAME FACE_idl_test1_lib
   FOLDER tests/FACE/Compiler/idl_test1_lib
+  ASPECTS FACE
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_face_idl_files(
+dds_idl_sources(
   TARGETS FACE_idl_test1_lib
+  ASPECTS FACE
   DDS_IDL_FLAGS -Wb,export_macro=FooLib_Export
                 -Wb,export_include=foolib_export.h
   TAO_IDL_FLAGS -Wb,export_macro=FooLib_Export
@@ -15,3 +17,4 @@ add_face_idl_files(
                 -I../../../DCPS/Compiler/idl_test1_lib
   IDL_FILES ../../../DCPS/Compiler/idl_test1_lib/FooDef.idl
 )
+

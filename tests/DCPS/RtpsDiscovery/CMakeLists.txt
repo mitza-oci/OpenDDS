@@ -10,19 +10,22 @@ requires(BUILT_IN_TOPICS)
 
 add_ace_exe(RtpsDiscovery
   OUTPUT_NAME RtpsDiscoveryTest
-  SOURCE_FILES RtpsDiscoveryTest.cpp
   FOLDER tests/DCPS/RtpsDiscovery
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Model
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(RtpsDiscovery
+  SOURCE_FILES RtpsDiscoveryTest.cpp
+)
+
 dds_idl_sources(
   TARGETS RtpsDiscovery
   TAO_IDL_FLAGS -SS
   IDL_FILES TestMsg.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -2,17 +2,29 @@ if (NO_OPENDDS_SAFETY_PROFILE)
   set(dcps_link_libraries TAO_PortableServer TAO_BiDirGIOP)
 else()
   set(dcps_link_libraries OpenDDS_Corba)
+  list(APPEND DCPS_COMPILE_DEFINITIONS OPENDDS_SAFETY_PROFILE TAOLIB_ERROR=ACELIB_ERROR TAOLIB_DEBUG=ACELIB_DEBUG)
 endif()
 
-add_package_lib(OpenDDS_Dcps
+foreach(opt ${OPENDDS_BASE_OPTIONS})
+  if (NOT ${opt})
+    list(APPEND DCPS_COMPILE_DEFINITIONS OPENDDS_NO_${opt})
+  endif()
+endforeach()
+
+add_ace_lib(OpenDDS_Dcps
   PACKAGE OpenDDS
   DEFINE_SYMBOL OPENDDS_DCPS_BUILD_DLL
   PUBLIC_COMPILE_DEFINITIONS "${DCPS_COMPILE_DEFINITIONS}"
-  INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}"
-  PUBLIC_INCLUDE_DIRECTORIES "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>;$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>"
+  PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+                             $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
+                             $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}>
   PUBLIC_LINK_LIBRARIES "${dcps_link_libraries}"
 )
 
+target_cxx_sources(OpenDDS_Dcps
+  HEADER_FILES Version.h
+               Versioned_Namespace.h
+)
 
 ## set MSVC precompiled headers
 if (MSVC)

@@ -2,55 +2,60 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(ConfigTransports_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES common.cpp
-               publisher.cpp
-               Options.cpp
-               Factory.cpp
-               Pusher.cpp
-               DDSTEST.cpp
-               DataWriterListenerImpl.cpp
-               DataReaderListener.cpp
-  HEADER_FILES common.h
-               Options.h
-               Factory.h
-               Pusher.h
-               DDSTEST.h
-               DataWriterListenerImpl.h
-               DataReaderListener.h
   FOLDER tests/DCPS/ConfigTransports
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(ConfigTransports_Publisher
+  SOURCE_FILES DDSTEST.cpp
+               DataReaderListener.cpp
+               DataWriterListenerImpl.cpp
+               Factory.cpp
+               Options.cpp
+               Pusher.cpp
+               common.cpp
+               publisher.cpp
+  HEADER_FILES DDSTEST.h
+               DataReaderListener.h
+               DataWriterListenerImpl.h
+               Factory.h
+               Options.h
+               Pusher.h
+               common.h
+)
+
 
 add_ace_exe(ConfigTransports_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES common.cpp
-               subscriber.cpp
-               Options.cpp
-               Factory.cpp
-               Puller.cpp
-               DDSTEST.cpp
-               DataWriterListenerImpl.cpp
-               DataReaderListener.cpp
-  HEADER_FILES common.h
-               Options.h
-               Factory.h
-               Puller.h
-               DDSTEST.h
-               DataWriterListenerImpl.h
-               DataReaderListener.h
   FOLDER tests/DCPS/ConfigTransports
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(ConfigTransports_Subscriber
+  SOURCE_FILES DDSTEST.cpp
+               DataReaderListener.cpp
+               DataWriterListenerImpl.cpp
+               Factory.cpp
+               Options.cpp
+               Puller.cpp
+               common.cpp
+               subscriber.cpp
+  HEADER_FILES DDSTEST.h
+               DataReaderListener.h
+               DataWriterListenerImpl.h
+               Factory.h
+               Options.h
+               Puller.h
+               common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

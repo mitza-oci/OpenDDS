@@ -8,43 +8,62 @@ endif()
 
 requires(BUILT_IN_TOPICS)
 
-add_ace_lib(FaceUnitTests_QosSettings
-  OUTPUT_NAME FaceUnitTests_QosSettings
+add_ace_lib(FaceUnitTests_Qossettings
+  OUTPUT_NAME FaceUnitTests_Qossettings
+  FOLDER tests/FACE/Unit
+  ASPECTS FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+)
+target_cxx_sources(FaceUnitTests_Qossettings
   SOURCE_FILES QosSettingsTest.cpp
-  FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 
-add_ace_lib(FaceUnitTests_MemoryPool
-  OUTPUT_NAME FaceUnitTests_MemoryPool
+
+add_ace_lib(FaceUnitTests_Memorypool
+  OUTPUT_NAME FaceUnitTests_Memorypool
+  FOLDER tests/FACE/Unit
+  ASPECTS FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+)
+target_cxx_sources(FaceUnitTests_Memorypool
   SOURCE_FILES MemoryPoolTest.cpp
-  FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 
-add_ace_lib(FaceUnitTests_FreeIndex
-  OUTPUT_NAME FaceUnitTests_FreeIndex
+
+add_ace_lib(FaceUnitTests_Freeindex
+  OUTPUT_NAME FaceUnitTests_Freeindex
+  FOLDER tests/FACE/Unit
+  ASPECTS FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+)
+target_cxx_sources(FaceUnitTests_Freeindex
   SOURCE_FILES FreeIndexTest.cpp
-  FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 
-add_ace_lib(FaceUnitTests_SafetyProfilePool
-  OUTPUT_NAME FaceUnitTests_SafetyProfilePool
-  SOURCE_FILES SafetyProfilePoolTest.cpp
+
+add_ace_lib(FaceUnitTests_Safetyprofilepool
+  OUTPUT_NAME FaceUnitTests_Safetyprofilepool
   REQUIRES "NOT NO_OPENDDS_SAFETY_PROFILE"
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  ASPECTS FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(FaceUnitTests_Safetyprofilepool
+  SOURCE_FILES SafetyProfilePoolTest.cpp
+)
+
 
 add_ace_lib(FaceUnitTests_Sequences
   OUTPUT_NAME FaceUnitTests_Sequences
-  SOURCE_FILES SequencesTest.cpp
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  ASPECTS FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+)
+target_cxx_sources(FaceUnitTests_Sequences
+  SOURCE_FILES SequencesTest.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

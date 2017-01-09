@@ -6,14 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_DpShutdown_idl
-  OUTPUT_NAME DDS_DpShutdown_idl
+add_ace_lib(DDS_DpShutdown_Idl
+  OUTPUT_NAME DDS_DpShutdown_Idl
   FOLDER tests/DCPS/DpShutdown
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_DpShutdown_idl
+  TARGETS DDS_DpShutdown_Idl
   DDS_IDL_FLAGS -Wb,export_macro=Messenger_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Messenger_export.h
                 -Wb,stub_export_macro=Messenger_Export
@@ -21,17 +21,20 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(DDS_DpShutdown
   OUTPUT_NAME dpshutdown
-  SOURCE_FILES dpshutdown.cpp
   FOLDER tests/DCPS/DpShutdown
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DDS_DpShutdown_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_DpShutdown_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(DDS_DpShutdown
+  SOURCE_FILES dpshutdown.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

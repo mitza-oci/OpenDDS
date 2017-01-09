@@ -8,8 +8,13 @@ endif()
 
 requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(dcpsinfo_test_pubsub
+add_ace_exe(dcpsinfo_test_Pubsub
   OUTPUT_NAME pubsub
+  FOLDER tests/DCPS/DCPSInfoRepo
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Rtps_Udp
+)
+target_cxx_sources(dcpsinfo_test_Pubsub
   SOURCE_FILES DCPSDataReaderI.cpp
                DCPSDataWriterI.cpp
                DiscReceivedCalls.cpp
@@ -17,12 +22,9 @@ add_ace_exe(dcpsinfo_test_pubsub
   HEADER_FILES DCPSDataReaderI.h
                DCPSDataWriterI.h
                DiscReceivedCalls.h
-  FOLDER tests/DCPS/DCPSInfoRepo
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Rtps_Udp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

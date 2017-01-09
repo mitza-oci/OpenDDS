@@ -1,36 +1,41 @@
-add_ace_exe(Thrasher_publisher
+add_ace_exe(Thrasher_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
-               ParticipantTask.cpp
+  FOLDER tests/DCPS/Thrasher
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
+                      ${CMAKE_CURRENT_BINARY_DIR}/../FooType
+  LINK_LIBRARIES OpenDDS_Dcps
+                 DcpsFooType
+)
+target_cxx_sources(Thrasher_Publisher
+  SOURCE_FILES ParticipantTask.cpp
                ProgressIndicator.cpp
+               Publisher.cpp
   HEADER_FILES ParticipantTask.h
                ProgressIndicator.h
-  FOLDER tests/DCPS/Thrasher
-  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
-                      ${CMAKE_CURRENT_BINARY_DIR}/../FooType
-  LINK_LIBRARIES DcpsFooType
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
 
-add_ace_exe(Thrasher_subscriber
+
+add_ace_exe(Thrasher_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES Subscriber.cpp
-               DataReaderListenerImpl.cpp
+  FOLDER tests/DCPS/Thrasher
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
+                      ${CMAKE_CURRENT_BINARY_DIR}/../FooType
+  LINK_LIBRARIES OpenDDS_Dcps
+                 DcpsFooType
+)
+target_cxx_sources(Thrasher_Subscriber
+  SOURCE_FILES DataReaderListenerImpl.cpp
                ProgressIndicator.cpp
+               Subscriber.cpp
   HEADER_FILES DataReaderListenerImpl.h
                ProgressIndicator.h
-  FOLDER tests/DCPS/Thrasher
-  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
-                      ${CMAKE_CURRENT_BINARY_DIR}/../FooType
-  LINK_LIBRARIES DcpsFooType
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

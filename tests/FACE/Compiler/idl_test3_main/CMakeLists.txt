@@ -2,14 +2,17 @@ requires(BUILT_IN_TOPICS)
 
 add_ace_exe(FACE_idl_test3_main
   OUTPUT_NAME idl_test3
-  SOURCE_FILES main.cpp
   FOLDER tests/FACE/Compiler/idl_test3_main
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          FACE
   LINK_LIBRARIES FACE_idl_test3_lib
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_FACE
+                 OpenDDS_Dcps
+)
+target_cxx_sources(FACE_idl_test3_main
+  SOURCE_FILES main.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

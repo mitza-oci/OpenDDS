@@ -21,43 +21,52 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(ZeroCopyDRL_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES Writer.h
   FOLDER tests/DCPS/ZeroCopyDataReaderListener
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Model
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  ZeroCopyDRL_idl
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(ZeroCopyDRL_Publisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+)
+
 
 add_ace_exe(ZeroCopyDRL_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/ZeroCopyDataReaderListener
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Model
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  ZeroCopyDRL_idl
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(ZeroCopyDRL_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+)
+
 
 add_ace_exe(ZeroCopyDRL_StackSubscriber
   OUTPUT_NAME stack_subscriber
-  SOURCE_FILES stack_subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/ZeroCopyDataReaderListener
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Model
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  ZeroCopyDRL_idl
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(ZeroCopyDRL_StackSubscriber
+  SOURCE_FILES DataReaderListener.cpp
+               stack_subscriber.cpp
+  HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

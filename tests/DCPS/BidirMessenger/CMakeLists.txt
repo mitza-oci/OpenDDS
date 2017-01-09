@@ -7,14 +7,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_BidirMessenger_idl
-  OUTPUT_NAME DDS_BidirMessenger_idl
+add_ace_lib(DDS_BidirMessenger_Idl
+  OUTPUT_NAME DDS_BidirMessenger_Idl
   FOLDER tests/DCPS/BidirMessenger
   DEFINE_SYMBOL BIDIRMESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_BidirMessenger_idl
+  TARGETS DDS_BidirMessenger_Idl
   DDS_IDL_FLAGS -Wb,export_macro=BidirMessenger_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=BidirMessenger_export.h
                 -Wb,stub_export_macro=BidirMessenger_Export
@@ -22,16 +22,20 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
-add_ace_exe(DDS_BidirMessenger_PubSub
+
+add_ace_exe(DDS_BidirMessenger_Pubsub
   OUTPUT_NAME pubsub
-  SOURCE_FILES pubsub.cpp
-               Writer.cpp
-               DataReaderListener.cpp
-  HEADER_FILES Writer.h
-               DataReaderListener.h
   FOLDER tests/DCPS/BidirMessenger
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DDS_BidirMessenger_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_BidirMessenger_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(DDS_BidirMessenger_Pubsub
+  SOURCE_FILES DataReaderListener.cpp
+               Writer.cpp
+               pubsub.cpp
+  HEADER_FILES DataReaderListener.h
+               Writer.h
+)
+

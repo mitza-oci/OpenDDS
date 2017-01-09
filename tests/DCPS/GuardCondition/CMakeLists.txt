@@ -8,12 +8,14 @@ endif()
 
 add_ace_exe(GuardCondition
   OUTPUT_NAME GuardConditionTest
-  SOURCE_FILES GuardConditionTest.cpp
   FOLDER tests/DCPS/GuardCondition
   LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(GuardCondition
+  SOURCE_FILES GuardConditionTest.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

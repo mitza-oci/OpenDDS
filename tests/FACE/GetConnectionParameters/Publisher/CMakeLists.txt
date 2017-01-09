@@ -9,11 +9,14 @@ endif()
 
 add_ace_exe(GetConnectionParametersPublisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
   FOLDER tests/FACE/GetConnectionParameters/Publisher
+  ASPECTS FACE
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../../Messenger
                       ${CMAKE_CURRENT_BINARY_DIR}/../../Messenger
   LINK_LIBRARIES FaceMessengerIdl
-                 OpenDDS_FACE
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(GetConnectionParametersPublisher
+  SOURCE_FILES Publisher.cpp
+)
+

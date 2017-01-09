@@ -2,21 +2,18 @@ requires(OBJECT_MODEL_PROFILE)
 
 add_ace_exe(Presentation
   OUTPUT_NAME tester
-  SOURCE_FILES main.cpp
   FOLDER tests/DCPS/Presentation
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType
   LINK_LIBRARIES OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  DcpsFooType
 )
+target_cxx_sources(Presentation
+  SOURCE_FILES main.cpp
+)
 
-add_custom_command(TARGET Presentation
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E create_symlink tester test
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -10,16 +10,21 @@ requires(BUILT_IN_TOPICS)
 
 add_ace_lib(FACE_idl_test_fixed
   OUTPUT_NAME FACE_idl_test_fixed
-  SOURCE_FILES TestFixed.cpp
   FOLDER tests/FACE/Compiler/idl_test_fixed
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  ASPECTS FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_face_idl_files(
+target_cxx_sources(FACE_idl_test_fixed
+  SOURCE_FILES TestFixed.cpp
+)
+
+dds_idl_sources(
   TARGETS FACE_idl_test_fixed
+  ASPECTS FACE
   IDL_FILES Fixed.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -8,31 +8,45 @@ endif()
 
 requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(Messenger_publisher
+add_ace_exe(Messenger_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
   FOLDER DevGuideExamples/DCPS/Messenger
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
-
-add_ace_exe(Messenger_subscriber
-  OUTPUT_NAME subscriber
-  SOURCE_FILES DataReaderListenerImpl.cpp
-               Subscriber.cpp
-  HEADER_FILES DataReaderListenerImpl.h
-  FOLDER DevGuideExamples/DCPS/Messenger
-  LINK_LIBRARIES OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+target_cxx_sources(Messenger_Publisher
+  SOURCE_FILES Publisher.cpp
 )
 
 dds_idl_sources(
-  TARGETS Messenger_publisher
-          Messenger_subscriber
+  TARGETS Messenger_Publisher
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+
+add_ace_exe(Messenger_Subscriber
+  OUTPUT_NAME subscriber
+  FOLDER DevGuideExamples/DCPS/Messenger
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Tcp
+)
+target_cxx_sources(Messenger_Subscriber
+  SOURCE_FILES DataReaderListenerImpl.cpp
+               Subscriber.cpp
+  HEADER_FILES DataReaderListenerImpl.h
+)
+
+dds_idl_sources(
+  TARGETS Messenger_Subscriber
+  IDL_FILES Messenger.idl
+)
+
+
+dds_idl_sources(
+  IDL_FILES Messenger.idl
+)
+
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

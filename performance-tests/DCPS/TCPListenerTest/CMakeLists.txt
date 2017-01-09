@@ -2,32 +2,37 @@ requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(DCPS_Perf_TCPListener_Pub
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES common.h
-               Writer.h
   FOLDER performance-tests/DCPS/TCPListenerTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(DCPS_Perf_TCPListener_Pub
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+               common.h
+)
+
 
 add_ace_exe(DCPS_Perf_TCPListener_Sub
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES common.h
-               TestStats.h
-               DataReaderListener.h
   FOLDER performance-tests/DCPS/TCPListenerTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(DCPS_Perf_TCPListener_Sub
+  SOURCE_FILES DataReaderListener.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+               TestStats.h
+               common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

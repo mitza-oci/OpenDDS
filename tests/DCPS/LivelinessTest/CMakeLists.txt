@@ -2,35 +2,40 @@ requires(OWNERSHIP_PROFILE)
 
 add_ace_exe(LivelinessTestPublisher
   OUTPUT_NAME publisher
-  SOURCE_FILES common.cpp
-               publisher.cpp
-               Writer.cpp
-  HEADER_FILES common.h
-               Writer.h
   FOLDER tests/DCPS/LivelinessTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(LivelinessTestPublisher
+  SOURCE_FILES Writer.cpp
+               common.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+               common.h
+)
+
 
 add_ace_exe(LivelinessTestSubscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES common.cpp
-               subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES common.h
-               DataReaderListener.h
   FOLDER tests/DCPS/LivelinessTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(LivelinessTestSubscriber
+  SOURCE_FILES DataReaderListener.cpp
+               common.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+               common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

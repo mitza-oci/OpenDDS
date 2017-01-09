@@ -8,19 +8,22 @@ endif()
 
 add_ace_exe(ZeroCopyRead
   OUTPUT_NAME main
-  SOURCE_FILES main.cpp
   FOLDER tests/DCPS/ZeroCopyRead
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(ZeroCopyRead
+  SOURCE_FILES main.cpp
+)
+
 dds_idl_sources(
   TARGETS ZeroCopyRead
   TAO_IDL_FLAGS -SS
   IDL_FILES Simple.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

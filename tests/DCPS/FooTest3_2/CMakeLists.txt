@@ -1,34 +1,39 @@
 add_ace_exe(FooTest3_2_Publisher
   OUTPUT_NAME FooTest3_publisher
-  SOURCE_FILES pub_main.cpp
-               PubDriver.cpp
-               InstanceDataMap.cpp
-               Writer.cpp
-  HEADER_FILES PubDriver.h
-               InstanceDataMap.h
-               Writer.h
   FOLDER tests/DCPS/FooTest3_2
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType3Unbounded
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(FooTest3_2_Publisher
+  SOURCE_FILES InstanceDataMap.cpp
+               PubDriver.cpp
+               Writer.cpp
+               pub_main.cpp
+  HEADER_FILES InstanceDataMap.h
+               PubDriver.h
+               Writer.h
+)
+
 
 add_ace_exe(FooTest3_2_Subscriber
   OUTPUT_NAME FooTest3_subscriber
-  SOURCE_FILES sub_main.cpp
-               SubDriver.cpp
-               DataReaderListener.cpp
-  HEADER_FILES SubDriver.h
-               DataReaderListener.h
   FOLDER tests/DCPS/FooTest3_2
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType3Unbounded
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(FooTest3_2_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               SubDriver.cpp
+               sub_main.cpp
+  HEADER_FILES DataReaderListener.h
+               SubDriver.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

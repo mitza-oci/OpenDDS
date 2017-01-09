@@ -1,65 +1,76 @@
 requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(InfoRepo_population_SyncServer
+
+requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
+
+add_ace_exe(InfoRepo_population_Syncserver
   OUTPUT_NAME syncServer
-  SOURCE_FILES SyncServer.cpp
-               SyncExt_i.cpp
-  HEADER_FILES SyncExt_i.h
+
   FOLDER performance-tests/DCPS/InfoRepo_population
+  ASPECTS TAO
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
-  LINK_LIBRARIES Sync_ServerLib
+  LINK_LIBRARIES Sync_Serverlib
                  TAO_PortableServer
                  TAO_IORTable
 )
-
+target_cxx_sources(InfoRepo_population_Syncserver
+  SOURCE_FILES SyncExt_i.cpp
+               SyncServer.cpp
+  HEADER_FILES SyncExt_i.h
+)
 
 add_ace_exe(InfoRepo_population_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES SyncClientExt_i.cpp
-               publisher.cpp
-               Writer.cpp
-  HEADER_FILES SyncClientExt_i.h
-               Writer.h
   FOLDER performance-tests/DCPS/InfoRepo_population
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES OpenDDS_Tcp
-                 Sync_ClientLib
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+                 Sync_Clientlib
+)
+target_cxx_sources(InfoRepo_population_Publisher
+  SOURCE_FILES SyncClientExt_i.cpp
+               Writer.cpp
+               publisher.cpp
+  HEADER_FILES SyncClientExt_i.h
+               Writer.h
 )
 
 add_ace_exe(InfoRepo_population_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES SyncClientExt_i.cpp
-               subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES SyncClientExt_i.h
-               DataReaderListener.h
   FOLDER performance-tests/DCPS/InfoRepo_population
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES OpenDDS_Tcp
-                 Sync_ClientLib
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+                 Sync_Clientlib
+)
+target_cxx_sources(InfoRepo_population_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               SyncClientExt_i.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+               SyncClientExt_i.h
 )
 
 tao_idl_sources(
-  TARGETS InfoRepo_population_SyncServer
+  TARGETS InfoRepo_population_Syncserver
           InfoRepo_population_Publisher
           InfoRepo_population_Subscriber
-  IDL_FLAGS -I../Sync
+  IDL_FLAGS -Sa -St -I../Sync
   IDL_FILES SyncExt.idl
 )
 
 dds_idl_sources(
   TARGETS InfoRepo_population_Publisher
           InfoRepo_population_Subscriber
-  TAO_IDL_FLAGS -I../Sync
+  TAO_IDL_FLAGS -Sa -St -I../Sync
+  DDS_IDL_FLAGS -Sa -St -I../Sync
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -8,20 +8,23 @@ endif()
 
 add_ace_exe(DdsDcps_UnitTest
   OUTPUT_NAME DdsDcps_UnitTest
-  SOURCE_FILES MyTypeSupportImpl.cpp
-               Main.cpp
-  HEADER_FILES MyTypeSupportImpl.h
   FOLDER tests/DCPS/unit
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(DdsDcps_UnitTest
+  SOURCE_FILES Main.cpp
+               MyTypeSupportImpl.cpp
+  HEADER_FILES MyTypeSupportImpl.h
+)
+
 tao_idl_sources(
   TARGETS DdsDcps_UnitTest
   IDL_FILES MyTypeSupport.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

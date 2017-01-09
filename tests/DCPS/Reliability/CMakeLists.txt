@@ -5,10 +5,10 @@ if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 add_subdirectory(IDL)
-add_subdirectory(pub)
 add_subdirectory(sub)
+add_subdirectory(pub)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

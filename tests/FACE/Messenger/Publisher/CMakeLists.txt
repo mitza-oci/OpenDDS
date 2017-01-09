@@ -2,9 +2,12 @@
 
 add_ace_exe(FaceMessengerPublisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
   FOLDER tests/FACE/Messenger/Publisher
+  ASPECTS FACE
   LINK_LIBRARIES FaceMessengerIdl
-                 OpenDDS_FACE
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(FaceMessengerPublisher
+  SOURCE_FILES Publisher.cpp
+)
+

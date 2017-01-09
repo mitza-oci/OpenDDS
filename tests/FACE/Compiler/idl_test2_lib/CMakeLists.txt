@@ -10,11 +10,13 @@ endif()
 add_ace_lib(FACE_idl_test2_lib
   OUTPUT_NAME FACE_idl_test2_lib
   FOLDER tests/FACE/Compiler/idl_test2_lib
+  ASPECTS FACE
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_face_idl_files(
+dds_idl_sources(
   TARGETS FACE_idl_test2_lib
+  ASPECTS FACE
   DDS_IDL_FLAGS -Wb,export_macro=FooLib_Export
                 -Wb,export_include=foolib_export.h
                 -I../../../DCPS/Compiler/idl_test2_lib
@@ -24,3 +26,4 @@ add_face_idl_files(
   IDL_FILES ../../../DCPS/Compiler/idl_test2_lib/FooDef.idl
             ../../../DCPS/Compiler/idl_test2_lib/BazDef.idl
 )
+

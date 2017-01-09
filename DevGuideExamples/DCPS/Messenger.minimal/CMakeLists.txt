@@ -9,32 +9,47 @@ endif()
 
 requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(MessengerMinimal_publisher
+add_ace_exe(MessengerMinimal_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
-               Boilerplate.cpp
-  HEADER_FILES Boilerplate.h
   FOLDER DevGuideExamples/DCPS/Messenger.minimal
-  LINK_LIBRARIES OpenDDS_Model
-                 OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Tcp
+                 OpenDDS_Model
 )
-
-add_ace_exe(MessengerMinimal_subscriber
-  OUTPUT_NAME subscriber
-  SOURCE_FILES DataReaderListenerImpl.cpp
-               Subscriber.cpp
-               Boilerplate.cpp
-  HEADER_FILES DataReaderListenerImpl.h
-               Boilerplate.h
-  FOLDER DevGuideExamples/DCPS/Messenger.minimal
-  LINK_LIBRARIES OpenDDS_Model
-                 OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+target_cxx_sources(MessengerMinimal_Publisher
+  SOURCE_FILES Boilerplate.cpp
+               Publisher.cpp
+  HEADER_FILES Boilerplate.h
 )
 
 dds_idl_sources(
-  TARGETS MessengerMinimal_publisher
-          MessengerMinimal_subscriber
+  TARGETS MessengerMinimal_Publisher
   IDL_FILES Messenger.idl
 )
+
+
+add_ace_exe(MessengerMinimal_Subscriber
+  OUTPUT_NAME subscriber
+  FOLDER DevGuideExamples/DCPS/Messenger.minimal
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Tcp
+                 OpenDDS_Model
+)
+target_cxx_sources(MessengerMinimal_Subscriber
+  SOURCE_FILES Boilerplate.cpp
+               DataReaderListenerImpl.cpp
+               Subscriber.cpp
+  HEADER_FILES Boilerplate.h
+               DataReaderListenerImpl.h
+)
+
+dds_idl_sources(
+  TARGETS MessengerMinimal_Subscriber
+  IDL_FILES Messenger.idl
+)
+
+
+dds_idl_sources(
+  IDL_FILES Messenger.idl
+)
+

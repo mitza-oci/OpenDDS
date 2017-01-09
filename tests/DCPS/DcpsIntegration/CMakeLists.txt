@@ -1,30 +1,35 @@
-add_ace_exe(dcps_integration_topic
+add_ace_exe(dcps_integration_Topic
   OUTPUT_NAME topic_test
-  SOURCE_FILES topic.cpp
-               DomainParticipantListener.cpp
+  FOLDER tests/DCPS/DcpsIntegration
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
+                 DcpsFooType
+)
+target_cxx_sources(dcps_integration_Topic
+  SOURCE_FILES DomainParticipantListener.cpp
                TopicListener.cpp
+               topic.cpp
   HEADER_FILES DomainParticipantListener.h
                TopicListener.h
-  FOLDER tests/DCPS/DcpsIntegration
-  LINK_LIBRARIES DcpsFooType
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
 
-add_ace_exe(dcps_integration_infrastructure
+
+add_ace_exe(dcps_integration_Infrastructure
   OUTPUT_NAME infrastructure_test
-  SOURCE_FILES infrastructure.cpp
-               DomainParticipantListener.cpp
-  HEADER_FILES DomainParticipantListener.h
   FOLDER tests/DCPS/DcpsIntegration
-  LINK_LIBRARIES DcpsFooType
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
+                 DcpsFooType
+)
+target_cxx_sources(dcps_integration_Infrastructure
+  SOURCE_FILES DomainParticipantListener.cpp
+               infrastructure.cpp
+  HEADER_FILES DomainParticipantListener.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -2,14 +2,16 @@ requires(OWNERSHIP_PROFILE BUILD_SHARED_LIBS)
 
 add_ace_exe(DcpsFooTest5_0
   OUTPUT_NAME main
-  SOURCE_FILES main.cpp
   FOLDER tests/DCPS/FooTest5_0
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
 )
+target_cxx_sources(DcpsFooTest5_0
+  SOURCE_FILES main.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

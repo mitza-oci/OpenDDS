@@ -8,13 +8,15 @@ endif()
 
 add_ace_exe(DDS_transport_rtps_reliability
   OUTPUT_NAME DDS_transport_rtps_reliability
-  SOURCE_FILES rtps_reliability.cpp
   FOLDER tests/transport/rtps_reliability
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Rtps_Udp
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Rtps_Udp
+)
+target_cxx_sources(DDS_transport_rtps_reliability
+  SOURCE_FILES rtps_reliability.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

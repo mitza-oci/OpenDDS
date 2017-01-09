@@ -66,6 +66,7 @@ to_string(const GUID_t& guid)
 }
 
 #ifndef OPENDDS_SAFETY_PROFILE
+#ifndef GEN_OSTREAM_OPS
 std::ostream&
 operator<<(std::ostream& os, const GUID_t& rhs)
 {
@@ -94,6 +95,7 @@ operator<<(std::ostream& os, const GUID_t& rhs)
 
   return os;
 }
+#endif // GEN_OSTREAM_OPS
 
 std::istream&
 operator>>(std::istream& is, GUID_t& rhs)

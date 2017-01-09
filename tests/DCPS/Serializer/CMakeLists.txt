@@ -8,14 +8,16 @@ endif()
 
 add_ace_exe(SerializerTest
   OUTPUT_NAME SerializerTest
+  FOLDER tests/DCPS/Serializer
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Dcps
+)
+target_cxx_sources(SerializerTest
   SOURCE_FILES AlignmentTest.cpp
                SerializerTest.cpp
-  FOLDER tests/DCPS/Serializer
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

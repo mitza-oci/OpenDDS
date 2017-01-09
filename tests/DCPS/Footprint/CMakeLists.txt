@@ -7,14 +7,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_Footprint_idl
-  OUTPUT_NAME DDS_Footprint_idl
+add_ace_lib(DDS_Footprint_Idl
+  OUTPUT_NAME DDS_Footprint_Idl
   FOLDER tests/DCPS/Footprint
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_Footprint_idl
+  TARGETS DDS_Footprint_Idl
   DDS_IDL_FLAGS -Wb,export_macro=Messenger_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Messenger_export.h
                 -Wb,stub_export_macro=Messenger_Export
@@ -22,46 +22,59 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
-add_ace_exe(DDS_Footprint_RtpsPublisher
+
+add_ace_exe(DDS_Footprint_Rtpspublisher
   OUTPUT_NAME rtpspublisher
-  SOURCE_FILES rtpspublisher.cpp
-               Writer.cpp
-  HEADER_FILES Writer.h
   FOLDER tests/DCPS/Footprint
-  LINK_LIBRARIES DDS_Footprint_idl
+  LINK_LIBRARIES DDS_Footprint_Idl
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(DDS_Footprint_Rtpspublisher
+  SOURCE_FILES Writer.cpp
+               rtpspublisher.cpp
+  HEADER_FILES Writer.h
+)
 
-add_ace_exe(DDS_Footprint_RtpsSubscriber
+
+add_ace_exe(DDS_Footprint_Rtpssubscriber
   OUTPUT_NAME rtpssubscriber
-  SOURCE_FILES rtpssubscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/Footprint
-  LINK_LIBRARIES DDS_Footprint_idl
+  LINK_LIBRARIES DDS_Footprint_Idl
                  OpenDDS_Rtps_Udp
 )
-
-add_ace_exe(DDS_Footprint_TcpPublisher
-  OUTPUT_NAME tcppublisher
-  SOURCE_FILES tcppublisher.cpp
-               Writer.cpp
-  HEADER_FILES Writer.h
-  FOLDER tests/DCPS/Footprint
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DDS_Footprint_idl
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-)
-
-add_ace_exe(DDS_Footprint_TcpSubscriber
-  OUTPUT_NAME tcpsubscriber
-  SOURCE_FILES tcpsubscriber.cpp
-               DataReaderListener.cpp
+target_cxx_sources(DDS_Footprint_Rtpssubscriber
+  SOURCE_FILES DataReaderListener.cpp
+               rtpssubscriber.cpp
   HEADER_FILES DataReaderListener.h
-  FOLDER tests/DCPS/Footprint
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DDS_Footprint_idl
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+
+
+add_ace_exe(DDS_Footprint_Tcppublisher
+  OUTPUT_NAME tcppublisher
+  FOLDER tests/DCPS/Footprint
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_Footprint_Idl
+                 OpenDDS_Dcps
+)
+target_cxx_sources(DDS_Footprint_Tcppublisher
+  SOURCE_FILES Writer.cpp
+               tcppublisher.cpp
+  HEADER_FILES Writer.h
+)
+
+
+add_ace_exe(DDS_Footprint_Tcpsubscriber
+  OUTPUT_NAME tcpsubscriber
+  FOLDER tests/DCPS/Footprint
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DDS_Footprint_Idl
+                 OpenDDS_Dcps
+)
+target_cxx_sources(DDS_Footprint_Tcpsubscriber
+  SOURCE_FILES DataReaderListener.cpp
+               tcpsubscriber.cpp
+  HEADER_FILES DataReaderListener.h
+)
+

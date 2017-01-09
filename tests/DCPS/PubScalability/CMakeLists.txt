@@ -6,47 +6,53 @@ if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
-
-add_ace_exe(PubScalability_Publisher
-  OUTPUT_NAME publisher
-  SOURCE_FILES pub_main.cpp
-               PubDriver.cpp
-               InstanceDataMap.cpp
-               Writer.cpp
-  HEADER_FILES PubDriver.h
-               InstanceDataMap.h
-               Writer.h
-  FOLDER tests/DCPS/PubScalability
-  LINK_LIBRARIES PubScalability_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-)
-
-add_ace_exe(PubScalability_Subscriber
-  OUTPUT_NAME subscriber
-  SOURCE_FILES sub_main.cpp
-               SubDriver.cpp
-               DataReaderListener.cpp
-  HEADER_FILES SubDriver.h
-               DataReaderListener.h
-  FOLDER tests/DCPS/PubScalability
-  LINK_LIBRARIES PubScalability_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-)
-
-add_ace_lib(PubScalability_idl
-  OUTPUT_NAME PubScalability_idl
+add_ace_lib(PubScalability_Idl
+  OUTPUT_NAME PubScalability_Idl
   FOLDER tests/DCPS/PubScalability
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS PubScalability_idl
+  TARGETS PubScalability_Idl
   DDS_IDL_FLAGS -Wb,export_macro=SampleTypeLib_Export
   TAO_IDL_FLAGS -Wb,export_macro=SampleTypeLib_Export
                 -Wb,export_include=sampletypelib_export.h
                 -SS
   IDL_FILES SampleType.idl
 )
+
+add_ace_exe(PubScalability_Publisher
+  OUTPUT_NAME publisher
+  FOLDER tests/DCPS/PubScalability
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES PubScalability_Idl
+                 OpenDDS_Dcps
+)
+target_cxx_sources(PubScalability_Publisher
+  SOURCE_FILES InstanceDataMap.cpp
+               PubDriver.cpp
+               Writer.cpp
+               pub_main.cpp
+  HEADER_FILES InstanceDataMap.h
+               PubDriver.h
+               Writer.h
+)
+
+
+add_ace_exe(PubScalability_Subscriber
+  OUTPUT_NAME subscriber
+  FOLDER tests/DCPS/PubScalability
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES PubScalability_Idl
+                 OpenDDS_Dcps
+)
+target_cxx_sources(PubScalability_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               SubDriver.cpp
+               sub_main.cpp
+  HEADER_FILES DataReaderListener.h
+               SubDriver.h
+)
+
+

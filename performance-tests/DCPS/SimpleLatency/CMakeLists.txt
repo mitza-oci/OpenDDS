@@ -7,14 +7,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(SimpleLatency_idl
-  OUTPUT_NAME SimpleLatency_idl
+add_ace_lib(SimpleLatency_Idl
+  OUTPUT_NAME SimpleLatency_Idl
   FOLDER performance-tests/DCPS/SimpleLatency
   DEFINE_SYMBOL SIMPLELATENCY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS SimpleLatency_idl
+  TARGETS SimpleLatency_Idl
   DDS_IDL_FLAGS -Wb,export_macro=SimpleLatency_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=SimpleLatency_export.h
                 -Wb,stub_export_macro=SimpleLatency_Export
@@ -22,27 +22,34 @@ dds_idl_sources(
   IDL_FILES DDSPerfTest.idl
 )
 
+
 add_ace_exe(DDS_SimpleLatency_Pub
   OUTPUT_NAME dds_pub
-  SOURCE_FILES sample_pub.cpp
-               PubListener.cpp
-  HEADER_FILES PubListener.h
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER performance-tests/DCPS/SimpleLatency
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 SimpleLatency_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Dcps
 )
+target_cxx_sources(DDS_SimpleLatency_Pub
+  SOURCE_FILES PubListener.cpp
+               sample_pub.cpp
+  HEADER_FILES PubListener.h
+)
+
 
 add_ace_exe(DDS_SimpleLatency_Sub
   OUTPUT_NAME dds_sub
-  SOURCE_FILES sample_sub.cpp
-               SubListener.cpp
-  HEADER_FILES SubListener.h
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER performance-tests/DCPS/SimpleLatency
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 SimpleLatency_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Dcps
 )
+target_cxx_sources(DDS_SimpleLatency_Sub
+  SOURCE_FILES SubListener.cpp
+               sample_sub.cpp
+  HEADER_FILES SubListener.h
+)
+
 add_subdirectory(raw_tcp)

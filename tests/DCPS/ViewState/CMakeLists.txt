@@ -10,19 +10,22 @@ requires(OWNERSHIP_PROFILE)
 
 add_ace_exe(ViewState
   OUTPUT_NAME main
-  SOURCE_FILES main.cpp
   FOLDER tests/DCPS/ViewState
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(ViewState
+  SOURCE_FILES main.cpp
+)
+
 dds_idl_sources(
   TARGETS ViewState
   TAO_IDL_FLAGS -SS
   IDL_FILES Simple.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

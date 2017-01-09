@@ -10,12 +10,14 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_lib(FileSystemStorage
   OUTPUT_NAME FileSystemStorage
-  SOURCE_FILES FileSystemStorageTest.cpp
   FOLDER tests/DCPS/FileSystemStorage
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(FileSystemStorage
+  SOURCE_FILES FileSystemStorageTest.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

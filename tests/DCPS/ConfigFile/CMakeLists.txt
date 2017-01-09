@@ -10,17 +10,19 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(ConfigFile
   OUTPUT_NAME ConfigFile
-  SOURCE_FILES ConfigFile.cpp
   FOLDER tests/DCPS/ConfigFile
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_InfoRepoDiscovery
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Multicast
                  OpenDDS_Tcp
                  OpenDDS_Udp
                  OpenDDS_Rtps
 )
+target_cxx_sources(ConfigFile
+  SOURCE_FILES ConfigFile.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

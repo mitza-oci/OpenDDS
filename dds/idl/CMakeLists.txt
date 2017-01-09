@@ -1,18 +1,5 @@
 
-# file(GLOB sources *.cpp)
-#
-# add_executable(opendds_idl
-#   ${sources}
-# )
-#
-# set_target_properties(opendds_idl PROPERTIES
-#   LINK_LIBRARIES "TAO_IDL_FE"
-#   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
-#   COMPILE_DEFINITIONS TAO_IDL_PREPROCESSOR=\"${CMAKE_CXX_COMPILER}\"
-# )
-
-
-add_package_exe(opendds_idl
+add_ace_exe(opendds_idl
   PACKAGE OpenDDS
   LINK_LIBRARIES TAO_IDL_FE
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}

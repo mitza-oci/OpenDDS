@@ -10,14 +10,17 @@ endif()
 add_ace_lib(FaceConformanceIdl
   OUTPUT_NAME FaceConformanceIdl
   FOLDER tests/FACE/Conformance
+  ASPECTS FACE
   DEFINE_SYMBOL SAMPLEMODEL_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-add_face_idl_files(
+dds_idl_sources(
   TARGETS FaceConformanceIdl
+  ASPECTS FACE
   DDS_IDL_FLAGS -Wb,export_include=SampleModel_Export.h
                 -Wb,export_macro=SampleModel_Export
   TAO_IDL_FLAGS -Wb,export_include=SampleModel_Export.h
                 -Wb,export_macro=SampleModel_Export
   IDL_FILES SampleModel.idl
 )
+

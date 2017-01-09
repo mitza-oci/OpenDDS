@@ -8,14 +8,14 @@ endif()
 
 requires(OWNERSHIP_PROFILE)
 
-add_ace_lib(DDS_Instances_idl
-  OUTPUT_NAME DDS_Instances_idl
+add_ace_lib(DDS_Instances_Idl
+  OUTPUT_NAME DDS_Instances_Idl
   FOLDER tests/DCPS/Instances
   DEFINE_SYMBOL INSTANCESLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_Instances_idl
+  TARGETS DDS_Instances_Idl
   DDS_IDL_FLAGS -Wb,export_macro=InstancesLib_Export
   TAO_IDL_FLAGS -Wb,export_macro=InstancesLib_Export
                 -Wb,export_include=instanceslib_export.h
@@ -24,29 +24,35 @@ dds_idl_sources(
             NoKeyData.idl
 )
 
+
 add_ace_exe(Instances_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Publisher.cpp
   FOLDER tests/DCPS/Instances
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES TestUtils
-                 DDS_Instances_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+                 DDS_Instances_Idl
 )
+target_cxx_sources(Instances_Publisher
+  SOURCE_FILES Publisher.cpp
+)
+
 
 add_ace_exe(Instances_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES Subscriber.cpp
   FOLDER tests/DCPS/Instances
-  LINK_LIBRARIES TestUtils
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ${DCPS_TRANSPORTS_FOR_TEST}
-                 DDS_Instances_idl
-                 OpenDDS_Model
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Model
+                 TestUtils
+                 DDS_Instances_Idl
+)
+target_cxx_sources(Instances_Subscriber
+  SOURCE_FILES Subscriber.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

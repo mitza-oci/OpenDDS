@@ -1,13 +1,15 @@
-add_ace_exe(register_instance_topic
+add_ace_exe(register_instance_Topic
   OUTPUT_NAME register_instance_test
-  SOURCE_FILES register_instance.cpp
   FOLDER tests/DCPS/RegisterInstance
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DcpsFooType
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(register_instance_Topic
+  SOURCE_FILES register_instance.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

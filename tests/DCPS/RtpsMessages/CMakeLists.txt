@@ -8,13 +8,15 @@ endif()
 
 add_ace_exe(RtpsMessages
   OUTPUT_NAME RtpsMessagesTest
-  SOURCE_FILES RtpsMessagesTest.cpp
   FOLDER tests/DCPS/RtpsMessages
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Rtps
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+)
+target_cxx_sources(RtpsMessages
+  SOURCE_FILES RtpsMessagesTest.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

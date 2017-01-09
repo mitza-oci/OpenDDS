@@ -8,19 +8,22 @@ endif()
 
 add_ace_exe(ReadCondition
   OUTPUT_NAME ReadConditionTest
-  SOURCE_FILES ReadConditionTest.cpp
   FOLDER tests/DCPS/ReadCondition
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(ReadCondition
+  SOURCE_FILES ReadConditionTest.cpp
+)
+
 dds_idl_sources(
   TARGETS ReadCondition
   TAO_IDL_FLAGS -SS
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

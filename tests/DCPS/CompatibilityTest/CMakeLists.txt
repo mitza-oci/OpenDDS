@@ -1,36 +1,41 @@
 add_ace_exe(CompatibilityTest_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES common.cpp
-               publisher.cpp
-               Writer.cpp
-               DataWriterListenerImpl.cpp
-  HEADER_FILES common.h
-               Writer.h
-               DataWriterListenerImpl.h
   FOLDER tests/DCPS/CompatibilityTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(CompatibilityTest_Publisher
+  SOURCE_FILES DataWriterListenerImpl.cpp
+               Writer.cpp
+               common.cpp
+               publisher.cpp
+  HEADER_FILES DataWriterListenerImpl.h
+               Writer.h
+               common.h
+)
+
 
 add_ace_exe(CompatibilityTest_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES common.cpp
-               subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES common.h
-               DataReaderListener.h
   FOLDER tests/DCPS/CompatibilityTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(CompatibilityTest_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               common.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+               common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -21,3 +21,4 @@ dds_idl_sources(
   IDL_FILES FooDef.idl
             BazDef.idl
 )
+

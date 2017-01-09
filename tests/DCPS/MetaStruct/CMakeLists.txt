@@ -10,16 +10,19 @@ requires(CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION)
 
 add_ace_lib(MetaStructTest
   OUTPUT_NAME MetaStructTest
-  SOURCE_FILES MetaStructTest.cpp
   FOLDER tests/DCPS/MetaStruct
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(MetaStructTest
+  SOURCE_FILES MetaStructTest.cpp
+)
+
 dds_idl_sources(
   TARGETS MetaStructTest
   IDL_FILES MetaStructTest.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

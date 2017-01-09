@@ -1,12 +1,30 @@
 
-add_package_lib(OpenDDS_Rtps
+add_ace_lib(OpenDDS_Rtps
   PACKAGE OpenDDS
   DEFINE_SYMBOL OPENDDS_RTPS_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 
-glob_target_cxx_sources(OpenDDS_Rtps)
+target_cxx_sources(OpenDDS_Rtps
+  SOURCE_FILES GuidGenerator.cpp
+               ParameterListConverter.cpp
+               RtpsDiscovery.cpp
+               Sedp.cpp
+               Spdp.cpp
+               md5.cpp
+  HEADER_FILES BaseMessageTypes.h
+               BaseMessageUtils.h
+               GuidGenerator.h
+               MessageTypes.h
+               ParameterListConverter.h
+               RtpsDiscovery.h
+               Sedp.h
+               Spdp.h
+               md5.h
+               rtps_export.h
+)
+
 
 dds_idl_sources(
   TARGETS OpenDDS_Rtps

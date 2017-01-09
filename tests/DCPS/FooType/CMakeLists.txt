@@ -2,11 +2,14 @@
 
 add_ace_lib(DcpsFooType
   OUTPUT_NAME DcpsFooType
-  SOURCE_FILES Foo_Singleton_Transport.cpp
-  HEADER_FILES Foo_Singleton_Transport.h
   FOLDER tests/DCPS/FooType
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(DcpsFooType
+  SOURCE_FILES Foo_Singleton_Transport.cpp
+  HEADER_FILES Foo_Singleton_Transport.h
+)
+
 dds_idl_sources(
   TARGETS DcpsFooType
   DDS_IDL_FLAGS -Wb,export_macro=FooType_Export
@@ -15,3 +18,4 @@ dds_idl_sources(
                 -SS
   IDL_FILES FooType.idl
 )
+

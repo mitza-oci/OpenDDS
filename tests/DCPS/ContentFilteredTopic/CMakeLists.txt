@@ -10,18 +10,21 @@ requires(CONTENT_FILTERED_TOPIC CONTENT_SUBSCRIPTION)
 
 add_ace_exe(ContentFilteredTopic
   OUTPUT_NAME ContentFilteredTopicTest
-  SOURCE_FILES ContentFilteredTopicTest.cpp
   FOLDER tests/DCPS/ContentFilteredTopic
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(ContentFilteredTopic
+  SOURCE_FILES ContentFilteredTopicTest.cpp
+)
+
 dds_idl_sources(
   TARGETS ContentFilteredTopic
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

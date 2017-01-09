@@ -8,14 +8,14 @@ endif()
 
 requires(OWNERSHIP_PROFILE)
 
-add_ace_lib(WaitForAck_idl
-  OUTPUT_NAME WaitForAck_idl
+add_ace_lib(WaitForAck_Idl
+  OUTPUT_NAME WaitForAck_Idl
   FOLDER tests/DCPS/WaitForAck
   DEFINE_SYMBOL WAITFORACK_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS WaitForAck_idl
+  TARGETS WaitForAck_Idl
   DDS_IDL_FLAGS -Wb,export_macro=WaitForAck_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=WaitForAck_export.h
                 -Wb,stub_export_macro=WaitForAck_Export
@@ -23,39 +23,45 @@ dds_idl_sources(
   IDL_FILES Test.idl
 )
 
+
 add_ace_exe(WaitForAck_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES Writer.cpp
-               Publisher.cpp
-               Options.cpp
-               publisher_main.cpp
-  HEADER_FILES Writer.h
-               Publisher.h
-               Options.h
-  INLINE_FILES Options.inl
   FOLDER tests/DCPS/WaitForAck
-  LINK_LIBRARIES WaitForAck_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES WaitForAck_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(WaitForAck_Publisher
+  SOURCE_FILES Options.cpp
+               Publisher.cpp
+               Writer.cpp
+               publisher_main.cpp
+  HEADER_FILES Options.h
+               Publisher.h
+               Writer.h
+  INLINE_FILES Options.inl
+)
+
 
 add_ace_exe(WaitForAck_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES Subscriber.cpp
-               Options.cpp
-               subscriber_main.cpp
-  HEADER_FILES Subscriber.h
-               Options.h
-  INLINE_FILES Options.inl
   FOLDER tests/DCPS/WaitForAck
-  LINK_LIBRARIES WaitForAck_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES WaitForAck_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(WaitForAck_Subscriber
+  SOURCE_FILES Options.cpp
+               Subscriber.cpp
+               subscriber_main.cpp
+  HEADER_FILES Options.h
+               Subscriber.h
+  INLINE_FILES Options.inl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

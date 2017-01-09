@@ -8,21 +8,24 @@ endif()
 
 add_ace_exe(StaticDiscoveryTest
   OUTPUT_NAME StaticDiscoveryTest
+  FOLDER tests/DCPS/StaticDiscovery
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
+)
+target_cxx_sources(StaticDiscoveryTest
   SOURCE_FILES DataReaderListenerImpl.cpp
                StaticDiscoveryTest.cpp
   HEADER_FILES DataReaderListenerImpl.h
-  FOLDER tests/DCPS/StaticDiscovery
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+
 dds_idl_sources(
   TARGETS StaticDiscoveryTest
   TAO_IDL_FLAGS -SS
   IDL_FILES TestMsg.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

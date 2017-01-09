@@ -2,20 +2,22 @@ requires(OWNERSHIP_PROFILE OBJECT_MODEL_PROFILE)
 
 add_ace_exe(DcpsFooTest4
   OUTPUT_NAME FooTest4
-  SOURCE_FILES main.cpp
-               Reader.cpp
-               Writer.cpp
-  HEADER_FILES Reader.h
-               Writer.h
   FOLDER tests/DCPS/FooTest4
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(DcpsFooTest4
+  SOURCE_FILES Reader.cpp
+               Writer.cpp
+               main.cpp
+  HEADER_FILES Reader.h
+               Writer.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

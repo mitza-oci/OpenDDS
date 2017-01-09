@@ -8,45 +8,51 @@ endif()
 
 requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(Reconnect_idl
-  OUTPUT_NAME Reconnect_idl
+add_ace_lib(Reconnect_Idl
+  OUTPUT_NAME Reconnect_Idl
   FOLDER tests/DCPS/Reconnect
   DEFINE_SYMBOL RECONNECT_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS Reconnect_idl
+  TARGETS Reconnect_Idl
   DDS_IDL_FLAGS -Wb,export_macro=Reconnect_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Reconnect_export.h
                 -Wb,stub_export_macro=Reconnect_Export
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(Reconnect_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-               DataWriterListener.cpp
-  HEADER_FILES Writer.h
-               DataWriterListener.h
   FOLDER tests/DCPS/Reconnect
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
-                 Reconnect_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+                 Reconnect_Idl
 )
+target_cxx_sources(Reconnect_Publisher
+  SOURCE_FILES DataWriterListener.cpp
+               Writer.cpp
+               publisher.cpp
+  HEADER_FILES DataWriterListener.h
+               Writer.h
+)
+
 
 add_ace_exe(Reconnect_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/Reconnect
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
-                 Reconnect_idl
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+                 Reconnect_Idl
+)
+target_cxx_sources(Reconnect_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -8,19 +8,22 @@ endif()
 
 add_ace_exe(StaticDiscoveryReconnectTest
   OUTPUT_NAME StaticDiscoveryReconnectTest
-  SOURCE_FILES StaticDiscoveryTest.cpp
   FOLDER tests/DCPS/StaticDiscoveryReconnect
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(StaticDiscoveryReconnectTest
+  SOURCE_FILES StaticDiscoveryTest.cpp
+)
+
 dds_idl_sources(
   TARGETS StaticDiscoveryReconnectTest
   TAO_IDL_FLAGS -SS
   IDL_FILES TestMsg.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

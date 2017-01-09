@@ -2,15 +2,17 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(SharedTransport
   OUTPUT_NAME tester
-  SOURCE_FILES TestCase.cpp
-  HEADER_FILES TestCase.h
   FOLDER tests/DCPS/SharedTransport
+  ASPECTS DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES TestFramework
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(SharedTransport
+  SOURCE_FILES TestCase.cpp
+  HEADER_FILES TestCase.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

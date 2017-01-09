@@ -3,6 +3,7 @@ project(OpenDDS CXX)
 
 find_package(TAO REQUIRED CONFIG)
 
+
 if (NOT OPENDDS_VERSION)
   file(READ "VERSION" VERSION_FILE_CONTENT)
   string(REGEX MATCH "([0-9]\\.)+[0-9]" OPENDDS_VERSION ${VERSION_FILE_CONTENT})
@@ -11,21 +12,19 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 option(BUILD_SHARED_LIBS "" ON)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(DDS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
-include(cmake/AddPackage.cmake)
-include(cmake/AddDdsIdlTargets.cmake)
-include(cmake/dcps_options.cmake)
+include(cmake/opendds_options.cmake)
+include(cmake/opendds_aspects.cmake)
+include(cmake/dds_idl_sources.cmake)
 
 
 add_package(OpenDDS
   VERSION ${OPENDDS_VERSION}
 )
 
-set(DDS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 enable_testing()
-
 
 add_subdirectory(dds)
 add_subdirectory(tools/modeling/codegen/model)
@@ -35,11 +34,11 @@ add_subdirectory(performance-tests)
 add_subdirectory(DevGuideExamples)
 add_subdirectory(bin/PerlDDS)
 
-
 install_package(OpenDDS
   CONFIG_OPTIONS ${DDS_OPTIONS}
   PREREQUISITE TAO
-  EXTRA_CMAKE_FILES cmake/AddDdsIdlTargets.cmake
+  EXTRA_CMAKE_FILES cmake/dds_idl_sources.cmake
+                    cmake/opendds_aspects.cmake
 )
 
 

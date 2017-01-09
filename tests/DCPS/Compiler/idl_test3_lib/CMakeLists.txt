@@ -5,9 +5,6 @@ add_ace_lib(idl_test3_lib
   FOLDER tests/DCPS/Compiler/idl_test3_lib
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-if (MSVC)
-  target_compile_options(idl_test3_lib /bigobj)
-endif()
 dds_idl_sources(
   TARGETS idl_test3_lib
   DDS_IDL_FLAGS -Wb,export_macro=FooLib_Export
@@ -20,3 +17,8 @@ dds_idl_sources(
             FooDef3.idl
             SharedTypes.idl
 )
+
+if (MSVC)
+  target_compile_options(idl_test3_lib /bigobj)
+endif()
+

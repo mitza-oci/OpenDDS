@@ -2,17 +2,19 @@ requires(BUILT_IN_TOPICS NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(BuiltInTopic
   OUTPUT_NAME bit
-  SOURCE_FILES main.cpp
-               common.cpp
-  HEADER_FILES common.h
   FOLDER tests/DCPS/BuiltInTopic
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES DcpsFooType4
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(BuiltInTopic
+  SOURCE_FILES common.cpp
+               main.cpp
+  HEADER_FILES common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

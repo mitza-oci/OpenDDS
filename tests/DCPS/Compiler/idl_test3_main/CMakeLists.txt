@@ -2,14 +2,16 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(idl_test3_main
   OUTPUT_NAME idl_test3
-  SOURCE_FILES main.cpp
   FOLDER tests/DCPS/Compiler/idl_test3_main
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 idl_test3_lib
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES idl_test3_lib
                  OpenDDS_Dcps
 )
+target_cxx_sources(idl_test3_main
+  SOURCE_FILES main.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

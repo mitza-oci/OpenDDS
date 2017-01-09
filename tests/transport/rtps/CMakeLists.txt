@@ -6,23 +6,28 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(DDS_transport_rtps_pub
+add_ace_exe(DDS_transport_rtps_Pub
   OUTPUT_NAME publisher
+  FOLDER tests/transport/rtps
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Rtps_Udp
+)
+target_cxx_sources(DDS_transport_rtps_Pub
   SOURCE_FILES publisher.cpp
-  FOLDER tests/transport/rtps
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Rtps_Udp
 )
 
-add_ace_exe(DDS_transport_rtps_sub
+
+add_ace_exe(DDS_transport_rtps_Sub
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
   FOLDER tests/transport/rtps
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Rtps_Udp
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Rtps_Udp
+)
+target_cxx_sources(DDS_transport_rtps_Sub
+  SOURCE_FILES subscriber.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

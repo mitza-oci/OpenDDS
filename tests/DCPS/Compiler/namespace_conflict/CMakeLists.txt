@@ -9,13 +9,17 @@ endif()
 
 add_ace_exe(DDS_namespace_conflict
   OUTPUT_NAME DDS_namespace_conflict
-  SOURCE_FILES main.cpp
   FOLDER tests/DCPS/Compiler/namespace_conflict
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(DDS_namespace_conflict
+  SOURCE_FILES main.cpp
+)
+
 dds_idl_sources(
   TARGETS DDS_namespace_conflict
   TAO_IDL_FLAGS -SS
   IDL_FILES Nsc.idl
 )
+

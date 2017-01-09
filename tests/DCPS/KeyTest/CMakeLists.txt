@@ -6,17 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_KeyTest_idl
-  OUTPUT_NAME DDS_KeyTest_idl
+add_ace_lib(DDS_KeyTest_Idl
+  OUTPUT_NAME DDS_KeyTest_Idl
   FOLDER tests/DCPS/KeyTest
   DEFINE_SYMBOL KEYTEST_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-if (MSVC)
-  target_compile_options(DDS_KeyTest_idl /bigobj)
-endif()
 dds_idl_sources(
-  TARGETS DDS_KeyTest_idl
+  TARGETS DDS_KeyTest_Idl
   DDS_IDL_FLAGS -Wb,export_macro=KeyTest_Export
   TAO_IDL_FLAGS -Wb,export_include=KeyTest_export.h
                 -Wb,export_macro=KeyTest_Export
@@ -27,34 +24,47 @@ dds_idl_sources(
             BoundTest2.idl
 )
 
-add_ace_exe(DDS_KeyTest_IsBounded
+if (MSVC)
+  target_compile_options(DDS_KeyTest_Idl /bigobj)
+endif()
+
+
+add_ace_exe(DDS_KeyTest_Isbounded
   OUTPUT_NAME IsBounded
+  FOLDER tests/DCPS/KeyTest
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Rtps
+                 DDS_KeyTest_Idl
+)
+target_cxx_sources(DDS_KeyTest_Isbounded
   SOURCE_FILES IsBounded.cpp
-  FOLDER tests/DCPS/KeyTest
-  LINK_LIBRARIES DDS_KeyTest_idl
-                 OpenDDS_Rtps
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
 
-add_ace_exe(DDS_KeyTest_KeyMarshalling
+
+add_ace_exe(DDS_KeyTest_Keymarshalling
   OUTPUT_NAME KeyMarshalling
-  SOURCE_FILES KeyMarshalling.cpp
   FOLDER tests/DCPS/KeyTest
-  LINK_LIBRARIES DDS_KeyTest_idl
-                 OpenDDS_Rtps
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Rtps
+                 DDS_KeyTest_Idl
+)
+target_cxx_sources(DDS_KeyTest_Keymarshalling
+  SOURCE_FILES KeyMarshalling.cpp
 )
 
-add_ace_exe(KeyTest_MD5
-  OUTPUT_NAME KeyTest_MD5
-  SOURCE_FILES md5_test.cpp
+
+add_ace_exe(KeyTest_Md5
+  OUTPUT_NAME KeyTest_Md5
   FOLDER tests/DCPS/KeyTest
   LINK_LIBRARIES OpenDDS_Rtps
 )
+target_cxx_sources(KeyTest_Md5
+  SOURCE_FILES md5_test.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

@@ -1,31 +1,36 @@
 add_ace_exe(ManyTopicTestPublisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES common.h
-               Writer.h
   FOLDER tests/DCPS/ManyTopicTest
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 ManyTopicTypes
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Model
                  common
-                 OpenDDS_Model
+                 ManyTopicTypes
 )
+target_cxx_sources(ManyTopicTestPublisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+               common.h
+)
+
 
 add_ace_exe(ManyTopicTestSubscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-  HEADER_FILES common.h
-               DataReaderListener.h
   FOLDER tests/DCPS/ManyTopicTest
-  LINK_LIBRARIES ManyTopicTypes
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 common
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES common
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+                 ManyTopicTypes
+)
+target_cxx_sources(ManyTopicTestSubscriber
+  SOURCE_FILES subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+               common.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

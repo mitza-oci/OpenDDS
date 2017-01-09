@@ -22,7 +22,6 @@ tao_idl_sources(
 
 if (NO_OPENDDS_SAFETY_PROFILE)
   if (BUILT_IN_TOPICS)
-
     dds_idl_sources(
       TARGETS OpenDDS_Dcps
       DDS_IDL_FLAGS ${dcps_flags}
@@ -75,7 +74,7 @@ else(NO_OPENDDS_SAFETY_PROFILE)
   dds_idl_sources(
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp -ZC DdsDcpsInfrastructureC.h
-    IDLS DdsDcpsConditionSeq.idl
+    IDL_FILES DdsDcpsConditionSeq.idl
   )
 
   dds_idl_sources(

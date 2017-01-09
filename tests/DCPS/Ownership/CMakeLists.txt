@@ -8,50 +8,56 @@ endif()
 
 requires(OWNERSHIP_PROFILE OWNERSHIP_KIND_EXCLUSIVE)
 
-add_ace_lib(DDS_Ownership_idl
-  OUTPUT_NAME DDS_Ownership_idl
+add_ace_lib(DDS_Ownership_Idl
+  OUTPUT_NAME DDS_Ownership_Idl
   FOLDER tests/DCPS/Ownership
   DEFINE_SYMBOL OWNERSHIP_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS DDS_Ownership_idl
+  TARGETS DDS_Ownership_Idl
   DDS_IDL_FLAGS -Wb,export_macro=Ownership_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=Ownership_export.h
                 -Wb,stub_export_macro=Ownership_Export
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(DDS_Ownership_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES Writer.h
   FOLDER tests/DCPS/Ownership
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Multicast
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Multicast
                  OpenDDS_Tcp
-                 DDS_Ownership_idl
+                 DDS_Ownership_Idl
                  OpenDDS_Udp
                  OpenDDS_Model
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(DDS_Ownership_Publisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+)
+
 
 add_ace_exe(DDS_Ownership_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
-               DataReaderListener.cpp
-  HEADER_FILES DataReaderListener.h
   FOLDER tests/DCPS/Ownership
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Multicast
-                 OpenDDS_Udp
-                 DDS_Ownership_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+  LINK_LIBRARIES OpenDDS_Multicast
                  OpenDDS_Tcp
+                 DDS_Ownership_Idl
+                 OpenDDS_Udp
                  OpenDDS_Rtps_Udp
 )
+target_cxx_sources(DDS_Ownership_Subscriber
+  SOURCE_FILES DataReaderListener.cpp
+               subscriber.cpp
+  HEADER_FILES DataReaderListener.h
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

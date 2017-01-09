@@ -10,19 +10,22 @@ requires(PERSISTENCE_PROFILE)
 
 add_ace_exe(StatusCondition
   OUTPUT_NAME StatusConditionTest
-  SOURCE_FILES StatusConditionTest.cpp
   FOLDER tests/DCPS/StatusCondition
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(StatusCondition
+  SOURCE_FILES StatusConditionTest.cpp
+)
+
 dds_idl_sources(
   TARGETS StatusCondition
   TAO_IDL_FLAGS -SS
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

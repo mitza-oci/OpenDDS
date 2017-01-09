@@ -6,16 +6,17 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OpenDDS_QOS_XML_XSC_Handler TARGET)
-
 add_ace_exe(qos_dump
   OUTPUT_NAME qos_dump
-  SOURCE_FILES qos_dump.cpp
   FOLDER tests/DCPS/QoS_XML/dump
+  ASPECTS TAO
   LINK_LIBRARIES OpenDDS_QOS_XML_XSC_Handler
 )
+target_cxx_sources(qos_dump
+  SOURCE_FILES qos_dump.cpp
+)
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

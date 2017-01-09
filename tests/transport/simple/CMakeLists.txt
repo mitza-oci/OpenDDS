@@ -10,31 +10,36 @@ requires(NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(DDS_transport_simple_Publisher
   OUTPUT_NAME simple_publisher
-  SOURCE_FILES pub_main.cpp
-               PubDriver.cpp
-               SimpleDataWriter.cpp
-  HEADER_FILES PubDriver.h
-               SimpleDataWriter.h
   FOLDER tests/transport/simple
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Shmem
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
 )
+target_cxx_sources(DDS_transport_simple_Publisher
+  SOURCE_FILES PubDriver.cpp
+               SimpleDataWriter.cpp
+               pub_main.cpp
+  HEADER_FILES PubDriver.h
+               SimpleDataWriter.h
+)
+
 
 add_ace_exe(DDS_transport_simple_Subscriber
   OUTPUT_NAME simple_subscriber
-  SOURCE_FILES sub_main.cpp
-               SubDriver.cpp
-               SimpleDataReader.cpp
-  HEADER_FILES SubDriver.h
-               SimpleDataReader.h
   FOLDER tests/transport/simple
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Shmem
-                 ${DCPS_DEFAULT_DISCOVERY_LIBS}
+)
+target_cxx_sources(DDS_transport_simple_Subscriber
+  SOURCE_FILES SimpleDataReader.cpp
+               SubDriver.cpp
+               sub_main.cpp
+  HEADER_FILES SimpleDataReader.h
+               SubDriver.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

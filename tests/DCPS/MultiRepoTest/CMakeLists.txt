@@ -2,41 +2,46 @@ requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
 add_ace_exe(MultiRepoTest_Monitor
   OUTPUT_NAME monitor
-  SOURCE_FILES monitor.cpp
-               TestMonitor.cpp
-               TestConfig.cpp
-               DataWriterListenerImpl.cpp
-               ForwardingListener.cpp
-  HEADER_FILES TestMonitor.h
-               TestConfig.h
-               DataWriterListenerImpl.h
-               ForwardingListener.h
   FOLDER tests/DCPS/MultiRepoTest
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DcpsFooType5
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DcpsFooType5
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(MultiRepoTest_Monitor
+  SOURCE_FILES DataWriterListenerImpl.cpp
+               ForwardingListener.cpp
+               TestConfig.cpp
+               TestMonitor.cpp
+               monitor.cpp
+  HEADER_FILES DataWriterListenerImpl.h
+               ForwardingListener.h
+               TestConfig.h
+               TestMonitor.h
+)
+
 
 add_ace_exe(MultiRepoTest_System
   OUTPUT_NAME system
-  SOURCE_FILES system.cpp
-               TestSystem.cpp
-               TestConfig.cpp
-               DataWriterListenerImpl.cpp
-               ForwardingListener.cpp
-  HEADER_FILES TestSystem.h
-               TestConfig.h
-               DataWriterListenerImpl.h
-               ForwardingListener.h
   FOLDER tests/DCPS/MultiRepoTest
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 DcpsFooType5
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES DcpsFooType5
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(MultiRepoTest_System
+  SOURCE_FILES DataWriterListenerImpl.cpp
+               ForwardingListener.cpp
+               TestConfig.cpp
+               TestSystem.cpp
+               system.cpp
+  HEADER_FILES DataWriterListenerImpl.h
+               ForwardingListener.h
+               TestConfig.h
+               TestSystem.h
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

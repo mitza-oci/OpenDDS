@@ -10,16 +10,19 @@ requires(CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION)
 
 add_ace_exe(FilterExpressionTest
   OUTPUT_NAME FilterExpressionTest
-  SOURCE_FILES FilterExpression.cpp
   FOLDER tests/DCPS/FilterExpression
   LINK_LIBRARIES OpenDDS_Dcps
 )
+target_cxx_sources(FilterExpressionTest
+  SOURCE_FILES FilterExpression.cpp
+)
+
 dds_idl_sources(
   TARGETS FilterExpressionTest
   IDL_FILES FilterStruct.idl
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 

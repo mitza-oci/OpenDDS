@@ -8,14 +8,14 @@ endif()
 
 requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(sub_init_loop_idl
-  OUTPUT_NAME sub_init_loop_idl
+add_ace_lib(sub_init_loop_Idl
+  OUTPUT_NAME sub_init_loop_Idl
   FOLDER tests/DCPS/sub_init_loop
   DEFINE_SYMBOL SUBINITLOOP_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
-  TARGETS sub_init_loop_idl
+  TARGETS sub_init_loop_Idl
   DDS_IDL_FLAGS -Wb,export_macro=SubInitLoop_Export
   TAO_IDL_FLAGS -Wb,stub_export_include=SubInitLoop_export.h
                 -Wb,stub_export_macro=SubInitLoop_Export
@@ -23,29 +23,35 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
+
 add_ace_exe(sub_init_loop_Publisher
   OUTPUT_NAME publisher
-  SOURCE_FILES publisher.cpp
-               Writer.cpp
-  HEADER_FILES Writer.h
   FOLDER tests/DCPS/sub_init_loop
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 sub_init_loop_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES sub_init_loop_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
 )
+target_cxx_sources(sub_init_loop_Publisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+)
+
 
 add_ace_exe(sub_init_loop_Subscriber
   OUTPUT_NAME subscriber
-  SOURCE_FILES subscriber.cpp
   FOLDER tests/DCPS/sub_init_loop
-  LINK_LIBRARIES ${DCPS_DEFAULT_DISCOVERY_LIBS}
-                 sub_init_loop_idl
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
+  LINK_LIBRARIES sub_init_loop_Idl
                  OpenDDS_Dcps
-                 ${DCPS_TRANSPORTS_FOR_TEST}
+)
+target_cxx_sources(sub_init_loop_Subscriber
+  SOURCE_FILES subscriber.cpp
 )
 
-include(${DDS_ROOT}/cmake/AddDdsTest.cmake)
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
 configure_dds_test_files()
 
 
