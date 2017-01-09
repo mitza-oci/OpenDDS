@@ -10,8 +10,9 @@ endif()
 ace_add_lib(FACE_idl_test2_lib
   OUTPUT_NAME FACE_idl_test2_lib
   FOLDER tests/FACE/Compiler/idl_test2_lib
+  ASPECTS FACE
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
   TARGETS FACE_idl_test2_lib

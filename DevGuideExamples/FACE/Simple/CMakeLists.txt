@@ -10,8 +10,9 @@ endif()
 ace_add_lib(FaceMessenger_Idl
   OUTPUT_NAME FaceMessenger_Idl
   FOLDER DevGuideExamples/FACE/Simple
+  ASPECTS FACE
   DEFINE_SYMBOL FACEMESSENGER_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
   TARGETS FaceMessenger_Idl

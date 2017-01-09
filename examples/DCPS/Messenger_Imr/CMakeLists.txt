@@ -33,6 +33,7 @@ dds_idl_sources(
 ace_add_exe(DDS_Messenger_Imr_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/Messenger_Imr
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
                  OpenDDS_Default_Discovery
@@ -47,6 +48,7 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Publisher
 ace_add_exe(DDS_Messenger_Imr_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/Messenger_Imr
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
                  OpenDDS_Default_Discovery

@@ -33,6 +33,8 @@ dds_idl_sources(
 ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
   FOLDER examples/DCPS/Messenger_IOGR_Imr
+  ASPECTS NEGOTIATE_CODESETS
+          TAO
   LINK_LIBRARIES TAO_FT_ServerORB
                  TAO_AnyTypeCode
                  TAO_FT_ClientORB
@@ -57,6 +59,12 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
                publisher.cpp
   HEADER_FILES Writer.h
 )
+target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+)
+
 
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Subscriber

@@ -14,6 +14,16 @@ ace_target_cxx_sources(FooTest3_2_Publisher
                PubDriver.h
                Writer.h
 )
+target_cxx_sources(FooTest3_2_Publisher
+  SOURCE_FILES InstanceDataMap.cpp
+               PubDriver.cpp
+               Writer.cpp
+               pub_main.cpp
+  HEADER_FILES InstanceDataMap.h
+               PubDriver.h
+               Writer.h
+)
+
 
 
 ace_add_exe(FooTest3_2_Subscriber

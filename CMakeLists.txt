@@ -3,6 +3,7 @@ project(OpenDDS CXX)
 
 include(cmake/find_or_download_tao.cmake)
 
+
 if (NOT OPENDDS_VERSION)
   file(READ "VERSION" VERSION_FILE_CONTENT)
   string(REGEX MATCH "([0-9]\\.)+[0-9]" OPENDDS_VERSION ${VERSION_FILE_CONTENT})

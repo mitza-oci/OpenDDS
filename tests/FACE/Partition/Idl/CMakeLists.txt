@@ -3,8 +3,9 @@
 ace_add_lib(FacePartitionIdl
   OUTPUT_NAME FacePartitionIdl
   FOLDER tests/FACE/Partition/Idl
+  ASPECTS FACE
   DEFINE_SYMBOL FACEMESSENGER_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
   TARGETS FacePartitionIdl

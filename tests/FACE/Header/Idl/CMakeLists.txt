@@ -3,8 +3,9 @@
 ace_add_lib(FaceHeaderTestIdl
   OUTPUT_NAME FaceHeaderTestIdl
   FOLDER tests/FACE/Header/Idl
+  ASPECTS FACE
   DEFINE_SYMBOL FACEHEADERTEST_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
   TARGETS FaceHeaderTestIdl

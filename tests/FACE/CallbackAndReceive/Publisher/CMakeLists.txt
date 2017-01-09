@@ -10,10 +10,10 @@ endif()
 ace_add_exe(CallbackAndReceivePublisher
   OUTPUT_NAME publisher
   FOLDER tests/FACE/CallbackAndReceive/Publisher
+  ASPECTS FACE
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../../Messenger
                       ${CMAKE_CURRENT_BINARY_DIR}/../../Messenger
   LINK_LIBRARIES FaceMessengerIdl
-                 OpenDDS_FACE
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(CallbackAndReceivePublisher

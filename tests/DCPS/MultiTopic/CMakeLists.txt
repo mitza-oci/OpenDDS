@@ -11,6 +11,7 @@ ace_requires(MULTI_TOPIC CONTENT_SUBSCRIPTION)
 ace_add_exe(MultiTopicTest
   OUTPUT_NAME MultiTopicTest
   FOLDER tests/DCPS/MultiTopic
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

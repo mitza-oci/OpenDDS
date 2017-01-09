@@ -36,6 +36,10 @@ ace_add_exe(Instances_Publisher
 ace_target_cxx_sources(Instances_Publisher
   SOURCE_FILES Publisher.cpp
 )
+target_cxx_sources(Instances_Publisher
+  SOURCE_FILES Publisher.cpp
+)
+
 
 
 ace_add_exe(Instances_Subscriber

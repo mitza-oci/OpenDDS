@@ -26,6 +26,7 @@ dds_idl_sources(
 ace_add_exe(Reconnect_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Reconnect
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  Reconnect_Idl
                  OpenDDS_Default_Discovery
@@ -42,6 +43,7 @@ ace_target_cxx_sources(Reconnect_Publisher
 ace_add_exe(Reconnect_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Reconnect
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  Reconnect_Idl
                  OpenDDS_Default_Discovery

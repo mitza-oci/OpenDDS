@@ -11,6 +11,7 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(error_handling
   OUTPUT_NAME error_handling
   FOLDER tests/transport/error_handling
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

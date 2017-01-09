@@ -27,6 +27,7 @@ dds_idl_sources(
 ace_add_exe(Monitor_Messenger_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Monitor
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
@@ -42,6 +43,7 @@ ace_target_cxx_sources(Monitor_Messenger_Publisher
 ace_add_exe(Monitor_Messenger_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Monitor
+  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl

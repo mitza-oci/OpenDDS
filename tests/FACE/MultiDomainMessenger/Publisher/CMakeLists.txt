@@ -3,8 +3,8 @@
 ace_add_exe(FaceMultiDomainMessengerPublisher
   OUTPUT_NAME publisher
   FOLDER tests/FACE/MultiDomainMessenger/Publisher
+  ASPECTS FACE
   LINK_LIBRARIES FaceMultiDomainMessengerIdl
-                 OpenDDS_FACE
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(FaceMultiDomainMessengerPublisher

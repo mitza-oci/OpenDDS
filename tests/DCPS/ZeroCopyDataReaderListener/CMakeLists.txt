@@ -35,6 +35,12 @@ ace_target_cxx_sources(ZeroCopyDRL_Publisher
                publisher.cpp
   HEADER_FILES Writer.h
 )
+target_cxx_sources(ZeroCopyDRL_Publisher
+  SOURCE_FILES Writer.cpp
+               publisher.cpp
+  HEADER_FILES Writer.h
+)
+
 
 
 ace_add_exe(ZeroCopyDRL_Subscriber

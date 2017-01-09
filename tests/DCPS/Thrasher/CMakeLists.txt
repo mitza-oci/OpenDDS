@@ -19,6 +19,8 @@ ace_target_cxx_sources(Thrasher_Publisher
 ace_add_exe(Thrasher_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Thrasher
+  ASPECTS DCPS_DEFAULT_DISCOVERY
+          DCPS_TRANSPORTS_FOR_TEST
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType
   LINK_LIBRARIES OpenDDS_Transports_For_Test
