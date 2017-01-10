@@ -50,9 +50,16 @@ target_cxx_sources(DDS_Messenger_Imr_Subscriber
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
 
+include(${DDS_ROOT}/cmake/add_dds_test.cmake)
+file(READ "run_test.pl" RUN_TEST_CONTENT)
+string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:tao_imr_locator>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:tao_imr_activator>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_CONTENT})
+
+file(COPY pub.ini sub.ini
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_dds_test("examples/DCPS/Messenger_Imr/run_test.pl"
   COMMAND run_test.pl
