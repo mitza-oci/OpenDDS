@@ -14,7 +14,7 @@ ace_target_cxx_sources(FooTest3_2_Publisher
                PubDriver.h
                Writer.h
 )
-target_cxx_sources(FooTest3_2_Publisher
+ace_target_cxx_sources(FooTest3_2_Publisher
   SOURCE_FILES InstanceDataMap.cpp
                PubDriver.cpp
                Writer.cpp

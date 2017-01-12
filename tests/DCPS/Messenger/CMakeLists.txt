@@ -34,7 +34,7 @@ ace_target_cxx_sources(DDS_Messenger_Publisher
                publisher.cpp
   HEADER_FILES Writer.h
 )
-target_cxx_sources(DDS_Messenger_Publisher
+ace_target_cxx_sources(DDS_Messenger_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h

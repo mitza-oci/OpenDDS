@@ -9,7 +9,7 @@ ace_add_exe(register_instance_Topic
 ace_target_cxx_sources(register_instance_Topic
   SOURCE_FILES register_instance.cpp
 )
-target_cxx_sources(register_instance_Topic
+ace_target_cxx_sources(register_instance_Topic
   SOURCE_FILES register_instance.cpp
 )
 

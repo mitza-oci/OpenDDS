@@ -22,7 +22,7 @@ ace_add_exe(ConfigFile
 ace_target_cxx_sources(ConfigFile
   SOURCE_FILES ConfigFile.cpp
 )
-target_cxx_sources(ConfigFile
+ace_target_cxx_sources(ConfigFile
   SOURCE_FILES ConfigFile.cpp
 )
 

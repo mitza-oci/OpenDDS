@@ -14,7 +14,7 @@ ace_add_lib(FACE_idl_test_fixed
   ASPECTS FACE
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(FACE_idl_test_fixed
+ace_target_cxx_sources(FACE_idl_test_fixed
   SOURCE_FILES TestFixed.cpp
 )
 ace_target_cxx_sources(FACE_idl_test_fixed

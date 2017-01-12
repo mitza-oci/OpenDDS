@@ -14,7 +14,7 @@ ace_add_lib(FaceUnitTests_Qossettings
   ASPECTS FACE
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(FaceUnitTests_Qossettings
+ace_target_cxx_sources(FaceUnitTests_Qossettings
   SOURCE_FILES QosSettingsTest.cpp
 )
 ace_target_cxx_sources(FaceUnitTests_Qossettings
@@ -28,7 +28,7 @@ ace_add_lib(FaceUnitTests_Memorypool
   ASPECTS FACE
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(FaceUnitTests_Memorypool
+ace_target_cxx_sources(FaceUnitTests_Memorypool
   SOURCE_FILES MemoryPoolTest.cpp
 )
 ace_target_cxx_sources(FaceUnitTests_Memorypool
@@ -42,7 +42,7 @@ ace_add_lib(FaceUnitTests_Freeindex
   ASPECTS FACE
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(FaceUnitTests_Freeindex
+ace_target_cxx_sources(FaceUnitTests_Freeindex
   SOURCE_FILES FreeIndexTest.cpp
 )
 ace_target_cxx_sources(FaceUnitTests_Freeindex
@@ -57,7 +57,7 @@ ace_add_lib(FaceUnitTests_Safetyprofilepool
   ASPECTS FACE
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(FaceUnitTests_Safetyprofilepool
+ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
   SOURCE_FILES SafetyProfilePoolTest.cpp
 )
 ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
@@ -71,7 +71,7 @@ ace_add_lib(FaceUnitTests_Sequences
   ASPECTS FACE
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(FaceUnitTests_Sequences
+ace_target_cxx_sources(FaceUnitTests_Sequences
   SOURCE_FILES SequencesTest.cpp
 )
 ace_target_cxx_sources(FaceUnitTests_Sequences

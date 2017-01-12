@@ -14,7 +14,7 @@ ace_target_cxx_sources(DCPS_Perf_SimpleE2E_Pub
                Writer.h
                common.h
 )
-target_cxx_sources(DCPS_Perf_SimpleE2E_Pub
+ace_target_cxx_sources(DCPS_Perf_SimpleE2E_Pub
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES TestException.h

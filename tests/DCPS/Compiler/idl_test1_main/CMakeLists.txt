@@ -10,7 +10,7 @@ ace_add_exe(idl_test1_main
 ace_target_cxx_sources(idl_test1_main
   SOURCE_FILES main.cpp
 )
-target_cxx_sources(idl_test1_main
+ace_target_cxx_sources(idl_test1_main
   SOURCE_FILES main.cpp
 )
 

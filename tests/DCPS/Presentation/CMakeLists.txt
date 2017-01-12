@@ -13,7 +13,7 @@ ace_add_exe(Presentation
 ace_target_cxx_sources(Presentation
   SOURCE_FILES main.cpp
 )
-target_cxx_sources(Presentation
+ace_target_cxx_sources(Presentation
   SOURCE_FILES main.cpp
 )
 

@@ -39,7 +39,7 @@ ace_target_cxx_sources(DDS_Priority_Publisher
                Publisher.h
   INLINE_FILES Options.inl
 )
-target_cxx_sources(DDS_Priority_Publisher
+ace_target_cxx_sources(DDS_Priority_Publisher
   SOURCE_FILES Options.cpp
                Publisher.cpp
                publisher_main.cpp

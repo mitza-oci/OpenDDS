@@ -14,16 +14,9 @@ endif()
 
 
 function(dds_configure_test_files)
-  file(GLOB files *.ini)
+  file(GLOB files *.ini *.pl)
   file(COPY ${files}
        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
-  file(GLOB test_scripts RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.pl)
-  foreach(script ${test_scripts})
-    file(READ ${script} RUN_TEST_CONTENT)
-    string(REPLACE "# -*- perl -*-" "# -*- perl -*-\n\$ENV{'DDS_ROOT'}=\"$<TARGET_FILE_DIR:OpenDDS_Dcps>/..\";\n\$ENV{'ACE_ROOT'}=\"${ACE_ROOT}\";" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${script}" CONTENT "${RUN_TEST_CONTENT}")
-  endforeach()
 endfunction()
 
 function(dds_add_test name)

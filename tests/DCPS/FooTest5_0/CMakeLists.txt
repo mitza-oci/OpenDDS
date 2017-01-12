@@ -10,7 +10,7 @@ ace_add_exe(DcpsFooTest5_0
 ace_target_cxx_sources(DcpsFooTest5_0
   SOURCE_FILES main.cpp
 )
-target_cxx_sources(DcpsFooTest5_0
+ace_target_cxx_sources(DcpsFooTest5_0
   SOURCE_FILES main.cpp
 )
 

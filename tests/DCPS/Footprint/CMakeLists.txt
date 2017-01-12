@@ -61,7 +61,7 @@ ace_target_cxx_sources(DDS_Footprint_Tcppublisher
                tcppublisher.cpp
   HEADER_FILES Writer.h
 )
-target_cxx_sources(DDS_Footprint_Tcppublisher
+ace_target_cxx_sources(DDS_Footprint_Tcppublisher
   SOURCE_FILES Writer.cpp
                tcppublisher.cpp
   HEADER_FILES Writer.h
