@@ -1,5 +1,5 @@
 
-add_ace_exe(opendds_idl
+ace_add_exe(opendds_idl
   PACKAGE OpenDDS
   FOLDER dds
   LINK_LIBRARIES TAO_IDL_FE
@@ -7,7 +7,7 @@ add_ace_exe(opendds_idl
   COMPILE_DEFINITIONS TAO_IDL_PREPROCESSOR=\"${CMAKE_CXX_COMPILER}\"
 )
 
-target_cxx_sources(opendds_idl
+ace_target_cxx_sources(opendds_idl
   SOURCE_FILES  be_global.cpp
                 be_init.cpp
                 be_produce.cpp

@@ -1,6 +1,6 @@
 
 
-add_ace_lib(FaceHeaderTestIdl
+ace_add_lib(FaceHeaderTestIdl
   OUTPUT_NAME FaceHeaderTestIdl
   FOLDER tests/FACE/Header/Idl
   ASPECTS FACE

@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OWNERSHIP_PROFILE)
+ace_requires(OWNERSHIP_PROFILE)
 
-add_ace_lib(DDS_Instances_Idl
+ace_add_lib(DDS_Instances_Idl
   OUTPUT_NAME DDS_Instances_Idl
   FOLDER tests/DCPS/Instances
   DEFINE_SYMBOL INSTANCESLIB_BUILD_DLL
@@ -25,7 +25,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(Instances_Publisher
+ace_add_exe(Instances_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Instances
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -34,12 +34,12 @@ add_ace_exe(Instances_Publisher
                  OpenDDS_Dcps
                  DDS_Instances_Idl
 )
-target_cxx_sources(Instances_Publisher
+ace_target_cxx_sources(Instances_Publisher
   SOURCE_FILES Publisher.cpp
 )
 
 
-add_ace_exe(Instances_Subscriber
+ace_add_exe(Instances_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Instances
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -48,51 +48,51 @@ add_ace_exe(Instances_Subscriber
                  TestUtils
                  DDS_Instances_Idl
 )
-target_cxx_sources(Instances_Subscriber
+ace_target_cxx_sources(Instances_Subscriber
   SOURCE_FILES Subscriber.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl single_instance single_datawriter keyed"
+dds_add_test("tests/DCPS/Instances/run_test.pl single_instance single_datawriter keyed"
   COMMAND run_test.pl single_instance single_datawriter keyed
   LABELS DCPS_MIN
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl single_instance single_datawriter nokey"
+dds_add_test("tests/DCPS/Instances/run_test.pl single_instance single_datawriter nokey"
   COMMAND run_test.pl single_instance single_datawriter nokey
   LABELS DCPS_MIN
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl multiple_instance single_datawriter keyed"
+dds_add_test("tests/DCPS/Instances/run_test.pl multiple_instance single_datawriter keyed"
   COMMAND run_test.pl multiple_instance single_datawriter keyed
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl multiple_instance single_datawriter nokey"
+dds_add_test("tests/DCPS/Instances/run_test.pl multiple_instance single_datawriter nokey"
   COMMAND run_test.pl multiple_instance single_datawriter nokey
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl single_instance multiple_datawriter keyed"
+dds_add_test("tests/DCPS/Instances/run_test.pl single_instance multiple_datawriter keyed"
   COMMAND run_test.pl single_instance multiple_datawriter keyed
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl single_instance multiple_datawriter nokey"
+dds_add_test("tests/DCPS/Instances/run_test.pl single_instance multiple_datawriter nokey"
   COMMAND run_test.pl single_instance multiple_datawriter nokey
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl multiple_instance multiple_datawriter keyed"
+dds_add_test("tests/DCPS/Instances/run_test.pl multiple_instance multiple_datawriter keyed"
   COMMAND run_test.pl multiple_instance multiple_datawriter keyed
 )
 
 
-add_dds_test("tests/DCPS/Instances/run_test.pl multiple_instance multiple_datawriter nokey"
+dds_add_test("tests/DCPS/Instances/run_test.pl multiple_instance multiple_datawriter nokey"
   COMMAND run_test.pl multiple_instance multiple_datawriter nokey
 )

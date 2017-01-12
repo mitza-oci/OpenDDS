@@ -1,4 +1,4 @@
-add_ace_exe(CompatibilityTest_Publisher
+ace_add_exe(CompatibilityTest_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/CompatibilityTest
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -7,7 +7,7 @@ add_ace_exe(CompatibilityTest_Publisher
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(CompatibilityTest_Publisher
+ace_target_cxx_sources(CompatibilityTest_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
                Writer.cpp
                common.cpp
@@ -18,7 +18,7 @@ target_cxx_sources(CompatibilityTest_Publisher
 )
 
 
-add_ace_exe(CompatibilityTest_Subscriber
+ace_add_exe(CompatibilityTest_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/CompatibilityTest
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -27,7 +27,7 @@ add_ace_exe(CompatibilityTest_Subscriber
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(CompatibilityTest_Subscriber
+ace_target_cxx_sources(CompatibilityTest_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                common.cpp
                subscriber.cpp
@@ -35,23 +35,23 @@ target_cxx_sources(CompatibilityTest_Subscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/CompatibilityTest/run_test.pl"
+dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl"
   COMMAND run_test.pl
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
 )
 
 
-add_dds_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc"
+dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
   LABELS RTPS
 )
 
 
-add_dds_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc_tcp"
+dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc_tcp"
   COMMAND run_test.pl rtps_disc_tcp
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   LABELS RTPS

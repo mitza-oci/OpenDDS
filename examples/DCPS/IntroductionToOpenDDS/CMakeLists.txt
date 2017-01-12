@@ -7,9 +7,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(StockQuoter_Common
+ace_add_lib(StockQuoter_Common
   OUTPUT_NAME StockQuoterCommon
   FOLDER examples/DCPS/IntroductionToOpenDDS
   ASPECTS TAO
@@ -31,7 +31,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(StockQuoter_Publisher
+ace_add_exe(StockQuoter_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/IntroductionToOpenDDS
   ASPECTS TAO
@@ -42,12 +42,12 @@ add_ace_exe(StockQuoter_Publisher
                  TAO_Svc_Utils
                  StockQuoter_Common
 )
-target_cxx_sources(StockQuoter_Publisher
+ace_target_cxx_sources(StockQuoter_Publisher
   SOURCE_FILES publisher.cpp
 )
 
 
-add_ace_exe(StockQuoter_Subscriber
+ace_add_exe(StockQuoter_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/IntroductionToOpenDDS
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -55,7 +55,7 @@ add_ace_exe(StockQuoter_Subscriber
   LINK_LIBRARIES OpenDDS_Tcp
                  StockQuoter_Common
 )
-target_cxx_sources(StockQuoter_Subscriber
+ace_target_cxx_sources(StockQuoter_Subscriber
   SOURCE_FILES ExchangeEventDataReaderListenerImpl.cpp
                QuoteDataReaderListenerImpl.cpp
                subscriber.cpp

@@ -1,6 +1,6 @@
-requires(CONTENT_FILTERED_TOPIC CONTENT_SUBSCRIPTION)
+ace_requires(CONTENT_FILTERED_TOPIC CONTENT_SUBSCRIPTION)
 
-add_ace_exe(SubscriberCycle_Publisher
+ace_add_exe(SubscriberCycle_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/SubscriberCycle
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -10,7 +10,7 @@ add_ace_exe(SubscriberCycle_Publisher
   LINK_LIBRARIES OpenDDS_Dcps
                  DcpsFooType
 )
-target_cxx_sources(SubscriberCycle_Publisher
+ace_target_cxx_sources(SubscriberCycle_Publisher
   SOURCE_FILES ParticipantTask.cpp
                ProgressIndicator.cpp
                Publisher.cpp
@@ -19,7 +19,7 @@ target_cxx_sources(SubscriberCycle_Publisher
 )
 
 
-add_ace_exe(SubscriberCycle_Subscriber
+ace_add_exe(SubscriberCycle_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/SubscriberCycle
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -29,7 +29,7 @@ add_ace_exe(SubscriberCycle_Subscriber
   LINK_LIBRARIES OpenDDS_Dcps
                  DcpsFooType
 )
-target_cxx_sources(SubscriberCycle_Subscriber
+ace_target_cxx_sources(SubscriberCycle_Subscriber
   SOURCE_FILES ProgressIndicator.cpp
                Subscriber.cpp
                SubscriberListenerImpl.cpp
@@ -37,10 +37,10 @@ target_cxx_sources(SubscriberCycle_Subscriber
                SubscriberListenerImpl.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/SubscriberCycle/run_test.pl"
+dds_add_test("tests/DCPS/SubscriberCycle/run_test.pl"
   COMMAND run_test.pl
 )

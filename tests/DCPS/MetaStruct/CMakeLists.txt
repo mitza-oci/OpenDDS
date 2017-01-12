@@ -6,14 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION)
+ace_requires(CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION)
 
-add_ace_lib(MetaStructTest
+ace_add_lib(MetaStructTest
   OUTPUT_NAME MetaStructTest
   FOLDER tests/DCPS/MetaStruct
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(MetaStructTest
+ace_target_cxx_sources(MetaStructTest
   SOURCE_FILES MetaStructTest.cpp
 )
 
@@ -22,10 +22,10 @@ dds_idl_sources(
   IDL_FILES MetaStructTest.idl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/MetaStruct/run_test.pl"
+dds_add_test("tests/DCPS/MetaStruct/run_test.pl"
   COMMAND run_test.pl
 )

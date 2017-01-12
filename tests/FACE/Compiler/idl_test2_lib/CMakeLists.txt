@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(FACE_idl_test2_lib
+ace_add_lib(FACE_idl_test2_lib
   OUTPUT_NAME FACE_idl_test2_lib
   FOLDER tests/FACE/Compiler/idl_test2_lib
   ASPECTS FACE

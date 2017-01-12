@@ -7,16 +7,16 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-requires("INTERCEPTORS"
+ace_requires("INTERCEPTORS"
          "TARGET tao_imr_locator"
          "TARGET tao_imr_activator"
          "TARGET tao_imr"
          NO_OPENDDS_SAFETY_PROFILE
 )
 
-add_ace_lib(DDS_Messenger_IOGR_Imr_Idl
+ace_add_lib(DDS_Messenger_IOGR_Imr_Idl
   OUTPUT_NAME DDS_Messenger_IOGR_Imr_Idl
   FOLDER examples/DCPS/Messenger_IOGR_Imr
   DEFINE_SYMBOL MESSENGER_IOGR_IMR_BUILD_DLL
@@ -31,7 +31,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_Messenger_IOGR_Imr_Aggregator
+ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
   FOLDER examples/DCPS/Messenger_IOGR_Imr
   ASPECTS NEGOTIATE_CODESETS
@@ -43,34 +43,34 @@ add_ace_exe(DDS_Messenger_IOGR_Imr_Aggregator
                  TAO_IORManip
                  TAO_PortableServer
 )
-target_cxx_sources(DDS_Messenger_IOGR_Imr_Aggregator
+ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Aggregator
   SOURCE_FILES Aggregator.cpp
   HEADER_FILES Aggregator.h
 )
 
 
-add_ace_exe(DDS_Messenger_IOGR_Imr_Publisher
+ace_add_exe(DDS_Messenger_IOGR_Imr_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/Messenger_IOGR_Imr
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DDS_Messenger_IOGR_Imr_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
+ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(DDS_Messenger_IOGR_Imr_Subscriber
+ace_add_exe(DDS_Messenger_IOGR_Imr_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/Messenger_IOGR_Imr
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DDS_Messenger_IOGR_Imr_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_Messenger_IOGR_Imr_Subscriber
+ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h

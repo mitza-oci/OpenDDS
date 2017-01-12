@@ -6,16 +6,16 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OWNERSHIP_PROFILE)
+ace_requires(OWNERSHIP_PROFILE)
 
-add_ace_exe(ViewState
+ace_add_exe(ViewState
   OUTPUT_NAME main
   FOLDER tests/DCPS/ViewState
   ASPECTS DCPS_DEFAULT_DISCOVERY
           DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(ViewState
+ace_target_cxx_sources(ViewState
   SOURCE_FILES main.cpp
 )
 
@@ -25,10 +25,10 @@ dds_idl_sources(
   IDL_FILES Simple.idl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/ViewState/run_test.pl"
+dds_add_test("tests/DCPS/ViewState/run_test.pl"
   COMMAND run_test.pl
 )

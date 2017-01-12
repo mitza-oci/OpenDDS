@@ -1,6 +1,6 @@
 
 
-add_ace_lib(FaceMultiDomainMessengerIdl
+ace_add_lib(FaceMultiDomainMessengerIdl
   OUTPUT_NAME FaceMultiDomainMessengerIdl
   FOLDER tests/FACE/MultiDomainMessenger/Idl
   ASPECTS FACE

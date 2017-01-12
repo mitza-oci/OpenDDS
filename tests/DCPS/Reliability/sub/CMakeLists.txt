@@ -1,6 +1,6 @@
 
 
-add_ace_exe(Reliability_Subscriber
+ace_add_exe(Reliability_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Reliability/sub
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -12,7 +12,7 @@ add_ace_exe(Reliability_Subscriber
   LINK_LIBRARIES OpenDDS_Model
                  Reliability
 )
-target_cxx_sources(Reliability_Subscriber
+ace_target_cxx_sources(Reliability_Subscriber
   SOURCE_FILES ../Boilerplate.cpp
                DataReaderListenerImpl.cpp
                SeqReaderListenerImpl.cpp

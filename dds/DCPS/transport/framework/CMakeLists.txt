@@ -1,4 +1,4 @@
-target_cxx_sources(OpenDDS_Dcps
+ace_target_cxx_sources(OpenDDS_Dcps
   SOURCE_FILES BuildChainVisitor.cpp
                CopyChainVisitor.cpp
                DataLink.cpp

@@ -1,11 +1,11 @@
 
 
-add_ace_lib(TestUtils
+ace_add_lib(TestUtils
   OUTPUT_NAME TestUtils
   FOLDER tests/Utils
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(TestUtils
+ace_target_cxx_sources(TestUtils
   SOURCE_FILES DDSApp.cpp
                Options.cpp
   HEADER_FILES DDSApp.h

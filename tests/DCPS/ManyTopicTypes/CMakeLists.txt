@@ -1,6 +1,6 @@
 
 
-add_ace_lib(ManyTopicTypes
+ace_add_lib(ManyTopicTypes
   OUTPUT_NAME ManyTopicTypes
   FOLDER tests/DCPS/ManyTopicTypes
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps

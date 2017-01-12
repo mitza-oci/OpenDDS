@@ -13,13 +13,13 @@ else()
 endif()
 
 
-function(configure_dds_test_files)
+function(dds_configure_test_files)
   file(GLOB files *.ini *.pl)
   file(COPY ${files}
        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endfunction()
 
-function(add_dds_test name)
+function(dds_add_test name)
   set(multiValueArgs COMMAND REQUIRES LABELS)
   cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 

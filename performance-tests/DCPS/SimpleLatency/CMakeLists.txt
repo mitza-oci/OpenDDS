@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(SimpleLatency_Idl
+ace_add_lib(SimpleLatency_Idl
   OUTPUT_NAME SimpleLatency_Idl
   FOLDER performance-tests/DCPS/SimpleLatency
   DEFINE_SYMBOL SIMPLELATENCY_BUILD_DLL
@@ -23,7 +23,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_SimpleLatency_Pub
+ace_add_exe(DDS_SimpleLatency_Pub
   OUTPUT_NAME dds_pub
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER performance-tests/DCPS/SimpleLatency
@@ -31,14 +31,14 @@ add_ace_exe(DDS_SimpleLatency_Pub
   LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_SimpleLatency_Pub
+ace_target_cxx_sources(DDS_SimpleLatency_Pub
   SOURCE_FILES PubListener.cpp
                sample_pub.cpp
   HEADER_FILES PubListener.h
 )
 
 
-add_ace_exe(DDS_SimpleLatency_Sub
+ace_add_exe(DDS_SimpleLatency_Sub
   OUTPUT_NAME dds_sub
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER performance-tests/DCPS/SimpleLatency
@@ -46,7 +46,7 @@ add_ace_exe(DDS_SimpleLatency_Sub
   LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_SimpleLatency_Sub
+ace_target_cxx_sources(DDS_SimpleLatency_Sub
   SOURCE_FILES SubListener.cpp
                sample_sub.cpp
   HEADER_FILES SubListener.h

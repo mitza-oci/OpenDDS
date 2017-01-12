@@ -1,6 +1,6 @@
 
 
-add_ace_lib(DcpsFooType3
+ace_add_lib(DcpsFooType3
   OUTPUT_NAME DcpsFooType3
   FOLDER tests/DCPS/FooType3
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps

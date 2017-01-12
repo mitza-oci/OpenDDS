@@ -1,6 +1,6 @@
-requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(DCPS_Perf_TCPListener_Pub
+ace_add_exe(DCPS_Perf_TCPListener_Pub
   OUTPUT_NAME publisher
   FOLDER performance-tests/DCPS/TCPListenerTest
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -8,7 +8,7 @@ add_ace_exe(DCPS_Perf_TCPListener_Pub
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
                  OpenDDS_Dcps
 )
-target_cxx_sources(DCPS_Perf_TCPListener_Pub
+ace_target_cxx_sources(DCPS_Perf_TCPListener_Pub
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
@@ -16,7 +16,7 @@ target_cxx_sources(DCPS_Perf_TCPListener_Pub
 )
 
 
-add_ace_exe(DCPS_Perf_TCPListener_Sub
+ace_add_exe(DCPS_Perf_TCPListener_Sub
   OUTPUT_NAME subscriber
   FOLDER performance-tests/DCPS/TCPListenerTest
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -24,7 +24,7 @@ add_ace_exe(DCPS_Perf_TCPListener_Sub
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
                  OpenDDS_Dcps
 )
-target_cxx_sources(DCPS_Perf_TCPListener_Sub
+ace_target_cxx_sources(DCPS_Perf_TCPListener_Sub
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
@@ -32,30 +32,30 @@ target_cxx_sources(DCPS_Perf_TCPListener_Sub
                common.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 1"
+dds_add_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 1"
   COMMAND run_test.pl -p 1 -s 1
 )
 
 
-add_dds_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 1 -c"
+dds_add_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 1 -c"
   COMMAND run_test.pl -p 1 -s 1 -c
 )
 
 
-add_dds_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 4"
+dds_add_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 1 -s 4"
   COMMAND run_test.pl -p 1 -s 4
 )
 
 
-add_dds_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 2 -s 3"
+dds_add_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 2 -s 3"
   COMMAND run_test.pl -p 2 -s 3
 )
 
 
-add_dds_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 4 -s 1"
+dds_add_test("performance-tests/DCPS/TCPListenerTest/run_test.pl -p 4 -s 1"
   COMMAND run_test.pl -p 4 -s 1
 )

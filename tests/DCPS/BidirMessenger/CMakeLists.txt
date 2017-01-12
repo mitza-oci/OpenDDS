@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_BidirMessenger_Idl
+ace_add_lib(DDS_BidirMessenger_Idl
   OUTPUT_NAME DDS_BidirMessenger_Idl
   FOLDER tests/DCPS/BidirMessenger
   DEFINE_SYMBOL BIDIRMESSENGER_BUILD_DLL
@@ -23,7 +23,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_BidirMessenger_Pubsub
+ace_add_exe(DDS_BidirMessenger_Pubsub
   OUTPUT_NAME pubsub
   FOLDER tests/DCPS/BidirMessenger
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -31,7 +31,7 @@ add_ace_exe(DDS_BidirMessenger_Pubsub
   LINK_LIBRARIES DDS_BidirMessenger_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_BidirMessenger_Pubsub
+ace_target_cxx_sources(DDS_BidirMessenger_Pubsub
   SOURCE_FILES DataReaderListener.cpp
                Writer.cpp
                pubsub.cpp

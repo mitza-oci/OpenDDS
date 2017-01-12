@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(idl_test2_lib
+ace_add_lib(idl_test2_lib
   OUTPUT_NAME idl_test2_lib
   FOLDER tests/DCPS/Compiler/idl_test2_lib
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps

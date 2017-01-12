@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(ConfigFile
+ace_add_exe(ConfigFile
   OUTPUT_NAME ConfigFile
   FOLDER tests/DCPS/ConfigFile
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -18,14 +18,14 @@ add_ace_exe(ConfigFile
                  OpenDDS_Udp
                  OpenDDS_Rtps
 )
-target_cxx_sources(ConfigFile
+ace_target_cxx_sources(ConfigFile
   SOURCE_FILES ConfigFile.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/ConfigFile/run_test.pl"
+dds_add_test("tests/DCPS/ConfigFile/run_test.pl"
   COMMAND run_test.pl
 )

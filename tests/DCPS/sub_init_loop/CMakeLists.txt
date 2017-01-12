@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(sub_init_loop_Idl
+ace_add_lib(sub_init_loop_Idl
   OUTPUT_NAME sub_init_loop_Idl
   FOLDER tests/DCPS/sub_init_loop
   DEFINE_SYMBOL SUBINITLOOP_BUILD_DLL
@@ -24,7 +24,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(sub_init_loop_Publisher
+ace_add_exe(sub_init_loop_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/sub_init_loop
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -32,14 +32,14 @@ add_ace_exe(sub_init_loop_Publisher
   LINK_LIBRARIES sub_init_loop_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(sub_init_loop_Publisher
+ace_target_cxx_sources(sub_init_loop_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(sub_init_loop_Subscriber
+ace_add_exe(sub_init_loop_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/sub_init_loop
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -47,14 +47,14 @@ add_ace_exe(sub_init_loop_Subscriber
   LINK_LIBRARIES sub_init_loop_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(sub_init_loop_Subscriber
+ace_target_cxx_sources(sub_init_loop_Subscriber
   SOURCE_FILES subscriber.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/sub_init_loop/run_test.pl"
+dds_add_test("tests/DCPS/sub_init_loop/run_test.pl"
   COMMAND run_test.pl
 )

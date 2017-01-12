@@ -8,11 +8,11 @@ endif()
 
 
 find_package(Qt4)
-requires(QT4_FOUND)
+ace_requires(QT4_FOUND)
 
 if (("${MSVC_VERSION}" GREATER 1599) OR (NOT "${CMAKE_CXX_STANDARD}" EQUAL 98))
   ## MSVC_VERSION==1600  is the earliest version of MSVC to support std::shared_ptr
-  ## for other compiler, To enable C++11 requires CMAKE_CXX_STANDARD set and not equal to 98.
+  ## for other compiler, To enable C++11 ace_requires CMAKE_CXX_STANDARD set and not equal to 98.
 else()
   find_package(Boost)
   if (NOT Boost_FOUND)
@@ -28,7 +28,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
-add_ace_exe(ishapes
+ace_add_exe(ishapes
   OUTPUT_NAME ishapes
   FOLDER examples/DCPS/ishapes
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -39,7 +39,7 @@ add_ace_exe(ishapes
                  OpenDDS_Udp
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(ishapes
+ace_target_cxx_sources(ishapes
   SOURCE_FILES BouncingShapeDynamics.cpp
                Circle.cpp
                DDSShapeDynamics.cpp

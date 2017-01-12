@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_TopicReuse_Idl
+ace_add_lib(DDS_TopicReuse_Idl
   OUTPUT_NAME DDS_TopicReuse_Idl
   FOLDER tests/DCPS/TopicReuse
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
@@ -22,7 +22,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_TopicReuse_Topicreuse
+ace_add_exe(DDS_TopicReuse_Topicreuse
   OUTPUT_NAME tpreuse
   FOLDER tests/DCPS/TopicReuse
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -30,15 +30,15 @@ add_ace_exe(DDS_TopicReuse_Topicreuse
   LINK_LIBRARIES OpenDDS_Dcps
                  DDS_TopicReuse_Idl
 )
-target_cxx_sources(DDS_TopicReuse_Topicreuse
+ace_target_cxx_sources(DDS_TopicReuse_Topicreuse
   SOURCE_FILES tpreuse.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/TopicReuse/run_test.pl"
+dds_add_test("tests/DCPS/TopicReuse/run_test.pl"
   COMMAND run_test.pl
   LABELS RTPS DCPS_MIN
 )

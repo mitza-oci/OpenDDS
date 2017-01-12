@@ -1,9 +1,9 @@
-requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
 
 
-requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(InfoRepo_population_Syncserver
+ace_add_exe(InfoRepo_population_Syncserver
   OUTPUT_NAME syncServer
 
   FOLDER performance-tests/DCPS/InfoRepo_population
@@ -14,13 +14,13 @@ add_ace_exe(InfoRepo_population_Syncserver
                  TAO_PortableServer
                  TAO_IORTable
 )
-target_cxx_sources(InfoRepo_population_Syncserver
+ace_target_cxx_sources(InfoRepo_population_Syncserver
   SOURCE_FILES SyncExt_i.cpp
                SyncServer.cpp
   HEADER_FILES SyncExt_i.h
 )
 
-add_ace_exe(InfoRepo_population_Publisher
+ace_add_exe(InfoRepo_population_Publisher
   OUTPUT_NAME publisher
   FOLDER performance-tests/DCPS/InfoRepo_population
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -29,7 +29,7 @@ add_ace_exe(InfoRepo_population_Publisher
   LINK_LIBRARIES OpenDDS_Tcp
                  Sync_Clientlib
 )
-target_cxx_sources(InfoRepo_population_Publisher
+ace_target_cxx_sources(InfoRepo_population_Publisher
   SOURCE_FILES SyncClientExt_i.cpp
                Writer.cpp
                publisher.cpp
@@ -37,7 +37,7 @@ target_cxx_sources(InfoRepo_population_Publisher
                Writer.h
 )
 
-add_ace_exe(InfoRepo_population_Subscriber
+ace_add_exe(InfoRepo_population_Subscriber
   OUTPUT_NAME subscriber
   FOLDER performance-tests/DCPS/InfoRepo_population
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -46,7 +46,7 @@ add_ace_exe(InfoRepo_population_Subscriber
   LINK_LIBRARIES OpenDDS_Tcp
                  Sync_Clientlib
 )
-target_cxx_sources(InfoRepo_population_Subscriber
+ace_target_cxx_sources(InfoRepo_population_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                SyncClientExt_i.cpp
                subscriber.cpp
@@ -70,10 +70,10 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("performance-tests/DCPS/InfoRepo_population/run_test.pl"
+dds_add_test("performance-tests/DCPS/InfoRepo_population/run_test.pl"
   COMMAND run_test.pl
 )

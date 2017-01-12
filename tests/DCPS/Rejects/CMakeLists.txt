@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_Rejects_Idl
+ace_add_lib(DDS_Rejects_Idl
   OUTPUT_NAME DDS_Rejects_Idl
   FOLDER tests/DCPS/Rejects
   DEFINE_SYMBOL REJECTS_BUILD_DLL
@@ -22,7 +22,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_Rejects_Publisher
+ace_add_exe(DDS_Rejects_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Rejects
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -30,14 +30,14 @@ add_ace_exe(DDS_Rejects_Publisher
   LINK_LIBRARIES DDS_Rejects_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_Rejects_Publisher
+ace_target_cxx_sources(DDS_Rejects_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(DDS_Rejects_Subscriber
+ace_add_exe(DDS_Rejects_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Rejects
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -45,23 +45,23 @@ add_ace_exe(DDS_Rejects_Subscriber
   LINK_LIBRARIES DDS_Rejects_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_Rejects_Subscriber
+ace_target_cxx_sources(DDS_Rejects_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/Rejects/run_test.pl"
+dds_add_test("tests/DCPS/Rejects/run_test.pl"
   COMMAND run_test.pl
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
 )
 
 
-add_dds_test("tests/DCPS/Rejects/run_test.pl rtps_disc"
+dds_add_test("tests/DCPS/Rejects/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
   LABELS MCAST RTPS
 )

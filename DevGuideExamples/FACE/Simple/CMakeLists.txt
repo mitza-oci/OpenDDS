@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(FaceMessenger_Idl
+ace_add_lib(FaceMessenger_Idl
   OUTPUT_NAME FaceMessenger_Idl
   FOLDER DevGuideExamples/FACE/Simple
   ASPECTS FACE
@@ -25,38 +25,38 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(FaceMessenger_Publisher
+ace_add_exe(FaceMessenger_Publisher
   OUTPUT_NAME publisher
   FOLDER DevGuideExamples/FACE/Simple
   ASPECTS FACE
   LINK_LIBRARIES FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FaceMessenger_Publisher
+ace_target_cxx_sources(FaceMessenger_Publisher
   SOURCE_FILES Publisher.cpp
 )
 
 
-add_ace_exe(FaceMessenger_Subscriber
+ace_add_exe(FaceMessenger_Subscriber
   OUTPUT_NAME subscriber
   FOLDER DevGuideExamples/FACE/Simple
   ASPECTS FACE
   LINK_LIBRARIES FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FaceMessenger_Subscriber
+ace_target_cxx_sources(FaceMessenger_Subscriber
   SOURCE_FILES Subscriber.cpp
 )
 
 
-add_ace_exe(FaceMessenger_Callbacksubscriber
+ace_add_exe(FaceMessenger_Callbacksubscriber
   OUTPUT_NAME callback_subscriber
   FOLDER DevGuideExamples/FACE/Simple
   ASPECTS FACE
   LINK_LIBRARIES FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FaceMessenger_Callbacksubscriber
+ace_target_cxx_sources(FaceMessenger_Callbacksubscriber
   SOURCE_FILES CallbackSubscriber.cpp
 )
 

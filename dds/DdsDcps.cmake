@@ -11,7 +11,7 @@ foreach(opt ${OPENDDS_BASE_OPTIONS})
   endif()
 endforeach()
 
-add_ace_lib(OpenDDS_Dcps
+ace_add_lib(OpenDDS_Dcps
   PACKAGE OpenDDS
   FOLDER dds
   DEFINE_SYMBOL OPENDDS_DCPS_BUILD_DLL
@@ -22,7 +22,7 @@ add_ace_lib(OpenDDS_Dcps
   PUBLIC_LINK_LIBRARIES "${dcps_link_libraries}"
 )
 
-target_cxx_sources(OpenDDS_Dcps
+ace_target_cxx_sources(OpenDDS_Dcps
   HEADER_FILES Version.h
                Versioned_Namespace.h
 )

@@ -7,9 +7,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(Monitor_Messenger_Idl
+ace_add_lib(Monitor_Messenger_Idl
   OUTPUT_NAME Monitor_Messenger_Idl
   FOLDER tests/DCPS/Monitor
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
@@ -24,7 +24,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(Monitor_Messenger_Publisher
+ace_add_exe(Monitor_Messenger_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Monitor
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -32,14 +32,14 @@ add_ace_exe(Monitor_Messenger_Publisher
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
 )
-target_cxx_sources(Monitor_Messenger_Publisher
+ace_target_cxx_sources(Monitor_Messenger_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(Monitor_Messenger_Subscriber
+ace_add_exe(Monitor_Messenger_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Monitor
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -47,14 +47,14 @@ add_ace_exe(Monitor_Messenger_Subscriber
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
 )
-target_cxx_sources(Monitor_Messenger_Subscriber
+ace_target_cxx_sources(Monitor_Messenger_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
 )
 
 
-add_ace_exe(Monitor_Messenger_Monitor
+ace_add_exe(Monitor_Messenger_Monitor
   OUTPUT_NAME monitor
   FOLDER tests/DCPS/Monitor
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -62,7 +62,7 @@ add_ace_exe(Monitor_Messenger_Monitor
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
 )
-target_cxx_sources(Monitor_Messenger_Monitor
+ace_target_cxx_sources(Monitor_Messenger_Monitor
   SOURCE_FILES DPMDataReaderListener.cpp
                DRMDataReaderListener.cpp
                DRPerMDataReaderListener.cpp

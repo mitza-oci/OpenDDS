@@ -7,16 +7,16 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(MessengerMinimal_Publisher
+ace_add_exe(MessengerMinimal_Publisher
   OUTPUT_NAME publisher
   FOLDER DevGuideExamples/DCPS/Messenger.minimal
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Model
 )
-target_cxx_sources(MessengerMinimal_Publisher
+ace_target_cxx_sources(MessengerMinimal_Publisher
   SOURCE_FILES Boilerplate.cpp
                Publisher.cpp
   HEADER_FILES Boilerplate.h
@@ -28,14 +28,14 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(MessengerMinimal_Subscriber
+ace_add_exe(MessengerMinimal_Subscriber
   OUTPUT_NAME subscriber
   FOLDER DevGuideExamples/DCPS/Messenger.minimal
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Model
 )
-target_cxx_sources(MessengerMinimal_Subscriber
+ace_target_cxx_sources(MessengerMinimal_Subscriber
   SOURCE_FILES Boilerplate.cpp
                DataReaderListenerImpl.cpp
                Subscriber.cpp

@@ -1,6 +1,6 @@
 
 
-add_ace_lib(Reliability
+ace_add_lib(Reliability
   OUTPUT_NAME Reliability
   FOLDER tests/DCPS/Reliability/IDL
   DEFINE_SYMBOL RELIABILITY_BUILD_DLL

@@ -7,13 +7,13 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(DDS_namespace_conflict
+ace_add_exe(DDS_namespace_conflict
   OUTPUT_NAME DDS_namespace_conflict
   FOLDER tests/DCPS/Compiler/namespace_conflict
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(DDS_namespace_conflict
+ace_target_cxx_sources(DDS_namespace_conflict
   SOURCE_FILES main.cpp
 )
 

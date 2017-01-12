@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(FaceReliabilitySubscriber
+ace_add_exe(FaceReliabilitySubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/FACE/Reliability/Subscriber
   ASPECTS FACE
@@ -16,7 +16,7 @@ add_ace_exe(FaceReliabilitySubscriber
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FaceReliabilitySubscriber
+ace_target_cxx_sources(FaceReliabilitySubscriber
   SOURCE_FILES Subscriber.cpp
 )
 

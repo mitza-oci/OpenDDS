@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(SetQosDeadline_Idl
+ace_add_lib(SetQosDeadline_Idl
   OUTPUT_NAME SetQosDeadline_Idl
   FOLDER tests/DCPS/SetQosDeadline
   DEFINE_SYMBOL SETQOSDEADLINE_BUILD_DLL
@@ -22,7 +22,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(SetQosDeadline_Publisher
+ace_add_exe(SetQosDeadline_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/SetQosDeadline
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -30,14 +30,14 @@ add_ace_exe(SetQosDeadline_Publisher
   LINK_LIBRARIES SetQosDeadline_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(SetQosDeadline_Publisher
+ace_target_cxx_sources(SetQosDeadline_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(SetQosDeadline_Subscriber
+ace_add_exe(SetQosDeadline_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/SetQosDeadline
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -45,23 +45,23 @@ add_ace_exe(SetQosDeadline_Subscriber
   LINK_LIBRARIES SetQosDeadline_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(SetQosDeadline_Subscriber
+ace_target_cxx_sources(SetQosDeadline_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/SetQosDeadline/run_test.pl"
+dds_add_test("tests/DCPS/SetQosDeadline/run_test.pl"
   COMMAND run_test.pl
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
 )
 
 
-add_dds_test("tests/DCPS/SetQosDeadline/run_test.pl rtps_disc"
+dds_add_test("tests/DCPS/SetQosDeadline/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
   LABELS MCAST RTPS
 )

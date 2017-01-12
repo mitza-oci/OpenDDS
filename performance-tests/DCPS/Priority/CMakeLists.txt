@@ -7,9 +7,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(perf_Priority_Idl
+ace_add_lib(perf_Priority_Idl
   OUTPUT_NAME perf_Priority_Idl
   FOLDER performance-tests/DCPS/Priority
   DEFINE_SYMBOL PRIORITY_BUILD_DLL
@@ -24,7 +24,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(perf_Priority_Publisher
+ace_add_exe(perf_Priority_Publisher
   OUTPUT_NAME publisher
   FOLDER performance-tests/DCPS/Priority
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -32,7 +32,7 @@ add_ace_exe(perf_Priority_Publisher
   LINK_LIBRARIES perf_Priority_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(perf_Priority_Publisher
+ace_target_cxx_sources(perf_Priority_Publisher
   SOURCE_FILES Options.cpp
                PublicationProfile.cpp
                Publisher.cpp
@@ -46,7 +46,7 @@ target_cxx_sources(perf_Priority_Publisher
 )
 
 
-add_ace_exe(perf_Priority_Subscriber
+ace_add_exe(perf_Priority_Subscriber
   OUTPUT_NAME subscriber
   FOLDER performance-tests/DCPS/Priority
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -54,7 +54,7 @@ add_ace_exe(perf_Priority_Subscriber
   LINK_LIBRARIES perf_Priority_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(perf_Priority_Subscriber
+ace_target_cxx_sources(perf_Priority_Subscriber
   SOURCE_FILES Commas.cpp
                DataReaderListener.cpp
                Options.cpp

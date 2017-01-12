@@ -1,4 +1,4 @@
-add_ace_lib(DDS_ManyTopicMultiProcess_Idl
+ace_add_lib(DDS_ManyTopicMultiProcess_Idl
   OUTPUT_NAME DDS_ManyTopicMultiProcess_Idl
   FOLDER tests/DCPS/ManyTopicMultiProcess
   DEFINE_SYMBOL MANYFOOLIB_BUILD_DLL
@@ -15,7 +15,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(ManyTopicMultiProcessPublisher
+ace_add_exe(ManyTopicMultiProcessPublisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ManyTopicMultiProcess
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -24,7 +24,7 @@ add_ace_exe(ManyTopicMultiProcessPublisher
                  common
                  DDS_ManyTopicMultiProcess_Idl
 )
-target_cxx_sources(ManyTopicMultiProcessPublisher
+ace_target_cxx_sources(ManyTopicMultiProcessPublisher
   SOURCE_FILES DataReaderListener.cpp
                DataReaderListener1.cpp
                Writer.cpp
@@ -36,7 +36,7 @@ target_cxx_sources(ManyTopicMultiProcessPublisher
 )
 
 
-add_ace_exe(ManyTopicMultiProcessSubscriber
+ace_add_exe(ManyTopicMultiProcessSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ManyTopicMultiProcess
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -45,7 +45,7 @@ add_ace_exe(ManyTopicMultiProcessSubscriber
                  common
                  DDS_ManyTopicMultiProcess_Idl
 )
-target_cxx_sources(ManyTopicMultiProcessSubscriber
+ace_target_cxx_sources(ManyTopicMultiProcessSubscriber
   SOURCE_FILES DataReaderListener.cpp
                DataReaderListener1.cpp
                DataReaderListener4.cpp
@@ -58,10 +58,10 @@ target_cxx_sources(ManyTopicMultiProcessSubscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/ManyTopicMultiProcess/run_test.pl"
+dds_add_test("tests/DCPS/ManyTopicMultiProcess/run_test.pl"
   COMMAND run_test.pl
 )

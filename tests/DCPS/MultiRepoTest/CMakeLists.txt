@@ -1,6 +1,6 @@
-requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(MultiRepoTest_Monitor
+ace_add_exe(MultiRepoTest_Monitor
   OUTPUT_NAME monitor
   FOLDER tests/DCPS/MultiRepoTest
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -8,7 +8,7 @@ add_ace_exe(MultiRepoTest_Monitor
   LINK_LIBRARIES DcpsFooType5
                  OpenDDS_Dcps
 )
-target_cxx_sources(MultiRepoTest_Monitor
+ace_target_cxx_sources(MultiRepoTest_Monitor
   SOURCE_FILES DataWriterListenerImpl.cpp
                ForwardingListener.cpp
                TestConfig.cpp
@@ -21,7 +21,7 @@ target_cxx_sources(MultiRepoTest_Monitor
 )
 
 
-add_ace_exe(MultiRepoTest_System
+ace_add_exe(MultiRepoTest_System
   OUTPUT_NAME system
   FOLDER tests/DCPS/MultiRepoTest
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -29,7 +29,7 @@ add_ace_exe(MultiRepoTest_System
   LINK_LIBRARIES DcpsFooType5
                  OpenDDS_Dcps
 )
-target_cxx_sources(MultiRepoTest_System
+ace_target_cxx_sources(MultiRepoTest_System
   SOURCE_FILES DataWriterListenerImpl.cpp
                ForwardingListener.cpp
                TestConfig.cpp
@@ -41,15 +41,15 @@ target_cxx_sources(MultiRepoTest_System
                TestSystem.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/MultiRepoTest/run_test.pl"
+dds_add_test("tests/DCPS/MultiRepoTest/run_test.pl"
   COMMAND run_test.pl
 )
 
 
-add_dds_test("tests/DCPS/MultiRepoTest/run_test.pl fileconfig"
+dds_add_test("tests/DCPS/MultiRepoTest/run_test.pl fileconfig"
   COMMAND run_test.pl fileconfig
 )

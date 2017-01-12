@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_Inconsistent_Qos_Idl
+ace_add_lib(DDS_Inconsistent_Qos_Idl
   OUTPUT_NAME DDS_Inconsistent_Qos_Idl
   FOLDER tests/DCPS/Inconsistent_Qos
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
@@ -22,7 +22,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_Inconsistent_Qos_Inconsistent_qos
+ace_add_exe(DDS_Inconsistent_Qos_Inconsistent_qos
   OUTPUT_NAME inconsistent_qos
   FOLDER tests/DCPS/Inconsistent_Qos
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -30,15 +30,15 @@ add_ace_exe(DDS_Inconsistent_Qos_Inconsistent_qos
   LINK_LIBRARIES OpenDDS_QOS_XML_XSC_Handler
                  DDS_Inconsistent_Qos_Idl
 )
-target_cxx_sources(DDS_Inconsistent_Qos_Inconsistent_qos
+ace_target_cxx_sources(DDS_Inconsistent_Qos_Inconsistent_qos
   SOURCE_FILES inconsistent_qos.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/Inconsistent_Qos/run_test.pl"
+dds_add_test("tests/DCPS/Inconsistent_Qos/run_test.pl"
   COMMAND run_test.pl
   LABELS RTPS DDS4CCM_OPENDDS DCPS_MIN
 )

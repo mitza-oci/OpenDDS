@@ -1,6 +1,6 @@
-requires(OBJECT_MODEL_PROFILE)
+ace_requires(OBJECT_MODEL_PROFILE)
 
-add_ace_exe(FooTest3_0_Publisher
+ace_add_exe(FooTest3_0_Publisher
   OUTPUT_NAME FooTest3_publisher
   FOLDER tests/DCPS/FooTest3_0
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -8,7 +8,7 @@ add_ace_exe(FooTest3_0_Publisher
   LINK_LIBRARIES DcpsFooType3
                  OpenDDS_Dcps
 )
-target_cxx_sources(FooTest3_0_Publisher
+ace_target_cxx_sources(FooTest3_0_Publisher
   SOURCE_FILES DataWriterListener.cpp
                DomainParticipantListener.cpp
                PubDriver.cpp
@@ -21,7 +21,7 @@ target_cxx_sources(FooTest3_0_Publisher
 )
 
 
-add_ace_exe(FooTest3_0_Subscriber
+ace_add_exe(FooTest3_0_Subscriber
   OUTPUT_NAME FooTest3_subscriber
   FOLDER tests/DCPS/FooTest3_0
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -29,7 +29,7 @@ add_ace_exe(FooTest3_0_Subscriber
   LINK_LIBRARIES DcpsFooType3
                  OpenDDS_Dcps
 )
-target_cxx_sources(FooTest3_0_Subscriber
+ace_target_cxx_sources(FooTest3_0_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                SubDriver.cpp
                sub_main.cpp
@@ -37,41 +37,41 @@ target_cxx_sources(FooTest3_0_Subscriber
                SubDriver.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl"
   COMMAND run_test.pl
   LABELS DCPS_MIN
 )
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl unregister"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl unregister"
   COMMAND run_test.pl unregister
 )
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl dispose"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl dispose"
   COMMAND run_test.pl dispose
 )
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl resume"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl resume"
   COMMAND run_test.pl resume
 )
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl listener"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl listener"
   COMMAND run_test.pl listener
 )
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl allocator"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl allocator"
   COMMAND run_test.pl allocator
 )
 
 
-add_dds_test("tests/DCPS/FooTest3_0/run_test.pl liveliness"
+dds_add_test("tests/DCPS/FooTest3_0/run_test.pl liveliness"
   COMMAND run_test.pl liveliness
 )

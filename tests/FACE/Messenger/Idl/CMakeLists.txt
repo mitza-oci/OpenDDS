@@ -1,6 +1,6 @@
 
 
-add_ace_lib(FaceMessengerIdl
+ace_add_lib(FaceMessengerIdl
   OUTPUT_NAME FaceMessengerIdl
   FOLDER tests/FACE/Messenger/Idl
   ASPECTS FACE

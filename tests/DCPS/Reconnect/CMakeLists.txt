@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(Reconnect_Idl
+ace_add_lib(Reconnect_Idl
   OUTPUT_NAME Reconnect_Idl
   FOLDER tests/DCPS/Reconnect
   DEFINE_SYMBOL RECONNECT_BUILD_DLL
@@ -23,14 +23,14 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(Reconnect_Publisher
+ace_add_exe(Reconnect_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Reconnect
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  Reconnect_Idl
 )
-target_cxx_sources(Reconnect_Publisher
+ace_target_cxx_sources(Reconnect_Publisher
   SOURCE_FILES DataWriterListener.cpp
                Writer.cpp
                publisher.cpp
@@ -39,43 +39,43 @@ target_cxx_sources(Reconnect_Publisher
 )
 
 
-add_ace_exe(Reconnect_Subscriber
+ace_add_exe(Reconnect_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Reconnect
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  Reconnect_Idl
 )
-target_cxx_sources(Reconnect_Subscriber
+ace_target_cxx_sources(Reconnect_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/Reconnect/run_test.pl"
+dds_add_test("tests/DCPS/Reconnect/run_test.pl"
   COMMAND run_test.pl
 )
 
 
-add_dds_test("tests/DCPS/Reconnect/run_test.pl restart_sub"
+dds_add_test("tests/DCPS/Reconnect/run_test.pl restart_sub"
   COMMAND run_test.pl restart_sub
 )
 
 
-add_dds_test("tests/DCPS/Reconnect/run_test.pl restart_pub"
+dds_add_test("tests/DCPS/Reconnect/run_test.pl restart_pub"
   COMMAND run_test.pl restart_pub
 )
 
 
-add_dds_test("tests/DCPS/Reconnect/run_test.pl bp_timeout"
+dds_add_test("tests/DCPS/Reconnect/run_test.pl bp_timeout"
   COMMAND run_test.pl bp_timeout
 )
 
 
-add_dds_test("tests/DCPS/Reconnect/run_test.pl sub_init_crash"
+dds_add_test("tests/DCPS/Reconnect/run_test.pl sub_init_crash"
   COMMAND run_test.pl sub_init_crash
 )

@@ -1,6 +1,6 @@
-requires ("NOT NO_OPENDDS_SAFETY_PROFILE")
+ace_requires ("NOT NO_OPENDDS_SAFETY_PROFILE")
 
-add_ace_lib(OpenDDS_Corba
+ace_add_lib(OpenDDS_Corba
   PACKAGE OpenDDS
   FOLDER dds/CORBA/tao
   DEFINE_SYMBOL TAO_BUILD_DLL

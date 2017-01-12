@@ -1,4 +1,4 @@
-target_cxx_sources(OpenDDS_FACE
+ace_target_cxx_sources(OpenDDS_FACE
   SOURCE_FILES ConnectionSettings.cpp
                Parser.cpp
                QosSettings.cpp

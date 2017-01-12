@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(CallbackAndReceiveSubscriber
+ace_add_exe(CallbackAndReceiveSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/FACE/CallbackAndReceive/Subscriber
   ASPECTS FACE
@@ -16,7 +16,7 @@ add_ace_exe(CallbackAndReceiveSubscriber
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(CallbackAndReceiveSubscriber
+ace_target_cxx_sources(CallbackAndReceiveSubscriber
   SOURCE_FILES Subscriber.cpp
 )
 

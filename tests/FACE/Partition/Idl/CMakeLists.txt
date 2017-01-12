@@ -1,6 +1,6 @@
 
 
-add_ace_lib(FacePartitionIdl
+ace_add_lib(FacePartitionIdl
   OUTPUT_NAME FacePartitionIdl
   FOLDER tests/FACE/Partition/Idl
   ASPECTS FACE

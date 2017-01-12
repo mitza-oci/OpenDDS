@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires("NOT MINIMUM_CORBA"
+ace_requires("NOT MINIMUM_CORBA"
          "NOT CORBA_E_MICRO"
          "NOT CORBA_E_COMPACT"
          "TARGET TAO_Svc_Utils"
@@ -16,7 +16,7 @@ requires("NOT MINIMUM_CORBA"
          NO_OPENDDS_SAFETY_PROFILE
 )
 
-add_ace_lib(DDS_Messenger_Imr_Idl
+ace_add_lib(DDS_Messenger_Imr_Idl
   OUTPUT_NAME DDS_Messenger_Imr_Idl
   FOLDER examples/DCPS/Messenger_Imr
   DEFINE_SYMBOL MESSENGER_IMR_BUILD_DLL
@@ -31,35 +31,35 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_Messenger_Imr_Publisher
+ace_add_exe(DDS_Messenger_Imr_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/Messenger_Imr
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
 )
-target_cxx_sources(DDS_Messenger_Imr_Publisher
+ace_target_cxx_sources(DDS_Messenger_Imr_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(DDS_Messenger_Imr_Subscriber
+ace_add_exe(DDS_Messenger_Imr_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/Messenger_Imr
   ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
 )
-target_cxx_sources(DDS_Messenger_Imr_Subscriber
+ace_target_cxx_sources(DDS_Messenger_Imr_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
 )
 
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 file(READ "run_test.pl" RUN_TEST_CONTENT)
 string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:tao_imr_locator>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
 string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:tao_imr_activator>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
@@ -69,6 +69,6 @@ file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_
 file(COPY pub.ini sub.ini
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-add_dds_test("examples/DCPS/Messenger_Imr/run_test.pl"
+dds_add_test("examples/DCPS/Messenger_Imr/run_test.pl"
   COMMAND run_test.pl
 )

@@ -1,4 +1,4 @@
-target_cxx_sources(OpenDDS_Dcps
+ace_target_cxx_sources(OpenDDS_Dcps
   HEADER_FILES yard_base_grammar.hpp
                yard_char_set.hpp
                yard_parser.hpp

@@ -18,7 +18,7 @@ include(cmake/opendds_aspects.cmake)
 include(cmake/dds_idl_sources.cmake)
 
 
-add_package(OpenDDS
+ace_add_package(OpenDDS
   VERSION ${OPENDDS_VERSION}
 )
 
@@ -32,7 +32,7 @@ add_subdirectory(performance-tests)
 add_subdirectory(DevGuideExamples)
 add_subdirectory(bin/PerlDDS)
 
-install_package(OpenDDS
+ace_install_package(OpenDDS
   CONFIG_OPTIONS ${DDS_OPTIONS}
   PREREQUISITE TAO
   EXTRA_CMAKE_FILES cmake/dds_idl_sources.cmake

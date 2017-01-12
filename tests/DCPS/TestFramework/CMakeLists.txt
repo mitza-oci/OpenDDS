@@ -1,12 +1,12 @@
 
 
-add_ace_lib(TestFramework
+ace_add_lib(TestFramework
   OUTPUT_NAME TestFramework
   FOLDER tests/DCPS/TestFramework
   DEFINE_SYMBOL TESTFRAMEWORK_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(TestFramework
+ace_target_cxx_sources(TestFramework
   SOURCE_FILES TestFramework.cpp
   HEADER_FILES TestFramework.h
                TestFramework_T.h

@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_DpShutdown_Idl
+ace_add_lib(DDS_DpShutdown_Idl
   OUTPUT_NAME DDS_DpShutdown_Idl
   FOLDER tests/DCPS/DpShutdown
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
@@ -22,7 +22,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_DpShutdown
+ace_add_exe(DDS_DpShutdown
   OUTPUT_NAME dpshutdown
   FOLDER tests/DCPS/DpShutdown
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -30,15 +30,15 @@ add_ace_exe(DDS_DpShutdown
   LINK_LIBRARIES DDS_DpShutdown_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_DpShutdown
+ace_target_cxx_sources(DDS_DpShutdown
   SOURCE_FILES dpshutdown.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/DpShutdown/run_test.pl"
+dds_add_test("tests/DCPS/DpShutdown/run_test.pl"
   COMMAND run_test.pl
   LABELS RTPS DCPS_MIN
 )

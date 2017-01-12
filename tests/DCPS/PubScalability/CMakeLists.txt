@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
-add_ace_lib(PubScalability_Idl
+ace_add_lib(PubScalability_Idl
   OUTPUT_NAME PubScalability_Idl
   FOLDER tests/DCPS/PubScalability
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
@@ -20,7 +20,7 @@ dds_idl_sources(
   IDL_FILES SampleType.idl
 )
 
-add_ace_exe(PubScalability_Publisher
+ace_add_exe(PubScalability_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/PubScalability
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -28,7 +28,7 @@ add_ace_exe(PubScalability_Publisher
   LINK_LIBRARIES PubScalability_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(PubScalability_Publisher
+ace_target_cxx_sources(PubScalability_Publisher
   SOURCE_FILES InstanceDataMap.cpp
                PubDriver.cpp
                Writer.cpp
@@ -39,7 +39,7 @@ target_cxx_sources(PubScalability_Publisher
 )
 
 
-add_ace_exe(PubScalability_Subscriber
+ace_add_exe(PubScalability_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/PubScalability
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -47,7 +47,7 @@ add_ace_exe(PubScalability_Subscriber
   LINK_LIBRARIES PubScalability_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(PubScalability_Subscriber
+ace_target_cxx_sources(PubScalability_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                SubDriver.cpp
                sub_main.cpp

@@ -1,12 +1,12 @@
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
 if (BUILD_IN_TOPIC)
   set(optional_build_in_topic_library OpenDDS_Tcp)
 endif()
 
 
-add_ace_lib(OpenDDS_InfoRepoLib
+ace_add_lib(OpenDDS_InfoRepoLib
   PACKAGE OpenDDS
   FOLDER dds/InfoRepo
   DEFINE_SYMBOL OPENDDS_INFOREPOLIB_BUILD_DLL
@@ -18,7 +18,7 @@ add_ace_lib(OpenDDS_InfoRepoLib
                         ${optional_build_in_topic_library}
 )
 
-target_cxx_sources(OpenDDS_InfoRepoLib
+ace_target_cxx_sources(OpenDDS_InfoRepoLib
   SOURCE_FILES  DCPSInfo_i.cpp
                 DcpsInfo_pch.cpp
                 DCPS_IR_Domain.cpp
@@ -47,7 +47,7 @@ target_cxx_sources(OpenDDS_InfoRepoLib
 )
 
 #############################################
-add_ace_lib(OpenDDS_Federator
+ace_add_lib(OpenDDS_Federator
   PACKAGE OpenDDS
   FOLDER dds/InfoRepo
   DEFINE_SYMBOL OPENDDS_FEDERATOR_BUILD_DLL
@@ -55,7 +55,7 @@ add_ace_lib(OpenDDS_Federator
   PUBLIC_LINK_LIBRARIES OpenDDS_InfoRepoLib
 )
 
-target_cxx_sources(OpenDDS_Federator
+ace_target_cxx_sources(OpenDDS_Federator
   SOURCE_FILES  FederatorConfig.cpp
                 FederatorManagerImpl.cpp
                 FederatorManagerImpl_updates.cpp
@@ -82,26 +82,26 @@ dds_idl_sources(
 )
 
 ###################################################
-add_ace_lib(OpenDDS_InfoRepoServ
+ace_add_lib(OpenDDS_InfoRepoServ
   PACKAGE OpenDDS
   FOLDER dds/InfoRepo
   DEFINE_SYMBOL OPENDDS_INFOREPOSERV_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Federator
 )
 
-target_cxx_sources(OpenDDS_InfoRepoServ
+ace_target_cxx_sources(OpenDDS_InfoRepoServ
   SOURCE_FILES DCPSInfoRepoServ.cpp
   HEADER_FILES DCPSInfoRepoServ.h
 )
 
 #####################################################
-add_ace_exe(DCPSInfoRepo
+ace_add_exe(DCPSInfoRepo
   PACKAGE OpenDDS
   FOLDER dds/InfoRepo
   LINK_LIBRARIES OpenDDS_InfoRepoServ
 )
 
-target_cxx_sources(DCPSInfoRepo
+ace_target_cxx_sources(DCPSInfoRepo
   SOURCE_FILES DCPSInfoRepo.cpp
 )
 

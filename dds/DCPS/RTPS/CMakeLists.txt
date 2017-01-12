@@ -1,5 +1,5 @@
 
-add_ace_lib(OpenDDS_Rtps
+ace_add_lib(OpenDDS_Rtps
   PACKAGE OpenDDS
   FOLDER dds/DCPS
   DEFINE_SYMBOL OPENDDS_RTPS_BUILD_DLL
@@ -7,7 +7,7 @@ add_ace_lib(OpenDDS_Rtps
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 
-target_cxx_sources(OpenDDS_Rtps
+ace_target_cxx_sources(OpenDDS_Rtps
   SOURCE_FILES GuidGenerator.cpp
                ParameterListConverter.cpp
                RtpsDiscovery.cpp

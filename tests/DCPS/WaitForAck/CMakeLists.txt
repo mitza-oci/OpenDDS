@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OWNERSHIP_PROFILE)
+ace_requires(OWNERSHIP_PROFILE)
 
-add_ace_lib(WaitForAck_Idl
+ace_add_lib(WaitForAck_Idl
   OUTPUT_NAME WaitForAck_Idl
   FOLDER tests/DCPS/WaitForAck
   DEFINE_SYMBOL WAITFORACK_BUILD_DLL
@@ -24,7 +24,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(WaitForAck_Publisher
+ace_add_exe(WaitForAck_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/WaitForAck
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -32,7 +32,7 @@ add_ace_exe(WaitForAck_Publisher
   LINK_LIBRARIES WaitForAck_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(WaitForAck_Publisher
+ace_target_cxx_sources(WaitForAck_Publisher
   SOURCE_FILES Options.cpp
                Publisher.cpp
                Writer.cpp
@@ -44,7 +44,7 @@ target_cxx_sources(WaitForAck_Publisher
 )
 
 
-add_ace_exe(WaitForAck_Subscriber
+ace_add_exe(WaitForAck_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/WaitForAck
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -52,7 +52,7 @@ add_ace_exe(WaitForAck_Subscriber
   LINK_LIBRARIES WaitForAck_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(WaitForAck_Subscriber
+ace_target_cxx_sources(WaitForAck_Subscriber
   SOURCE_FILES Options.cpp
                Subscriber.cpp
                subscriber_main.cpp
@@ -61,25 +61,25 @@ target_cxx_sources(WaitForAck_Subscriber
   INLINE_FILES Options.inl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/WaitForAck/run_test.pl"
+dds_add_test("tests/DCPS/WaitForAck/run_test.pl"
   COMMAND run_test.pl
 )
 
 
-add_dds_test("tests/DCPS/WaitForAck/run_test.pl rtps"
+dds_add_test("tests/DCPS/WaitForAck/run_test.pl rtps"
   COMMAND run_test.pl rtps
 )
 
 
-add_dds_test("tests/DCPS/WaitForAck/run_test.pl --publisher"
+dds_add_test("tests/DCPS/WaitForAck/run_test.pl --publisher"
   COMMAND run_test.pl --publisher
 )
 
 
-add_dds_test("tests/DCPS/WaitForAck/run_test.pl rtps --publisher"
+dds_add_test("tests/DCPS/WaitForAck/run_test.pl rtps --publisher"
   COMMAND run_test.pl rtps --publisher
 )

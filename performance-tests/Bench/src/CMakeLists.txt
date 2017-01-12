@@ -7,9 +7,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(BenchProcess
+ace_add_exe(BenchProcess
   OUTPUT_NAME testprocess
   FOLDER performance-tests/Bench/src
   ASPECTS TAO
@@ -19,7 +19,7 @@ add_ace_exe(BenchProcess
                  TAO_Svc_Utils
                  OpenDDS_Dcps
 )
-target_cxx_sources(BenchProcess
+ace_target_cxx_sources(BenchProcess
   SOURCE_FILES DataReaderListener.cpp
                EntityProfiles.cpp
                Options.cpp

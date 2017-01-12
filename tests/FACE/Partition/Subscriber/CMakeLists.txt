@@ -1,6 +1,6 @@
 
 
-add_ace_exe(FacePartitionSubscriber
+ace_add_exe(FacePartitionSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/FACE/Partition/Subscriber
   ASPECTS FACE
@@ -9,7 +9,7 @@ add_ace_exe(FacePartitionSubscriber
   LINK_LIBRARIES FacePartitionIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FacePartitionSubscriber
+ace_target_cxx_sources(FacePartitionSubscriber
   SOURCE_FILES Subscriber.cpp
 )
 

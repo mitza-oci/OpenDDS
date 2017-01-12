@@ -1,6 +1,6 @@
-requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(Federation_Publisher
+ace_add_exe(Federation_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Federation
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -8,7 +8,7 @@ add_ace_exe(Federation_Publisher
   LINK_LIBRARIES DcpsFooType5
                  OpenDDS_Dcps
 )
-target_cxx_sources(Federation_Publisher
+ace_target_cxx_sources(Federation_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
                Publisher.cpp
                TestConfig.cpp
@@ -19,7 +19,7 @@ target_cxx_sources(Federation_Publisher
 )
 
 
-add_ace_exe(Federation_Subscriber
+ace_add_exe(Federation_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Federation
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -27,7 +27,7 @@ add_ace_exe(Federation_Subscriber
   LINK_LIBRARIES DcpsFooType5
                  OpenDDS_Dcps
 )
-target_cxx_sources(Federation_Subscriber
+ace_target_cxx_sources(Federation_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                Subscriber.cpp
                TestConfig.cpp
@@ -37,10 +37,10 @@ target_cxx_sources(Federation_Subscriber
                TestConfig.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/Federation/run_test.pl"
+dds_add_test("tests/DCPS/Federation/run_test.pl"
   COMMAND run_test.pl
 )

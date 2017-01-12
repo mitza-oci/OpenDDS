@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(GetConnectionParametersSubscriber
+ace_add_exe(GetConnectionParametersSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/FACE/GetConnectionParameters/Subscriber
   ASPECTS FACE
@@ -16,7 +16,7 @@ add_ace_exe(GetConnectionParametersSubscriber
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(GetConnectionParametersSubscriber
+ace_target_cxx_sources(GetConnectionParametersSubscriber
   SOURCE_FILES Subscriber.cpp
 )
 

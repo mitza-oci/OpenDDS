@@ -1,13 +1,13 @@
 
 
-add_ace_exe(FaceHeaderSubscriber
+ace_add_exe(FaceHeaderSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/FACE/Header/Subscriber
   ASPECTS FACE
   LINK_LIBRARIES FaceHeaderTestIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FaceHeaderSubscriber
+ace_target_cxx_sources(FaceHeaderSubscriber
   SOURCE_FILES Subscriber.cpp
 )
 

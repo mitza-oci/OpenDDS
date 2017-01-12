@@ -1,14 +1,14 @@
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(OpenDDS_Shmem
+ace_add_lib(OpenDDS_Shmem
   PACKAGE OpenDDS
   FOLDER dds/DCPS/transport
   DEFINE_SYMBOL OPENDDS_SHMEM_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 
-target_cxx_sources(OpenDDS_Shmem
+ace_target_cxx_sources(OpenDDS_Shmem
   SOURCE_FILES Shmem.cpp
                ShmemDataLink.cpp
                ShmemInst.cpp

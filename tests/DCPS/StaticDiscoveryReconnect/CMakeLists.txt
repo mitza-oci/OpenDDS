@@ -6,14 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(StaticDiscoveryReconnectTest
+ace_add_exe(StaticDiscoveryReconnectTest
   OUTPUT_NAME StaticDiscoveryReconnectTest
   FOLDER tests/DCPS/StaticDiscoveryReconnect
   ASPECTS DCPS_DEFAULT_DISCOVERY
           DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(StaticDiscoveryReconnectTest
+ace_target_cxx_sources(StaticDiscoveryReconnectTest
   SOURCE_FILES StaticDiscoveryTest.cpp
 )
 
@@ -23,11 +23,11 @@ dds_idl_sources(
   IDL_FILES TestMsg.idl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/StaticDiscoveryReconnect/run_test.pl"
+dds_add_test("tests/DCPS/StaticDiscoveryReconnect/run_test.pl"
   COMMAND run_test.pl
   LABELS MCAST
 )

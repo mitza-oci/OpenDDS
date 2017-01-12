@@ -1,6 +1,6 @@
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_exe(ConfigTransports_Publisher
+ace_add_exe(ConfigTransports_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ConfigTransports
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -9,7 +9,7 @@ add_ace_exe(ConfigTransports_Publisher
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(ConfigTransports_Publisher
+ace_target_cxx_sources(ConfigTransports_Publisher
   SOURCE_FILES DDSTEST.cpp
                DataReaderListener.cpp
                DataWriterListenerImpl.cpp
@@ -28,7 +28,7 @@ target_cxx_sources(ConfigTransports_Publisher
 )
 
 
-add_ace_exe(ConfigTransports_Subscriber
+ace_add_exe(ConfigTransports_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ConfigTransports
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -37,7 +37,7 @@ add_ace_exe(ConfigTransports_Subscriber
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(ConfigTransports_Subscriber
+ace_target_cxx_sources(ConfigTransports_Subscriber
   SOURCE_FILES DDSTEST.cpp
                DataReaderListener.cpp
                DataWriterListenerImpl.cpp
@@ -55,10 +55,10 @@ target_cxx_sources(ConfigTransports_Subscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/ConfigTransports/run_test.pl"
+dds_add_test("tests/DCPS/ConfigTransports/run_test.pl"
   COMMAND run_test.pl
 )

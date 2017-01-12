@@ -1,6 +1,6 @@
-requires (NO_OPENDDS_SAFETY_PROFILE)
+ace_requires (NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(OpenDDS_monitor
+ace_add_lib(OpenDDS_monitor
   PACKAGE OpenDDS
   FOLDER dds
   DEFINE_SYMBOL OPENDDS_MONITOR_BUILD_DLL
@@ -15,7 +15,7 @@ dds_idl_sources(
   IDL_FILES monitor.idl
 )
 
-target_cxx_sources(OpenDDS_monitor
+ace_target_cxx_sources(OpenDDS_monitor
   SOURCE_FILES DPMonitorImpl.cpp
                DRMonitorImpl.cpp
                DRPeriodicMonitorImpl.cpp

@@ -38,7 +38,7 @@ all_labels = {
 
 add_test_text = """
 
-add_dds_test({name}
+dds_add_test({name}
   COMMAND {command}
 )
 """
@@ -113,13 +113,9 @@ for filename, test_group in testcases.iteritems():
   requires_written = False
   in_target_requires_clause = False
   target_requires = []
-  if filename == "performance-tests/DCPS/InfoRepo_population/CMakeLists.txt":
-    debug=True
-  else:
-    debug=False
   with open(filename, "r") as myfile:
     for line in myfile:
-      match = re.match("^requires\(([^\)]+)\)",line)
+      match = re.match("^ace_requires\(([^\)]+)\)",line)
       if match:
         matched_requires = []
         for x in shlex.split(match.group(1)):
@@ -129,12 +125,12 @@ for filename, test_group in testcases.iteritems():
             matched_requires.append(x)
 
         new_requires = set.union(test_group_requires, matched_requires)
-        file_content += "requires(%s)\n" % " ".join(new_requires)
+        file_content += "ace_requires(%s)\n" % " ".join(new_requires)
         requires_written = True
       elif not requires_written and line.startswith("add_ace") and len(test_group_requires):
         new_requires = test_group_requires
         requires_written = True
-        file_content += "requires(%s)\n\n" % " ".join(test_group_requires)
+        file_content += "ace_requires(%s)\n\n" % " ".join(test_group_requires)
         file_content += line
       elif line.startswith("  REQUIRES "):
         in_target_requires_clause = True
@@ -149,14 +145,14 @@ for filename, test_group in testcases.iteritems():
           file_content += line
           in_target_requires_clause = False
           target_requires = []
-      elif line.startswith("include(${DDS_ROOT}/cmake/add_dds_test.cmake)"):
+      elif line.startswith("include(${DDS_ROOT}/cmake/dds_add_test.cmake)"):
         break
       else:
         file_content += line
 
   file_content = file_content.strip()
-  file_content += "\n\ninclude(${DDS_ROOT}/cmake/add_dds_test.cmake)\n"
-  file_content += "configure_dds_test_files()\n"
+  file_content += "\n\ninclude(${DDS_ROOT}/cmake/dds_add_test.cmake)\n"
+  file_content += "dds_configure_test_files()\n"
   for case in test_group:
     file_content += add_test_text.format(
         name = case.name(),

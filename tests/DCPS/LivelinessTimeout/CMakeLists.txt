@@ -1,4 +1,4 @@
-add_ace_exe(LivelinessTimeout_Publisher
+ace_add_exe(LivelinessTimeout_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/LivelinessTimeout
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -7,7 +7,7 @@ add_ace_exe(LivelinessTimeout_Publisher
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(LivelinessTimeout_Publisher
+ace_target_cxx_sources(LivelinessTimeout_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
                Writer.cpp
                common.cpp
@@ -18,7 +18,7 @@ target_cxx_sources(LivelinessTimeout_Publisher
 )
 
 
-add_ace_exe(LivelinessTimeout_Subscriber
+ace_add_exe(LivelinessTimeout_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/LivelinessTimeout
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -27,7 +27,7 @@ add_ace_exe(LivelinessTimeout_Subscriber
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(LivelinessTimeout_Subscriber
+ace_target_cxx_sources(LivelinessTimeout_Subscriber
   SOURCE_FILES DataReaderListenerImpl.cpp
                common.cpp
                subscriber.cpp
@@ -35,10 +35,10 @@ target_cxx_sources(LivelinessTimeout_Subscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/LivelinessTimeout/run_test.pl"
+dds_add_test("tests/DCPS/LivelinessTimeout/run_test.pl"
   COMMAND run_test.pl
 )

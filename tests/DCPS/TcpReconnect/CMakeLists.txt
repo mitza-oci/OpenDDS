@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(DDS_TcpReconnect_Idl
+ace_add_lib(DDS_TcpReconnect_Idl
   OUTPUT_NAME DDS_TcpReconnect_Idl
   FOLDER tests/DCPS/TcpReconnect
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
@@ -23,7 +23,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_TcpReconnect_Publisher
+ace_add_exe(DDS_TcpReconnect_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/TcpReconnect
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -35,14 +35,14 @@ add_ace_exe(DDS_TcpReconnect_Publisher
                  OpenDDS_Model
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(DDS_TcpReconnect_Publisher
+ace_target_cxx_sources(DDS_TcpReconnect_Publisher
   SOURCE_FILES Writer.cpp
                publisher.cpp
   HEADER_FILES Writer.h
 )
 
 
-add_ace_exe(DDS_TcpReconnect_Subscriber
+ace_add_exe(DDS_TcpReconnect_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/TcpReconnect
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -53,26 +53,26 @@ add_ace_exe(DDS_TcpReconnect_Subscriber
                  OpenDDS_Udp
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(DDS_TcpReconnect_Subscriber
+ace_target_cxx_sources(DDS_TcpReconnect_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                subscriber.cpp
   HEADER_FILES DataReaderListener.h
 )
 
 
-add_ace_exe(stub
+ace_add_exe(stub
   OUTPUT_NAME stub
   FOLDER tests/DCPS/TcpReconnect
   LINK_LIBRARIES ACE
 )
-target_cxx_sources(stub
+ace_target_cxx_sources(stub
   SOURCE_FILES stub.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/TcpReconnect/run_test.pl"
+dds_add_test("tests/DCPS/TcpReconnect/run_test.pl"
   COMMAND run_test.pl
 )

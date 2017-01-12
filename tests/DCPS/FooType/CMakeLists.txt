@@ -1,11 +1,11 @@
 
 
-add_ace_lib(DcpsFooType
+ace_add_lib(DcpsFooType
   OUTPUT_NAME DcpsFooType
   FOLDER tests/DCPS/FooType
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(DcpsFooType
+ace_target_cxx_sources(DcpsFooType
   SOURCE_FILES Foo_Singleton_Transport.cpp
   HEADER_FILES Foo_Singleton_Transport.h
 )

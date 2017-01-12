@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(FaceReliabilityPublisher
+ace_add_exe(FaceReliabilityPublisher
   OUTPUT_NAME publisher
   FOLDER tests/FACE/Reliability/Publisher
   ASPECTS FACE
@@ -16,7 +16,7 @@ add_ace_exe(FaceReliabilityPublisher
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FaceReliabilityPublisher
+ace_target_cxx_sources(FaceReliabilityPublisher
   SOURCE_FILES Publisher.cpp
 )
 

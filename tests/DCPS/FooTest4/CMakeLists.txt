@@ -1,6 +1,6 @@
-requires(OWNERSHIP_PROFILE OBJECT_MODEL_PROFILE)
+ace_requires(OWNERSHIP_PROFILE OBJECT_MODEL_PROFILE)
 
-add_ace_exe(DcpsFooTest4
+ace_add_exe(DcpsFooTest4
   OUTPUT_NAME FooTest4
   FOLDER tests/DCPS/FooTest4
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -9,7 +9,7 @@ add_ace_exe(DcpsFooTest4
                  common
                  OpenDDS_Dcps
 )
-target_cxx_sources(DcpsFooTest4
+ace_target_cxx_sources(DcpsFooTest4
   SOURCE_FILES Reader.cpp
                Writer.cpp
                main.cpp
@@ -17,31 +17,31 @@ target_cxx_sources(DcpsFooTest4
                Writer.h
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/FooTest4/run_test.pl"
+dds_add_test("tests/DCPS/FooTest4/run_test.pl"
   COMMAND run_test.pl
   LABELS DCPS_MIN
 )
 
 
-add_dds_test("tests/DCPS/FooTest4/run_test.pl mi"
+dds_add_test("tests/DCPS/FooTest4/run_test.pl mi"
   COMMAND run_test.pl mi
 )
 
 
-add_dds_test("tests/DCPS/FooTest4/run_test.pl mr"
+dds_add_test("tests/DCPS/FooTest4/run_test.pl mr"
   COMMAND run_test.pl mr
 )
 
 
-add_dds_test("tests/DCPS/FooTest4/run_test.pl mri"
+dds_add_test("tests/DCPS/FooTest4/run_test.pl mri"
   COMMAND run_test.pl mri
 )
 
 
-add_dds_test("tests/DCPS/FooTest4/run_test.pl mrit"
+dds_add_test("tests/DCPS/FooTest4/run_test.pl mrit"
   COMMAND run_test.pl mrit
 )

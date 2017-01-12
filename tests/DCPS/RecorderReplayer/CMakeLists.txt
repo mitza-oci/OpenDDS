@@ -6,7 +6,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DDS_RecorderReplayer_Idl
+ace_add_lib(DDS_RecorderReplayer_Idl
   OUTPUT_NAME DDS_RecorderReplayer_Idl
   FOLDER tests/DCPS/RecorderReplayer
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
@@ -22,7 +22,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_RecorderReplayer_Publisher
+ace_add_exe(DDS_RecorderReplayer_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/RecorderReplayer
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -30,12 +30,12 @@ add_ace_exe(DDS_RecorderReplayer_Publisher
   LINK_LIBRARIES DDS_RecorderReplayer_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_RecorderReplayer_Publisher
+ace_target_cxx_sources(DDS_RecorderReplayer_Publisher
   SOURCE_FILES Publisher.cpp
 )
 
 
-add_ace_exe(DDS_RecorderReplayer_Subscriber
+ace_add_exe(DDS_RecorderReplayer_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/RecorderReplayer
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -43,35 +43,35 @@ add_ace_exe(DDS_RecorderReplayer_Subscriber
   LINK_LIBRARIES DDS_RecorderReplayer_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_RecorderReplayer_Subscriber
+ace_target_cxx_sources(DDS_RecorderReplayer_Subscriber
   SOURCE_FILES DataReaderListenerImpl.cpp
                Subscriber.cpp
   HEADER_FILES DataReaderListenerImpl.h
 )
 
 
-add_ace_exe(DDS_RecorderReplayer_Relay
+ace_add_exe(DDS_RecorderReplayer_Relay
   OUTPUT_NAME relay
   FOLDER tests/DCPS/RecorderReplayer
   ASPECTS DCPS_DEFAULT_DISCOVERY
           DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(DDS_RecorderReplayer_Relay
+ace_target_cxx_sources(DDS_RecorderReplayer_Relay
   SOURCE_FILES Relay.cpp
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/RecorderReplayer/run_test.pl"
+dds_add_test("tests/DCPS/RecorderReplayer/run_test.pl"
   COMMAND run_test.pl
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
 )
 
 
-add_dds_test("tests/DCPS/RecorderReplayer/run_test.pl rtps_disc"
+dds_add_test("tests/DCPS/RecorderReplayer/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
   LABELS MCAST RTPS
 )

@@ -1,6 +1,6 @@
 
 
-add_ace_lib(idl_test3_lib
+ace_add_lib(idl_test3_lib
   OUTPUT_NAME idl_test3_lib
   FOLDER tests/DCPS/Compiler/idl_test3_lib
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps

@@ -1,6 +1,6 @@
 
 
-add_ace_lib(DCPS_Perf_TypeNoKeyBounded
+ace_add_lib(DCPS_Perf_TypeNoKeyBounded
   OUTPUT_NAME DCPS_Perf_TypeNoKeyBounded
   FOLDER performance-tests/DCPS/TypeNoKeyBounded
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps

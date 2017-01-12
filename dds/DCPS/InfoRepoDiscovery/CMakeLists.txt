@@ -1,7 +1,7 @@
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(OpenDDS_InfoRepoDiscovery
+ace_add_lib(OpenDDS_InfoRepoDiscovery
   PACKAGE OpenDDS
   FOLDER dds/DCPS
   DEFINE_SYMBOL OPENDDS_INFOREPODISCOVERY_BUILD_DLL
@@ -9,7 +9,7 @@ add_ace_lib(OpenDDS_InfoRepoDiscovery
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps OpenDDS_Tcp
 )
 
-target_cxx_sources(OpenDDS_InfoRepoDiscovery
+ace_target_cxx_sources(OpenDDS_InfoRepoDiscovery
   SOURCE_FILES DataReaderRemoteImpl.cpp
                DataWriterRemoteImpl.cpp
                FailoverListener.cpp

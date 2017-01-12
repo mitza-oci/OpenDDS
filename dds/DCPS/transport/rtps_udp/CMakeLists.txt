@@ -1,13 +1,13 @@
 
 
-add_ace_lib(OpenDDS_Rtps_Udp
+ace_add_lib(OpenDDS_Rtps_Udp
   PACKAGE OpenDDS
   FOLDER dds/DCPS/transport
   DEFINE_SYMBOL OPENDDS_RTPS_UDP_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Rtps
 )
 
-target_cxx_sources(OpenDDS_Rtps_Udp
+ace_target_cxx_sources(OpenDDS_Rtps_Udp
   SOURCE_FILES RtpsCustomizedElement.cpp
                RtpsSampleHeader.cpp
                RtpsTransportHeader.cpp

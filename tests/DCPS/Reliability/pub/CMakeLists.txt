@@ -1,6 +1,6 @@
 
 
-add_ace_exe(Reliability_Publisher
+ace_add_exe(Reliability_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Reliability/pub
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -12,7 +12,7 @@ add_ace_exe(Reliability_Publisher
   LINK_LIBRARIES OpenDDS_Model
                  Reliability
 )
-target_cxx_sources(Reliability_Publisher
+ace_target_cxx_sources(Reliability_Publisher
   SOURCE_FILES ../Boilerplate.cpp
                Publisher.cpp
 )

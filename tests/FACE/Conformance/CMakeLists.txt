@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(FaceConformanceIdl
+ace_add_lib(FaceConformanceIdl
   OUTPUT_NAME FaceConformanceIdl
   FOLDER tests/FACE/Conformance
   ASPECTS FACE

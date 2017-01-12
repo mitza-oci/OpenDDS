@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_lib(DcpsFooType3NoKey
+ace_add_lib(DcpsFooType3NoKey
   OUTPUT_NAME DcpsFooType3NoKey
   FOLDER tests/DCPS/FooType3NoKey
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps

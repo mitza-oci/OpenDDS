@@ -6,9 +6,9 @@ if (NOT DDS_ROOT)
 endif()
 
 
-requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(DDS_Priority_Idl
+ace_add_lib(DDS_Priority_Idl
   OUTPUT_NAME DDS_Priority_Idl
   FOLDER tests/DCPS/Priority
   DEFINE_SYMBOL PRIORITY_BUILD_DLL
@@ -24,7 +24,7 @@ dds_idl_sources(
 )
 
 
-add_ace_exe(DDS_Priority_Publisher
+ace_add_exe(DDS_Priority_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Priority
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -32,7 +32,7 @@ add_ace_exe(DDS_Priority_Publisher
   LINK_LIBRARIES DDS_Priority_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_Priority_Publisher
+ace_target_cxx_sources(DDS_Priority_Publisher
   SOURCE_FILES Options.cpp
                Publisher.cpp
                publisher_main.cpp
@@ -42,7 +42,7 @@ target_cxx_sources(DDS_Priority_Publisher
 )
 
 
-add_ace_exe(DDS_Priority_Subscriber
+ace_add_exe(DDS_Priority_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Priority
   ASPECTS DCPS_DEFAULT_DISCOVERY
@@ -50,7 +50,7 @@ add_ace_exe(DDS_Priority_Subscriber
   LINK_LIBRARIES DDS_Priority_Idl
                  OpenDDS_Dcps
 )
-target_cxx_sources(DDS_Priority_Subscriber
+ace_target_cxx_sources(DDS_Priority_Subscriber
   SOURCE_FILES DataReaderListener.cpp
                Options.cpp
                Subscriber.cpp
@@ -61,15 +61,15 @@ target_cxx_sources(DDS_Priority_Subscriber
   INLINE_FILES Options.inl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/Priority/run_test.pl"
+dds_add_test("tests/DCPS/Priority/run_test.pl"
   COMMAND run_test.pl
 )
 
 
-add_dds_test("tests/DCPS/Priority/run_test.pl --instances"
+dds_add_test("tests/DCPS/Priority/run_test.pl --instances"
   COMMAND run_test.pl --instances
 )

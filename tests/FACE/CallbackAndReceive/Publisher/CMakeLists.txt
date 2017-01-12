@@ -7,7 +7,7 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(CallbackAndReceivePublisher
+ace_add_exe(CallbackAndReceivePublisher
   OUTPUT_NAME publisher
   FOLDER tests/FACE/CallbackAndReceive/Publisher
   ASPECTS FACE
@@ -16,7 +16,7 @@ add_ace_exe(CallbackAndReceivePublisher
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(CallbackAndReceivePublisher
+ace_target_cxx_sources(CallbackAndReceivePublisher
   SOURCE_FILES Publisher.cpp
 )
 

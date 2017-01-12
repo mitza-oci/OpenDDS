@@ -1,6 +1,6 @@
 
 
-add_ace_exe(FacePartitionPublisher
+ace_add_exe(FacePartitionPublisher
   OUTPUT_NAME publisher
   FOLDER tests/FACE/Partition/Publisher
   ASPECTS FACE
@@ -9,7 +9,7 @@ add_ace_exe(FacePartitionPublisher
   LINK_LIBRARIES FacePartitionIdl
                  OpenDDS_Rtps_Udp
 )
-target_cxx_sources(FacePartitionPublisher
+ace_target_cxx_sources(FacePartitionPublisher
   SOURCE_FILES Publisher.cpp
 )
 

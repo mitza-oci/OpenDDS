@@ -1,8 +1,8 @@
 
 
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(Sync_Serverlib
+ace_add_lib(Sync_Serverlib
   OUTPUT_NAME SyncServer
   REQUIRES "NOT MINIMUM_CORBA"
   FOLDER performance-tests/DCPS/Sync
@@ -12,13 +12,13 @@ add_ace_lib(Sync_Serverlib
   PUBLIC_LINK_LIBRARIES TAO_PortableServer
                         TAO_IORTable
 )
-target_cxx_sources(Sync_Serverlib
+ace_target_cxx_sources(Sync_Serverlib
   SOURCE_FILES SyncServer_i.cpp
   HEADER_FILES SyncServer_i.h
 )
 
 
-add_ace_lib(Sync_Clientlib
+ace_add_lib(Sync_Clientlib
   OUTPUT_NAME SyncClient
   FOLDER performance-tests/DCPS/Sync
   ASPECTS TAO
@@ -26,13 +26,13 @@ add_ace_lib(Sync_Clientlib
                              ${CMAKE_CURRENT_BINARY_DIR}
   PUBLIC_LINK_LIBRARIES TAO_PortableServer
 )
-target_cxx_sources(Sync_Clientlib
+ace_target_cxx_sources(Sync_Clientlib
   SOURCE_FILES SyncClient_i.cpp
   HEADER_FILES SyncClient_i.h
 )
 
 
-add_ace_exe(Sync_Server
+ace_add_exe(Sync_Server
   OUTPUT_NAME syncServer
   REQUIRES "NOT MINIMUM_CORBA"
   FOLDER performance-tests/DCPS/Sync
@@ -41,7 +41,7 @@ add_ace_exe(Sync_Server
                  TAO_PortableServer
                  TAO_IORTable
 )
-target_cxx_sources(Sync_Server
+ace_target_cxx_sources(Sync_Server
   SOURCE_FILES SyncServer.cpp
 )
 

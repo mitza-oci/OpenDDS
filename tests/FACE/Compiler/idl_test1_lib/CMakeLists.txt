@@ -1,6 +1,6 @@
 
 
-add_ace_lib(FACE_idl_test1_lib
+ace_add_lib(FACE_idl_test1_lib
   OUTPUT_NAME FACE_idl_test1_lib
   FOLDER tests/FACE/Compiler/idl_test1_lib
   ASPECTS FACE

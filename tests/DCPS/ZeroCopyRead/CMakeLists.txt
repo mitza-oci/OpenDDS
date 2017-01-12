@@ -6,14 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-add_ace_exe(ZeroCopyRead
+ace_add_exe(ZeroCopyRead
   OUTPUT_NAME main
   FOLDER tests/DCPS/ZeroCopyRead
   ASPECTS DCPS_DEFAULT_DISCOVERY
           DCPS_TRANSPORTS_FOR_TEST
   LINK_LIBRARIES OpenDDS_Dcps
 )
-target_cxx_sources(ZeroCopyRead
+ace_target_cxx_sources(ZeroCopyRead
   SOURCE_FILES main.cpp
 )
 
@@ -23,15 +23,15 @@ dds_idl_sources(
   IDL_FILES Simple.idl
 )
 
-include(${DDS_ROOT}/cmake/add_dds_test.cmake)
-configure_dds_test_files()
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
 
 
-add_dds_test("tests/DCPS/ZeroCopyRead/run_test.pl"
+dds_add_test("tests/DCPS/ZeroCopyRead/run_test.pl"
   COMMAND run_test.pl
 )
 
 
-add_dds_test("tests/DCPS/ZeroCopyRead/run_test.pl by_instance"
+dds_add_test("tests/DCPS/ZeroCopyRead/run_test.pl by_instance"
   COMMAND run_test.pl by_instance
 )

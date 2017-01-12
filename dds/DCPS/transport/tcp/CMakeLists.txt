@@ -1,13 +1,13 @@
-requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-add_ace_lib(OpenDDS_Tcp
+ace_add_lib(OpenDDS_Tcp
   PACKAGE OpenDDS
   FOLDER dds/DCPS/transport
   DEFINE_SYMBOL OPENDDS_TCP_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 
-target_cxx_sources(OpenDDS_Tcp
+ace_target_cxx_sources(OpenDDS_Tcp
   SOURCE_FILES Tcp.cpp
                TcpAcceptor.cpp
                TcpConnection.cpp

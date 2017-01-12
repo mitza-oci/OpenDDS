@@ -1,12 +1,12 @@
 
-add_ace_lib(OpenDDS_Model
+ace_add_lib(OpenDDS_Model
   DEFINE_SYMBOL OPENDDS_MODEL_BUILD_DLL
   PACKAGE OpenDDS
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
 )
 
-target_cxx_sources(OpenDDS_Model
+ace_target_cxx_sources(OpenDDS_Model
   SOURCE_FILES Application.cpp
                Config.cpp
                Delegate.cpp
