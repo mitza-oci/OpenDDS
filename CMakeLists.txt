@@ -25,7 +25,7 @@ ace_add_package(OpenDDS
 enable_testing()
 
 add_subdirectory(dds)
-add_subdirectory(tools/modeling/codegen/model)
+add_subdirectory(tools)
 add_subdirectory(examples/DCPS)
 add_subdirectory(tests)
 add_subdirectory(performance-tests)
