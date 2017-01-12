@@ -149,13 +149,13 @@ for filename, test_group in testcases.iteritems():
           file_content += line
           in_target_requires_clause = False
           target_requires = []
-      elif line.startswith("include(${DDS_ROOT}/cmake/AddDdsTest.cmake)"):
+      elif line.startswith("include(${DDS_ROOT}/cmake/add_dds_test.cmake)"):
         break
       else:
         file_content += line
 
   file_content = file_content.strip()
-  file_content += "\n\ninclude(${DDS_ROOT}/cmake/AddDdsTest.cmake)\n"
+  file_content += "\n\ninclude(${DDS_ROOT}/cmake/add_dds_test.cmake)\n"
   file_content += "configure_dds_test_files()\n"
   for case in test_group:
     file_content += add_test_text.format(

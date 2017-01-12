@@ -1,5 +1,5 @@
 project(Messenger CXX)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 
 if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
@@ -72,9 +72,6 @@ file(GLOB files *.ini)
 file(COPY ${files} run_test.pl run_corbaloc_test.pl
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-file(READ "run_ns_test.pl" RUN_NS_TEST_CONTENT)
-string(REPLACE "\$orbsvcs{'Naming_Service'}" "\"$<TARGET_FILE:tao_cosnaming>\"" RUN_NS_TEST_CONTENT ${RUN_NS_TEST_CONTENT})
-file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_ns_test.pl CONTENT ${RUN_NS_TEST_CONTENT})
 
 add_dds_test("tests/DCPS/Messenger/run_test.pl"
   COMMAND run_test.pl
@@ -192,8 +189,13 @@ add_dds_test("tests/DCPS/Messenger/run_corbaloc_test.pl host_port_only"
   REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
 )
 
+if (TARGET tao_cosnaming)
+  file(READ "run_ns_test.pl" RUN_NS_TEST_CONTENT)
+  string(REPLACE "\$orbsvcs{'Naming_Service'}" "\"$<TARGET_FILE:tao_cosnaming>\"" RUN_NS_TEST_CONTENT ${RUN_NS_TEST_CONTENT})
+  file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_ns_test.pl CONTENT ${RUN_NS_TEST_CONTENT})
 
-add_dds_test("tests/DCPS/Messenger/run_ns_test.pl"
-  COMMAND run_ns_test.pl
-  REQUIRES "TARGET TAO_Svc_Utils" OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
-)
+  add_dds_test("tests/DCPS/Messenger/run_ns_test.pl"
+    COMMAND run_ns_test.pl
+    REQUIRES "TARGET TAO_Svc_Utils" OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
+  )
+endif()

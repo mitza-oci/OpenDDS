@@ -1,6 +1,6 @@
 
 project(Bench CXX)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 
 if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)

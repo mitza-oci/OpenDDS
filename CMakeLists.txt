@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 project(OpenDDS CXX)
 
-find_package(TAO REQUIRED CONFIG)
-
+include(cmake/find_or_download_tao.cmake)
 
 if (NOT OPENDDS_VERSION)
   file(READ "VERSION" VERSION_FILE_CONTENT)
@@ -22,7 +21,6 @@ include(cmake/dds_idl_sources.cmake)
 add_package(OpenDDS
   VERSION ${OPENDDS_VERSION}
 )
-
 
 enable_testing()
 

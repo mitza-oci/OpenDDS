@@ -1,12 +1,20 @@
 project(Messenger_Imr CXX)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 
 if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-requires("NOT MINIMUM_CORBA" "TARGET TAO_Svc_Utils" NO_OPENDDS_SAFETY_PROFILE "NOT CORBA_E_MICRO" "NOT CORBA_E_COMPACT")
+requires("NOT MINIMUM_CORBA"
+         "NOT CORBA_E_MICRO"
+         "NOT CORBA_E_COMPACT"
+         "TARGET TAO_Svc_Utils"
+         "TARGET tao_imr_locator"
+         "TARGET tao_imr_activator"
+         "TARGET tao_imr"
+         NO_OPENDDS_SAFETY_PROFILE
+)
 
 add_ace_lib(DDS_Messenger_Imr_Idl
   OUTPUT_NAME DDS_Messenger_Imr_Idl

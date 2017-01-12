@@ -1,6 +1,6 @@
 
 project(Messenger_IOGR_Imr CXX)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 
 if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
@@ -8,6 +8,13 @@ endif()
 
 
 requires(NO_OPENDDS_SAFETY_PROFILE)
+
+requires("INTERCEPTORS"
+         "TARGET tao_imr_locator"
+         "TARGET tao_imr_activator"
+         "TARGET tao_imr"
+         NO_OPENDDS_SAFETY_PROFILE
+)
 
 add_ace_lib(DDS_Messenger_IOGR_Imr_Idl
   OUTPUT_NAME DDS_Messenger_IOGR_Imr_Idl
@@ -26,7 +33,6 @@ dds_idl_sources(
 
 add_ace_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
-  REQUIRES "NOT CORBA_E_COMPACT"
   FOLDER examples/DCPS/Messenger_IOGR_Imr
   ASPECTS NEGOTIATE_CODESETS
           TAO

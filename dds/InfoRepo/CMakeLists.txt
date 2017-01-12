@@ -8,6 +8,7 @@ endif()
 
 add_ace_lib(OpenDDS_InfoRepoLib
   PACKAGE OpenDDS
+  FOLDER dds/InfoRepo
   DEFINE_SYMBOL OPENDDS_INFOREPOLIB_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   PUBLIC_LINK_LIBRARIES TAO_IORTable
@@ -48,6 +49,7 @@ target_cxx_sources(OpenDDS_InfoRepoLib
 #############################################
 add_ace_lib(OpenDDS_Federator
   PACKAGE OpenDDS
+  FOLDER dds/InfoRepo
   DEFINE_SYMBOL OPENDDS_FEDERATOR_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   PUBLIC_LINK_LIBRARIES OpenDDS_InfoRepoLib
@@ -82,6 +84,7 @@ dds_idl_sources(
 ###################################################
 add_ace_lib(OpenDDS_InfoRepoServ
   PACKAGE OpenDDS
+  FOLDER dds/InfoRepo
   DEFINE_SYMBOL OPENDDS_INFOREPOSERV_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Federator
 )
@@ -94,6 +97,7 @@ target_cxx_sources(OpenDDS_InfoRepoServ
 #####################################################
 add_ace_exe(DCPSInfoRepo
   PACKAGE OpenDDS
+  FOLDER dds/InfoRepo
   LINK_LIBRARIES OpenDDS_InfoRepoServ
 )
 

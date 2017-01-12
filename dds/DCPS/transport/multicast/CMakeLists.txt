@@ -2,6 +2,7 @@
 
 add_ace_lib(OpenDDS_Multicast
   PACKAGE OpenDDS
+  FOLDER dds/DCPS/transport
   DEFINE_SYMBOL OPENDDS_MULTICAST_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
