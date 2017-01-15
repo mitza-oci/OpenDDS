@@ -29,11 +29,11 @@ if (MSVC)
 endif(MSVC)
 
 add_subdirectory(dds)
-add_subdirectory(tools)
-add_subdirectory(examples/DCPS)
-add_subdirectory(tests)
-add_subdirectory(performance-tests)
-add_subdirectory(DevGuideExamples)
+ace_add_optional_subdirectory(tools)
+ace_add_optional_subdirectory(examples/DCPS)
+ace_add_optional_subdirectory(tests)
+ace_add_optional_subdirectory(performance-tests)
+ace_add_optional_subdirectory(DevGuideExamples)
 add_subdirectory(bin/PerlDDS)
 
 ace_install_package(OpenDDS
