@@ -1,11 +1,10 @@
 ace_add_exe(LivelinessTimeout_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/LivelinessTimeout
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(LivelinessTimeout_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
@@ -21,11 +20,10 @@ ace_target_cxx_sources(LivelinessTimeout_Publisher
 ace_add_exe(LivelinessTimeout_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/LivelinessTimeout
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(LivelinessTimeout_Subscriber
   SOURCE_FILES DataReaderListenerImpl.cpp

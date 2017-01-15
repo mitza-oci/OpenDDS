@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(WaitForAck_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/WaitForAck
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES WaitForAck_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 WaitForAck_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(WaitForAck_Publisher
   SOURCE_FILES Options.cpp
@@ -47,10 +46,9 @@ ace_target_cxx_sources(WaitForAck_Publisher
 ace_add_exe(WaitForAck_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/WaitForAck
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES WaitForAck_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 WaitForAck_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(WaitForAck_Subscriber
   SOURCE_FILES Options.cpp

@@ -3,10 +3,9 @@ ace_requires(OBJECT_MODEL_PROFILE)
 ace_add_exe(FooTest3_0_Publisher
   OUTPUT_NAME FooTest3_publisher
   FOLDER tests/DCPS/FooTest3_0
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType3
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType3
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(FooTest3_0_Publisher
   SOURCE_FILES DataWriterListener.cpp
@@ -24,10 +23,9 @@ ace_target_cxx_sources(FooTest3_0_Publisher
 ace_add_exe(FooTest3_0_Subscriber
   OUTPUT_NAME FooTest3_subscriber
   FOLDER tests/DCPS/FooTest3_0
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType3
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType3
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(FooTest3_0_Subscriber
   SOURCE_FILES DataReaderListener.cpp

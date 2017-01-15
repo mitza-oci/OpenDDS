@@ -26,9 +26,9 @@ dds_idl_sources(
 ace_add_exe(DDS_GroupPresentation_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/GroupPresentation
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_GroupPresentation_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_GroupPresentation_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,9 +40,9 @@ ace_target_cxx_sources(DDS_GroupPresentation_Publisher
 ace_add_exe(DDS_GroupPresentation_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/GroupPresentation
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_GroupPresentation_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_GroupPresentation_Subscriber
   SOURCE_FILES DataReaderListener.cpp

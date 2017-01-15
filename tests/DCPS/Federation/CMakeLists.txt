@@ -3,10 +3,9 @@ ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(Federation_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Federation
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType5
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType5
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(Federation_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
@@ -22,10 +21,9 @@ ace_target_cxx_sources(Federation_Publisher
 ace_add_exe(Federation_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Federation
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType5
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType5
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(Federation_Subscriber
   SOURCE_FILES DataReaderListener.cpp

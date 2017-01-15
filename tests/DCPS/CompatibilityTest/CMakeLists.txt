@@ -1,11 +1,10 @@
 ace_add_exe(CompatibilityTest_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/CompatibilityTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(CompatibilityTest_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
@@ -21,11 +20,10 @@ ace_target_cxx_sources(CompatibilityTest_Publisher
 ace_add_exe(CompatibilityTest_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/CompatibilityTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(CompatibilityTest_Subscriber
   SOURCE_FILES DataReaderListener.cpp

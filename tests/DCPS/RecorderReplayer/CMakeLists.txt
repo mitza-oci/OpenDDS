@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_RecorderReplayer_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/RecorderReplayer
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_RecorderReplayer_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_RecorderReplayer_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_RecorderReplayer_Publisher
   SOURCE_FILES Publisher.cpp
@@ -38,10 +37,9 @@ ace_target_cxx_sources(DDS_RecorderReplayer_Publisher
 ace_add_exe(DDS_RecorderReplayer_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/RecorderReplayer
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_RecorderReplayer_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_RecorderReplayer_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_RecorderReplayer_Subscriber
   SOURCE_FILES DataReaderListenerImpl.cpp
@@ -53,9 +51,8 @@ ace_target_cxx_sources(DDS_RecorderReplayer_Subscriber
 ace_add_exe(DDS_RecorderReplayer_Relay
   OUTPUT_NAME relay
   FOLDER tests/DCPS/RecorderReplayer
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_RecorderReplayer_Relay
   SOURCE_FILES Relay.cpp

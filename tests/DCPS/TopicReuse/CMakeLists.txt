@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_TopicReuse_Topicreuse
   OUTPUT_NAME tpreuse
   FOLDER tests/DCPS/TopicReuse
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_TopicReuse_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_TopicReuse_Topicreuse
   SOURCE_FILES tpreuse.cpp

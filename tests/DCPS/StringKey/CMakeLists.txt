@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_StringKey_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/StringKey
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_StringKey_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_StringKey_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(DDS_StringKey_Publisher
 ace_add_exe(DDS_StringKey_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/StringKey
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_StringKey_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_StringKey_Subscriber
   SOURCE_FILES DataReaderListener.cpp

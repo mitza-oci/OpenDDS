@@ -3,11 +3,11 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(PersistentInfoRepo_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/PersistentInfoRepo
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestUtils
                  DcpsFooType4
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(PersistentInfoRepo_Publisher
   SOURCE_FILES Publisher.cpp
@@ -17,11 +17,11 @@ ace_target_cxx_sources(PersistentInfoRepo_Publisher
 ace_add_exe(PersistentInfoRepo_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/PersistentInfoRepo
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestUtils
                  DcpsFooType4
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(PersistentInfoRepo_Subscriber
   SOURCE_FILES Listener.cpp

@@ -3,9 +3,8 @@
 ace_add_lib(FaceMessengerIdl
   OUTPUT_NAME FaceMessengerIdl
   FOLDER tests/FACE/Messenger/Idl
-  ASPECTS FACE
   DEFINE_SYMBOL FACEMESSENGER_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 dds_idl_sources(
   TARGETS FaceMessengerIdl

@@ -9,8 +9,7 @@ endif()
 ace_add_exe(WriteDataContainer
   OUTPUT_NAME WriteDataContainerTest
   FOLDER tests/DCPS/WriteDataContainer
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(WriteDataContainer
   SOURCE_FILES WriteDataContainerTest.cpp

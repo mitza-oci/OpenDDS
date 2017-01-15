@@ -3,10 +3,9 @@ ace_requires(BUILT_IN_TOPICS NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(BuiltInTopic
   OUTPUT_NAME bit
   FOLDER tests/DCPS/BuiltInTopic
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(BuiltInTopic
   SOURCE_FILES common.cpp

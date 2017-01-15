@@ -9,9 +9,8 @@ endif()
 ace_add_exe(ReadCondition
   OUTPUT_NAME ReadConditionTest
   FOLDER tests/DCPS/ReadCondition
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ReadCondition
   SOURCE_FILES ReadConditionTest.cpp

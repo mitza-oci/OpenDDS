@@ -9,8 +9,8 @@ endif()
 ace_add_exe(DDS_transport_rtps_reliability
   OUTPUT_NAME DDS_transport_rtps_reliability
   FOLDER tests/transport/rtps_reliability
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Rtps_Udp
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_transport_rtps_reliability
   SOURCE_FILES rtps_reliability.cpp

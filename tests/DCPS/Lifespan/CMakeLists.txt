@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(DDS_Lifespan_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Lifespan
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Lifespan_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Lifespan_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Lifespan_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
@@ -44,10 +43,9 @@ ace_target_cxx_sources(DDS_Lifespan_Publisher
 ace_add_exe(DDS_Lifespan_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Lifespan
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Lifespan_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Lifespan_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Lifespan_Subscriber
   SOURCE_FILES DataReaderListener.cpp

@@ -26,10 +26,9 @@ dds_idl_sources(
 ace_add_exe(DDS_BidirMessenger_Pubsub
   OUTPUT_NAME pubsub
   FOLDER tests/DCPS/BidirMessenger
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_BidirMessenger_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_BidirMessenger_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_BidirMessenger_Pubsub
   SOURCE_FILES DataReaderListener.cpp

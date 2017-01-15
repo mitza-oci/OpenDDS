@@ -11,9 +11,9 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(DDS_transport_simple_Publisher
   OUTPUT_NAME simple_publisher
   FOLDER tests/transport/simple
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Shmem
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_transport_simple_Publisher
   SOURCE_FILES PubDriver.cpp
@@ -27,9 +27,9 @@ ace_target_cxx_sources(DDS_transport_simple_Publisher
 ace_add_exe(DDS_transport_simple_Subscriber
   OUTPUT_NAME simple_subscriber
   FOLDER tests/transport/simple
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Shmem
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_transport_simple_Subscriber
   SOURCE_FILES SimpleDataReader.cpp

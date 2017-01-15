@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_Partition_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Partition
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Partition_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Partition_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Partition_Publisher
   SOURCE_FILES DataWriterListener.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(DDS_Partition_Publisher
 ace_add_exe(DDS_Partition_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Partition
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Partition_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Partition_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Partition_Subscriber
   SOURCE_FILES DataReaderListener.cpp

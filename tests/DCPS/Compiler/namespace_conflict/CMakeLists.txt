@@ -10,8 +10,7 @@ endif()
 ace_add_exe(DDS_namespace_conflict
   OUTPUT_NAME DDS_namespace_conflict
   FOLDER tests/DCPS/Compiler/namespace_conflict
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_namespace_conflict
   SOURCE_FILES main.cpp

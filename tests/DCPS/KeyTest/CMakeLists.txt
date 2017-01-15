@@ -32,10 +32,10 @@ endif()
 ace_add_exe(DDS_KeyTest_Isbounded
   OUTPUT_NAME IsBounded
   FOLDER tests/DCPS/KeyTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Rtps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Rtps
                  DDS_KeyTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_KeyTest_Isbounded
   SOURCE_FILES IsBounded.cpp
@@ -45,10 +45,10 @@ ace_target_cxx_sources(DDS_KeyTest_Isbounded
 ace_add_exe(DDS_KeyTest_Keymarshalling
   OUTPUT_NAME KeyMarshalling
   FOLDER tests/DCPS/KeyTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Rtps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Rtps
                  DDS_KeyTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_KeyTest_Keymarshalling
   SOURCE_FILES KeyMarshalling.cpp

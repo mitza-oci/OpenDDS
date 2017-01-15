@@ -1,10 +1,9 @@
 ace_add_exe(dcps_integration_Topic
   OUTPUT_NAME topic_test
   FOLDER tests/DCPS/DcpsIntegration
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(dcps_integration_Topic
   SOURCE_FILES DomainParticipantListener.cpp
@@ -18,10 +17,9 @@ ace_target_cxx_sources(dcps_integration_Topic
 ace_add_exe(dcps_integration_Infrastructure
   OUTPUT_NAME infrastructure_test
   FOLDER tests/DCPS/DcpsIntegration
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(dcps_integration_Infrastructure
   SOURCE_FILES DomainParticipantListener.cpp

@@ -1,13 +1,8 @@
-ace_requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
-
-
-ace_requires("NOT MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(NO_OPENDDS_SAFETY_PROFILE "NOT TAO_HAS_MINIMUM_CORBA")
 
 ace_add_exe(InfoRepo_population_Syncserver
   OUTPUT_NAME syncServer
-
   FOLDER performance-tests/DCPS/InfoRepo_population
-  ASPECTS TAO
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES Sync_Serverlib
@@ -23,11 +18,11 @@ ace_target_cxx_sources(InfoRepo_population_Syncserver
 ace_add_exe(InfoRepo_population_Publisher
   OUTPUT_NAME publisher
   FOLDER performance-tests/DCPS/InfoRepo_population
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES OpenDDS_Tcp
                  Sync_Clientlib
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(InfoRepo_population_Publisher
   SOURCE_FILES SyncClientExt_i.cpp
@@ -37,14 +32,15 @@ ace_target_cxx_sources(InfoRepo_population_Publisher
                Writer.h
 )
 
+
 ace_add_exe(InfoRepo_population_Subscriber
   OUTPUT_NAME subscriber
   FOLDER performance-tests/DCPS/InfoRepo_population
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES OpenDDS_Tcp
                  Sync_Clientlib
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(InfoRepo_population_Subscriber
   SOURCE_FILES DataReaderListener.cpp

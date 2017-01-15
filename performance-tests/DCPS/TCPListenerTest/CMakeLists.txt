@@ -3,10 +3,9 @@ ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(DCPS_Perf_TCPListener_Pub
   OUTPUT_NAME publisher
   FOLDER performance-tests/DCPS/TCPListenerTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DCPS_Perf_TypeNoKeyBounded
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DCPS_Perf_TCPListener_Pub
   SOURCE_FILES Writer.cpp
@@ -19,10 +18,9 @@ ace_target_cxx_sources(DCPS_Perf_TCPListener_Pub
 ace_add_exe(DCPS_Perf_TCPListener_Sub
   OUTPUT_NAME subscriber
   FOLDER performance-tests/DCPS/TCPListenerTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DCPS_Perf_TypeNoKeyBounded
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DCPS_Perf_TCPListener_Sub
   SOURCE_FILES DataReaderListener.cpp

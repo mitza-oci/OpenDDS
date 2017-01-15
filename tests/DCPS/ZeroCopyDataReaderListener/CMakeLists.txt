@@ -25,10 +25,10 @@ dds_idl_sources(
 ace_add_exe(ZeroCopyDRL_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ZeroCopyDataReaderListener
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Model
                  ZeroCopyDRL_idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ZeroCopyDRL_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,10 +40,10 @@ ace_target_cxx_sources(ZeroCopyDRL_Publisher
 ace_add_exe(ZeroCopyDRL_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ZeroCopyDataReaderListener
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Model
                  ZeroCopyDRL_idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ZeroCopyDRL_Subscriber
   SOURCE_FILES DataReaderListener.cpp
@@ -55,10 +55,10 @@ ace_target_cxx_sources(ZeroCopyDRL_Subscriber
 ace_add_exe(ZeroCopyDRL_StackSubscriber
   OUTPUT_NAME stack_subscriber
   FOLDER tests/DCPS/ZeroCopyDataReaderListener
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Model
                  ZeroCopyDRL_idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ZeroCopyDRL_StackSubscriber
   SOURCE_FILES DataReaderListener.cpp

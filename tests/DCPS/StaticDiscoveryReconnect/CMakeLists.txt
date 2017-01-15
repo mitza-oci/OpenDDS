@@ -9,9 +9,8 @@ endif()
 ace_add_exe(StaticDiscoveryReconnectTest
   OUTPUT_NAME StaticDiscoveryReconnectTest
   FOLDER tests/DCPS/StaticDiscoveryReconnect
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(StaticDiscoveryReconnectTest
   SOURCE_FILES StaticDiscoveryTest.cpp

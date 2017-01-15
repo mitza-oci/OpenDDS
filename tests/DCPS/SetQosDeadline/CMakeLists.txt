@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(SetQosDeadline_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/SetQosDeadline
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES SetQosDeadline_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 SetQosDeadline_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(SetQosDeadline_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(SetQosDeadline_Publisher
 ace_add_exe(SetQosDeadline_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/SetQosDeadline
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES SetQosDeadline_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 SetQosDeadline_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(SetQosDeadline_Subscriber
   SOURCE_FILES DataReaderListener.cpp

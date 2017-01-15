@@ -1,11 +1,11 @@
 ace_add_exe(ManyTopicTestPublisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ManyTopicTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
-                 common
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  ManyTopicTypes
+                 common
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ManyTopicTestPublisher
   SOURCE_FILES Writer.cpp
@@ -18,11 +18,10 @@ ace_target_cxx_sources(ManyTopicTestPublisher
 ace_add_exe(ManyTopicTestSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ManyTopicTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES common
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  ManyTopicTypes
+                 common
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ManyTopicTestSubscriber
   SOURCE_FILES subscriber.cpp

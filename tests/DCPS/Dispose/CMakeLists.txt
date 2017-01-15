@@ -3,12 +3,11 @@ ace_requires(OWNERSHIP_PROFILE)
 ace_add_exe(Dispose
   OUTPUT_NAME tester
   FOLDER tests/DCPS/Dispose
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(Dispose
   SOURCE_FILES main.cpp

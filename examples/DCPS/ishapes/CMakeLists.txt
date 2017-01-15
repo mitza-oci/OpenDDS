@@ -26,15 +26,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+
 ace_add_exe(ishapes
   OUTPUT_NAME ishapes
   FOLDER examples/DCPS/ishapes
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
   LINK_LIBRARIES OpenDDS_Multicast
                  Qt4::QtGui
                  OpenDDS_Tcp
                  OpenDDS_Udp
+                 OpenDDS_Default_Discovery
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(ishapes

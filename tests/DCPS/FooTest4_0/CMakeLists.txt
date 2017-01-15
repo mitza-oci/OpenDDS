@@ -3,11 +3,10 @@ ace_requires(OWNERSHIP_PROFILE)
 ace_add_exe(DcpsFooTest4_0
   OUTPUT_NAME FooTest4_0
   FOLDER tests/DCPS/FooTest4_0
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DcpsFooTest4_0
   SOURCE_FILES DataReaderListener.cpp

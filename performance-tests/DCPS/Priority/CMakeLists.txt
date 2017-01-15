@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(perf_Priority_Publisher
   OUTPUT_NAME publisher
   FOLDER performance-tests/DCPS/Priority
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES perf_Priority_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 perf_Priority_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(perf_Priority_Publisher
   SOURCE_FILES Options.cpp
@@ -49,10 +48,9 @@ ace_target_cxx_sources(perf_Priority_Publisher
 ace_add_exe(perf_Priority_Subscriber
   OUTPUT_NAME subscriber
   FOLDER performance-tests/DCPS/Priority
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES perf_Priority_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 perf_Priority_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(perf_Priority_Subscriber
   SOURCE_FILES Commas.cpp

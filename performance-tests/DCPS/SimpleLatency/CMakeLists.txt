@@ -27,9 +27,8 @@ ace_add_exe(DDS_SimpleLatency_Pub
   OUTPUT_NAME dds_pub
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER performance-tests/DCPS/SimpleLatency
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES SimpleLatency_Idl
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_SimpleLatency_Pub
   SOURCE_FILES PubListener.cpp
@@ -42,9 +41,8 @@ ace_add_exe(DDS_SimpleLatency_Sub
   OUTPUT_NAME dds_sub
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   FOLDER performance-tests/DCPS/SimpleLatency
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES SimpleLatency_Idl
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_SimpleLatency_Sub
   SOURCE_FILES SubListener.cpp

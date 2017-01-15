@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(CorbaSeq_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/CorbaSeq
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES CorbaSeq_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 CorbaSeq_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(CorbaSeq_Publisher
   SOURCE_FILES Writer.cpp
@@ -42,10 +41,9 @@ ace_target_cxx_sources(CorbaSeq_Publisher
 ace_add_exe(CorbaSeq_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/CorbaSeq
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES CorbaSeq_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 CorbaSeq_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(CorbaSeq_Subscriber
   SOURCE_FILES DataReaderListener.cpp

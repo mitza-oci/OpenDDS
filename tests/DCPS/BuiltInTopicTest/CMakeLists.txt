@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(DDS_BuiltInTopicTest_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/BuiltInTopicTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_BuiltInTopicTest_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_BuiltInTopicTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_BuiltInTopicTest_Publisher
   SOURCE_FILES Writer.cpp
@@ -42,10 +41,9 @@ ace_target_cxx_sources(DDS_BuiltInTopicTest_Publisher
 ace_add_exe(DDS_BuiltInTopicTest_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/BuiltInTopicTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_BuiltInTopicTest_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_BuiltInTopicTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_BuiltInTopicTest_Subscriber
   SOURCE_FILES DataReaderListener.cpp
@@ -57,10 +55,9 @@ ace_target_cxx_sources(DDS_BuiltInTopicTest_Subscriber
 ace_add_exe(DDS_BuiltInTopicTest_Monitor
   OUTPUT_NAME monitor
   FOLDER tests/DCPS/BuiltInTopicTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_BuiltInTopicTest_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_BuiltInTopicTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_BuiltInTopicTest_Monitor
   SOURCE_FILES monitor.cpp

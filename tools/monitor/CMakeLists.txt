@@ -11,10 +11,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(Monitor_App
   OUTPUT_NAME monitor
   FOLDER tools
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Qt4::QtGui
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(Monitor_App
   SOURCE_FILES Edge.cpp
@@ -56,7 +56,6 @@ ace_target_qt_sources(Monitor_App
            RepoDialog.ui
   RESOURCE_FILES Monitor.qrc
 )
-
 
 if (MSVC)
   target_compile_options(Monitor_App /bigobj)

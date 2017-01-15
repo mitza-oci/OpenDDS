@@ -18,11 +18,11 @@ dds_idl_sources(
 ace_add_exe(ManyTopicMultiProcessPublisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ManyTopicMultiProcess
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  common
                  DDS_ManyTopicMultiProcess_Idl
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ManyTopicMultiProcessPublisher
   SOURCE_FILES DataReaderListener.cpp
@@ -39,11 +39,11 @@ ace_target_cxx_sources(ManyTopicMultiProcessPublisher
 ace_add_exe(ManyTopicMultiProcessSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ManyTopicMultiProcess
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  common
                  DDS_ManyTopicMultiProcess_Idl
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ManyTopicMultiProcessSubscriber
   SOURCE_FILES DataReaderListener.cpp

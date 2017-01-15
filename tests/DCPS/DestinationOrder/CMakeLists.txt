@@ -3,9 +3,8 @@ ace_requires(OWNERSHIP_PROFILE)
 ace_add_exe(DestinationOrder
   OUTPUT_NAME tester
   FOLDER tests/DCPS/DestinationOrder
-  ASPECTS DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES TestFramework
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 TestFramework
 )
 ace_target_cxx_sources(DestinationOrder
   SOURCE_FILES TestCase.cpp

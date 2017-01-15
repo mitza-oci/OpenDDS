@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_ManualAssertLiveliness_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ManualAssertLiveliness
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_ManualAssertLiveliness_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_ManualAssertLiveliness_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_ManualAssertLiveliness_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
@@ -42,10 +41,9 @@ ace_target_cxx_sources(DDS_ManualAssertLiveliness_Publisher
 ace_add_exe(DDS_ManualAssertLiveliness_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ManualAssertLiveliness
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_ManualAssertLiveliness_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_ManualAssertLiveliness_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_ManualAssertLiveliness_Subscriber
   SOURCE_FILES DataReaderListener.cpp

@@ -9,8 +9,7 @@ endif()
 ace_add_exe(SerializerTest
   OUTPUT_NAME SerializerTest
   FOLDER tests/DCPS/Serializer
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(SerializerTest
   SOURCE_FILES AlignmentTest.cpp

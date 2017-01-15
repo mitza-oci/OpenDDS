@@ -11,8 +11,8 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(dcpsinfo_test_Pubsub
   OUTPUT_NAME pubsub
   FOLDER tests/DCPS/DCPSInfoRepo
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Rtps_Udp
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(dcpsinfo_test_Pubsub
   SOURCE_FILES DCPSDataReaderI.cpp

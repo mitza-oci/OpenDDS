@@ -26,9 +26,9 @@ dds_idl_sources(
 ace_add_exe(DDS_PersistentDurability_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/PersistentDurability
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_PersistentDurability_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_PersistentDurability_Publisher
   SOURCE_FILES DataWriterListenerImpl.cpp
@@ -42,9 +42,9 @@ ace_target_cxx_sources(DDS_PersistentDurability_Publisher
 ace_add_exe(DDS_PersistentDurability_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/PersistentDurability
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_PersistentDurability_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_PersistentDurability_Subscriber
   SOURCE_FILES DataReaderListener.cpp

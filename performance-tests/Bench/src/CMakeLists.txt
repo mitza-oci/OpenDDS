@@ -12,12 +12,10 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(BenchProcess
   OUTPUT_NAME testprocess
   FOLDER performance-tests/Bench/src
-  ASPECTS TAO
-          DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES TAO_AnyTypeCode
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 TAO_AnyTypeCode
                  TAO_Svc_Utils
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(BenchProcess
   SOURCE_FILES DataReaderListener.cpp

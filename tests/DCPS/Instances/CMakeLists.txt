@@ -28,11 +28,10 @@ dds_idl_sources(
 ace_add_exe(Instances_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Instances
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES TestUtils
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 TestUtils
                  DDS_Instances_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(Instances_Publisher
   SOURCE_FILES Publisher.cpp
@@ -42,11 +41,11 @@ ace_target_cxx_sources(Instances_Publisher
 ace_add_exe(Instances_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Instances
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestUtils
                  DDS_Instances_Idl
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(Instances_Subscriber
   SOURCE_FILES Subscriber.cpp

@@ -33,12 +33,12 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
+  REQUIRES "NOT TAO_HAS_CORBA_E_MICRO"
   FOLDER examples/DCPS/Messenger_IOGR_Imr
-  ASPECTS NEGOTIATE_CODESETS
-          TAO
   LINK_LIBRARIES TAO_FT_ServerORB
                  TAO_AnyTypeCode
                  TAO_FT_ClientORB
+                 TAO_Client
                  TAO_Valuetype
                  TAO_IORManip
                  TAO_PortableServer
@@ -52,9 +52,8 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Aggregator
 ace_add_exe(DDS_Messenger_IOGR_Imr_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/Messenger_IOGR_Imr
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DDS_Messenger_IOGR_Imr_Idl
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
   SOURCE_FILES Writer.cpp
@@ -66,9 +65,8 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
 ace_add_exe(DDS_Messenger_IOGR_Imr_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/Messenger_IOGR_Imr
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DDS_Messenger_IOGR_Imr_Idl
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Subscriber
   SOURCE_FILES DataReaderListener.cpp

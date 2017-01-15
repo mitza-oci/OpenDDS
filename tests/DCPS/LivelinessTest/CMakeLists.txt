@@ -3,11 +3,10 @@ ace_requires(OWNERSHIP_PROFILE)
 ace_add_exe(LivelinessTestPublisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/LivelinessTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(LivelinessTestPublisher
   SOURCE_FILES Writer.cpp
@@ -21,11 +20,10 @@ ace_target_cxx_sources(LivelinessTestPublisher
 ace_add_exe(LivelinessTestSubscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/LivelinessTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(LivelinessTestSubscriber
   SOURCE_FILES DataReaderListener.cpp

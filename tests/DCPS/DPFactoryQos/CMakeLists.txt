@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_DPFactoryQos_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/DPFactoryQos
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_DPFactoryQos_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_DPFactoryQos_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_DPFactoryQos_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(DDS_DPFactoryQos_Publisher
 ace_add_exe(DDS_DPFactoryQos_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/DPFactoryQos
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_DPFactoryQos_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_DPFactoryQos_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_DPFactoryQos_Subscriber
   SOURCE_FILES DataReaderListener.cpp

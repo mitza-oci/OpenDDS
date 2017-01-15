@@ -52,10 +52,9 @@ ace_target_cxx_sources(DDS_Footprint_Rtpssubscriber
 ace_add_exe(DDS_Footprint_Tcppublisher
   OUTPUT_NAME tcppublisher
   FOLDER tests/DCPS/Footprint
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Footprint_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Footprint_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Footprint_Tcppublisher
   SOURCE_FILES Writer.cpp
@@ -67,10 +66,9 @@ ace_target_cxx_sources(DDS_Footprint_Tcppublisher
 ace_add_exe(DDS_Footprint_Tcpsubscriber
   OUTPUT_NAME tcpsubscriber
   FOLDER tests/DCPS/Footprint
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Footprint_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Footprint_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Footprint_Tcpsubscriber
   SOURCE_FILES DataReaderListener.cpp

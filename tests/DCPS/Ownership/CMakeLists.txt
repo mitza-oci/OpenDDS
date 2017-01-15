@@ -26,12 +26,12 @@ dds_idl_sources(
 ace_add_exe(DDS_Ownership_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Ownership
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Multicast
                  OpenDDS_Tcp
                  DDS_Ownership_Idl
                  OpenDDS_Udp
                  OpenDDS_Model
+                 OpenDDS_Default_Discovery
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(DDS_Ownership_Publisher
@@ -44,11 +44,11 @@ ace_target_cxx_sources(DDS_Ownership_Publisher
 ace_add_exe(DDS_Ownership_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Ownership
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Multicast
                  OpenDDS_Tcp
                  DDS_Ownership_Idl
                  OpenDDS_Udp
+                 OpenDDS_Default_Discovery
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(DDS_Ownership_Subscriber

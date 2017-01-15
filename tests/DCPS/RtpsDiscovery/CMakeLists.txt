@@ -11,9 +11,9 @@ ace_requires(BUILT_IN_TOPICS)
 ace_add_exe(RtpsDiscovery
   OUTPUT_NAME RtpsDiscoveryTest
   FOLDER tests/DCPS/RtpsDiscovery
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Model
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(RtpsDiscovery
   SOURCE_FILES RtpsDiscoveryTest.cpp

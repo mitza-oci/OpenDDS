@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_RtiSerialization_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/RtiSerialization
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_RtiSerialization_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_RtiSerialization_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_RtiSerialization_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(DDS_RtiSerialization_Publisher
 ace_add_exe(DDS_RtiSerialization_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/RtiSerialization
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_RtiSerialization_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_RtiSerialization_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_RtiSerialization_Subscriber
   SOURCE_FILES DataReaderListener.cpp

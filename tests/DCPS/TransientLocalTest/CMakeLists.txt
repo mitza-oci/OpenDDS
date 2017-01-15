@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(DDS_TransientLocalTest_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/TransientLocalTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_TransientLocalTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_TransientLocalTest_Publisher
   SOURCE_FILES publisher.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(DDS_TransientLocalTest_Publisher
 ace_add_exe(DDS_TransientLocalTest_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/TransientLocalTest
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_TransientLocalTest_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_TransientLocalTest_Subscriber
   SOURCE_FILES DataReaderListener.cpp

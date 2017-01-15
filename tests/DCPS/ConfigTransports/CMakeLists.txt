@@ -3,11 +3,10 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(ConfigTransports_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/ConfigTransports
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ConfigTransports_Publisher
   SOURCE_FILES DDSTEST.cpp
@@ -31,11 +30,10 @@ ace_target_cxx_sources(ConfigTransports_Publisher
 ace_add_exe(ConfigTransports_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/ConfigTransports
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DcpsFooType4
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DcpsFooType4
                  common
-                 OpenDDS_Dcps
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ConfigTransports_Subscriber
   SOURCE_FILES DDSTEST.cpp

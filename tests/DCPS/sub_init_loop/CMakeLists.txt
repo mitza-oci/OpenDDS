@@ -27,10 +27,9 @@ dds_idl_sources(
 ace_add_exe(sub_init_loop_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/sub_init_loop
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES sub_init_loop_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 sub_init_loop_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(sub_init_loop_Publisher
   SOURCE_FILES Writer.cpp
@@ -42,10 +41,9 @@ ace_target_cxx_sources(sub_init_loop_Publisher
 ace_add_exe(sub_init_loop_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/sub_init_loop
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES sub_init_loop_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 sub_init_loop_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(sub_init_loop_Subscriber
   SOURCE_FILES subscriber.cpp

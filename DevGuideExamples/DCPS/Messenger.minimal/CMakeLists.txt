@@ -12,9 +12,9 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(MessengerMinimal_Publisher
   OUTPUT_NAME publisher
   FOLDER DevGuideExamples/DCPS/Messenger.minimal
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(MessengerMinimal_Publisher
   SOURCE_FILES Boilerplate.cpp
@@ -31,9 +31,9 @@ dds_idl_sources(
 ace_add_exe(MessengerMinimal_Subscriber
   OUTPUT_NAME subscriber
   FOLDER DevGuideExamples/DCPS/Messenger.minimal
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Model
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(MessengerMinimal_Subscriber
   SOURCE_FILES Boilerplate.cpp

@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_DpShutdown
   OUTPUT_NAME dpshutdown
   FOLDER tests/DCPS/DpShutdown
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_DpShutdown_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_DpShutdown_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_DpShutdown
   SOURCE_FILES dpshutdown.cpp

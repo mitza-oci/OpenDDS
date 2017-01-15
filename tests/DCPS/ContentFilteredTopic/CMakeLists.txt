@@ -11,9 +11,9 @@ ace_requires(CONTENT_FILTERED_TOPIC CONTENT_SUBSCRIPTION)
 ace_add_exe(ContentFilteredTopic
   OUTPUT_NAME ContentFilteredTopicTest
   FOLDER tests/DCPS/ContentFilteredTopic
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Rtps_Udp
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(ContentFilteredTopic
   SOURCE_FILES ContentFilteredTopicTest.cpp

@@ -24,6 +24,10 @@ ace_add_package(OpenDDS
 
 enable_testing()
 
+if (MSVC)
+  add_compile_options("/bigobj")
+endif(MSVC)
+
 add_subdirectory(dds)
 add_subdirectory(tools)
 add_subdirectory(examples/DCPS)

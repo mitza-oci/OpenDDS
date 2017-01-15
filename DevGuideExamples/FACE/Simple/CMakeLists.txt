@@ -10,9 +10,8 @@ endif()
 ace_add_lib(FaceMessenger_Idl
   OUTPUT_NAME FaceMessenger_Idl
   FOLDER DevGuideExamples/FACE/Simple
-  ASPECTS FACE
   DEFINE_SYMBOL FACEMESSENGER_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 dds_idl_sources(
   TARGETS FaceMessenger_Idl
@@ -28,8 +27,8 @@ dds_idl_sources(
 ace_add_exe(FaceMessenger_Publisher
   OUTPUT_NAME publisher
   FOLDER DevGuideExamples/FACE/Simple
-  ASPECTS FACE
-  LINK_LIBRARIES FaceMessenger_Idl
+  LINK_LIBRARIES OpenDDS_FACE
+                 FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(FaceMessenger_Publisher
@@ -40,8 +39,8 @@ ace_target_cxx_sources(FaceMessenger_Publisher
 ace_add_exe(FaceMessenger_Subscriber
   OUTPUT_NAME subscriber
   FOLDER DevGuideExamples/FACE/Simple
-  ASPECTS FACE
-  LINK_LIBRARIES FaceMessenger_Idl
+  LINK_LIBRARIES OpenDDS_FACE
+                 FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(FaceMessenger_Subscriber
@@ -52,8 +51,8 @@ ace_target_cxx_sources(FaceMessenger_Subscriber
 ace_add_exe(FaceMessenger_Callbacksubscriber
   OUTPUT_NAME callback_subscriber
   FOLDER DevGuideExamples/FACE/Simple
-  ASPECTS FACE
-  LINK_LIBRARIES FaceMessenger_Idl
+  LINK_LIBRARIES OpenDDS_FACE
+                 FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
 )
 ace_target_cxx_sources(FaceMessenger_Callbacksubscriber

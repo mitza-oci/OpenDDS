@@ -25,10 +25,9 @@ dds_idl_sources(
 ace_add_exe(DDS_Messenger_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/Messenger
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Messenger_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Messenger_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Messenger_Publisher
   SOURCE_FILES Writer.cpp
@@ -40,10 +39,9 @@ ace_target_cxx_sources(DDS_Messenger_Publisher
 ace_add_exe(DDS_Messenger_Subscriber
   OUTPUT_NAME subscriber
   FOLDER tests/DCPS/Messenger
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Messenger_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Messenger_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Messenger_Subscriber
   SOURCE_FILES DataReaderListener.cpp
@@ -55,10 +53,9 @@ ace_target_cxx_sources(DDS_Messenger_Subscriber
 ace_add_exe(DDS_Messenger_Stacksubscriber
   OUTPUT_NAME stack_subscriber
   FOLDER tests/DCPS/Messenger
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES DDS_Messenger_Idl
-                 OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 DDS_Messenger_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Messenger_Stacksubscriber
   SOURCE_FILES DataReaderListener.cpp
@@ -67,10 +64,7 @@ ace_target_cxx_sources(DDS_Messenger_Stacksubscriber
 )
 
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
-
-file(GLOB files *.ini)
-file(COPY ${files} run_test.pl run_corbaloc_test.pl
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/Messenger/run_test.pl"
@@ -189,13 +183,8 @@ dds_add_test("tests/DCPS/Messenger/run_corbaloc_test.pl host_port_only"
   REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
 )
 
-if (TARGET tao_cosnaming)
-  file(READ "run_ns_test.pl" RUN_NS_TEST_CONTENT)
-  string(REPLACE "\$orbsvcs{'Naming_Service'}" "\"$<TARGET_FILE:tao_cosnaming>\"" RUN_NS_TEST_CONTENT ${RUN_NS_TEST_CONTENT})
-  file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_ns_test.pl CONTENT ${RUN_NS_TEST_CONTENT})
 
-  dds_add_test("tests/DCPS/Messenger/run_ns_test.pl"
-    COMMAND run_ns_test.pl
-    REQUIRES "TARGET TAO_Svc_Utils" OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
-  )
-endif()
+dds_add_test("tests/DCPS/Messenger/run_ns_test.pl"
+  COMMAND run_ns_test.pl
+  REQUIRES "TARGET TAO_Svc_Utils" OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
+)

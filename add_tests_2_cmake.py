@@ -16,9 +16,9 @@ all_requires = {
   '!DDS_NO_CONTENT_FILTERED_TOPIC': 'CONTENT_FILTERED_TOPIC',
   '!DDS_NO_QUERY_CONDITION': 'QUERY_CONDITION',
   '!DDS_NO_CONTENT_SUBSCRIPTION': 'CONTENT_SUBSCRIPTION',
-  '!CORBA_E_COMPACT': '"NOT CORBA_E_COMPACT"',
-  '!CORBA_E_MICRO' : '"NOT CORBA_E_MICRO"',
-  '!MIN_CORBA': '"NOT MINIMUM_CORBA"',
+  '!CORBA_E_COMPACT': '"NOT TAO_HAS_CORBA_E_COMPACT"',
+  '!CORBA_E_MICRO' : '"NOT TAO_HAS_CORBA_E_MICRO"',
+  '!MIN_CORBA': '"NOT TAO_HAS_MINIMUM_CORBA"',
   'OPENDDS_SAFETY_PROFILE': '"NOT NO_OPENDDS_SAFETY_PROFILE"',
   '!DDS_NO_ORBSVCS': '"TARGET TAO_Svc_Utils"',
   '!STATIC':'BUILD_SHARED_LIBS'
@@ -127,7 +127,7 @@ for filename, test_group in testcases.iteritems():
         new_requires = set.union(test_group_requires, matched_requires)
         file_content += "ace_requires(%s)\n" % " ".join(new_requires)
         requires_written = True
-      elif not requires_written and line.startswith("add_ace") and len(test_group_requires):
+      elif not requires_written and line.startswith("ace_add") and len(test_group_requires):
         new_requires = test_group_requires
         requires_written = True
         file_content += "ace_requires(%s)\n\n" % " ".join(test_group_requires)

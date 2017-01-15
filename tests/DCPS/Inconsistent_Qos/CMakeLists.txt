@@ -25,10 +25,10 @@ dds_idl_sources(
 ace_add_exe(DDS_Inconsistent_Qos_Inconsistent_qos
   OUTPUT_NAME inconsistent_qos
   FOLDER tests/DCPS/Inconsistent_Qos
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_QOS_XML_XSC_Handler
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_QOS_XML_XSC_Handler
                  DDS_Inconsistent_Qos_Idl
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(DDS_Inconsistent_Qos_Inconsistent_qos
   SOURCE_FILES inconsistent_qos.cpp

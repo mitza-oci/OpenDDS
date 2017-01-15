@@ -3,10 +3,9 @@ ace_requires(BUILT_IN_TOPICS)
 ace_add_exe(FACE_idl_test1_main
   OUTPUT_NAME idl_test1
   FOLDER tests/FACE/Compiler/idl_test1_main
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          FACE
   LINK_LIBRARIES FACE_idl_test1_lib
-                 OpenDDS_Dcps
+                 OpenDDS_FACE
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(FACE_idl_test1_main
   SOURCE_FILES main.cpp

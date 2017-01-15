@@ -9,9 +9,8 @@ endif()
 ace_add_exe(MultiDiscoveryTest
   OUTPUT_NAME MultiDiscoveryTest
   FOLDER tests/DCPS/MultiDiscovery
-  ASPECTS DCPS_DEFAULT_DISCOVERY
-          DCPS_TRANSPORTS_FOR_TEST
-  LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Transports_For_Test
+                 OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(MultiDiscoveryTest
   SOURCE_FILES DataReaderListenerImpl.cpp
