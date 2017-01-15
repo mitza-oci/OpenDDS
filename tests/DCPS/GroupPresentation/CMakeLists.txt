@@ -26,7 +26,6 @@ dds_idl_sources(
 ace_add_exe(DDS_GroupPresentation_Publisher
   OUTPUT_NAME publisher
   FOLDER tests/DCPS/GroupPresentation
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_GroupPresentation_Idl
                  OpenDDS_Default_Discovery

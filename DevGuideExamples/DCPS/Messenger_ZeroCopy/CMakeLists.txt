@@ -26,7 +26,6 @@ dds_idl_sources(
 ace_add_exe(Messenger_ZeroCopy_Publisher
   OUTPUT_NAME publisher
   FOLDER DevGuideExamples/DCPS/Messenger_ZeroCopy
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  Messenger_ZeroCopy_Idl
                  OpenDDS_Default_Discovery

@@ -11,7 +11,6 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(ConfigFile
   OUTPUT_NAME ConfigFile
   FOLDER tests/DCPS/ConfigFile
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_InfoRepoDiscovery
                  OpenDDS_Multicast
                  OpenDDS_Tcp

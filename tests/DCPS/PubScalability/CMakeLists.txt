@@ -6,19 +6,6 @@ if (NOT DDS_ROOT)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
-ace_add_lib(PubScalability_Idl
-  OUTPUT_NAME PubScalability_Idl
-  FOLDER tests/DCPS/PubScalability
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
-)
-dds_idl_sources(
-  TARGETS PubScalability_Idl
-  DDS_IDL_FLAGS -Wb,export_macro=SampleTypeLib_Export
-  TAO_IDL_FLAGS -Wb,export_macro=SampleTypeLib_Export
-                -Wb,export_include=sampletypelib_export.h
-                -SS
-  IDL_FILES SampleType.idl
-)
 
 ace_add_exe(PubScalability_Publisher
   OUTPUT_NAME publisher
@@ -53,4 +40,18 @@ ace_target_cxx_sources(PubScalability_Subscriber
                SubDriver.h
 )
 
+
+ace_add_lib(PubScalability_Idl
+  OUTPUT_NAME PubScalability_Idl
+  FOLDER tests/DCPS/PubScalability
+  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+)
+dds_idl_sources(
+  TARGETS PubScalability_Idl
+  DDS_IDL_FLAGS -Wb,export_macro=SampleTypeLib_Export
+  TAO_IDL_FLAGS -Wb,export_macro=SampleTypeLib_Export
+                -Wb,export_include=sampletypelib_export.h
+                -SS
+  IDL_FILES SampleType.idl
+)
 

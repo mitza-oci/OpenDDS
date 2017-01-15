@@ -12,7 +12,6 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_lib(StockQuoter_Common
   OUTPUT_NAME StockQuoterCommon
   FOLDER examples/DCPS/IntroductionToOpenDDS
-  ASPECTS TAO
   PUBLIC_INCLUDE_DIRECTORIES ${TAO_ROOT}/orbsvcs
   PUBLIC_LINK_LIBRARIES TAO_AnyTypeCode
                         TAO_Svc_Utils
@@ -34,8 +33,6 @@ dds_idl_sources(
 ace_add_exe(StockQuoter_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/IntroductionToOpenDDS
-  ASPECTS TAO
-          DCPS_DEFAULT_DISCOVERY
   INCLUDE_DIRECTORIES ${TAO_ROOT}/orbsvcs
   LINK_LIBRARIES TAO_AnyTypeCode
                  OpenDDS_Tcp

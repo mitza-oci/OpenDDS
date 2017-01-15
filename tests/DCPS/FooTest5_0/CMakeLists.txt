@@ -3,7 +3,6 @@ ace_requires(OWNERSHIP_PROFILE BUILD_SHARED_LIBS)
 ace_add_exe(DcpsFooTest5_0
   OUTPUT_NAME main
   FOLDER tests/DCPS/FooTest5_0
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES DcpsFooType4
                  OpenDDS_Default_Discovery
 )

@@ -11,7 +11,6 @@ ace_requires(QUERY_CONDITION CONTENT_SUBSCRIPTION)
 ace_add_exe(QueryCondition
   OUTPUT_NAME QueryConditionTest
   FOLDER tests/DCPS/QueryCondition
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

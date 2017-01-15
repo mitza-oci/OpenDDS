@@ -11,8 +11,7 @@ ace_requires(BUILT_IN_TOPICS)
 ace_add_lib(FaceUnitTests_Qossettings
   OUTPUT_NAME FaceUnitTests_Qossettings
   FOLDER tests/FACE/Unit
-  ASPECTS FACE
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Qossettings
   SOURCE_FILES QosSettingsTest.cpp
@@ -25,8 +24,7 @@ ace_target_cxx_sources(FaceUnitTests_Qossettings
 ace_add_lib(FaceUnitTests_Memorypool
   OUTPUT_NAME FaceUnitTests_Memorypool
   FOLDER tests/FACE/Unit
-  ASPECTS FACE
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Memorypool
   SOURCE_FILES MemoryPoolTest.cpp
@@ -39,8 +37,7 @@ ace_target_cxx_sources(FaceUnitTests_Memorypool
 ace_add_lib(FaceUnitTests_Freeindex
   OUTPUT_NAME FaceUnitTests_Freeindex
   FOLDER tests/FACE/Unit
-  ASPECTS FACE
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Freeindex
   SOURCE_FILES FreeIndexTest.cpp
@@ -54,8 +51,7 @@ ace_add_lib(FaceUnitTests_Safetyprofilepool
   OUTPUT_NAME FaceUnitTests_Safetyprofilepool
   REQUIRES "NOT NO_OPENDDS_SAFETY_PROFILE"
   FOLDER tests/FACE/Unit
-  ASPECTS FACE
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
   SOURCE_FILES SafetyProfilePoolTest.cpp
@@ -68,8 +64,7 @@ ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
 ace_add_lib(FaceUnitTests_Sequences
   OUTPUT_NAME FaceUnitTests_Sequences
   FOLDER tests/FACE/Unit
-  ASPECTS FACE
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Sequences
   SOURCE_FILES SequencesTest.cpp

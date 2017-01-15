@@ -11,7 +11,6 @@ ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 ace_add_exe(Messenger_Publisher
   OUTPUT_NAME publisher
   FOLDER DevGuideExamples/DCPS/Messenger
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

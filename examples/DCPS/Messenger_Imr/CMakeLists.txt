@@ -33,7 +33,6 @@ dds_idl_sources(
 ace_add_exe(DDS_Messenger_Imr_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/Messenger_Imr
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
                  OpenDDS_Default_Discovery
@@ -48,7 +47,6 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Publisher
 ace_add_exe(DDS_Messenger_Imr_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/Messenger_Imr
-  ASPECTS DCPS_DEFAULT_DISCOVERY
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
                  OpenDDS_Default_Discovery
@@ -67,8 +65,6 @@ string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Servi
 string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
 file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_CONTENT})
 
-file(COPY pub.ini sub.ini
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 dds_add_test("examples/DCPS/Messenger_Imr/run_test.pl"
   COMMAND run_test.pl

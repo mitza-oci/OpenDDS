@@ -3,9 +3,8 @@
 ace_add_lib(FACE_idl_test3_lib
   OUTPUT_NAME FACE_idl_test3_lib
   FOLDER tests/FACE/Compiler/idl_test3_lib
-  ASPECTS FACE
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
 dds_idl_sources(
   TARGETS FACE_idl_test3_lib

@@ -32,12 +32,12 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
+  REQUIRES "NOT TAO_HAS_CORBA_E_MICRO"
   FOLDER examples/DCPS/Messenger_IOGR_Imr
-  ASPECTS NEGOTIATE_CODESETS
-          TAO
   LINK_LIBRARIES TAO_FT_ServerORB
                  TAO_AnyTypeCode
                  TAO_FT_ClientORB
+                 TAO_Client
                  TAO_Valuetype
                  TAO_IORManip
                  TAO_PortableServer
