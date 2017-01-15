@@ -20,3 +20,8 @@ dds_configure_test_files()
 dds_add_test("tests/DCPS/TimeBasedFilter/run_test.pl"
   COMMAND run_test.pl
 )
+
+
+dds_add_test("tests/DCPS/TimeBasedFilter/run_test.pl -r"
+  COMMAND run_test.pl -r
+)
