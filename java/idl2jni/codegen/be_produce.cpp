@@ -282,7 +282,7 @@ BE_produce()
   }
 
   be_global->close_streams();
-
+  be_global->gen_java_list();
   // Clean up.
   BE_cleanup();
 }

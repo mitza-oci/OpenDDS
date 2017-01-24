@@ -9,11 +9,10 @@ endif()
 
 ace_requires(NO_OPENDDS_SAFETY_PROFILE)
 
-ace_requires("INTERCEPTORS"
-         "TARGET tao_imr_locator"
-         "TARGET tao_imr_activator"
-         "TARGET tao_imr"
-         NO_OPENDDS_SAFETY_PROFILE
+ace_requires("TARGET ImR_Locator_Service"
+             "TARGET ImR_Activator_Service"
+             "TARGET tao_imr"
+             NO_OPENDDS_SAFETY_PROFILE
 )
 
 ace_add_lib(DDS_Messenger_IOGR_Imr_Idl
@@ -33,12 +32,10 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
-  REQUIRES "NOT TAO_HAS_CORBA_E_MICRO"
   FOLDER examples/DCPS/Messenger_IOGR_Imr
   LINK_LIBRARIES TAO_FT_ServerORB
                  TAO_AnyTypeCode
                  TAO_FT_ClientORB
-                 TAO_Client
                  TAO_Valuetype
                  TAO_IORManip
                  TAO_PortableServer
@@ -75,8 +72,8 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Subscriber
 )
 
 file(READ "run_test.pl" RUN_TEST_CONTENT)
-string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:tao_imr_locator>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:tao_imr_activator>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
 string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
 file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_CONTENT})
 

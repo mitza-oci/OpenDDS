@@ -6,17 +6,14 @@ if (NOT DDS_ROOT)
 endif()
 
 
-ace_requires("NOT MINIMUM_CORBA"
-         "NOT CORBA_E_MICRO"
-         "NOT CORBA_E_COMPACT"
+ace_requires(
          "TARGET TAO_Svc_Utils"
-         "TARGET tao_imr_locator"
-         "TARGET tao_imr_activator"
+         "TARGET ImR_Locator_Service"
+         "TARGET ImR_Activator_Service"
          "TARGET tao_imr"
          NO_OPENDDS_SAFETY_PROFILE
 )
 
-ace_requires("NOT TAO_HAS_CORBA_E_MICRO" "TARGET TAO_Svc_Utils" "NOT TAO_HAS_CORBA_E_COMPACT" "NOT TAO_HAS_MINIMUM_CORBA" NO_OPENDDS_SAFETY_PROFILE)
 
 ace_add_lib(DDS_Messenger_Imr_Idl
   OUTPUT_NAME DDS_Messenger_Imr_Idl
@@ -61,7 +58,12 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Subscriber
 )
 
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
-dds_configure_test_files()
+
+file(READ "run_test.pl" RUN_TEST_CONTENT)
+string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
+file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_CONTENT})
 
 
 dds_add_test("examples/DCPS/Messenger_Imr/run_test.pl"

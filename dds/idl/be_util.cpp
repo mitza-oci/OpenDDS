@@ -87,6 +87,7 @@ void
 be_util::usage (void)
 {
   ACE_DEBUG((LM_DEBUG,
+    ACE_TEXT(" -j \t\t\tgenerate java output file list\n")
     ACE_TEXT(" -o <dir>\t\tsets output directory for all files\n")
     ACE_TEXT(" -Lface\t\t\tgenerate FACE IDL to C++ mapping\n")
     ACE_TEXT(" -Lspcpp\t\t\tgenerate Safety Profile IDL to C++ mapping\n")

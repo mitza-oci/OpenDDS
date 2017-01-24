@@ -1,0 +1,11 @@
+
+ace_add_lib(idl2jni_test_simple)
+
+dds_add_taoidl_jar(idl2jni_test_simple_jar
+  OUTPUT_NAME simple
+  LIB idl2jni_test_simple
+  TAO_IDL_FLAGS -DUSE_LOCAL
+  IDL2JNI_FLAGS -DUSE_LOCAL
+  IDL_FILES simple.idl
+)
+

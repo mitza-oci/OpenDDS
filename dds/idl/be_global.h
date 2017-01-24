@@ -136,14 +136,18 @@ public:
 
   static bool writeFile(const char* fileName, const std::string &content);
 
+  void add_java_output_file(const std::string&);
+  void gen_java_list();
 private:
   const char* filename_;
   // Name of the IDL file we are processing.
 
   bool java_, suppress_idl_, suppress_typecode_,
-    generate_wireshark_, generate_itl_, v8_, face_ts_;
+    generate_wireshark_, generate_itl_, v8_, face_ts_, gen_java_list_;
 
   ACE_CString export_macro_, export_include_, versioning_name_, versioning_begin_, versioning_end_, pch_include_, java_arg_, seq_;
+
+  std::string java_outputs_;
 
   LanguageMapping language_mapping_;
 };

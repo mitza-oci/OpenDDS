@@ -1,0 +1,4 @@
+add_subdirectory(messenger_idl)
+add_subdirectory(both)
+add_subdirectory(publisher)
+add_subdirectory(subscriber)

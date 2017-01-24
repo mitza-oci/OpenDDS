@@ -34,6 +34,7 @@ ace_add_optional_subdirectory(examples/DCPS)
 ace_add_optional_subdirectory(tests)
 ace_add_optional_subdirectory(performance-tests)
 ace_add_optional_subdirectory(DevGuideExamples)
+ace_add_optional_subdirectory(java)
 add_subdirectory(bin/PerlDDS)
 
 ace_install_package(OpenDDS

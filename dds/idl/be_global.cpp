@@ -38,6 +38,7 @@ BE_GlobalData::BE_GlobalData()
   , generate_itl_(false)
   , v8_(false)
   , face_ts_(false)
+  , gen_java_list_(false)
   , seq_("Seq")
   , language_mapping_(LANGMAP_NONE)
 {
@@ -267,6 +268,9 @@ BE_GlobalData::parse_args(long& i, char** av)
   static const size_t SZ_WB_EXPORT_MACRO = sizeof(WB_EXPORT_MACRO) - 1;
 
   switch (av[i][1]) {
+  case 'j':
+    gen_java_list_ = true;
+    break;
   case 'o':
     idl_global->append_idl_flag(av[i + 1]);
     if (ACE_OS::mkdir(av[i + 1]) != 0 && errno != EEXIST) {
@@ -549,4 +553,37 @@ BE_GlobalData::get_include_block(BE_GlobalData::stream_enum_t which)
   }
 
   return ret.str();
+}
+
+void
+BE_GlobalData::add_java_output_file(const std::string& filename)
+{
+  static char cwd[1024];
+  if (cwd[0] == '\0') {
+    ACE_OS::getcwd(cwd, 1024);
+    ACE_OS::strcat(cwd, ACE_DIRECTORY_SEPARATOR_STR);
+  }
+
+  if (gen_java_list_) {
+    java_outputs_ += cwd;
+    java_outputs_ += (filename + "\n");
+  }
+}
+
+void
+BE_GlobalData::gen_java_list()
+{
+  if (!gen_java_list_)
+    return;
+
+  string filebase(this->filename_);
+  size_t idx = filebase.rfind(ACE_DIRECTORY_SEPARATOR_CHAR);
+
+  if (idx != string::npos) {
+    filebase = filebase.substr(idx + 1);
+  }
+  filebase += ".TypeSupportImpl.java.list";
+
+  ofstream fout(filebase);
+  fout << java_outputs_;
 }

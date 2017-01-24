@@ -83,6 +83,7 @@ void
 be_util::usage (void)
 {
   ACE_DEBUG((LM_DEBUG,
+    ACE_TEXT(" -j\t\t\tgenerate the list of output java files\n")
     ACE_TEXT(" -o <dir>\t\tsets output directory for all files\n")
     ACE_TEXT(" -SI\t\t\tsuppress generation of *TypeSupport.idl\n")
     ACE_TEXT(" -Wb,export_macro=<macro name>\t\tsets export macro ")

@@ -301,6 +301,7 @@ namespace java_ts_generator {
     std::string clazz = name->last_component()->get_string();
     file += clazz + "TypeSupportImpl.java";
 
+    be_global->add_java_output_file(file);
     std::ofstream java(file.c_str());
     java << (jpackage.size() ? "package " : "") << jpackage
       << (jpackage.size() ? ";\n" :"") <<

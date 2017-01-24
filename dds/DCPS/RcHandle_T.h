@@ -233,19 +233,19 @@ T& unwrap_reference(reference_wrapper<T> const& t)
 
 
 template <typename T>
-RcHandle<T> make_rch()
+inline RcHandle<T> make_rch()
 {
   return RcHandle<T>(new T(), keep_count());
 }
 
 template <typename T, typename U>
-RcHandle<T> make_rch(U const& u)
+inline RcHandle<T> make_rch(U const& u)
 {
   return RcHandle<T>(new T(unwrap_reference(u)), keep_count());
 }
 
 template <typename T, typename U0, typename U1>
-RcHandle<T> make_rch(U0 const& u0, U1 const& u1)
+inline RcHandle<T> make_rch(U0 const& u0, U1 const& u1)
 {
   return RcHandle<T>(new T(unwrap_reference(u0), unwrap_reference(u1)), keep_count());
 }

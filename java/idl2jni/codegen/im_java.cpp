@@ -151,7 +151,7 @@ bool java_class_gen(const JavaName &jn, JavaFileType jft, const char *body,
   nativeLoader <<
   "}\n";
 
-  return BE_GlobalData::writeFile(file.c_str(), oss.str());
+  return be_global->write_java_file(file, oss.str());
 }
 
 bool gen_helper(const JavaName &jn, const char *repoid, bool narrow = false)

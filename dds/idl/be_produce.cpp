@@ -395,5 +395,6 @@ BE_produce()
                 BE_GlobalData::STREAM_LANG_H);
   }
 
+  be_global->gen_java_list();
   BE_cleanup();
 }

@@ -1,20 +1,16 @@
 
-find_package(XercesC)
-
-ace_requires(DDS4CCM_OPENDDS XercesC_FOUND)
-
 
 ace_add_lib(OpenDDS_QOS_XML_XSC_Handler
   OUTPUT_NAME OpenDDS_QOS_XML_XSC_Handler
+  PACKAGE OpenDDS
   COMPILE_DEFINITIONS XML_USE_PTHREADS
   FOLDER dds/DCPS
-  FEATURES GEN_OSTREAM
   DEFINE_SYMBOL XML_QOS_HANDLER_BUILD_DLL
-  PUBLIC_INCLUDE_DIRECTORIES ${XercesC_INCLUDE_DIRS}
   PUBLIC_LINK_LIBRARIES TAO_AnyTypeCode
                         OpenDDS_Dcps
-                        ${XercesC_LIBRARIES}
+                        ACE_XML_Utils
 )
+
 ace_target_cxx_sources(OpenDDS_QOS_XML_XSC_Handler
   SOURCE_FILES DataReaderQos_Handler.cpp
                DataWriterQos_Handler.cpp

@@ -92,14 +92,19 @@ public:
 
   static bool writeFile(const char *fileName, const std::string &content);
 
+  bool write_java_file(const std::string& fileName, const std::string &content);
+
+  void gen_java_list();
+
 private:
   const char *filename_;
   // Name of the IDL file we are processing.
 
   bool do_server_side_;
-
+  bool gen_java_list_;
   ACE_CString stub_export_macro_, stub_export_include_,
-  skel_export_macro_, skel_export_include_, native_lib_name_;
+    skel_export_macro_, skel_export_include_, native_lib_name_;
+  std::string java_outputs_;
 };
 
 class BE_Comment_Guard {
