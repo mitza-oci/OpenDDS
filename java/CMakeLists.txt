@@ -1,5 +1,5 @@
 
-find_package(JAVA)
+find_package(Java)
 find_package(JNI)
 
 ace_requires(JAVA_FOUND JNI_FOUND)
