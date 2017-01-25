@@ -576,7 +576,7 @@ BE_GlobalData::gen_java_list()
   if (!gen_java_list_)
     return;
 
-  string filebase(this->filename_);
+  std::string filebase(this->filename_);
   size_t idx = filebase.rfind(ACE_DIRECTORY_SEPARATOR_CHAR);
 
   if (idx != string::npos) {
@@ -584,6 +584,6 @@ BE_GlobalData::gen_java_list()
   }
   filebase += ".TypeSupportImpl.java.list";
 
-  ofstream fout(filebase);
+  std::ofstream fout(filebase.c_str());
   fout << java_outputs_;
 }
