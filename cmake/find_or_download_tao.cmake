@@ -9,6 +9,7 @@ if (NOT TAO_FOUND)
 
   download_project(PROJ                ACE_TAO
                    GIT_REPOSITORY      https://github.com/huangminghuang/ACE_TAO.git
+                   GIT_SHALLOW 1
                    GIT_TAG             cmake
                    UPDATE_DISCONNECTED 1
   )
