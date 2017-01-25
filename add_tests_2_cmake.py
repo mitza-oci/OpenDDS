@@ -5,6 +5,9 @@ import re
 import shlex
 import glob
 
+#tests_list = 'bin/dcps_tests.lst'
+tests_list = 'java/tests/dcps_java_tests.lst'
+
 all_requires = {
   '!OPENDDS_SAFETY_PROFILE':'NO_OPENDDS_SAFETY_PROFILE',
   '!DDS_NO_OBJECT_MODEL_PROFILE': 'OBJECT_MODEL_PROFILE',
@@ -91,7 +94,7 @@ def rename_test(filename):
     regex_sub_file(script, r"(\s*->create_process\(\)\s*=\s*test)\s*$",r"\1er")
 
 testcases = {}
-with open('bin/dcps_tests.lst') as f:
+with open(tests_list) as f:
   for line in f:
     line=line.strip()
     if line.startswith("#") or len(line) == 0:
