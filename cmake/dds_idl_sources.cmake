@@ -30,6 +30,11 @@ foreach(opt ${OPENDDS_BASE_OPTIONS})
   endif()
 endforeach()
 
+if (NOT BUILT_IN_TOPICS)
+  list(APPEND TAO_BASE_IDL_FLAGS -DDDS_HAS_MINIMUM_BIT)
+  list(APPEND DDS_BASE_IDL_FLAGS -DDDS_HAS_MINIMUM_BIT)
+endif()
+
 list(APPEND TAO_BASE_IDL_FLAGS -I${DDS_ROOT})
 
 function(add_dds_idl_command Name)
