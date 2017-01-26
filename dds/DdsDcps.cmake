@@ -11,6 +11,11 @@ foreach(opt ${OPENDDS_BASE_OPTIONS})
   endif()
 endforeach()
 
+if (NOT BUILT_IN_TOPICS)
+  list(APPEND DCPS_COMPILE_DEFINITIONS -DDDS_HAS_MINIMUM_BIT)
+endif()
+
+
 ace_add_lib(OpenDDS_Dcps
   PACKAGE OpenDDS
   FOLDER dds
