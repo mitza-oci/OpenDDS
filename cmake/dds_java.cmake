@@ -107,6 +107,9 @@ function(dds_add_taoidl_jar _target_name)
     IDL_FILES ${_arg_IDL_FILES}
   )
 
+  set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON PARENT_SCOPE)
+  set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
+
   get_target_property(libname ${_arg_LIB} OUTPUT_NAME)
   if (NOT libname)
     set(libname ${_arg_LIB})
@@ -160,6 +163,9 @@ function(dds_add_ddsidl_jar _target_name)
     DDS_IDL_FLAGS -Wb,java ${_arg_DDS_IDL_FLAGS}
     IDL_FILES ${_arg_IDL_FILES}
   )
+
+  set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON PARENT_SCOPE)
+  set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
 
   get_target_property(libname ${_arg_LIB} OUTPUT_NAME)
   if (NOT libname)

@@ -193,9 +193,11 @@ function(dds_idl_sources)
 
   foreach(target ${_arg_TARGETS})
     target_sources(${target} PRIVATE ${_idl_OUTPUT_FILES} ${_arg_IDL_FILES})
-    target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${rel_path}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${rel_path}>)
     list(APPEND packages ${PACKAGE_OF_${target}})
   endforeach()
+
+  set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON PARENT_SCOPE)
+  set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
 
   source_group("Generated Files" FILES ${_idl_OUTPUT_FILES} )
   source_group("IDL Files" FILES ${_arg_IDL_FILES})
