@@ -10,19 +10,13 @@ endif()
 find_package(Qt4)
 ace_requires(QT4_FOUND)
 
-if (NOT CMAKE_CXX_STANDARD)
-  include(CheckCXXSourceCompiles)
-  check_cxx_source_compiles(
-  "#include<memory>
-  int main(int argc, char** argv) {
-    std::shared_ptr<int> x; return x.get()==nullptr;
-  }" HAVE_SHARED_PTR)
-elseif(NOT "${CMAKE_CXX_STANDARD}" EQUAL 98)
-  set(HAVE_SHARED_PTR ON)
-endif()
+
+include(CheckCXXSymbolExists)
+set(CMAKE_REQUIRED_LIBRARIES ACE)
+check_cxx_symbol_exists(ACE_HAS_CPP11 ace/ACE.h ACE_HAS_CPP11)
 
 
-if (NOT HAVE_SHARED_PTR)
+if (NOT ACE_HAS_CPP11)
   find_package(Boost)
   if (NOT Boost_FOUND)
     message("Skipping ishapes because neither C++11 nor boost is found")
