@@ -12,20 +12,28 @@ else()
   message(WARNING "Cannot find PerlACE, no tests will be added")
 endif()
 
-
 function(dds_configure_test_files)
-  file(GLOB files *.ini)
+  file(GLOB files *.ini *.conf *.xml)
   file(COPY ${files}
        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
   file(GLOB test_scripts RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.pl)
   foreach(script ${test_scripts})
     file(READ ${script} RUN_TEST_CONTENT)
+
+    string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$orbsvcs{'Naming_Service'}" "\"$<TARGET_FILE:Naming_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_nsadd" "$<TARGET_FILE:tao_nsadd>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "\$ENV{DDS_ROOT}/bin" "$<TARGET_FILE_DIR:opendds_idl>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "\$ENV{ACE_ROOT}" "${ACE_ROOT}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$ENV{ACE_ROOT}/bin" "${ACE_ROOT}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "$TAO_ROOT" "${TAO_DIR}/.." RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "$DDS_ROOT/bin" "$<TARGET_FILE_DIR:opendds_idl>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "$ACE_ROOT/bin" "${ACE_ROOT}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "# -*- perl -*-" "# -*- perl -*-\n\$ENV{'DDS_ROOT'}=\"$<TARGET_FILE_DIR:OpenDDS_Dcps>/..\";\n\$ENV{'ACE_ROOT'}=\"${ACE_ROOT}\";" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "use PerlDDS::Process_Java;" "use PerlDDS::Process_Java;\nPerlACE::add_lib_path(\"$DDS_ROOT/lib\");" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "# -*- perl -*-" "# -*- perl -*-\n\$ENV{'DDS_ROOT'}=\"$<TARGET_FILE_DIR:OpenDDS_Dcps>/..\";\n\$ENV{'ACE_ROOT'}=\"$<TARGET_FILE_DIR:ACE>/..\";" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+
     file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${script}" CONTENT "${RUN_TEST_CONTENT}")
   endforeach()
 endfunction()
@@ -54,7 +62,7 @@ function(dds_add_test name)
 
   string(REPLACE " " "__" name "${name}")
   add_test(NAME "${name}"
-           COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=$<TARGET_FILE_DIR:DCPSInfoRepo>/.." env "ACE_ROOT=${ACE_ROOT}" perl ${_arg_COMMAND}
+           COMMAND ${CMAKE_COMMAND} -E env perl ${_arg_COMMAND}
   )
 
   set_tests_properties("${name}" PROPERTIES

@@ -37,7 +37,10 @@ my $DCPSREPO = PerlDDS::create_process ("$DDS_ROOT/bin/DCPSInfoRepo",
 
 PerlACE::add_lib_path ("$DDS_ROOT/java/tests/complex_idl");
 
-my $TEST = new PerlDDS::Process_Java ("ComplexIDLTest", $test_opts);
+my $classes = [];
+$classes = [ 'complex_idl_test.jar' ] if -r 'complex_idl_test.jar';
+
+my $TEST = new PerlDDS::Process_Java ("ComplexIDLTest", $test_opts, $classes);
 
 $DCPSREPO->Spawn ();
 if (PerlACE::waitforfile_timed ($dcpsrepo_ior, 30) == -1) {

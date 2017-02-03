@@ -36,7 +36,7 @@ PerlACE::add_lib_path ("$DDS_ROOT/java/tests/messenger/messenger_idl");
 
 my $PUB = new PerlDDS::Process_Java ('Both', $pub_opts,
                            ["$DDS_ROOT/java/tests/messenger/messenger_idl/".
-                            "messenger_idl_test.jar"]);
+                            "messenger_idl_test.jar", "java_both_test.jar"]);
 
 $DCPSREPO->Spawn ();
 if (PerlACE::waitforfile_timed ($dcpsrepo_ior, 30) == -1) {

@@ -1,3 +1,4 @@
 project: dcps {
   requires += no_opendds_safety_profile
+  exename = FileSystemStorageTest.cpp
 }

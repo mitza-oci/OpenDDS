@@ -33,8 +33,13 @@ my $DCPSREPO = PerlDDS::create_process("$DDS_ROOT/bin/DCPSInfoRepo", "-NOBITS ".
 my $idl_dir = "$DDS_ROOT/java/tests/messenger/messenger_idl";
 PerlACE::add_lib_path($idl_dir);
 
+my @classes = ($idl_dir . "/messenger_idl_test.jar");
+if ( -r 'zerocopy_java_test.jar') {
+  push @classes, 'zerocopy_java_test.jar';
+}
+
 my $PUB = new PerlDDS::Process_Java('ZeroCopy', $pub_opts,
-                                    [$idl_dir . "/messenger_idl_test.jar"]);
+                                    \@classes);
 
 $DCPSREPO->Spawn();
 if (PerlACE::waitforfile_timed($dcpsrepo_ior, 30) == -1) {

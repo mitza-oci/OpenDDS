@@ -27,8 +27,12 @@ my $SV = PerlDDS::create_process ("$TAO_ROOT/tests/Hello/server",
                                "-ORBDebugLevel $debug -o $iorfile");
 
 PerlACE::add_lib_path ('.');
+
+my $classes = [];
+$classes = ['hello_java_client.jar'] if -r 'hello_java_client.jar';
+
 my $CL = new PerlDDS::Process_Java ('Client', "-k file://$iorfile -ORBDebugLevel $debug",
-                          ['hello_java_client.jar']);
+                          $classes);
 
 my $server_status = $SV->Spawn ();
 

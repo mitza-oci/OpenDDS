@@ -4,6 +4,7 @@ use strict;
 use Env qw(JAVA_HOME DDS_ROOT ACE_ROOT TAO_ROOT);
 use lib "$ACE_ROOT/bin";
 use PerlACE::Process;
+use Cwd qw();
 
 our @ISA = qw(PerlACE::Process);
 PerlACE::add_lib_path("$DDS_ROOT/lib");
@@ -44,6 +45,7 @@ sub new {
   $arguments .= ' -cp ' . join($sep, @classpaths) . $jnid . ' '
       . $main . ' ' . $args;
 
+  print("java $arguments");
   my $self = $class->SUPER::new("$JAVA_HOME/bin/java", $arguments);
   bless($self, $class);
   $self->IgnoreExeSubDir(1);

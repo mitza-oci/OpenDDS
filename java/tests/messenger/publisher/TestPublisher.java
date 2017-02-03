@@ -44,6 +44,8 @@ public class TestPublisher {
             System.err.println("ERROR: Domain Participant Factory not found");
             return;
         }
+        System.out.println("Domain Participant Factory Done");
+
         DomainParticipant dp = dpf.create_participant(4,
             PARTICIPANT_QOS_DEFAULT.get(), null, DEFAULT_STATUS_MASK.value);
         if (dp == null) {
@@ -51,11 +53,15 @@ public class TestPublisher {
             return;
         }
 
+        System.out.println("Domain Participant creation Done");
+
         MessageTypeSupportImpl servant = new MessageTypeSupportImpl();
         if (servant.register_type(dp, "") != RETCODE_OK.value) {
             System.err.println("ERROR: register_type failed");
             return;
         }
+
+        System.out.println("MessageTypeSupportImpl Done");
 
         Topic top = dp.create_topic("Movie Discussion List",
                                     servant.get_type_name(),

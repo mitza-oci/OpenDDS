@@ -2,7 +2,8 @@
 if (BUILT_IN_TOPICS)
 
   dds_idl2jni_command(OpenDDS_Dcps_Java_idl
-    FLAGS -SS -I${TAO_ROOT}
+    FLAGS -Wb,native_lib_name=OpenDDS_DCPS_Java
+          -SS -I${TAO_ROOT}
           -I${CMAKE_CURRENT_SOURCE_DIR}/../..
           -I${CMAKE_CURRENT_SOURCE_DIR}/../../dds
           -Wb,stub_export_include=dcps_java_export.h

@@ -6,12 +6,12 @@ if (NOT DDS_ROOT)
 endif()
 
 
-ace_requires(CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION)
+ace_requires(CONTENT_SUBSCRIPTION_CORE CONTENT_SUBSCRIPTION MULTI_TOPIC)
 
-ace_add_lib(MetaStructTest
+ace_add_exe(MetaStructTest
   OUTPUT_NAME MetaStructTest
   FOLDER tests/DCPS/MetaStruct
-  PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(MetaStructTest
   SOURCE_FILES MetaStructTest.cpp

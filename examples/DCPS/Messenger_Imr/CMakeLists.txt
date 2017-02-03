@@ -58,13 +58,7 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Subscriber
 )
 
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
-
-file(READ "run_test.pl" RUN_TEST_CONTENT)
-string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_CONTENT})
-
+dds_configure_test_files()
 
 dds_add_test("examples/DCPS/Messenger_Imr/run_test.pl"
   COMMAND run_test.pl

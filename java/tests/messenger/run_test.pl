@@ -59,15 +59,19 @@ my $DCPSREPO = PerlDDS::create_process("$DDS_ROOT/bin/DCPSInfoRepo",
                  '-NOBITS' . (($debug eq '0' ? '' : " -ORBDebugLevel $debug" .
                  ' -ORBLogFile DCPSInfoRepo.log')) . " -o $dcpsrepo_ior");
 
+my $sub_classes = 'subscriber/classes';
+$sub_classes = 'subscriber/subscriber_idl_test.jar' if ! -r $sub_classes;
+
 my $SUB = new PerlDDS::Process_Java('TestSubscriber', $sub_opts,
-            ["$DDS_ROOT/java/tests/messenger/messenger_idl/".
-             'messenger_idl_test.jar', 'subscriber/classes']);
+            ["messenger_idl/messenger_idl_test.jar", $sub_classes]);
 
 PerlACE::add_lib_path("$DDS_ROOT/java/tests/messenger/messenger_idl");
 
+my $pub_classes = 'publisher/classes';
+$pub_classes = 'publisher/publisher_idl_test.jar' if ! -r $pub_classes;
+
 my $PUB = new PerlDDS::Process_Java('TestPublisher', $pub_opts,
-            ["$DDS_ROOT/java/tests/messenger/messenger_idl/".
-             'messenger_idl_test.jar', 'publisher/classes']);
+            ["messenger_idl/messenger_idl_test.jar", $pub_classes]);
 
 if ($use_repo) {
     print $DCPSREPO->CommandLine() . "\n";

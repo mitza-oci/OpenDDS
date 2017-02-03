@@ -37,8 +37,13 @@ my $DCPSREPO = PerlDDS::create_process ("$DDS_ROOT/bin/DCPSInfoRepo",
 
 PerlACE::add_lib_path ("$DDS_ROOT/java/tests/messenger/messenger_idl");
 
+my @classes = ("$DDS_ROOT/java/tests/messenger/messenger_idl/messenger_idl_test.jar");
+if ( -r "builtintopics_test.jar") {
+  push @classes, "builtintopics_test.jar";
+}
+
 my $TEST = new PerlDDS::Process_Java ("BuiltinTopicsTest", $test_opts,
-    ["$DDS_ROOT/java/tests/messenger/messenger_idl/messenger_idl_test.jar"]);
+    \@classes);
 
 $DCPSREPO->Spawn ();
 if (PerlACE::waitforfile_timed ($dcpsrepo_ior, 30) == -1) {

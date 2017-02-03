@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.6)
 project(OpenDDS CXX)
 
+
+if (DEFINED ACE_TAO_BUILD_ROOT)
+  set(ACE_DIR ${ACE_TAO_BUILD_ROOT}/ACE/cmake)
+  set(TAO_DIR ${ACE_TAO_BUILD_ROOT}/TAO/cmake)
+endif()
+
 include(cmake/find_or_download_tao.cmake)
 
 
 if (NOT OPENDDS_VERSION)
   file(READ "VERSION" VERSION_FILE_CONTENT)
-  string(REGEX MATCH "([0-9]\\.)+[0-9]" OPENDDS_VERSION ${VERSION_FILE_CONTENT})
+  string(REGEX MATCH "([0-9]\\.)+[0-9]+" OPENDDS_VERSION ${VERSION_FILE_CONTENT})
 endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -29,6 +35,11 @@ if (MSVC)
   add_compile_options("/bigobj")
 endif(MSVC)
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  ## shmem transport not working on MacOS, disable them all together
+  set(TEST_EXCLUDE_LABELS SHMEM)
+endif()
+
 add_subdirectory(dds)
 ace_add_optional_subdirectory(tools)
 ace_add_optional_subdirectory(examples/DCPS)
@@ -37,6 +48,7 @@ ace_add_optional_subdirectory(performance-tests)
 ace_add_optional_subdirectory(DevGuideExamples)
 ace_add_optional_subdirectory(java)
 add_subdirectory(bin/PerlDDS)
+add_subdirectory(docs)
 
 ace_install_package(OpenDDS
   CONFIG_OPTIONS ${DDS_OPTIONS}

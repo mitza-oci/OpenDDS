@@ -12,6 +12,8 @@ dds_add_ddsidl_jar(complex_idl_test_jar
   IDL2JNI_FLAGS -Wb,stub_export_include=complex_idl_test_Export.h
                 -Wb,stub_export_macro=complex_idl_test_Export
   IDL_FILES Complex_Idl.idl
+  SOURCES ComplexIDLTest.java
+          QuoteSupport.java
 )
 
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
@@ -20,5 +22,5 @@ dds_configure_test_files()
 
 dds_add_test("java/tests/complex_idl/run_test.pl"
   COMMAND run_test.pl
-  LABELS DCPS_MIN
+  LABELS DCPS_MIN JAVA
 )

@@ -2,8 +2,9 @@
 include(dcps_java_optional.cmake)
 
 list(APPEND BASE_IDL2JNI_FLAGS
-   -SS -I${TAO_ROOT} -I..
-   -I../.. -I${CMAKE_CURRENT_SOURCE_DIR}/../..
+   -Wb,native_lib_name=OpenDDS_DCPS_Java
+   -SS -I../.. -I${CMAKE_CURRENT_SOURCE_DIR}/../..
+   -I${TAO_ROOT} -I..
    -Wb,stub_export_include=dcps_java_export.h
    -Wb,stub_export_macro=dcps_java_Export
 )
@@ -97,7 +98,20 @@ create_javah(GENERATED_FILES OpenDDS_Dcps_jar_headers
           OpenDDS.DCPS.transport.TransportInst
           OpenDDS.DCPS.transport.TransportConfig
   CLASSPATH "${OPENDDS_JARS}"
+  OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/javah
 )
+
+
+foreach(input ${OpenDDS_Dcps_jar_headers})
+  file(RELATIVE_PATH output ${CMAKE_CURRENT_BINARY_DIR}/javah ${input})
+  set(output ${CMAKE_CURRENT_BINARY_DIR}/${output})
+  add_custom_command(
+    OUTPUT ${output}
+    DEPENDS ${input}
+    COMMAND ${CMAKE_COMMAND} "-DINPUT=${input}" "-DOUTPUT=${output}" -P ${CMAKE_CURRENT_SOURCE_DIR}/replace_jni_h.cmake
+  )
+  list(APPEND OpenDDS_DCPS_Java_headers ${output})
+endforeach()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_lib(OpenDDS_DCPS_Java
@@ -111,10 +125,18 @@ ace_add_lib(OpenDDS_DCPS_Java
                         OpenDDS_Tcp
                         OpenDDS_Udp
                         OpenDDS_Rtps_Udp
+                        TAO_PortableServer
                         tao_java
+)
+
+ace_target_cxx_sources(OpenDDS_DCPS_Java
+  SOURCE_FILES DDS_Qos_jni.cpp
+               OpenDDS_DCPS_jni.cpp
+  HEADER_FILES dcps_java_export.h
+               OpenDDS_jni_helpers.h
 )
 
 target_sources(OpenDDS_DCPS_Java PRIVATE
   ${OpenDDS_Dcps_Java_idl_CXX_OUTPUTS}
-  ${OpenDDS_Dcps_jar_headers}
+  ${OpenDDS_DCPS_Java_headers}
 )

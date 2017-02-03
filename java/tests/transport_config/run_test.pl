@@ -25,7 +25,7 @@ my $debug_opt = ($debug eq '0') ? ''
 
 my $test_opts = "-DCPSConfigFile dcps.ini $debug_opt";
 
-my $TEST = new PerlDDS::Process_Java ('TransportConfigTest', $test_opts);
+my $TEST = new PerlDDS::Process_Java ('TransportConfigTest', $test_opts, ['transport_config.jar']);
 
 my $TestResult = $TEST->SpawnWaitKill (300);
 if ($TestResult != 0) {

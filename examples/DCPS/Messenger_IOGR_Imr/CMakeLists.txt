@@ -77,11 +77,5 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Subscriber
   HEADER_FILES DataReaderListener.h
 )
 
-file(READ "run_test.pl" RUN_TEST_CONTENT)
-string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT ${RUN_TEST_CONTENT})
-file(GENERATE OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/run_test.pl CONTENT ${RUN_TEST_CONTENT})
-
-file(COPY pub.ini sub.ini
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+dds_configure_test_files()

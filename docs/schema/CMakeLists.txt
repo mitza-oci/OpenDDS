@@ -1,0 +1,1 @@
+configure_file(dds_qos.xsd dds_qos.xsd)

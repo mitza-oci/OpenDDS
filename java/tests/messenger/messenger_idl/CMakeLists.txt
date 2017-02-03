@@ -1,10 +1,10 @@
 
-ace_add_lib(messenger_idl
+ace_add_lib(messenger_idl_test
   DEFINE_SYMBOL MESSENGER_IDL_TEST_BUILD_DLL
 )
 
 dds_add_ddsidl_jar(messenger_idl_jar
-  LIB messenger_idl
+  LIB messenger_idl_test
   OUTPUT_NAME messenger_idl_test
   TAO_IDL_FLAGS -Wb,stub_export_include=messenger_idl_test_Export.h
                 -Wb,stub_export_macro=messenger_idl_test_Export

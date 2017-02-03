@@ -1,2 +1,5 @@
 project: dcps_test_java {
+  specific {
+    jarname  = transport_config
+  }
 }
