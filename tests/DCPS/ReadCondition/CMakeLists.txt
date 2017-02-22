@@ -18,7 +18,8 @@ ace_target_cxx_sources(ReadCondition
 
 dds_idl_sources(
   TARGETS ReadCondition
-  TAO_IDL_FLAGS -SS
+  TAO_IDL_FLAGS -SS -o GeneratedCode
+  DDS_IDL_FLAGS -o GeneratedCode
   IDL_FILES Messenger.idl
 )
 

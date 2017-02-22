@@ -22,6 +22,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_lib(tao_java
   DEFINE_SYMBOL TAO_JAVA_BUILD_DLL
   PACKAGE OpenDDS
+  FOLDER java/tao
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
                              $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java>
@@ -38,6 +39,10 @@ add_jar(tao_java_jar
   INCLUDE_JARS i2jrt
   VERSION ${OpenDDS_VERSION}
   SOURCES ${tao_java_idl_JAVA_OUTPUTS}
+)
+
+set_target_properties(tao_java_jar PROPERTIES
+  FOLDER java/tao
 )
 
 install_jar(tao_java_jar DESTINATION ${OpenDDS_INSTALL_DIR}/lib)

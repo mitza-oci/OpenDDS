@@ -3,6 +3,11 @@ add_jar(publisher_idl_test
   SOURCES TestPublisher.java
 )
 
+set_target_properties(publisher_idl_test PROPERTIES
+  FOLDER java/tests/messenger/publisher
+)
+
+
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 

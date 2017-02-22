@@ -77,6 +77,12 @@ add_jar(OpenDDS_Dcps_jar
           ${OpenDDS_Dcps_Java_idl_JAVA_OUTPUTS}
 )
 
+set_target_properties(OpenDDS_Dcps_jar PROPERTIES
+  FOLDER java/dds
+)
+
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/javah)
+
 create_javah(GENERATED_FILES OpenDDS_Dcps_jar_headers
   CLASSES OpenDDS.DCPS.TheParticipantFactory
           OpenDDS.DCPS.TheServiceParticipant
@@ -118,6 +124,7 @@ ace_add_lib(OpenDDS_DCPS_Java
   OUTPUT_NAME OpenDDS_DCPS_Java
   DEFINE_SYMBOL DCPS_JAVA_BUILD_DLL
   PACKAGE OpenDDS
+  FOLDER java/dds
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
                              $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java>

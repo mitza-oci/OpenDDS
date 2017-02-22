@@ -40,6 +40,8 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
   set(TEST_EXCLUDE_LABELS SHMEM)
 endif()
 
+set(DDS_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
 add_subdirectory(dds)
 ace_add_optional_subdirectory(tools)
 ace_add_optional_subdirectory(examples/DCPS)
@@ -51,7 +53,7 @@ add_subdirectory(bin/PerlDDS)
 add_subdirectory(docs)
 
 ace_install_package(OpenDDS
-  CONFIG_OPTIONS ${DDS_OPTIONS}
+  CONFIG_OPTIONS ${DDS_OPTIONS} DDS_BINARY_DIR
   PREREQUISITE TAO
   EXTRA_CMAKE_FILES cmake/dds_idl_sources.cmake
                     cmake/opendds_aspects.cmake

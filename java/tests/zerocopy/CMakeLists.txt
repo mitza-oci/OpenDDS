@@ -3,6 +3,11 @@ add_jar(zerocopy_java_test
   SOURCES ZeroCopy.java
 )
 
+set_target_properties(zerocopy_java_test PROPERTIES
+  FOLDER java/tests/zerocopy
+)
+
+
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 

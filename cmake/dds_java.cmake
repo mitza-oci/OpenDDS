@@ -86,7 +86,7 @@ function(dds_idl2jni_command name)
 endfunction()
 
 function(dds_add_taoidl_jar _target_name)
-  set(oneValueArgs OUTPUT_NAME VERSION LIB OUTPUT_DIR)
+  set(oneValueArgs OUTPUT_NAME VERSION LIB OUTPUT_DIR FOLDER)
   set(multiValueArgs TAO_IDL_FLAGS IDL2JNI_FLAGS IDL_FILES INCLUDE_JARS SOURCES)
   cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -134,10 +134,14 @@ function(dds_add_taoidl_jar _target_name)
     SOURCES ${${_target_name}_idl2jni_JAVA_OUTPUTS} ${_arg_SOURCES}
   )
 
+  if (DEFINED _arg_FOLDER)
+    set_target_properties(${_target_name} PROPERTIES FOLDER ${_arg_FOLDER})
+  endif()
+
 endfunction()
 
 function(dds_add_ddsidl_jar _target_name)
-  set(oneValueArgs OUTPUT_NAME VERSION LIB OUTPUT_DIR)
+  set(oneValueArgs OUTPUT_NAME VERSION LIB OUTPUT_DIR FOLDER)
   set(multiValueArgs TAO_IDL_FLAGS DDS_IDL_FLAGS IDL2JNI_FLAGS IDL_FILES INCLUDE_JARS SOURCES)
   cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -190,5 +194,9 @@ function(dds_add_ddsidl_jar _target_name)
     INCLUDE_JARS i2jrt OpenDDS_Dcps_jar  ${_arg_INCLUDE_JARS}
     SOURCES ${${_target_name}_idl2jni_JAVA_OUTPUTS} ${_arg_SOURCES} ${DDS_IDL_JAVA_OUTPUTS}
   )
+
+  if (DEFINED _arg_FOLDER)
+    set_target_properties(${_target_name} PROPERTIES FOLDER ${_arg_FOLDER})
+  endif()
 
 endfunction()

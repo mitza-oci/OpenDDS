@@ -10,6 +10,10 @@ add_jar(i2jrt
   OUTPUT_DIR ${CMAKE_BINARY_DIR}/lib
 )
 
+set_target_properties(i2jrt PROPERTIES
+  FOLDER java/idl2jni/runtime
+)
+
 create_javah(GENERATED_FILES i2jrt_headers
   CLASSES i2jrt.ORB i2jrt.TAOLocalObject i2jrt.TAOObject
   CLASSPATH i2jrt

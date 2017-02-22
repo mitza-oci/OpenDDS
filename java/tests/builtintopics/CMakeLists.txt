@@ -5,6 +5,10 @@ add_jar(builtintopics_test
   SOURCES BuiltinTopicsTest.java
 )
 
+set_target_properties(builtintopics_test PROPERTIES
+  FOLDER java/tests/buildintopics
+)
+
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 

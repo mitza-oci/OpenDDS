@@ -3,6 +3,10 @@ add_jar(transport_config
   SOURCES TransportConfigTest.java
 )
 
+set_target_properties(transport_config PROPERTIES
+  FOLDER java/tests/transport_config
+)
+
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 

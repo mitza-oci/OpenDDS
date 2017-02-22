@@ -54,8 +54,13 @@ list(APPEND DDS_BASE_IDL_FLAGS
 )
 
 include(dcps_optional_safety.cmake)
+
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CorbaSeq)
 include(CorbaSeq/CMakeLists.txt)
+
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CORBA/tao)
 include(CORBA/tao/CMakeLists.txt)
+
 include(DCPS/CMakeLists.txt)
 include(DCPS/transport/framework/CMakeLists.txt)
 include(DCPS/yard/CMakeLists.txt)
