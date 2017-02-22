@@ -21,11 +21,26 @@ function(dds_configure_test_files)
   foreach(script ${test_scripts})
     file(READ ${script} RUN_TEST_CONTENT)
 
-    string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "\$orbsvcs{'Naming_Service'}" "\"$<TARGET_FILE:Naming_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_nsadd" "$<TARGET_FILE:tao_nsadd>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    if (TARGET ImR_Locator_Service)
+      string(REPLACE "\$orbsvcs{'ImplRepo_Service'}" "\"$<TARGET_FILE:ImR_Locator_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    endif()
+
+    if (TARGET ImR_Activator_Service)
+      string(REPLACE "\$orbsvcs{'ImR_Activator'}" "\"$<TARGET_FILE:ImR_Activator_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    endif()
+
+    if (TARGET Naming_Service)
+      string(REPLACE "\$orbsvcs{'Naming_Service'}" "\"$<TARGET_FILE:Naming_Service>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    endif()
+
+    if (TARGET tao_nsadd)
+      string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_nsadd" "$<TARGET_FILE:tao_nsadd>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    endif()
+
+    if (TARGET tao_imr)
+      string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    endif()
+
     string(REPLACE "\$ENV{DDS_ROOT}/bin" "${DDS_BINARY_DIR}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "\$ENV{ACE_ROOT}/bin" "${ACE_ROOT}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "$TAO_ROOT" "${TAO_DIR}/.." RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
