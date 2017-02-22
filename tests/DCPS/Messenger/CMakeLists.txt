@@ -196,5 +196,5 @@ dds_add_test("tests/DCPS/Messenger/run_corbaloc_test.pl host_port_only"
 
 dds_add_test("tests/DCPS/Messenger/run_ns_test.pl"
   COMMAND run_ns_test.pl
-  REQUIRES "TARGET TAO_Svc_Utils" OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "TARGET TAO_Svc_Utils" "TARGET Naming_Service" OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
 )
