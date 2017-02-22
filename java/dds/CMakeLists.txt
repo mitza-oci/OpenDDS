@@ -137,7 +137,7 @@ ace_add_lib(OpenDDS_DCPS_Java
 )
 
 ace_target_cxx_sources(OpenDDS_DCPS_Java
-  SOURCE_FILES DDS_Qos_jni.cpp
+  SOURCE_FILES DDS_QoS_jni.cpp
                OpenDDS_DCPS_jni.cpp
   HEADER_FILES dcps_java_export.h
                OpenDDS_jni_helpers.h
