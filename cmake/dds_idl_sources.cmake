@@ -37,8 +37,8 @@ endif()
 
 list(APPEND TAO_BASE_IDL_FLAGS -I${DDS_ROOT})
 
-function(add_dds_idl_command Name)
-  set(add_dds_idl_command_usage "add_dds_idl_command(<Name> TAO_IDL_FLAGS flags DDS_IDL_FLAGS flags IDL_FILES Input1 Input2 ...]")
+function(dds_idl_command Name)
+  set(dds_idl_command_usage "dds_idl_command(<Name> TAO_IDL_FLAGS flags DDS_IDL_FLAGS flags IDL_FILES Input1 Input2 ...]")
 
   set(multiValueArgs TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES WORKING_DIRECTORY)
   cmake_parse_arguments(_arg "NO_TAO_IDL" "" "${multiValueArgs}" ${ARGN})
@@ -136,7 +136,7 @@ function(add_dds_idl_command Name)
   endforeach(input)
 
   if (NOT _arg_NO_TAO_IDL)
-    add_tao_idl_command(${Name}
+    tao_idl_command(${Name}
       IDL_FLAGS ${_arg_TAO_IDL_FLAGS}
       IDL_FILES ${_taoidl_inputs}
     )
@@ -183,7 +183,7 @@ function(dds_idl_sources)
     list(APPEND _arg_DDS_IDL_FLAGS ${${aspect}_DDS_IDL_FLAGS})
   endforeach()
 
-  add_dds_idl_command(_idl
+  dds_idl_command(_idl
     ${OPTIONAL_TAO_IDL}
     TAO_IDL_FLAGS ${_arg_TAO_IDL_FLAGS}
     DDS_IDL_FLAGS ${_arg_DDS_IDL_FLAGS}
