@@ -5,7 +5,7 @@ find_package(JNI)
 ace_requires(JAVA_FOUND JNI_FOUND)
 
 option(FULL_JRE "" ON)
-set(OPENDDS_JARS i2jrt OpenDDS_Dcps_jar CACHE INTERNAL "")
+set(OPENDDS_JARS i2jrt OpenDDS_DCPS_jar CACHE INTERNAL "")
 if (NOT FULL_JRE)
   list(APPEND OPENDDS_JARS i2jrt_compact)
 endif()

@@ -44,8 +44,8 @@ dds_idl2jni_command(OpenDDS_Dcps_Java_idl
             ../../dds/DdsDcpsSubscriptionExt.idl
 )
 
-add_jar(OpenDDS_Dcps_jar
-  OUTPUT_NAME OpenDDS_Dcps
+add_jar(OpenDDS_DCPS_jar
+  OUTPUT_NAME OpenDDS_DCPS
   OUTPUT_DIR ${PROJECT_BINARY_DIR}/lib
   INCLUDE_JARS i2jrt
   SOURCES OpenDDS/DCPS/TheParticipantFactory.java
@@ -77,13 +77,13 @@ add_jar(OpenDDS_Dcps_jar
           ${OpenDDS_Dcps_Java_idl_JAVA_OUTPUTS}
 )
 
-set_target_properties(OpenDDS_Dcps_jar PROPERTIES
+set_target_properties(OpenDDS_DCPS_jar PROPERTIES
   FOLDER java/dds
 )
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/javah)
 
-create_javah(GENERATED_FILES OpenDDS_Dcps_jar_headers
+create_javah(GENERATED_FILES OpenDDS_DCPS_jar_headers
   CLASSES OpenDDS.DCPS.TheParticipantFactory
           OpenDDS.DCPS.TheServiceParticipant
           DDS.PARTICIPANT_QOS_DEFAULT
@@ -108,7 +108,7 @@ create_javah(GENERATED_FILES OpenDDS_Dcps_jar_headers
 )
 
 
-foreach(input ${OpenDDS_Dcps_jar_headers})
+foreach(input ${OpenDDS_DCPS_jar_headers})
   file(RELATIVE_PATH output ${CMAKE_CURRENT_BINARY_DIR}/javah ${input})
   set(output ${CMAKE_CURRENT_BINARY_DIR}/${output})
   add_custom_command(

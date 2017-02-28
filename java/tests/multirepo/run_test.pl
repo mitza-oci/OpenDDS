@@ -42,11 +42,8 @@ my $DCPSREPO1 = PerlDDS::create_process("$DDS_ROOT/bin/DCPSInfoRepo",
 my $DCPSREPO2 = PerlDDS::create_process("$DDS_ROOT/bin/DCPSInfoRepo",
                   "$debug_opt -ORBLogFile DCPSInfoRepo2.log -o $dcpsrepo2_ior");
 
-my $classes = [];
-$classes = [ 'multirepo_test.jar' ] if -r 'multirepo_test.jar';
-
-my $MASTER = new PerlDDS::Process_Java("MultiRepoMaster", $master_opts, $classes);
-my $SLAVE = new PerlDDS::Process_Java("MultiRepoSlave", $slave_opts, $classes);
+my $MASTER = new PerlDDS::Process_Java("MultiRepoMaster", $master_opts, ['multirepo_test.jar']);
+my $SLAVE = new PerlDDS::Process_Java("MultiRepoSlave", $slave_opts, ['multirepo_test.jar']);
 
 $DCPSREPO1->Spawn();
 if (PerlACE::waitforfile_timed($dcpsrepo1_ior, 30) == -1) {

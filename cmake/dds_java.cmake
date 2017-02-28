@@ -191,7 +191,7 @@ function(dds_add_ddsidl_jar _target_name)
     OUTPUT_NAME "${_arg_OUTPUT_NAME}"
     OUTPUT_DIR "${_arg_OUTPUT_DIR}"
     ${version_option}
-    INCLUDE_JARS i2jrt OpenDDS_Dcps_jar  ${_arg_INCLUDE_JARS}
+    INCLUDE_JARS i2jrt OpenDDS_DCPS_jar  ${_arg_INCLUDE_JARS}
     SOURCES ${${_target_name}_idl2jni_JAVA_OUTPUTS} ${_arg_SOURCES} ${DDS_IDL_JAVA_OUTPUTS}
   )
 

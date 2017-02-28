@@ -65,7 +65,7 @@ PerlACE::add_lib_path("$DDS_ROOT/tests/DCPS/Messenger");
 
 my $SUB = new PerlDDS::Process_Java('TestSubscriber', $sub_opts,
             ["$DDS_ROOT/java/tests/messenger/messenger_idl/".
-             'messenger_idl_test.jar']);
+             'messenger_idl_test.jar', "subscriber_idl_test.jar"]);
 
 if ($use_repo) {
     print $DCPSREPO->CommandLine() . "\n";
