@@ -8,70 +8,56 @@ endif()
 
 ace_requires(BUILT_IN_TOPICS)
 
-ace_add_lib(FaceUnitTests_Qossettings
-  OUTPUT_NAME FaceUnitTests_Qossettings
+ace_add_exe(FaceUnitTests_Qossettings
+  OUTPUT_NAME QosSettingsTest
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
-)
-ace_target_cxx_sources(FaceUnitTests_Qossettings
-  SOURCE_FILES QosSettingsTest.cpp
+  LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Qossettings
   SOURCE_FILES QosSettingsTest.cpp
 )
 
 
-ace_add_lib(FaceUnitTests_Memorypool
-  OUTPUT_NAME FaceUnitTests_Memorypool
+ace_add_exe(FaceUnitTests_Memorypool
+  OUTPUT_NAME MemoryPoolTest
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
-)
-ace_target_cxx_sources(FaceUnitTests_Memorypool
-  SOURCE_FILES MemoryPoolTest.cpp
+  LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Memorypool
   SOURCE_FILES MemoryPoolTest.cpp
 )
 
 
-ace_add_lib(FaceUnitTests_Freeindex
-  OUTPUT_NAME FaceUnitTests_Freeindex
+ace_add_exe(FaceUnitTests_Freeindex
+  OUTPUT_NAME FreeIndexTest
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
-)
-ace_target_cxx_sources(FaceUnitTests_Freeindex
-  SOURCE_FILES FreeIndexTest.cpp
+  LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Freeindex
   SOURCE_FILES FreeIndexTest.cpp
 )
 
 
-ace_add_lib(FaceUnitTests_Safetyprofilepool
-  OUTPUT_NAME FaceUnitTests_Safetyprofilepool
+ace_add_exe(FaceUnitTests_Safetyprofilepool
+  OUTPUT_NAME SafetyProfilePoolTest
   REQUIRES "NOT NO_OPENDDS_SAFETY_PROFILE"
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
-)
-ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
-  SOURCE_FILES SafetyProfilePoolTest.cpp
+  LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
   SOURCE_FILES SafetyProfilePoolTest.cpp
 )
 
 
-ace_add_lib(FaceUnitTests_Sequences
-  OUTPUT_NAME FaceUnitTests_Sequences
+ace_add_exe(FaceUnitTests_Sequences
+  OUTPUT_NAME SequencesTest
   FOLDER tests/FACE/Unit
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
+  LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Sequences
   SOURCE_FILES SequencesTest.cpp
 )
-ace_target_cxx_sources(FaceUnitTests_Sequences
-  SOURCE_FILES SequencesTest.cpp
-)
+
 
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()

@@ -8,13 +8,10 @@ endif()
 
 ace_requires(BUILT_IN_TOPICS)
 
-ace_add_lib(FACE_idl_test_fixed
-  OUTPUT_NAME FACE_idl_test_fixed
+ace_add_exe(FACE_idl_test_fixed
+  OUTPUT_NAME TestFixed
   FOLDER tests/FACE/Compiler/idl_test_fixed
-  PUBLIC_LINK_LIBRARIES OpenDDS_FACE
-)
-ace_target_cxx_sources(FACE_idl_test_fixed
-  SOURCE_FILES TestFixed.cpp
+  LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FACE_idl_test_fixed
   SOURCE_FILES TestFixed.cpp
