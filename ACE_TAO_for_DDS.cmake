@@ -2,8 +2,12 @@
 ## Usage:
 ## cmake -C path_to/ACE_TAO_for_DDS.cmake path_to/ACE_TAO
 
-set(WHITELIST_TARGETS
+set(ACE_WHITELIST_TARGETS
   ACE ACE_XML_Utils ace_gperf ACEXML ACEXML_Parser
+  CACHE STRING ""
+)
+
+set(TAO_WHITELIST_TARGETS
   TAO_IDL_FE TAO_IDL_BE TAO_IDL_EXE
   TAO TAO_AnyTypeCode TAO_CodecFactory TAO_BiDirGIOP TAO_CSD_Framework TAO_CSD_ThreadPool
   TAO_Codeset TAO_DynamicInterface TAO_ImR_Client TAO_IORManip TAO_IORTable TAO_Messaging
