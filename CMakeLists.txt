@@ -1,14 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(OpenDDS CXX)
 
-
-if (DEFINED ACE_TAO_BUILD_ROOT)
-  set(ACE_DIR ${ACE_TAO_BUILD_ROOT}/ACE/cmake)
-  set(TAO_DIR ${ACE_TAO_BUILD_ROOT}/TAO/cmake)
-endif()
-
 include(cmake/find_or_download_tao.cmake)
-
 
 if (NOT OPENDDS_VERSION)
   file(READ "VERSION" VERSION_FILE_CONTENT)
