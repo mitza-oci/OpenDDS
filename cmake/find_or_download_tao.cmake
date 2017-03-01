@@ -6,7 +6,7 @@ if (NOT TARGET TAO)
     include(ACE_TAO_for_DDS.cmake)
     add_subdirectory(${ACE_TAO_SOURCE_DIR} ${ACE_TAO_BINARY_DIR})
   else()
-    find_package(TAO CONFIG)
+    find_package(TAO QUIET CONFIG)
 
     if (NOT TAO_FOUND)
       include(cmake/DownloadProject.cmake)

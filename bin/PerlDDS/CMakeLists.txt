@@ -11,7 +11,7 @@ file(COPY ${files}
 
 
 file(READ Run_Test.pm PM_CONTENT)
-string(REPLACE "use File::Spec;" "use File::Spec;\n$ACE_ROOT=\"$<TARGET_FILE_DIR:ACE>/..\";\n$DDS_ROOT=\"${PROJECT_BINARY_DIR}\";" PM_CONTENT "${PM_CONTENT}")
+string(REPLACE "use File::Spec;" "use File::Spec;\n\$ENV{'ACE_ROOT'}=\"$<TARGET_FILE_DIR:ACE>/..\";\n$ACE_ROOT=\"$<TARGET_FILE_DIR:ACE>/..\";\n$DDS_ROOT=\"${PROJECT_BINARY_DIR}\";" PM_CONTENT "${PM_CONTENT}")
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Run_Test.pm" CONTENT "${PM_CONTENT}")
 
 file(READ Process_Java.pm PM_CONTENT)
