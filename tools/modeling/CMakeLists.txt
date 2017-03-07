@@ -1,0 +1,5 @@
+find_package(Java)
+ace_requires(JAVA_FOUND)
+include(../../cmake/dds_java.cmake)
+add_subdirectory(plugins)
+add_subdirectory(tests)

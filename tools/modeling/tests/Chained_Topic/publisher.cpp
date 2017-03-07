@@ -9,6 +9,8 @@
 #endif
 
 #include "model/Chained_TopicTraits.h"
+#include "model/Chained_DataTypeSupportC.h"
+
 #include <model/Sync.h>
 
 int ACE_TMAIN(int argc, ACE_TCHAR** argv)

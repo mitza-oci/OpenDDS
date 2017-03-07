@@ -9,6 +9,8 @@
 #endif
 
 #include "model/Chained_TopicTraits.h"
+#include "model/Chained_DataTypeSupportC.h"
+
 #include <model/NullReaderListener.h>
 #include <model/Sync.h>
 

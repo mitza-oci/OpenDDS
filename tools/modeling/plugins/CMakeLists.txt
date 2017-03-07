@@ -1,0 +1,1 @@
+add_subdirectory(org.opendds.modeling.sdk.model.editor)
