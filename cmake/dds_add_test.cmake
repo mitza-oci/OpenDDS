@@ -82,5 +82,6 @@ function(dds_add_test name)
 
   set_tests_properties("${name}" PROPERTIES
     LABELS "${_arg_LABELS}"
+    RESOURCE_LOCK "${CMAKE_CURRENT_LIST_FILE}"
   )
 endfunction()

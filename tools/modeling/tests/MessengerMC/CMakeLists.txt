@@ -1,6 +1,4 @@
 
-ace_requires(MCAST)
-
 dds_add_model_lib(MessengerMC)
 
 ace_add_exe(MessengerMC_xmlPublisher
@@ -25,4 +23,5 @@ dds_configure_test_files()
 
 dds_add_test("tools/modeling/tests/MessengerMC/run_test.pl"
   COMMAND run_test.pl
+  LABELS MCAST
 )

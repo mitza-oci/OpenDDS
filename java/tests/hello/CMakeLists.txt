@@ -18,8 +18,10 @@ dds_add_taoidl_jar(hello_java_client
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
-
+if(EXISTS "${TAO_ROOT}/tests/Hello/server")
 dds_add_test("java/tests/hello/run_test.pl"
   COMMAND run_test.pl
   LABELS DCPS_MIN JAVA
 )
+endif()
+
