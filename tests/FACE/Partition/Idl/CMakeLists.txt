@@ -8,7 +8,6 @@ ace_add_lib(FacePartitionIdl
 )
 dds_idl_sources(
   TARGETS FacePartitionIdl
-  ASPECTS FACE
   DDS_IDL_FLAGS -Wb,export_include=FaceMessenger_Export.h
                 -Wb,export_macro=FaceMessenger_Export
   TAO_IDL_FLAGS -Wb,export_include=FaceMessenger_Export.h

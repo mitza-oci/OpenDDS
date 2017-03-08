@@ -37,6 +37,9 @@ endif()
 
 list(APPEND TAO_BASE_IDL_FLAGS -I${DDS_ROOT})
 
+set(FACE_TAO_IDL_FLAGS -SS -Wb,no_fixed_err)
+set(FACE_DDS_IDL_FLAGS -GfaceTS -Lface)
+
 function(dds_idl_command Name)
   set(dds_idl_command_usage "dds_idl_command(<Name> TAO_IDL_FLAGS flags DDS_IDL_FLAGS flags IDL_FILES Input1 Input2 ...]")
 
@@ -154,14 +157,17 @@ endfunction()
 
 
 function(dds_idl_sources)
-  set(multiValueArgs TARGETS TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES ASPECTS)
+  set(multiValueArgs TARGETS TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES)
   cmake_parse_arguments(_arg "NO_TAO_IDL" "" "${multiValueArgs}" ${ARGN})
 
-  foreach(target ${_arg_TARGETS})
-    if (NOT TARGET ${target})
-      return()
-    endif()
-  endforeach()
+  set(is_face OFF)
+
+  list(GET _arg_TARGETS 0 first_target)
+  get_property(first_target_link_libs TARGET ${first_target} PROPERTY LINK_LIBRARIES)
+
+  if ("OpenDDS_FACE" IN_LIST first_target_link_libs)
+    set(is_face ON)
+  endif()
 
   foreach(path ${_arg_IDL_FILES})
     if (IS_ABSOLUTE ${path})
@@ -178,10 +184,18 @@ function(dds_idl_sources)
     set(OPTIONAL_TAO_IDL NO_TAO_IDL)
   endif()
 
-  foreach(aspect ${_arg_ASPECTS})
-    list(APPEND _arg_TAO_IDL_FLAGS ${${aspect}_TAO_IDL_FLAGS})
-    list(APPEND _arg_DDS_IDL_FLAGS ${${aspect}_DDS_IDL_FLAGS})
-  endforeach()
+  # foreach(aspect ${_arg_ASPECTS})
+  #   list(APPEND _arg_TAO_IDL_FLAGS ${${aspect}_TAO_IDL_FLAGS})
+  #   list(APPEND _arg_DDS_IDL_FLAGS ${${aspect}_DDS_IDL_FLAGS})
+  #   if (NOT is_face)
+  #     message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} ASPECT is_fade not match")
+  #   endif()
+  # endforeach()
+
+  if (is_face)
+    list(APPEND _arg_TAO_IDL_FLAGS ${FACE_TAO_IDL_FLAGS})
+    list(APPEND _arg_DDS_IDL_FLAGS ${FACE_DDS_IDL_FLAGS})
+  endif()
 
   dds_idl_command(_idl
     ${OPTIONAL_TAO_IDL}
@@ -192,7 +206,7 @@ function(dds_idl_sources)
   )
 
   foreach(target ${_arg_TARGETS})
-    target_sources(${target} PRIVATE ${_idl_OUTPUT_FILES} ${_arg_IDL_FILES})
+    ace_target_sources(${target} PRIVATE ${_idl_OUTPUT_FILES} ${_arg_IDL_FILES})
     list(APPEND packages ${PACKAGE_OF_${target}})
   endforeach()
 

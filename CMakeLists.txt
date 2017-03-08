@@ -14,7 +14,6 @@ option(BUILD_SHARED_LIBS "" ON)
 set(DDS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(cmake/opendds_options.cmake)
-include(cmake/opendds_aspects.cmake)
 include(cmake/dds_idl_sources.cmake)
 
 
@@ -49,7 +48,6 @@ ace_install_package(OpenDDS
   CONFIG_OPTIONS ${DDS_OPTIONS} DDS_BINARY_DIR
   PREREQUISITE TAO
   EXTRA_CMAKE_FILES cmake/dds_idl_sources.cmake
-                    cmake/opendds_aspects.cmake
 )
 
 

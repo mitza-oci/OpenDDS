@@ -15,7 +15,6 @@ ace_add_lib(FaceConformanceIdl
 )
 dds_idl_sources(
   TARGETS FaceConformanceIdl
-  ASPECTS FACE
   DDS_IDL_FLAGS -Wb,export_include=SampleModel_Export.h
                 -Wb,export_macro=SampleModel_Export
   TAO_IDL_FLAGS -Wb,export_include=SampleModel_Export.h

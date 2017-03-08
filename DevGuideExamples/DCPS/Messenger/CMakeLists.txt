@@ -42,10 +42,6 @@ dds_idl_sources(
 )
 
 
-dds_idl_sources(
-  IDL_FILES Messenger.idl
-)
-
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 

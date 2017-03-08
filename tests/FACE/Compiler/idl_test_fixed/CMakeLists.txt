@@ -19,7 +19,6 @@ ace_target_cxx_sources(FACE_idl_test_fixed
 
 dds_idl_sources(
   TARGETS FACE_idl_test_fixed
-  ASPECTS FACE
   IDL_FILES Fixed.idl
 )
 

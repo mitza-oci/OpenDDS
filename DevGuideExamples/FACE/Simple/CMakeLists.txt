@@ -15,7 +15,6 @@ ace_add_lib(FaceMessenger_Idl
 )
 dds_idl_sources(
   TARGETS FaceMessenger_Idl
-  ASPECTS FACE
   DDS_IDL_FLAGS -Wb,export_include=FaceMessenger_Export.h
                 -Wb,export_macro=FaceMessenger_Export
   TAO_IDL_FLAGS -Wb,export_include=FaceMessenger_Export.h

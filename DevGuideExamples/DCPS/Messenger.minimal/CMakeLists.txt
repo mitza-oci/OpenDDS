@@ -47,9 +47,3 @@ dds_idl_sources(
   TARGETS MessengerMinimal_Subscriber
   IDL_FILES Messenger.idl
 )
-
-
-dds_idl_sources(
-  IDL_FILES Messenger.idl
-)
-
