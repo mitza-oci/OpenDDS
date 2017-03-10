@@ -142,7 +142,7 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl stack"
 
 dds_add_test("tests/DCPS/Messenger/run_test.pl ipv6"
   COMMAND run_test.pl ipv6
-  REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE ACE_HAS_IPV6
   LABELS IPV6
 )
 
