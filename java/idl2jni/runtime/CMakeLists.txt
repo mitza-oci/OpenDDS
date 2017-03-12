@@ -21,6 +21,11 @@ create_javah(GENERATED_FILES i2jrt_headers
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+if (NOT APPLE)
+  # In MacOS linking with JNI libraries causes coredump
+  set(JNI_LIBS ${JNI_LIBRARIES})
+endif()
+
 ace_add_lib(idl2jni_runtime
   DEFINE_SYMBOL IDL2JNI_RUNTIME_BUILD_DLL
   PACKAGE OpenDDS
@@ -28,7 +33,7 @@ ace_add_lib(idl2jni_runtime
   PUBLIC_INCLUDE_DIRECTORIES ${JNI_INCLUDE_DIRS}
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                              $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java/idl2jni/runtime>
-  PUBLIC_LINK_LIBRARIES TAO ${JNI_LIBRARIES}
+  PUBLIC_LINK_LIBRARIES TAO ${JNI_LIBS}
 )
 
 ace_target_cxx_sources(idl2jni_runtime
