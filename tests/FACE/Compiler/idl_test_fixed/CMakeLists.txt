@@ -28,4 +28,5 @@ dds_configure_test_files()
 
 dds_add_test("tests/FACE/Compiler/idl_test_fixed/run_test.pl"
   COMMAND run_test.pl
+  RESOURCE_LOCK FACE
 )

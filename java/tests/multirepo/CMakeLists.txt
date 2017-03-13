@@ -26,4 +26,5 @@ dds_configure_test_files()
 dds_add_test("java/tests/multirepo/run_test.pl"
   COMMAND run_test.pl
   LABELS DCPS_MIN JAVA
+  RESOURCE_LOCK JAVA
 )

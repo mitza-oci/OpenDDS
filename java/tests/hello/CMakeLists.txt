@@ -23,6 +23,7 @@ if(EXISTS "${TAO_ROOT}/tests/Hello/server")
 dds_add_test("java/tests/hello/run_test.pl"
   COMMAND run_test.pl
   LABELS DCPS_MIN JAVA
+  RESOURCE_LOCK JAVA
 )
 endif()
 
