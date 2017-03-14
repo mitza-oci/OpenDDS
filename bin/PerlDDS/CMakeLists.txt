@@ -13,6 +13,7 @@ file(COPY ${files}
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 file(READ Run_Test.pm PM_CONTENT)
+string(REPLACE "\$ENV{DDS_ROOT}/bin/DCPSInfoRepo" "$<TARGET_FILE:DCPSInfoRepo>" PM_CONTENT "${PM_CONTENT}")
 string(REPLACE "use File::Spec;" "use File::Spec;\n\$ENV{'ACE_ROOT'}=\"$<TARGET_FILE_DIR:ACE>/..\";\n$ACE_ROOT=\"$<TARGET_FILE_DIR:ACE>/..\";\n$DDS_ROOT=\"${OpenDDS_BINARY_DIR}\";" PM_CONTENT "${PM_CONTENT}")
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Run_Test.pm" CONTENT "${PM_CONTENT}")
 

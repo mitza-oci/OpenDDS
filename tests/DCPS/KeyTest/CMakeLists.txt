@@ -55,12 +55,12 @@ ace_target_cxx_sources(DDS_KeyTest_Keymarshalling
 )
 
 
-ace_add_exe(KeyTest_Md5
-  OUTPUT_NAME KeyTest_Md5
+ace_add_exe(KeyTest_MD5
+  OUTPUT_NAME KeyTest_MD5
   FOLDER tests/DCPS/KeyTest
   LINK_LIBRARIES OpenDDS_Rtps
 )
-ace_target_cxx_sources(KeyTest_Md5
+ace_target_cxx_sources(KeyTest_MD5
   SOURCE_FILES md5_test.cpp
 )
 

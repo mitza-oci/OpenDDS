@@ -33,8 +33,6 @@ else(TARGET Hello_Server)
   endif()
 endif(TARGET Hello_Server)
 
-get_filename_component(Hello_Server_dir ${Hello_Server_LOCATION} DIRECTORY)
-get_filename_component(TAO_ROOT ${Hello_Server_dir}/../.. ABSOLUTE)
 
 include(${DDS_ROOT}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
