@@ -1,16 +1,7 @@
 
-
-find_file(PERLACE_LOCATION Run_Test.pm
-          PATHS ${ACE_ROOT}/bin/PerlACE ${TAO_ROOT}/../ACE/bin/PerlACE ${TAO_ROOT}/../bin/PerlACE
-          NO_DEFAULT_PATH)
-
-if (PERLACE_LOCATION)
-  get_filename_component(PERLACE_LOCATION_DIR ${PERLACE_LOCATION} DIRECTORY)
-  get_filename_component(ACE_ROOT ${PERLACE_LOCATION_DIR}/../.. ABSOLUTE)
-  enable_testing()
-else()
-  message(WARNING "Cannot find PerlACE, no tests will be added")
-endif()
+set(PERLACE_DIR ${ACE_PACKAGE_DIR}/bin)
+set(DDS_ROOT $<TARGET_FILE_DIR:OpenDDS_Dcps>/..)
+set(PERLDDS_DIR ${DDS_ROOT}/bin)
 
 function(dds_configure_test_files)
   file(GLOB files *.ini *.conf *.xml)
@@ -41,11 +32,11 @@ function(dds_configure_test_files)
       string(REPLACE "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_FILE:tao_imr>" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     endif()
 
-    string(REPLACE "\$ENV{DDS_ROOT}/bin" "${OpenDDS_BINARY_DIR}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "\$ENV{ACE_ROOT}/bin" "${ACE_PACKAGE_DIR}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "$TAO_ROOT" "${TAO_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "$DDS_ROOT/bin" "${OpenDDS_BINARY_DIR}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    string(REPLACE "$ACE_ROOT/bin" "${ACE_PACKAGE_DIR}/bin" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$ENV{DDS_ROOT}/bin" "${PERLDDS_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "\$ENV{ACE_ROOT}/bin" "${PERLACE_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "$TAO_ROOT" "${TAO_ROOT}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "$DDS_ROOT/bin" "${PERLDDS_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    string(REPLACE "$ACE_ROOT/bin" "${PERLACE_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "use PerlDDS::Process_Java;" "use PerlDDS::Process_Java;\nPerlACE::add_lib_path(\"$DDS_ROOT/lib\");" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
 
     file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${script}" CONTENT "${RUN_TEST_CONTENT}")
@@ -79,6 +70,9 @@ function(dds_add_test name)
            COMMAND ${CMAKE_COMMAND} -E env perl ${_arg_COMMAND}
   )
   list(APPEND _arg_RESOURCE_LOCK "${CMAKE_CURRENT_LIST_FILE}")
+  if (RTPS IN_LIST _arg_LABELS)
+    list(APPEND _arg_RESOURCE_LOCK RTPS)
+  endif()
   set_tests_properties("${name}" PROPERTIES
     LABELS "${_arg_LABELS}"
     RESOURCE_LOCK "${_arg_RESOURCE_LOCK}"
