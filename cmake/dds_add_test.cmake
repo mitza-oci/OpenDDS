@@ -71,9 +71,9 @@ function(dds_add_test name)
            COMMAND ${CMAKE_COMMAND} -E env perl ${_arg_COMMAND}
   )
   list(APPEND _arg_RESOURCE_LOCK "${CMAKE_CURRENT_LIST_FILE}")
-  if (RTPS IN_LIST _arg_LABELS)
-    list(APPEND _arg_RESOURCE_LOCK RTPS)
-  endif()
+  # if (RTPS IN_LIST _arg_LABELS)
+  #   list(APPEND _arg_RESOURCE_LOCK RTPS)
+  # endif()
   set_tests_properties("${name}" PROPERTIES
     LABELS "${_arg_LABELS}"
     RESOURCE_LOCK "${_arg_RESOURCE_LOCK}"
