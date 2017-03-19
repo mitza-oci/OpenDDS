@@ -15,35 +15,32 @@ dds_configure_test_files()
 dds_add_test("java/tests/messenger/publisher/run_test.pl tcp"
   COMMAND run_test.pl tcp
   LABELS DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
 )
 
 
 dds_add_test("java/tests/messenger/publisher/run_test.pl udp"
   COMMAND run_test.pl udp
   LABELS DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
 )
 
 
 dds_add_test("java/tests/messenger/publisher/run_test.pl multicast"
   COMMAND run_test.pl multicast
   LABELS MCAST DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
 )
 
 
 dds_add_test("java/tests/messenger/publisher/run_test.pl rtps"
   COMMAND run_test.pl rtps
   LABELS MCAST RTPS DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
+  RESOURCE_LOCK JAVA_MESSENGER_RTPS
 )
 
 
 dds_add_test("java/tests/messenger/publisher/run_test.pl rtps_uni"
   COMMAND run_test.pl rtps_uni
   LABELS RTPS DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
+  RESOURCE_LOCK JAVA_MESSENGER_RTPS_UNI
 )
 
 
@@ -51,7 +48,7 @@ dds_add_test("java/tests/messenger/publisher/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
   REQUIRES BUILT_IN_TOPICS
   LABELS MCAST RTPS DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
+  RESOURCE_LOCK JAVA_MESSENGER_RTPS_DISC
 )
 
 
@@ -59,5 +56,5 @@ dds_add_test("java/tests/messenger/publisher/run_test.pl rtps_disc_tcp"
   COMMAND run_test.pl rtps_disc_tcp
   REQUIRES BUILT_IN_TOPICS
   LABELS MCAST RTPS DCPS_MIN JAVA
-  RESOURCE_LOCK JAVA
+  RESOURCE_LOCK JAVA_MESSENGER_RTPS_TCP
 )

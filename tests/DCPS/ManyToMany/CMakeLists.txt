@@ -89,6 +89,7 @@ dds_add_test("tests/DCPS/ManyToMany/run_test.pl rtps 1to1 small"
   COMMAND run_test.pl rtps 1to1 small
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   LABELS RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -96,12 +97,14 @@ dds_add_test("tests/DCPS/ManyToMany/run_test.pl rtps 1to1 large"
   COMMAND run_test.pl rtps 1to1 large
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
   LABELS RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
 dds_add_test("tests/DCPS/ManyToMany/run_test.pl rtps_disc 12to12 small"
   COMMAND run_test.pl rtps_disc 12to12 small
   LABELS RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -122,4 +125,5 @@ dds_add_test("tests/DCPS/ManyToMany/run_test.pl shmem 1to1 large"
 dds_add_test("tests/DCPS/ManyToMany/run_test.pl tcp 20to20 small orb_csdtp"
   COMMAND run_test.pl tcp 20to20 small orb_csdtp
   REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  RESOURCE_LOCK RTPS
 )

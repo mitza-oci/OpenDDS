@@ -151,6 +151,7 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl rtps"
   COMMAND run_test.pl rtps
   REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
   LABELS MCAST RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -158,6 +159,7 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_unicast"
   COMMAND run_test.pl rtps_unicast
   REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
   LABELS RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -165,6 +167,7 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
   REQUIRES OWNERSHIP_PROFILE
   LABELS MCAST RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -172,6 +175,7 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_disc_tcp"
   COMMAND run_test.pl rtps_disc_tcp
   REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
   LABELS MCAST RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -179,6 +183,7 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_disc_tcp thread_per"
   COMMAND run_test.pl rtps_disc_tcp thread_per
   REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
   LABELS MCAST RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
