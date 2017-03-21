@@ -35,11 +35,14 @@ BitSubscriptionListener::on_data_available(DDS::DataReader_ptr reader)
   DDS::ReturnCode_t error = bit_reader_i->read_next_sample(msg, info);
   if (error == DDS::RETCODE_OK) {
     ACE_GUARD(ACE_SYNCH_MUTEX, conditionGuard, condition.mutex());
-    matched = true;
-    sub_internal_key[0] = msg.participant_key.value[0];
-    sub_internal_key[1] = msg.participant_key.value[1];
-    sub_internal_key[2] = msg.participant_key.value[2];
-    condition.broadcast();
+    if (! matched) {
+      matched = true;
+      sub_internal_key[0] = msg.participant_key.value[0];
+      sub_internal_key[1] = msg.participant_key.value[1];
+      sub_internal_key[2] = msg.participant_key.value[2];
+
+      condition.broadcast();
+    }
   } else if (error != DDS::RETCODE_NO_DATA) {
     std::cout << "take next sample - error " << error << std::endl;
   }
