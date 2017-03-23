@@ -117,7 +117,7 @@ RunImRUtil("list -v");
 # The publisher invocation should incarnate the InfoRepo.
 print $Publisher->CommandLine() . "\n";
 $Publisher->Spawn ();
-
+sleep(1);
 print $Subscriber->CommandLine() . "\n";
 $Subscriber->Spawn ();
 
