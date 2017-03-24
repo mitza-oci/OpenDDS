@@ -65,26 +65,31 @@ dds_configure_test_files()
 
 dds_add_test("tests/FACE/Unit/run_test.pl qossettings"
   COMMAND run_test.pl qossettings
+  LABELS FACE
 )
 
 
 dds_add_test("tests/FACE/Unit/run_test.pl memorypool"
   COMMAND run_test.pl memorypool
+  LABELS FACE
 )
 
 
 dds_add_test("tests/FACE/Unit/run_test.pl safetyprofilepool"
   COMMAND run_test.pl safetyprofilepool
   REQUIRES "NOT NO_OPENDDS_SAFETY_PROFILE"
+  LABELS FACE
 )
 
 
 dds_add_test("tests/FACE/Unit/run_test.pl freeindex"
   COMMAND run_test.pl freeindex
+  LABELS FACE
 )
 
 
 dds_add_test("tests/FACE/Unit/run_test.pl sequences"
   COMMAND run_test.pl sequences
   REQUIRES "NOT NO_OPENDDS_SAFETY_PROFILE"
+  LABELS FACE
 )

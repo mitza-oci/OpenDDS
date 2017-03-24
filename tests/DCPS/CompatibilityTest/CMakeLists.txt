@@ -46,6 +46,7 @@ dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl"
 dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc LONG_TEST
   LABELS RTPS
+  RESOURCE_LOCK RTPS
 )
 
 
@@ -53,4 +54,5 @@ dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc_tcp"
   COMMAND run_test.pl rtps_disc_tcp
   REQUIRES NO_OPENDDS_SAFETY_PROFILE LONG_TEST
   LABELS RTPS
+  RESOURCE_LOCK RTPS
 )
