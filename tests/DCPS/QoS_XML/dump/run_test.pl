@@ -6,6 +6,13 @@ eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
 
 use lib "$ENV{ACE_ROOT}/bin";
 use PerlACE::TestTarget;
+use File::Basename;
+
+if (! defined $ENV{'DDS_ROOT'}){
+  my $dirname = dirname(__FILE__);
+  $ENV{'DDS_ROOT'} = $dirname . "/../../../..";
+}
+
 
 my $program = PerlACE::TestTarget::create_target (1) || die "Create target 1 failed\n";
 
