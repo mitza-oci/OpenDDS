@@ -1,4 +1,4 @@
-ace_requires(OWNERSHIP_PROFILE)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(DcpsFooTest4_0
   OUTPUT_NAME FooTest4_0
@@ -18,7 +18,7 @@ ace_target_cxx_sources(DcpsFooTest4_0
                Writer.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

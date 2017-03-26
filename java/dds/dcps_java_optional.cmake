@@ -1,9 +1,9 @@
 
-if (BUILT_IN_TOPICS)
+if (OPENDDS_HAS_BUILT_IN_TOPICS)
 
   dds_idl2jni_command(OpenDDS_Dcps_Java_idl
     FLAGS -Wb,native_lib_name=OpenDDS_DCPS_Java
-          -SS -I${TAO_ROOT}
+          -SS -I${TAO_INCLUDE_DIR}
           -I${CMAKE_CURRENT_SOURCE_DIR}/../..
           -I${CMAKE_CURRENT_SOURCE_DIR}/../../dds
           -Wb,stub_export_include=dcps_java_export.h
@@ -13,7 +13,7 @@ if (BUILT_IN_TOPICS)
 
   add_custom_command(
     OUTPUT BitsJC.cpp DdsDcpsCore.idl.TypeSupportImpl.java.list
-    COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${DDS_ROOT}" env "TAO_ROOT=${TAO_ROOT}" $<TARGET_FILE:opendds_idl>
+    COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" env "TAO_ROOT=${TAO_INCLUDE_DIR}" $<TARGET_FILE:opendds_idl>
               -j ${DDS_BASE_IDL_FLAGS} -Wb,java=BitsJC.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../../dds/DdsDcpsCore.idl
     DEPENDS opendds_idl ../../dds/DdsDcpsCore.idl
   )

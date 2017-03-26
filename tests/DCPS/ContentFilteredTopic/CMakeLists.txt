@@ -1,12 +1,12 @@
 project(ContentFilteredTopic CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(CONTENT_FILTERED_TOPIC CONTENT_SUBSCRIPTION)
+ace_requires(OPENDDS_HAS_CONTENT_FILTERED_TOPIC OPENDDS_HAS_CONTENT_SUBSCRIPTION)
 
 ace_add_exe(ContentFilteredTopic
   OUTPUT_NAME ContentFilteredTopicTest
@@ -24,19 +24,19 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/ContentFilteredTopic/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/ContentFilteredTopic/run_test.pl nopub"
   COMMAND run_test.pl nopub
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 

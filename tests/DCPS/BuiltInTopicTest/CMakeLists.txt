@@ -1,12 +1,12 @@
 project(BuiltInTopicTest CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(OWNERSHIP_PROFILE BUILT_IN_TOPICS)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE OPENDDS_HAS_BUILT_IN_TOPICS)
 
 ace_add_lib(DDS_BuiltInTopicTest_Idl
   OUTPUT_NAME DDS_BuiltInTopicTest_Idl
@@ -69,7 +69,7 @@ ace_target_cxx_sources(DDS_BuiltInTopicTest_Monitor
   SOURCE_FILES monitor.cpp
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
@@ -81,5 +81,5 @@ dds_add_test("tests/DCPS/BuiltInTopicTest/run_test.pl"
 
 dds_add_test("tests/DCPS/BuiltInTopicTest/prst_repo_run_test.pl"
   COMMAND prst_repo_run_test.pl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )

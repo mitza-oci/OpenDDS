@@ -1,5 +1,5 @@
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 if (BUILD_IN_TOPIC)
   set(optional_build_in_topic_library OpenDDS_Tcp)

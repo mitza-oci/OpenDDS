@@ -1,6 +1,6 @@
 
 find_package(Qt4)
-ace_requires(QT4_FOUND BUILT_IN_TOPICS)
+ace_requires(QT4_FOUND OPENDDS_HAS_BUILT_IN_TOPICS)
 
 
 set(CMAKE_AUTOMOC ON)

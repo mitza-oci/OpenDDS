@@ -1,7 +1,7 @@
 project(Messenger_Imr CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
@@ -11,7 +11,7 @@ ace_requires(
          "TARGET ImR_Locator_Service"
          "TARGET ImR_Activator_Service"
          "TARGET tao_imr"
-         NO_OPENDDS_SAFETY_PROFILE
+         "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
@@ -57,7 +57,7 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Subscriber
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 dds_add_test("examples/DCPS/Messenger_Imr/run_test.pl"

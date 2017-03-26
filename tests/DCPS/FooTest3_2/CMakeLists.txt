@@ -41,26 +41,26 @@ ace_target_cxx_sources(FooTest3_2_Subscriber
                SubDriver.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/FooTest3_2/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES OWNERSHIP_PROFILE
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE
   LABELS DCPS_MIN
 )
 
 
 dds_add_test("tests/DCPS/FooTest3_2/run_test.pl mi"
   COMMAND run_test.pl mi
-  REQUIRES OWNERSHIP_PROFILE
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE
 )
 
 
 dds_add_test("tests/DCPS/FooTest3_2/run_test.pl mw"
   COMMAND run_test.pl mw
-  REQUIRES OWNERSHIP_PROFILE
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE
 )
 
 
@@ -71,12 +71,12 @@ dds_add_test("tests/DCPS/FooTest3_2/run_test.pl bp_remove"
 
 dds_add_test("tests/DCPS/FooTest3_2/run_test.pl b"
   COMMAND run_test.pl b
-  REQUIRES OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/FooTest3_2/run_test.pl rtps b"
   COMMAND run_test.pl rtps b
-  REQUIRES OWNERSHIP_PROFILE BUILD_SHARED_LIBS
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE BUILD_SHARED_LIBS
   LABELS RTPS
 )

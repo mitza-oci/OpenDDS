@@ -1,4 +1,4 @@
-ace_requires(OWNERSHIP_PROFILE)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(MultiDPTest_Publisher
   OUTPUT_NAME publisher
@@ -31,7 +31,7 @@ ace_target_cxx_sources(MultiDPTest_Subscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

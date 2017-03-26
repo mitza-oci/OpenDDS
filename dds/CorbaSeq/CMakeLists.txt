@@ -1,5 +1,5 @@
 
-if (NO_OPENDDS_SAFETY_PROFILE)
+if (NOT OPENDDS_SAFETY_PROFILE)
 
   file(GLOB idls_files ${CMAKE_CURRENT_LIST_DIR}/*.idl)
 

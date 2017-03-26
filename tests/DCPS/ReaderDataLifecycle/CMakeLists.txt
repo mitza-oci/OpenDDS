@@ -1,4 +1,4 @@
-ace_requires(OWNERSHIP_PROFILE)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(ReaderDataLifecycle
   OUTPUT_NAME tester
@@ -13,13 +13,13 @@ ace_target_cxx_sources(ReaderDataLifecycle
   SOURCE_FILES main.cpp
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/ReaderDataLifecycle/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 

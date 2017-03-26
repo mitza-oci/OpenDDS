@@ -1,4 +1,4 @@
-if (DDS_SUPPRESS_ANYS)
+if (OPENDDS_SUPPRESS_ANYS)
   set(FLAGS -SS)
 endif()
 
@@ -34,7 +34,7 @@ else(TARGET Hello_Server)
 endif(TARGET Hello_Server)
 
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 dds_add_test("java/tests/hello/run_test.pl"

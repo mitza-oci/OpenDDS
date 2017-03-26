@@ -1,12 +1,12 @@
 project(CorbaSeq CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(CorbaSeq_Idl
   OUTPUT_NAME CorbaSeq_Idl
@@ -51,7 +51,7 @@ ace_target_cxx_sources(CorbaSeq_Subscriber
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

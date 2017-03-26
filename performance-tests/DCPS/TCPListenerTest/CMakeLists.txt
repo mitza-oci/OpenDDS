@@ -1,4 +1,4 @@
-ace_requires(OWNERSHIP_PROFILE NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DCPS_Perf_TCPListener_Pub
   OUTPUT_NAME publisher
@@ -30,7 +30,7 @@ ace_target_cxx_sources(DCPS_Perf_TCPListener_Sub
                common.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

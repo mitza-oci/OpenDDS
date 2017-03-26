@@ -7,7 +7,7 @@ if (NOT TARGET ACE)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DCPS_Perf_raw_tcp_latency_subscriber
   OUTPUT_NAME raw_tcp_subscriber

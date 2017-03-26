@@ -3,18 +3,18 @@ dds_idl2jni_command(tao_java_idl
   FLAGS -SS -Wb,stub_export_include=tao_java_export.h
         -Wb,stub_export_macro=tao_java_Export
         -Wb,tao_include_prefix=tao/
-  IDL_FILES ${TAO_ROOT}/tao/BooleanSeq.pidl
-            ${TAO_ROOT}/tao/CharSeq.pidl
-            ${TAO_ROOT}/tao/DoubleSeq.pidl
-            ${TAO_ROOT}/tao/FloatSeq.pidl
-            ${TAO_ROOT}/tao/LongLongSeq.pidl
-            ${TAO_ROOT}/tao/LongSeq.pidl
-            ${TAO_ROOT}/tao/OctetSeq.pidl
-            ${TAO_ROOT}/tao/ShortSeq.pidl
-            ${TAO_ROOT}/tao/StringSeq.pidl
-            ${TAO_ROOT}/tao/ULongLongSeq.pidl
-            ${TAO_ROOT}/tao/ULongSeq.pidl
-            ${TAO_ROOT}/tao/UShortSeq.pidl
+  IDL_FILES ${TAO_INCLUDE_DIR}/tao/BooleanSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/CharSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/DoubleSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/FloatSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/LongLongSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/LongSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/OctetSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/ShortSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/StringSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/ULongLongSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/ULongSeq.pidl
+            ${TAO_INCLUDE_DIR}/tao/UShortSeq.pidl
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

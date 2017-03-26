@@ -1,4 +1,4 @@
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(idl_test3_main
   OUTPUT_NAME idl_test3
@@ -13,7 +13,7 @@ ace_target_cxx_sources(idl_test3_main
   SOURCE_FILES main.cpp
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

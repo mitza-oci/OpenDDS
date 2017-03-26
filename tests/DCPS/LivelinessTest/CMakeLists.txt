@@ -1,4 +1,4 @@
-ace_requires(OWNERSHIP_PROFILE)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(LivelinessTestPublisher
   OUTPUT_NAME publisher
@@ -41,25 +41,25 @@ ace_target_cxx_sources(LivelinessTestSubscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/LivelinessTest/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/LivelinessTest/run_test.pl take"
   COMMAND run_test.pl take
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/LivelinessTest/run_test.pl udp"
   COMMAND run_test.pl udp
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 

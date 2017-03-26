@@ -2,12 +2,12 @@
 project(DistributedContent CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(BUILT_IN_TOPICS NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DDS_DistributedContent_Node
   OUTPUT_NAME node

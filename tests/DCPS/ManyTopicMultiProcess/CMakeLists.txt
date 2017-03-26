@@ -58,7 +58,7 @@ ace_target_cxx_sources(ManyTopicMultiProcessSubscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

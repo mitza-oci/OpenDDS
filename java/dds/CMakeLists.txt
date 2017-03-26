@@ -4,7 +4,7 @@ include(dcps_java_optional.cmake)
 list(APPEND BASE_IDL2JNI_FLAGS
    -Wb,native_lib_name=OpenDDS_DCPS_Java
    -SS -I../.. -I${CMAKE_CURRENT_SOURCE_DIR}/../..
-   -I${TAO_ROOT} -I..
+   -I${TAO_INCLUDE_DIR} -I..
    -Wb,stub_export_include=dcps_java_export.h
    -Wb,stub_export_macro=dcps_java_Export
 )

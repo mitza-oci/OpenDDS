@@ -6,7 +6,7 @@ set_target_properties(java_both_test PROPERTIES
   FOLDER java/tests/messenger/both
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

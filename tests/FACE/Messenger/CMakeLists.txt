@@ -2,7 +2,7 @@ add_subdirectory(Idl)
 add_subdirectory(Subscriber)
 add_subdirectory(Publisher)
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

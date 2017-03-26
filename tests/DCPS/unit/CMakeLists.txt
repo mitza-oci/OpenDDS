@@ -1,7 +1,7 @@
 project(UnitTest CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
@@ -19,11 +19,12 @@ ace_target_cxx_sources(DdsDcps_UnitTest
 )
 
 tao_idl_sources(
+  IDL_FLAGS -I${OpenDDS_INCLUDE_DIR}
   TARGETS DdsDcps_UnitTest
   IDL_FILES MyTypeSupport.idl
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

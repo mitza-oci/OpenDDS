@@ -2,12 +2,12 @@
 project(MessengerMinimal CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(MessengerMinimal_Publisher
   OUTPUT_NAME publisher

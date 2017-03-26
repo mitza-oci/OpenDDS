@@ -1,12 +1,12 @@
 project(Messenger_ZeroCopy CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(Messenger_ZeroCopy_Idl
   OUTPUT_NAME Messenger_ZeroCopy_Idl
@@ -48,7 +48,7 @@ ace_target_cxx_sources(Messenger_ZeroCopy_Subscriber
   HEADER_FILES DataReaderListenerImpl.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

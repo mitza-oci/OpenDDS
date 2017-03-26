@@ -1,4 +1,4 @@
-ace_requires(OWNERSHIP_PROFILE)
+ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(DcpsFooTest5Publisher
   OUTPUT_NAME publisher
@@ -36,25 +36,25 @@ ace_target_cxx_sources(DcpsFooTest5Subscriber
                common.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl udp"
   COMMAND run_test.pl udp
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl multicast"
   COMMAND run_test.pl multicast
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS MCAST
 )
 
@@ -67,20 +67,20 @@ dds_add_test("tests/DCPS/FooTest5/run_test.pl rtps"
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl shmem"
   COMMAND run_test.pl shmem
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS SHMEM
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl mi"
   COMMAND run_test.pl mi
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl udp mi"
   COMMAND run_test.pl udp mi
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
@@ -92,20 +92,20 @@ dds_add_test("tests/DCPS/FooTest5/run_test.pl rtps mi"
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl shmem mi"
   COMMAND run_test.pl shmem mi
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS SHMEM
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl nokey mi"
   COMMAND run_test.pl nokey mi
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl nokey udp mi"
   COMMAND run_test.pl nokey udp mi
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
@@ -117,7 +117,7 @@ dds_add_test("tests/DCPS/FooTest5/run_test.pl nokey rtps mi"
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl nokey shmem mi"
   COMMAND run_test.pl nokey shmem mi
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS SHMEM
 )
 
@@ -144,11 +144,11 @@ dds_add_test("tests/DCPS/FooTest5/run_test.pl mr"
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl multicast mr"
   COMMAND run_test.pl multicast mr
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/FooTest5/run_test.pl mixed_trans"
   COMMAND run_test.pl mixed_trans
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )

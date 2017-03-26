@@ -1,4 +1,4 @@
-set(PERLACE_DIR ${ACE_PACKAGE_DIR}/bin)
+set(PERLACE_DIR ${ACE_INCLUDE_DIR}/bin)
 
 
 set(files

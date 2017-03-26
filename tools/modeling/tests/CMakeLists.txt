@@ -11,11 +11,11 @@ function(dds_add_model_lib base)
   add_custom_command(
     OUTPUT model/${base}.idl model/${base}Traits.h model/${base}Traits.cpp model/${base}_T.h model/${base}_T.cpp
     DEPENDS sdk_generator_jar ${codegen_file} ${base}.opendds
-    COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${PROJECT_SOURCE_DIR}" ${Java_JAVA_EXECUTABLE} -jar ${PROJECT_BINARY_DIR}/tools/modeling/plugins/org.opendds.modeling.sdk.model.editor/bin/sdk_generator.jar ${CMAKE_CURRENT_SOURCE_DIR}/${codegen_file}
+    COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" ${Java_JAVA_EXECUTABLE} -jar ${PROJECT_BINARY_DIR}/tools/modeling/plugins/org.opendds.modeling.sdk.model.editor/bin/sdk_generator.jar ${CMAKE_CURRENT_SOURCE_DIR}/${codegen_file}
   )
   add_custom_command(
     OUTPUT model/${base}_export.h
-    COMMAND ${CMAKE_COMMAND} -E env "ACE_ROOT=${ACE_ROOT}" perl ${PROJECT_SOURCE_DIR}/bin/expfile.pl ${base}
+    COMMAND ${CMAKE_COMMAND} -E env "ACE_ROOT=${ACE_INCLUDE_DIR}" perl ${OpenDDS_INCLUDE_DIR}/bin/expfile.pl ${base}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/model
   )
   source_group("Generated Files" FILES
@@ -53,7 +53,7 @@ function(dds_add_model_lib base)
   dds_idl_sources(
     TARGETS ${base}
     DDS_IDL_FLAGS -Wb,export_macro=${base}_Export -o model -I${CMAKE_CURRENT_BINARY_DIR}/model ${INCLUDE_OPTIONS}
-    TAO_IDL_FLAGS -Wb,export_macro=${base}_Export -Wb,export_include=${base}_export.h -o model -I${CMAKE_CURRENT_BINARY_DIR}/model ${INCLUDE_OPTIONS}
+    TAO_IDL_FLAGS -I${OpenDDS_INCLUDE_DIR} -Wb,export_macro=${base}_Export -Wb,export_include=${base}_export.h -o model -I${CMAKE_CURRENT_BINARY_DIR}/model ${INCLUDE_OPTIONS}
     IDL_FILES ${CMAKE_CURRENT_BINARY_DIR}/model/${base}.idl
   )
 

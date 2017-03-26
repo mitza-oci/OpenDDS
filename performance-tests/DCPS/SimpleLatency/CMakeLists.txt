@@ -2,7 +2,7 @@
 project(SimpleLatency CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_SimpleLatency_Pub
   OUTPUT_NAME dds_pub
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   FOLDER performance-tests/DCPS/SimpleLatency
   LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Default_Discovery
@@ -39,7 +39,7 @@ ace_target_cxx_sources(DDS_SimpleLatency_Pub
 
 ace_add_exe(DDS_SimpleLatency_Sub
   OUTPUT_NAME dds_sub
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   FOLDER performance-tests/DCPS/SimpleLatency
   LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Default_Discovery

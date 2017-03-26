@@ -1,7 +1,7 @@
 project(Inconsistent_Qos CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
@@ -34,7 +34,7 @@ ace_target_cxx_sources(DDS_Inconsistent_Qos_Inconsistent_qos
   SOURCE_FILES inconsistent_qos.cpp
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

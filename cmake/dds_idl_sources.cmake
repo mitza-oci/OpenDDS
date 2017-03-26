@@ -1,11 +1,4 @@
 
-if (NOT DDS_ROOT AND TARGET OpenDDS_Dcps)
-# TAO_ROOT is not set, it indicates this file is included from the projects other than TAO
-  get_target_property(DDS_INCLUDE_DIRS OpenDDS_Dcps INTERFACE_INCLUDE_DIRECTORIES)
-  # set TAO_ROOT to be first element in ${TAO_INCLUDE_DIRS}
-  list(GET DDS_INCLUDE_DIRS 0 DDS_ROOT)
-endif()
-
 define_property(SOURCE PROPERTY DDS_IDL_FLAGS
   BRIEF_DOCS "sets additional opendds_idl compiler flags used to build sources within the target"
   FULL_DOCS "sets additional opendds_idl compiler flags used to build sources within the target"
@@ -13,29 +6,17 @@ define_property(SOURCE PROPERTY DDS_IDL_FLAGS
 
 set(DDS_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-if (DDS_SUPPRESS_ANYS)
-  list(APPEND TAO_BASE_IDL_FLAGS -Sa -St)
-  list(APPEND DDS_BASE_IDL_FLAGS -Sa -St)
-endif()
-
-if (NOT NO_OPENDDS_SAFETY_PROFILE)
-  list(APPEND TAO_BASE_IDL_FLAGS -DOPENDDS_SAFETY_PROFILE)
-  list(APPEND DDS_BASE_IDL_FLAGS -DOPENDDS_SAFETY_PROFILE)
-endif()
-
-foreach(opt ${OPENDDS_BASE_OPTIONS})
-  if (NOT ${opt})
-    list(APPEND TAO_BASE_IDL_FLAGS -DOPENDDS_NO_${opt})
-    list(APPEND DDS_BASE_IDL_FLAGS -DOPENDDS_NO_${opt})
+if (NOT DEFINED DDS_BASE_IDL_FLAGS)
+  if (DDS_SUPPRESS_ANYS)
+    list(APPEND TAO_BASE_IDL_FLAGS -Sa -St)
+    list(APPEND DDS_BASE_IDL_FLAGS -Sa -St)
   endif()
-endforeach()
 
-if (NOT BUILT_IN_TOPICS)
-  list(APPEND TAO_BASE_IDL_FLAGS -DDDS_HAS_MINIMUM_BIT)
-  list(APPEND DDS_BASE_IDL_FLAGS -DDDS_HAS_MINIMUM_BIT)
+  foreach(definition ${DCPS_COMPILE_DEFINITIONS})
+    list(APPEND TAO_BASE_IDL_FLAGS -D${definition})
+    list(APPEND DDS_BASE_IDL_FLAGS -D${definition})
+  endforeach()
 endif()
-
-list(APPEND TAO_BASE_IDL_FLAGS -I${DDS_ROOT})
 
 set(FACE_TAO_IDL_FLAGS -SS -Wb,no_fixed_err)
 set(FACE_DDS_IDL_FLAGS -GfaceTS -Lface)
@@ -130,8 +111,8 @@ function(dds_idl_command Name)
 
     add_custom_command(
       OUTPUT ${_cur_idl_outputs} ${_cur_type_support_idl} ${_cur_java_list}
-      DEPENDS opendds_idl ${DDS_ROOT}/dds/idl/IDLTemplate.txt ${abs_filename}
-      COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${DDS_ROOT}" env "TAO_ROOT=${TAO_ROOT}" $<TARGET_FILE:opendds_idl> -I${_working_source_dir}
+      DEPENDS opendds_idl ${OpenDDS_INCLUDE_DIR}/dds/idl/IDLTemplate.txt ${abs_filename}
+      COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" env "TAO_ROOT=${TAO_INCLUDE_DIR}" $<TARGET_FILE:opendds_idl> -I${_working_source_dir}
               ${_ddsidl_flags} ${file_dds_idl_flags} ${abs_filename}
       WORKING_DIRECTORY ${_arg_WORKING_DIRECTORY}
     )
@@ -140,7 +121,7 @@ function(dds_idl_command Name)
 
   if (NOT _arg_NO_TAO_IDL)
     tao_idl_command(${Name}
-      IDL_FLAGS ${_arg_TAO_IDL_FLAGS}
+      IDL_FLAGS -I${OpenDDS_INCLUDE_DIR} ${_arg_TAO_IDL_FLAGS}
       IDL_FILES ${_taoidl_inputs}
     )
   endif()

@@ -2,12 +2,12 @@
 project(TestProcess CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(BenchProcess
   OUTPUT_NAME testprocess
@@ -41,6 +41,6 @@ dds_idl_sources(
   TARGETS BenchProcess
   TAO_IDL_FLAGS -Sa
                 -St
-                -I${TAO_ROOT}/orbsvcs
+                -I${TAO_INCLUDE_DIR}/orbsvcs
   IDL_FILES Test.idl
 )

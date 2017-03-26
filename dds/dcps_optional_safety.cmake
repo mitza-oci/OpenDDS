@@ -6,7 +6,7 @@ set(dcps_flags
   -Wb,export_include=dds/DCPS/dcps_export.h
 )
 
-set(dcps_tao_flags ${dcps_flags} -SS)
+set(dcps_tao_flags -I${CMAKE_CURRENT_SOURCE_DIR}/.. ${dcps_flags} -SS)
 
 tao_idl_sources(
   TARGETS OpenDDS_Dcps
@@ -20,49 +20,7 @@ tao_idl_sources(
               DdsDcpsTypeSupportExt.idl
 )
 
-if (NO_OPENDDS_SAFETY_PROFILE)
-  if (BUILT_IN_TOPICS)
-    dds_idl_sources(
-      TARGETS OpenDDS_Dcps
-      DDS_IDL_FLAGS ${dcps_flags}
-      TAO_IDL_FLAGS ${dcps_tao_flags}
-      IDL_FILES  DdsDcpsGuid.idl
-                 DdsDcpsCore.idl
-                 DdsDcpsInfrastructure.idl
-    )
-    dds_idl_sources(
-      TARGETS OpenDDS_Dcps
-      DDS_IDL_FLAGS -SI ${dcps_flags}
-      TAO_IDL_FLAGS ${dcps_tao_flags}
-      IDL_FILES DdsDcpsInfoUtils.idl
-    )
-  else(BUILT_IN_TOPICS)
-    dds_idl_sources(
-      TARGETS OpenDDS_Dcps
-      DDS_IDL_FLAGS ${dcps_flags} -SI
-      TAO_IDL_FLAGS ${dcps_tao_flags}
-      IDL_FILES DdsDcpsGuid.idl
-                DdsDcpsCore.idl
-                DdsDcpsInfoUtils.idl
-    )
-
-   dds_idl_sources(
-      TARGETS OpenDDS_Dcps
-      DDS_IDL_FLAGS ${dcps_flags}
-      TAO_IDL_FLAGS ${dcps_tao_flags}
-      IDL_FILES DdsDcpsInfrastructure.idl
-    )
-  endif(BUILT_IN_TOPICS)
-
-  tao_idl_sources(
-    TARGETS OpenDDS_Dcps
-    IDL_FLAGS ${dcps_flags}
-    IDL_FILES  DdsDcpsConditionSeq.idl
-               DdsDcpsDataReaderSeq.idl
-  )
-
-else(NO_OPENDDS_SAFETY_PROFILE)
-
+if (OPENDDS_SAFETY_PROFILE)
   dds_idl_sources(
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp
@@ -97,5 +55,45 @@ else(NO_OPENDDS_SAFETY_PROFILE)
     IDL_FILES DdsDcpsCoreTypeSupport.idl
               DdsDcpsInfrastructure.idl
   )
+else(OPENDDS_SAFETY_PROFILE)
+  if (OPENDDS_HAS_BUILT_IN_TOPICS)
+    dds_idl_sources(
+      TARGETS OpenDDS_Dcps
+      DDS_IDL_FLAGS ${dcps_flags}
+      TAO_IDL_FLAGS ${dcps_tao_flags}
+      IDL_FILES  DdsDcpsGuid.idl
+                 DdsDcpsCore.idl
+                 DdsDcpsInfrastructure.idl
+    )
+    dds_idl_sources(
+      TARGETS OpenDDS_Dcps
+      DDS_IDL_FLAGS -SI ${dcps_flags}
+      TAO_IDL_FLAGS ${dcps_tao_flags}
+      IDL_FILES DdsDcpsInfoUtils.idl
+    )
+  else(OPENDDS_HAS_BUILT_IN_TOPICS)
+    dds_idl_sources(
+      TARGETS OpenDDS_Dcps
+      DDS_IDL_FLAGS ${dcps_flags} -SI
+      TAO_IDL_FLAGS ${dcps_tao_flags}
+      IDL_FILES DdsDcpsGuid.idl
+                DdsDcpsCore.idl
+                DdsDcpsInfoUtils.idl
+    )
 
-endif(NO_OPENDDS_SAFETY_PROFILE)
+   dds_idl_sources(
+      TARGETS OpenDDS_Dcps
+      DDS_IDL_FLAGS ${dcps_flags}
+      TAO_IDL_FLAGS ${dcps_tao_flags}
+      IDL_FILES DdsDcpsInfrastructure.idl
+    )
+  endif(OPENDDS_HAS_BUILT_IN_TOPICS)
+
+  tao_idl_sources(
+    TARGETS OpenDDS_Dcps
+    IDL_FLAGS -I${CMAKE_CUR} ${dcps_flags}
+    IDL_FILES  DdsDcpsConditionSeq.idl
+               DdsDcpsDataReaderSeq.idl
+  )
+
+endif(OPENDDS_SAFETY_PROFILE)

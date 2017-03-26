@@ -1,4 +1,4 @@
-ace_requires(BUILT_IN_TOPICS)
+ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
 
 ace_add_exe(FACE_idl_test1_main
   OUTPUT_NAME idl_test1
@@ -11,7 +11,7 @@ ace_target_cxx_sources(FACE_idl_test1_main
   SOURCE_FILES main.cpp
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

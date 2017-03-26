@@ -27,7 +27,7 @@ ace_target_cxx_sources(dcps_integration_Infrastructure
   HEADER_FILES DomainParticipantListener.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
@@ -38,19 +38,19 @@ dds_add_test("tests/DCPS/DcpsIntegration/run_test-integration.pl"
 
 dds_add_test("tests/DCPS/DcpsIntegration/run_test-topic.pl"
   COMMAND run_test-topic.pl
-  REQUIRES PERSISTENCE_PROFILE
+  REQUIRES OPENDDS_HAS_PERSISTENCE_PROFILE
 )
 
 
 dds_add_test("tests/DCPS/DcpsIntegration/run_test-topic.pl rtps_disc"
   COMMAND run_test-topic.pl rtps_disc
-  REQUIRES PERSISTENCE_PROFILE
+  REQUIRES OPENDDS_HAS_PERSISTENCE_PROFILE
   LABELS MCAST RTPS
 )
 
 
 dds_add_test("tests/DCPS/DcpsIntegration/run_test-topic.pl rtps_disc_tcp"
   COMMAND run_test-topic.pl rtps_disc_tcp
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE PERSISTENCE_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE" OPENDDS_HAS_PERSISTENCE_PROFILE
   LABELS MCAST RTPS
 )

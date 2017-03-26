@@ -1,7 +1,6 @@
 
-set(PERLACE_DIR ${ACE_PACKAGE_DIR}/bin)
-set(DDS_ROOT $<TARGET_FILE_DIR:OpenDDS_Dcps>/..)
-set(PERLDDS_DIR ${DDS_ROOT}/bin)
+set(PERLACE_DIR ${ACE_INCLUDE_DIR}/bin)
+set(PERLDDS_DIR ${OpenDDS_BINARY_DIR}/bin)
 
 function(dds_configure_test_files)
   file(GLOB files *.ini *.conf *.xml)

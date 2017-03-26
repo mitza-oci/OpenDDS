@@ -1,7 +1,7 @@
 project(ManualAssertLiveliness CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
@@ -51,25 +51,25 @@ ace_target_cxx_sources(DDS_ManualAssertLiveliness_Subscriber
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl lost"
   COMMAND run_test.pl lost
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtps"
   COMMAND run_test.pl rtps
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
   RESOURCE_LOCK RTPS
 )
@@ -77,7 +77,7 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtps"
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtps lost"
   COMMAND run_test.pl rtps lost
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
   RESOURCE_LOCK RTPS
 )
@@ -85,7 +85,7 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtps lost"
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco"
   COMMAND run_test.pl rtpsdisco
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
   RESOURCE_LOCK RTPS
 )
@@ -93,7 +93,7 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco"
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco lost"
   COMMAND run_test.pl rtpsdisco lost
-  REQUIRES NO_OPENDDS_SAFETY_PROFILE
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
   RESOURCE_LOCK RTPS
 )

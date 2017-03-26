@@ -12,8 +12,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 option(BUILD_SHARED_LIBS "" ON)
 set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
 
-set(DDS_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-
 include(cmake/opendds_options.cmake)
 include(cmake/dds_idl_sources.cmake)
 

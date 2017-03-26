@@ -5,12 +5,6 @@ ace_add_lib(two_idl_test
   FOLDER java/tests/two_idl
 )
 
-
-# add additional flags to Message.idl
-# set_source_files_properties(
-#   Message.idl PROPERTIES DDS_IDL_FLAGS -SI
-# )
-
 dds_add_ddsidl_jar(two_idl_test_jar
   OUTPUT_NAME two_idl_test
   FOLDER java/tests/two_idl

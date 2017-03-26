@@ -1,5 +1,5 @@
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(dcpsinfo_dump
   FOLDER tools

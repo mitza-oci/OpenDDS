@@ -1,4 +1,4 @@
-ace_requires(BUILT_IN_TOPICS NO_OPENDDS_SAFETY_PROFILE)
+ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(BuiltInTopic
   OUTPUT_NAME bit
@@ -13,7 +13,7 @@ ace_target_cxx_sources(BuiltInTopic
   HEADER_FILES common.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

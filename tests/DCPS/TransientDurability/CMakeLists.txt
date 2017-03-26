@@ -1,12 +1,12 @@
 project(TransientDurability CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(PERSISTENCE_PROFILE)
+ace_requires(OPENDDS_HAS_PERSISTENCE_PROFILE)
 
 ace_add_lib(DDS_TransientDurability_Idl
   OUTPUT_NAME DDS_TransientDurability_Idl
@@ -52,7 +52,7 @@ ace_target_cxx_sources(DDS_TransientDurability_Subscriber
   HEADER_FILES DataReaderListener.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

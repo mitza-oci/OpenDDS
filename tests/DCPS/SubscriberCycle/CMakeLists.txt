@@ -1,4 +1,4 @@
-ace_requires(CONTENT_FILTERED_TOPIC CONTENT_SUBSCRIPTION)
+ace_requires(OPENDDS_HAS_CONTENT_FILTERED_TOPIC OPENDDS_HAS_CONTENT_SUBSCRIPTION)
 
 ace_add_exe(SubscriberCycle_Publisher
   OUTPUT_NAME publisher
@@ -35,7 +35,7 @@ ace_target_cxx_sources(SubscriberCycle_Subscriber
                SubscriberListenerImpl.h
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

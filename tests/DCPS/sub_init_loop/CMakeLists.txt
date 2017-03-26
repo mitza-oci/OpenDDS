@@ -1,12 +1,12 @@
 project(sub_init_loop CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(sub_init_loop_Idl
   OUTPUT_NAME sub_init_loop_Idl
@@ -49,7 +49,7 @@ ace_target_cxx_sources(sub_init_loop_Subscriber
   SOURCE_FILES subscriber.cpp
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

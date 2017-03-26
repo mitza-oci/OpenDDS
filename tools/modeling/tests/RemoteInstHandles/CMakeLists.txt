@@ -1,4 +1,4 @@
-ace_requires(BUILT_IN_TOPICS)
+ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
 
 dds_add_model_lib(RemoteInstHandles)
 

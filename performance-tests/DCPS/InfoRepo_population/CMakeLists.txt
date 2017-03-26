@@ -1,4 +1,4 @@
-ace_requires(NO_OPENDDS_SAFETY_PROFILE "NOT TAO_HAS_MINIMUM_CORBA")
+ace_requires("NOT OPENDDS_SAFETY_PROFILE" "NOT TAO_HAS_MINIMUM_CORBA")
 
 ace_add_exe(InfoRepo_population_Syncserver
   OUTPUT_NAME syncServer
@@ -66,7 +66,7 @@ dds_idl_sources(
   IDL_FILES Messenger.idl
 )
 
-include(${DDS_ROOT}/cmake/dds_add_test.cmake)
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 

@@ -11,7 +11,7 @@ add_subdirectory(monitor)
 add_library(OpenDDS_Default_Discovery INTERFACE)
 add_library(OpenDDS_Transports_For_Test INTERFACE)
 
-if (NO_OPENDDS_SAFETY_PROFILE)
+if (NOT OPENDDS_SAFETY_PROFILE)
   target_link_libraries(OpenDDS_Default_Discovery INTERFACE
     OpenDDS_InfoRepoDiscovery
   )

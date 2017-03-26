@@ -2,17 +2,17 @@
 project(StockQuoter CXX)
 cmake_minimum_required(VERSION 3.3)
 
-if (NOT DDS_ROOT)
+if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
 
-ace_requires(NO_OPENDDS_SAFETY_PROFILE)
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(StockQuoter_Common
   OUTPUT_NAME StockQuoterCommon
   FOLDER examples/DCPS/IntroductionToOpenDDS
-  PUBLIC_INCLUDE_DIRECTORIES ${TAO_ROOT}/orbsvcs
+  PUBLIC_INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   PUBLIC_LINK_LIBRARIES TAO_AnyTypeCode
                         TAO_Svc_Utils
                         OpenDDS_Dcps
@@ -22,10 +22,10 @@ dds_idl_sources(
   DDS_IDL_FLAGS -Wb,export_macro=StockQuoterCommon_Export
   TAO_IDL_FLAGS -Sa
                 -St
-                -I${TAO_ROOT}/orbsvcs
+                -I${TAO_INCLUDE_DIR}/orbsvcs
                 -Wb,export_macro=StockQuoterCommon_Export
                 -Wb,export_include=StockQuoterCommon_Export.h
-                -I${TAO_ROOT}/orbsvcs
+                -I${TAO_INCLUDE_DIR}/orbsvcs
   IDL_FILES StockQuoter.idl
 )
 
@@ -33,7 +33,7 @@ dds_idl_sources(
 ace_add_exe(StockQuoter_Publisher
   OUTPUT_NAME publisher
   FOLDER examples/DCPS/IntroductionToOpenDDS
-  INCLUDE_DIRECTORIES ${TAO_ROOT}/orbsvcs
+  INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   LINK_LIBRARIES TAO_AnyTypeCode
                  OpenDDS_Tcp
                  TAO_Svc_Utils
@@ -48,7 +48,7 @@ ace_target_cxx_sources(StockQuoter_Publisher
 ace_add_exe(StockQuoter_Subscriber
   OUTPUT_NAME subscriber
   FOLDER examples/DCPS/IntroductionToOpenDDS
-  INCLUDE_DIRECTORIES ${TAO_ROOT}/orbsvcs
+  INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   LINK_LIBRARIES OpenDDS_Tcp
                  StockQuoter_Common
                  OpenDDS_Default_Discovery

@@ -342,6 +342,8 @@ void get_interface_addrs(OPENDDS_VECTOR(ACE_INET_Addr)& addrs)
 
 bool set_socket_multicast_ttl(const ACE_SOCK_Dgram& socket, const unsigned char& ttl)
 {
+  if (ttl == 1)
+    return true;
   ACE_HANDLE handle = socket.get_handle();
   const void* ttlp = &ttl;
 #if defined(ACE_LINUX) || defined(__linux__)
@@ -363,11 +365,14 @@ bool set_socket_multicast_ttl(const ACE_SOCK_Dgram& socket, const unsigned char&
                                 IPV6_MULTICAST_HOPS,
                                 static_cast<const char*>(ttlp),
                                 sizeof(TTL))) {
+      char addr_string[1024];
+      local_addr.addr_to_string(addr_string, 1024);
       ACE_ERROR_RETURN((LM_ERROR,
                         ACE_TEXT("(%P|%t) ERROR: ")
                         ACE_TEXT("set_socket_ttl: ")
-                        ACE_TEXT("failed to set IPV6 TTL: %d %p\n"),
+                        ACE_TEXT("failed to set IPV6 TTL: %d, addr=%s, %p\n"),
                         ttl,
+                        addr_string,
                         ACE_TEXT("ACE_OS::setsockopt(TTL)")),
                        false);
     }
