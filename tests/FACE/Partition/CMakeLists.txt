@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.3)
 if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
+
+ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
+
 add_subdirectory(Idl)
 add_subdirectory(Subscriber)
 add_subdirectory(Publisher)

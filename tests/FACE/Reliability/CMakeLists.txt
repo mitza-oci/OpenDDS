@@ -1,3 +1,5 @@
+ace_requires("TARGET OpenDDS_FACE")
+
 add_subdirectory(Publisher)
 add_subdirectory(Subscriber)
 

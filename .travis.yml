@@ -74,7 +74,7 @@ before_script:
         rm modeling_plugins.tar.gz;
     fi
   - if [ "$NO_INLINE" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_INLINE=OFF"; fi
-  - if [ "$NO_BIT" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILT_IN_TOPICS=OFF"; fi
+  - if [ "$NO_BIT" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$STATIC" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
   - if [ "$NO_DEBUG" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE"; else DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG"; fi
 #  - if [ "$SAFETY_PROFILE" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS --safety-profile"; fi
