@@ -143,8 +143,15 @@ function(dds_idl_sources)
 
   set(is_face OFF)
 
-  list(GET _arg_TARGETS 0 first_target)
-  get_property(first_target_link_libs TARGET ${first_target} PROPERTY LINK_LIBRARIES)
+  foreach(target _arg_TARGETS)
+    if (TARGET ${target})
+      get_property(first_target_link_libs TARGET ${target} PROPERTY LINK_LIBRARIES)
+      if ("OpenDDS_FACE" IN_LIST first_target_link_libs)
+        set(is_face ON)
+      endif()
+      break()
+    endif()
+  endforeach()
 
   if ("OpenDDS_FACE" IN_LIST first_target_link_libs)
     set(is_face ON)
