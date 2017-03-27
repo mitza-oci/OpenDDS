@@ -143,19 +143,15 @@ function(dds_idl_sources)
 
   set(is_face OFF)
 
-  foreach(target _arg_TARGETS)
+  foreach(target ${_arg_TARGETS})
     if (TARGET ${target})
-      get_property(first_target_link_libs TARGET ${target} PROPERTY LINK_LIBRARIES)
-      if ("OpenDDS_FACE" IN_LIST first_target_link_libs)
+      get_property(target_link_libs TARGET ${target} PROPERTY LINK_LIBRARIES)
+      if ("OpenDDS_FACE" IN_LIST target_link_libs)
         set(is_face ON)
       endif()
       break()
     endif()
   endforeach()
-
-  if ("OpenDDS_FACE" IN_LIST first_target_link_libs)
-    set(is_face ON)
-  endif()
 
   foreach(path ${_arg_IDL_FILES})
     if (IS_ABSOLUTE ${path})
