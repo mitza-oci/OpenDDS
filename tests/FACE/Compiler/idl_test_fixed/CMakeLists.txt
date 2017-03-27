@@ -6,7 +6,7 @@ if (NOT OpenDDS_INCLUDE_DIR)
 endif()
 
 
-ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
+ace_requires("TARGET OpenDDS_FACE")
 
 ace_add_exe(FACE_idl_test_fixed
   OUTPUT_NAME TestFixed
