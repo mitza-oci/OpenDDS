@@ -43,11 +43,11 @@ public:
     local_address_config_str_ = str;
     local_address_.set(str);
   }
-  void local_address(u_short port_number, const char* host_name)
+  void local_address(u_short port_number, const char* host_name, int type)
   {
     local_address_config_str_ = host_name;
     local_address_config_str_ += ":" + to_dds_string(port_number);
-    local_address_.set(port_number, host_name);
+    local_address_.set(port_number, host_name, 1, type);
   }
   void local_address_set_port(u_short port_number) {
     local_address_.set_port_number(port_number);

@@ -82,7 +82,7 @@ UdpDataLink::open(const ACE_INET_Addr& remote_address)
     VDBG_LVL((LM_DEBUG,
               ACE_TEXT("(%P|%t) UdpDataLink::open listening on host %C:%hu\n"),
               hostname.c_str(), port), 2);
-    this->config_->local_address(port, hostname.c_str());
+    this->config_->local_address(port, hostname.c_str(), address.get_type());
 
   // Similar case to the "if" case above, but with a bound host/IP but no port
   } else if (!this->active_ &&
@@ -148,7 +148,7 @@ UdpDataLink::open(const ACE_INET_Addr& remote_address)
 
     // For the active side, send the blob and wait for a 1 byte ack.
     VDBG((LM_DEBUG, "(%P|%t) UdpDataLink::open: active connect to %C:%hu\n",
-      remote_address.get_host_addr(), remote_address.get_port_number()));
+      remote_address_.get_host_addr(), remote_address_.get_port_number()));
 
     TransportLocator info;
     this->impl()->connection_info_i(info);
@@ -218,7 +218,7 @@ UdpDataLink::open(const ACE_INET_Addr& remote_address)
     iovec iov[MAX_SEND_BLOCKS];
     const int num_blocks =
       TransportSendStrategy::mb_to_iov(*transport_header_block, iov);
-    const ssize_t sent = socket().send(iov, num_blocks, remote_address);
+    const ssize_t sent = socket().send(iov, num_blocks, remote_address_);
     transport_header_block->release();
     if (sent < 0) {
       ACE_ERROR_RETURN((LM_ERROR, ACE_TEXT("(%P|%t) ERROR: UdpDataLink::open: ")

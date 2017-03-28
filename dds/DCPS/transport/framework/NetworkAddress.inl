@@ -50,7 +50,7 @@ ACE_INLINE
 void OpenDDS::DCPS::NetworkAddress::to_addr(ACE_INET_Addr& addr) const
 {
   DBG_ENTRY_LVL("NetworkAddress","to_addr",6);
-  addr.set(addr_.c_str());
+  addr.set(addr_.c_str(), addr.get_type());
 }
 
 ACE_INLINE

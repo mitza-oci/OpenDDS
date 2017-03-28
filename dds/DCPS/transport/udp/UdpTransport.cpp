@@ -170,7 +170,7 @@ UdpTransport::configure_i(TransportInst* config)
   // Override with DCPSDefaultAddress.
   if (conf->local_address() == ACE_INET_Addr () &&
       !TheServiceParticipant->default_address ().empty ()) {
-    conf->local_address(0, TheServiceParticipant->default_address ().c_str ());
+    conf->local_address(0, TheServiceParticipant->default_address ().c_str (), conf->local_address().get_type());
   }
 
   // Our "server side" data link is created here, similar to the acceptor_
