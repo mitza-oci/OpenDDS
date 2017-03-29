@@ -5,7 +5,7 @@ if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
-ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
+ace_requires("TARGET OpenDDS_FACE")
 
 add_subdirectory(Idl)
 add_subdirectory(Publisher)
