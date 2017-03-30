@@ -17,7 +17,6 @@ file(GLOB libs ${OpenDDS_ROOT}/lib/*)
 foreach(file ${libs})
   get_filename_component(name ${file} NAME)
   symlink(${file} ${INSTALL_PREFIX}/lib/${name})
-
 endforeach()
 
 file(GLOB exes ${OpenDDS_ROOT}/bin/*)

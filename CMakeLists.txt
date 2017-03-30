@@ -47,7 +47,7 @@ ace_install_package(OpenDDS
   EXTRA_CMAKE_FILES cmake/dds_idl_sources.cmake
 )
 
-
+include(cmake/export_opendds_hosttools.cmake)
 ## This line must be the last of the file, so we can run the post install script
 ## in the correct order
 add_subdirectory(cmake)
