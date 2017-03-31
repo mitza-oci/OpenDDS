@@ -560,8 +560,8 @@ BE_GlobalData::add_java_output_file(const std::string& filename)
 {
   static char cwd[1024];
   if (cwd[0] == '\0') {
-    ACE_OS::getcwd(cwd, 1024);
-    ACE_OS::strcat(cwd, ACE_DIRECTORY_SEPARATOR_STR);
+    ::getcwd(cwd, 1024);
+    ::strcat(cwd, ACE_DIRECTORY_SEPARATOR_STR_A);
   }
 
   if (gen_java_list_) {
