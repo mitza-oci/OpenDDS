@@ -1,4 +1,4 @@
-
+ace_requires("NOT ACE_USES_WCHAR")
 
 ace_add_lib(OpenDDS_QOS_XML_XSC_Handler
   OUTPUT_NAME OpenDDS_QOS_XML_XSC_Handler

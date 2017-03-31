@@ -1,5 +1,5 @@
 
-ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
+ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS "NOT ACE_USES_WCHAR")
 
 ace_add_lib(OpenDDS_FACE
   PACKAGE OpenDDS
