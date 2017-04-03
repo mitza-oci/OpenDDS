@@ -7,7 +7,7 @@ if (EXISTS ${OpenDDS_HostTools_DIR}/TAO_IDL_Targets.cmake)
 endif()
 
 set(OpenDDS_HostTools_FOUND 1)
-foreach(target dds_idl TAO_IDL_EXE ace_gerf)
+foreach(target opendds_idl TAO_IDL_EXE ace_gperf)
   if(NOT TARGET ${target})
     set(OpenDDS_HostTools_FOUND 0)
     return()

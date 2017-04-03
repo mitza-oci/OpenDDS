@@ -1,4 +1,7 @@
 
+if (OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
+  return()
+endif()
 
 set(tools opendds_idl)
 if (TARGET idl2jni)
@@ -16,7 +19,7 @@ else()
 endif()
 
 export(TARGETS ${tools}
-       FILE OpenDDS_HostTools_Target.cmake)
+       FILE OpenDDS_HostTools_Targets.cmake)
 
 
 export(PACKAGE OpenDDS_HostTools)

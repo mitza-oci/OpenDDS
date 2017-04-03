@@ -1,4 +1,4 @@
-
+ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(OpenDDS_Multicast
   PACKAGE OpenDDS

@@ -5,6 +5,7 @@ if (NOT OPENDDS_SAFETY_PROFILE)
 else()
   set(dcps_link_libraries OpenDDS_Corba)
   list(APPEND DCPS_CXX_COMPILE_DEFINITIONS TAOLIB_ERROR=ACELIB_ERROR TAOLIB_DEBUG=ACELIB_DEBUG)
+  add_subdirectory(CORBA)
 endif()
 
 
@@ -49,9 +50,6 @@ include(dcps_optional_safety.cmake)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CorbaSeq)
 include(CorbaSeq/CMakeLists.txt)
-
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CORBA/tao)
-include(CORBA/tao/CMakeLists.txt)
 
 include(DCPS/CMakeLists.txt)
 include(DCPS/transport/framework/CMakeLists.txt)

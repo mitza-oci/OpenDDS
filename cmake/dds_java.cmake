@@ -98,6 +98,10 @@ function(dds_add_taoidl_jar _target_name)
     set(_arg_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
   endif()
 
+  if (NOT (TARGET ${_arg_LIB} AND TARGET TAO_PortableServer))
+    return()
+  endif()
+
   target_link_libraries(${_arg_LIB} PUBLIC
     idl2jni_runtime TAO_PortableServer)
 
@@ -155,6 +159,10 @@ function(dds_add_ddsidl_jar _target_name)
 
   if (_arg_VERSION)
     set(version_option VERSION ${_arg_VERSION})
+  endif()
+
+  if (NOT (TARGET ${_arg_LIB} AND TARGET OpenDDS_DCPS_Java))
+    return()
   endif()
 
   target_link_libraries(${_arg_LIB} PUBLIC

@@ -1,3 +1,7 @@
+if (TARGET opendds_idl)
+  ## Happens when cross compiling
+  return()
+endif()
 
 ace_add_exe(opendds_idl
   PACKAGE OpenDDS

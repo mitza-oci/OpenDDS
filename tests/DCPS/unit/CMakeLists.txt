@@ -20,7 +20,7 @@ ace_target_cxx_sources(DdsDcps_UnitTest
 
 tao_idl_sources(
   IDL_FLAGS -I${OpenDDS_INCLUDE_DIR}
-  TARGETS DdsDcps_UnitTest
+  STUB_TARGETS DdsDcps_UnitTest
   IDL_FILES MyTypeSupport.idl
 )
 

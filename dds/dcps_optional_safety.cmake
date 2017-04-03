@@ -21,40 +21,48 @@ tao_idl_sources(
 )
 
 if (OPENDDS_SAFETY_PROFILE)
+
+  tao_idl_sources(
+    TARGETS OpenDDS_Dcps
+    IDL_FLAGS ${dcps_tao_flags}
+    IDL_FILES DdsDcpsInfrastructure.idl
+  )
+
   dds_idl_sources(
+    NO_TAO_IDL
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp
-    TAO_IDL_FLAGS ${dcps_tao_flags}
     IDL_FILES DdsDcpsGuid.idl
               DdsDcpsInfoUtils.idl
   )
 
   dds_idl_sources(
+    NO_TAO_IDL
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp -ZC DdsDcpsInfrastructureC.h
     IDL_FILES DdsDcpsConditionSeq.idl
   )
 
   dds_idl_sources(
+    NO_TAO_IDL
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -SI -Lspcpp -ZC DdsDcpsSubscriptionC.h
-    TAO_IDL_FLAGS ${dcps_tao_flags}
     IDL_FILES DdsDcpsDataReaderSeq.idl
   )
 
   dds_idl_sources(
+    NO_TAO_IDL
     TARGETS OpenDDS_Dcps
     DDS_IDL_FLAGS ${dcps_flags} -Lspcpp
-    TAO_IDL_FLAGS ${dcps_tao_flags}
     IDL_FILES DdsDcpsCore.idl
   )
 
   tao_idl_sources(
     TARGETS OpenDDS_Dcps
     IDL_FLAGS ${dcps_tao_flags}
-    IDL_FILES DdsDcpsCoreTypeSupport.idl
-              DdsDcpsInfrastructure.idl
+    IDL_FILES ${CMAKE_CURRENT_BINARY_DIR}/DdsDcpsCoreTypeSupport.idl
   )
+
 else(OPENDDS_SAFETY_PROFILE)
   if (OPENDDS_HAS_BUILT_IN_TOPICS)
     dds_idl_sources(

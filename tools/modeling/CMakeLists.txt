@@ -1,5 +1,5 @@
 find_package(Java)
-ace_requires(JAVA_FOUND)
+ace_requires(JAVA_FOUND "NOT OPENDDS_SAFETY_PROFILE")
 include(../../cmake/dds_java.cmake)
 add_subdirectory(plugins)
 add_subdirectory(tests)
