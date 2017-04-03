@@ -10,6 +10,13 @@
 
 #include <cstdlib>
 
+#if __cplusplus >= 201103L
+#define SAFETY_NOEXCEPT noexcept
+#else
+#define SAFETY_NOEXCEPT throw()
+#define ACE_HAS_NEW_THROW_SPEC
+#endif
+
 static bool no_global_new = false;
 
 class DisableGlobalNew {
@@ -36,11 +43,11 @@ void* operator new(size_t sz)
   return ::malloc(sz);
 }
 
-void operator delete(void* ptr) {
+void operator delete(void* ptr) SAFETY_NOEXCEPT {
   ::free(ptr);
 }
 
-void* operator new(size_t sz, const std::nothrow_t&)
+void* operator new(size_t sz, const std::nothrow_t&) SAFETY_NOEXCEPT
 {
   if (no_global_new) {
     printf ("ERROR: call to global operator new\n");
@@ -48,11 +55,11 @@ void* operator new(size_t sz, const std::nothrow_t&)
   return ::malloc(sz);
 }
 
-void operator delete(void* ptr, const std::nothrow_t&) {
+void operator delete(void* ptr, const std::nothrow_t&) SAFETY_NOEXCEPT {
   ::free(ptr);
 }
 
-void* operator new[](size_t sz, const std::nothrow_t&)
+void* operator new[](size_t sz, const std::nothrow_t&) SAFETY_NOEXCEPT
 {
   if (no_global_new) {
     printf ("ERROR: call to global operator new[]\n");
@@ -67,7 +74,7 @@ void* operator new[](size_t sz, const std::nothrow_t&)
   return ::malloc(sz);
 }
 
-void operator delete[](void* ptr, const std::nothrow_t&) {
+void operator delete[](void* ptr, const std::nothrow_t&) SAFETY_NOEXCEPT {
   ::free(ptr);
 }
 
@@ -89,7 +96,7 @@ void* operator new[](size_t sz)
   return ::malloc(sz);
 }
 
-void operator delete[](void* ptr) {
+void operator delete[](void* ptr) SAFETY_NOEXCEPT {
   ::free(ptr);
 }
 
