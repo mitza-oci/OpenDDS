@@ -5,14 +5,14 @@ ace_add_exe(Chained_Data_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model Chained_Data CfTopic
 )
-target_sources(Chained_Data_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(Chained_Data_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(Chained_Data_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model Chained_Data CfTopic
 )
-target_sources(Chained_Data_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(Chained_Data_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )

@@ -2,6 +2,7 @@
 
 ace_add_lib(two_idl_test
   DEFINE_SYMBOL TWO_IDL_TEST_BUILD_DLL
+  REQUIRES OpenDDS_DCPS_Java
   FOLDER java/tests/two_idl
 )
 

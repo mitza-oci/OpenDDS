@@ -1,3 +1,5 @@
+ace_requires(OpenDDS_DCPS_Java)
+
 add_subdirectory(hello)
 add_subdirectory(transport_config)
 add_subdirectory(two_idl)

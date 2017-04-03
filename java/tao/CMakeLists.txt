@@ -1,3 +1,4 @@
+ace_requires("TARGET TAO")
 
 dds_idl2jni_command(tao_java_idl
   FLAGS -SS -Wb,stub_export_include=tao_java_export.h
@@ -46,3 +47,4 @@ set_target_properties(tao_java_jar PROPERTIES
 )
 
 install_jar(tao_java_jar DESTINATION ${OpenDDS_INSTALL_DIR}/lib)
+

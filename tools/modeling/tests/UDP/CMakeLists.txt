@@ -5,16 +5,16 @@ ace_add_exe(UDP_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model UDP
 )
-target_sources(UDP_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(UDP_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(UDP_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model UDP
 )
-target_sources(UDP_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(UDP_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

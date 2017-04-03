@@ -5,16 +5,16 @@ ace_add_exe(Comments_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model Comments
 )
-target_sources(Comments_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(Comments_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(Comments_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model Comments
 )
-target_sources(Comments_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(Comments_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

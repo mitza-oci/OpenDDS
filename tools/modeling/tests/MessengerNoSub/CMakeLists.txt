@@ -5,8 +5,8 @@ ace_add_exe(MessengerNoSub_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model MessengerNoSub
 )
-target_sources(MessengerNoSub_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(MessengerNoSub_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 dds_configure_test_files()

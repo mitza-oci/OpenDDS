@@ -7,16 +7,16 @@ ace_add_exe(ModuleNameConflict_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model ModuleNameConflict
 )
-target_sources(ModuleNameConflict_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(ModuleNameConflict_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(ModuleNameConflict_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model ModuleNameConflict
 )
-target_sources(ModuleNameConflict_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(ModuleNameConflict_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

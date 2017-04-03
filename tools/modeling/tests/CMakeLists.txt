@@ -38,14 +38,16 @@ function(dds_add_model_lib base)
     PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/model>
     PUBLIC_LINK_LIBRARIES OpenDDS_Model ${_arg_PUBLIC_LINK_LIBRARIES}
   )
-  target_sources(${base} PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR}/model/${base}Traits.h
-    ${CMAKE_CURRENT_BINARY_DIR}/model/${base}Traits.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/model/${base}_T.h
-    ${CMAKE_CURRENT_BINARY_DIR}/model/${base}_T.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/model/${base}_export.h
-  )
 
+  if (TARGET ${base})
+    target_sources(${base} PRIVATE
+      ${CMAKE_CURRENT_BINARY_DIR}/model/${base}Traits.h
+      ${CMAKE_CURRENT_BINARY_DIR}/model/${base}Traits.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/model/${base}_T.h
+      ${CMAKE_CURRENT_BINARY_DIR}/model/${base}_T.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/model/${base}_export.h
+    )
+  endif(TARGET ${base})
   foreach(lib ${_arg_PUBLIC_LINK_LIBRARIES})
     list(APPEND INCLUDE_OPTIONS -I$<TARGET_FILE_DIR:${lib}>/model)
   endforeach()

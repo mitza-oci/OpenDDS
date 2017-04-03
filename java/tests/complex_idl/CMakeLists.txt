@@ -1,6 +1,7 @@
 ace_add_lib(complex_idl_test
   OUTPUT_NAME complex_idl_test
   FOLDER java/tests/complex_idl
+  REQUIRES OpenDDS_DCPS_Java
   DEFINE_SYMBOL COMPLEX_IDL_TEST_BUILD_DLL
 )
 

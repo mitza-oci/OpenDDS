@@ -5,16 +5,16 @@ ace_add_exe(CopyTopicQos_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model CopyTopicQos
 )
-target_sources(CopyTopicQos_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(CopyTopicQos_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(CopyTopicQos_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model CopyTopicQos
 )
-target_sources(CopyTopicQos_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(CopyTopicQos_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

@@ -20,8 +20,6 @@ ace_add_package(OpenDDS
   VERSION ${OPENDDS_VERSION}
 )
 
-enable_testing()
-
 if (MSVC)
   add_compile_options("/bigobj")
 endif(MSVC)
@@ -31,13 +29,18 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
   set(TEST_EXCLUDE_LABELS SHMEM)
 endif()
 
-add_subdirectory(dds)
-ace_add_optional_subdirectory(tools)
-ace_add_optional_subdirectory(examples/DCPS)
-ace_add_optional_subdirectory(tests)
-ace_add_optional_subdirectory(performance-tests)
-ace_add_optional_subdirectory(DevGuideExamples)
-ace_add_optional_subdirectory(java)
+enable_testing()
+
+if (HOSTTOOLS_ONLY)
+  set(OPENDDS_SUBDIRS "dds/idl")
+else()
+  set(OPENDDS_SUBDIRS "dds;tools;java;examples;tests;performance-tests;DevGuideExamples" CACHE STRING "")
+endif()
+
+foreach(subdir ${OPENDDS_SUBDIRS})
+  add_subdirectory(${subdir})
+endforeach()
+
 add_subdirectory(bin/PerlDDS)
 add_subdirectory(docs)
 

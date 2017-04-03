@@ -5,16 +5,16 @@ ace_add_exe(CompositeKey_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model CompositeKey
 )
-target_sources(CompositeKey_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(CompositeKey_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(CompositeKey_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model CompositeKey
 )
-target_sources(CompositeKey_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(CompositeKey_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

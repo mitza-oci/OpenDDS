@@ -5,16 +5,16 @@ ace_add_exe(Arrays_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model Arrays
 )
-target_sources(Arrays_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(Arrays_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(Arrays_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model Arrays
 )
-target_sources(Arrays_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(Arrays_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

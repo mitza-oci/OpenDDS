@@ -1,4 +1,3 @@
-
 include(dcps_java_optional.cmake)
 
 list(APPEND BASE_IDL2JNI_FLAGS
@@ -143,7 +142,9 @@ ace_target_cxx_sources(OpenDDS_DCPS_Java
                OpenDDS_jni_helpers.h
 )
 
-target_sources(OpenDDS_DCPS_Java PRIVATE
-  ${OpenDDS_Dcps_Java_idl_CXX_OUTPUTS}
-  ${OpenDDS_DCPS_Java_headers}
-)
+if (TARGET OpenDDS_DCPS_Java)
+  target_sources(OpenDDS_DCPS_Java PRIVATE
+    ${OpenDDS_Dcps_Java_idl_CXX_OUTPUTS}
+    ${OpenDDS_DCPS_Java_headers}
+  )
+endif()

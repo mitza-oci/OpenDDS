@@ -1,3 +1,7 @@
+if (TARGET idl2jni)
+  ## Happens when cross compiling
+  return()
+endif()
 
 ace_add_exe(idl2jni
   PACKAGE OpenDDS

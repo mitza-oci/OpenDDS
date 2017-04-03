@@ -5,16 +5,16 @@ ace_add_exe(SubscriberQos_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model SubQos
 )
-target_sources(SubscriberQos_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(SubscriberQos_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(SubscriberQos_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model SubQos
 )
-target_sources(SubscriberQos_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(SubscriberQos_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

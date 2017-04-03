@@ -5,16 +5,16 @@ ace_add_exe(MessengerWriterQos_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model MessengerWriterQos
 )
-target_sources(MessengerWriterQos_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(MessengerWriterQos_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(MessengerWriterQos_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model MessengerWriterQos
 )
-target_sources(MessengerWriterQos_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(MessengerWriterQos_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

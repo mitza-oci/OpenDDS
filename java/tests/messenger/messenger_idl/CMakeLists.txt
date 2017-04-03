@@ -1,6 +1,7 @@
 
 ace_add_lib(messenger_idl_test
   DEFINE_SYMBOL MESSENGER_IDL_TEST_BUILD_DLL
+  REQUIRES OpenDDS_DCPS_Java
   FOLDER java/tests/messenger/messenger_idl
 )
 

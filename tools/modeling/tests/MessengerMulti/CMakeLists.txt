@@ -5,16 +5,16 @@ ace_add_exe(MessengerMulti_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model MessengerMulti
 )
-target_sources(MessengerMulti_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(MessengerMulti_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(MessengerMulti_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model MessengerMulti
 )
-target_sources(MessengerMulti_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(MessengerMulti_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()

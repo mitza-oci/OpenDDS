@@ -5,16 +5,16 @@ ace_add_exe(InvalidNames_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model InvalidNames
 )
-target_sources(InvalidNames_xmlPublisher PRIVATE
-  publisher.cpp
+ace_target_cxx_sources(InvalidNames_xmlPublisher
+  SOURCE_FILES publisher.cpp
 )
 
 ace_add_exe(InvalidNames_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model InvalidNames
 )
-target_sources(InvalidNames_xmlSubscriber PRIVATE
-  subscriber.cpp
+ace_target_cxx_sources(InvalidNames_xmlSubscriber
+  SOURCE_FILES subscriber.cpp
 )
 
 dds_configure_test_files()
