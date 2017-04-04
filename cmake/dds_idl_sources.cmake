@@ -11,14 +11,12 @@ if (NOT DEFINED DDS_BASE_IDL_FLAGS)
     list(APPEND TAO_BASE_IDL_FLAGS -Sa -St)
     list(APPEND DDS_BASE_IDL_FLAGS -Sa -St)
   endif()
-  message("DDS_BASE_IDL_FLAGS=${DDS_BASE_IDL_FLAGS}")
   foreach(definition ${DCPS_COMPILE_DEFINITIONS})
     list(APPEND TAO_BASE_IDL_FLAGS -D${definition})
     list(APPEND DDS_BASE_IDL_FLAGS -D${definition})
   endforeach()
 endif()
 
-message("DDS_BASE_IDL_FLAGS=${DDS_BASE_IDL_FLAGS}")
 
 set(FACE_TAO_IDL_FLAGS -SS -Wb,no_fixed_err)
 set(FACE_DDS_IDL_FLAGS -GfaceTS -Lface)
@@ -145,13 +143,6 @@ function(dds_idl_sources)
 
   set(is_face OFF)
 
-  if (_DEBUG)
-    message("_arg_IDL_FILES=${_arg_IDL_FILES}")
-    message("_arg_DDS_IDL_FLAGS=${_arg_DDS_IDL_FLAGS}")
-    message("_arg_TAO_IDL_FLAGS=${_arg_TAO_IDL_FLAGS}")
-  endif()
-
-
   foreach(target ${_arg_TARGETS})
     if (TARGET ${target})
       get_property(target_link_libs TARGET ${target} PROPERTY LINK_LIBRARIES)
@@ -180,14 +171,6 @@ function(dds_idl_sources)
   if (is_face)
     list(APPEND _arg_TAO_IDL_FLAGS ${FACE_TAO_IDL_FLAGS})
     list(APPEND _arg_DDS_IDL_FLAGS ${FACE_DDS_IDL_FLAGS})
-  endif()
-
-  if (_DEBUG)
-    message("Before dds_idl_command")
-    message("_arg_IDL_FILES=${_arg_IDL_FILES}")
-    message("_arg_DDS_IDL_FLAGS=${_arg_DDS_IDL_FLAGS}")
-    message("_arg_TAO_IDL_FLAGS=${_arg_TAO_IDL_FLAGS}")
-    message("WORKING_DIRECTORY=${rel_path}")
   endif()
 
   dds_idl_command(_idl
