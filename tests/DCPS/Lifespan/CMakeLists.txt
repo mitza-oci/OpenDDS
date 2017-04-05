@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_lib(DDS_Lifespan_Idl
   OUTPUT_NAME DDS_Lifespan_Idl
-  FOLDER tests/DCPS/Lifespan
+
   DEFINE_SYMBOL LIFESPAN_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +26,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Lifespan_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/Lifespan
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Lifespan_Idl
                  OpenDDS_Default_Discovery
@@ -42,7 +42,7 @@ ace_target_cxx_sources(DDS_Lifespan_Publisher
 
 ace_add_exe(DDS_Lifespan_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/Lifespan
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Lifespan_Idl
                  OpenDDS_Default_Discovery

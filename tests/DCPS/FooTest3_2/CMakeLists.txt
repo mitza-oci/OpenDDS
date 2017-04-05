@@ -1,6 +1,6 @@
 ace_add_exe(FooTest3_2_Publisher
   OUTPUT_NAME FooTest3_publisher
-  FOLDER tests/DCPS/FooTest3_2
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType3Unbounded
                  OpenDDS_Default_Discovery
@@ -28,7 +28,7 @@ ace_target_cxx_sources(FooTest3_2_Publisher
 
 ace_add_exe(FooTest3_2_Subscriber
   OUTPUT_NAME FooTest3_subscriber
-  FOLDER tests/DCPS/FooTest3_2
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType3Unbounded
                  OpenDDS_Default_Discovery

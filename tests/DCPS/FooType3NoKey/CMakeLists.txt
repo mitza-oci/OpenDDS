@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(DcpsFooType3NoKey
   OUTPUT_NAME DcpsFooType3NoKey
-  FOLDER tests/DCPS/FooType3NoKey
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

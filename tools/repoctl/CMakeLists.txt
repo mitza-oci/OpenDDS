@@ -2,7 +2,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(repoctl
   PACKAGE OpenDDS
-  FOLDER tool
+  FOLDER OpenDDS/tools
   LINK_LIBRARIES TAO_IORTable
                  TAO_Svc_Utils
                  TAO_ImR_Client

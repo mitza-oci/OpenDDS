@@ -6,6 +6,7 @@ dds_add_model_lib(CfTopic
 ace_add_exe(CfTopic_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model CfTopic
+
 )
 ace_target_cxx_sources(CfTopic_xmlPublisher
   SOURCE_FILES publisher.cpp
@@ -14,6 +15,7 @@ ace_target_cxx_sources(CfTopic_xmlPublisher
 ace_add_exe(CfTopic_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model CfTopic
+
 )
 ace_target_cxx_sources(CfTopic_xmlSubscriber
   SOURCE_FILES subscriber.cpp

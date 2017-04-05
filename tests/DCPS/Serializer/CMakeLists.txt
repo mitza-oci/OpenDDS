@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(SerializerTest
   OUTPUT_NAME SerializerTest
-  FOLDER tests/DCPS/Serializer
+
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(SerializerTest

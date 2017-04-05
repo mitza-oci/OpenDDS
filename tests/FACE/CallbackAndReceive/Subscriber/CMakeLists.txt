@@ -9,7 +9,7 @@ endif()
 
 ace_add_exe(CallbackAndReceiveSubscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/FACE/CallbackAndReceive/Subscriber
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../../Messenger
                       ${CMAKE_CURRENT_BINARY_DIR}/../../Messenger
   LINK_LIBRARIES FaceMessengerIdl

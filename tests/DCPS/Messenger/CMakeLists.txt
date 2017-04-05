@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(DDS_Messenger_Idl
   OUTPUT_NAME DDS_Messenger_Idl
-  FOLDER tests/DCPS/Messenger
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +24,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Messenger_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/Messenger
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Messenger_Idl
                  OpenDDS_Default_Discovery
@@ -44,7 +44,7 @@ ace_target_cxx_sources(DDS_Messenger_Publisher
 
 ace_add_exe(DDS_Messenger_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/Messenger
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Messenger_Idl
                  OpenDDS_Default_Discovery
@@ -58,7 +58,7 @@ ace_target_cxx_sources(DDS_Messenger_Subscriber
 
 ace_add_exe(DDS_Messenger_Stacksubscriber
   OUTPUT_NAME stack_subscriber
-  FOLDER tests/DCPS/Messenger
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Messenger_Idl
                  OpenDDS_Default_Discovery

@@ -10,7 +10,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(Messenger_Publisher
   OUTPUT_NAME publisher
-  FOLDER DevGuideExamples/DCPS/Messenger
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )
@@ -26,7 +26,7 @@ dds_idl_sources(
 
 ace_add_exe(Messenger_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER DevGuideExamples/DCPS/Messenger
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

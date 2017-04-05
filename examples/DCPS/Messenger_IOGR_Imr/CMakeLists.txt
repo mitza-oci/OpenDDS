@@ -17,7 +17,7 @@ ace_requires("TARGET ImR_Locator_Service"
 
 ace_add_lib(DDS_Messenger_IOGR_Imr_Idl
   OUTPUT_NAME DDS_Messenger_IOGR_Imr_Idl
-  FOLDER examples/DCPS/Messenger_IOGR_Imr
+
   DEFINE_SYMBOL MESSENGER_IOGR_IMR_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -32,7 +32,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
-  FOLDER examples/DCPS/Messenger_IOGR_Imr
+
   LINK_LIBRARIES TAO_FT_ServerORB
                  TAO_AnyTypeCode
                  TAO_FT_ClientORB
@@ -48,7 +48,7 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Aggregator
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Publisher
   OUTPUT_NAME publisher
-  FOLDER examples/DCPS/Messenger_IOGR_Imr
+
   LINK_LIBRARIES DDS_Messenger_IOGR_Imr_Idl
                  OpenDDS_Default_Discovery
 )
@@ -67,7 +67,7 @@ ace_target_cxx_sources(DDS_Messenger_IOGR_Imr_Publisher
 
 ace_add_exe(DDS_Messenger_IOGR_Imr_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER examples/DCPS/Messenger_IOGR_Imr
+
   LINK_LIBRARIES DDS_Messenger_IOGR_Imr_Idl
                  OpenDDS_Default_Discovery
 )

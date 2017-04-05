@@ -6,6 +6,7 @@ dds_add_model_lib(ModuleNameConflict
 ace_add_exe(ModuleNameConflict_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model ModuleNameConflict
+
 )
 ace_target_cxx_sources(ModuleNameConflict_xmlPublisher
   SOURCE_FILES publisher.cpp
@@ -14,6 +15,7 @@ ace_target_cxx_sources(ModuleNameConflict_xmlPublisher
 ace_add_exe(ModuleNameConflict_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model ModuleNameConflict
+
 )
 ace_target_cxx_sources(ModuleNameConflict_xmlSubscriber
   SOURCE_FILES subscriber.cpp

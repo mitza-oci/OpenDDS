@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(DdsDcps_UnitTest
   OUTPUT_NAME DdsDcps_UnitTest
-  FOLDER tests/DCPS/unit
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

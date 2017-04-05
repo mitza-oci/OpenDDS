@@ -17,7 +17,7 @@ ace_requires(
 
 ace_add_lib(DDS_Messenger_Imr_Idl
   OUTPUT_NAME DDS_Messenger_Imr_Idl
-  FOLDER examples/DCPS/Messenger_Imr
+
   DEFINE_SYMBOL MESSENGER_IMR_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -32,7 +32,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Messenger_Imr_Publisher
   OUTPUT_NAME publisher
-  FOLDER examples/DCPS/Messenger_Imr
+
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
                  OpenDDS_Default_Discovery
@@ -46,7 +46,7 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Publisher
 
 ace_add_exe(DDS_Messenger_Imr_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER examples/DCPS/Messenger_Imr
+
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_Messenger_Imr_Idl
                  OpenDDS_Default_Discovery

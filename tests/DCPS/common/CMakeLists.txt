@@ -2,7 +2,7 @@
 
 ace_add_lib(common
   OUTPUT_NAME common
-  FOLDER tests/DCPS/common
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(common

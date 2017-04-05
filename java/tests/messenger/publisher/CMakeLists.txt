@@ -1,12 +1,7 @@
-add_jar(publisher_idl_test
+dds_add_jar(publisher_idl_test
   INCLUDE_JARS ${OPENDDS_JARS} messenger_idl_jar
   SOURCES TestPublisher.java
 )
-
-set_target_properties(publisher_idl_test PROPERTIES
-  FOLDER java/tests/messenger/publisher
-)
-
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()

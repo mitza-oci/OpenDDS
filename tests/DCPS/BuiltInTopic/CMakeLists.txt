@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(BuiltInTopic
   OUTPUT_NAME bit
-  FOLDER tests/DCPS/BuiltInTopic
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  OpenDDS_Default_Discovery

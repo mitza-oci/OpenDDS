@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(DDS_Inconsistent_Qos_Idl
   OUTPUT_NAME DDS_Inconsistent_Qos_Idl
-  FOLDER tests/DCPS/Inconsistent_Qos
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +24,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Inconsistent_Qos_Inconsistent_qos
   OUTPUT_NAME inconsistent_qos
-  FOLDER tests/DCPS/Inconsistent_Qos
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_QOS_XML_XSC_Handler
                  DDS_Inconsistent_Qos_Idl

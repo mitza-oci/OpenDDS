@@ -2,7 +2,7 @@
 
 ace_add_lib(TestUtils
   OUTPUT_NAME TestUtils
-  FOLDER tests/Utils
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(TestUtils

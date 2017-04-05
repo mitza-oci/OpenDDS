@@ -2,16 +2,12 @@
 ace_requires(BUILD_SHARED_LIBS)
 
 #set(CMAKE_JAVA_COMPILE_FLAGS -sourcepath . -d classes -classpath . -implicit:none)
-add_jar(i2jrt
+dds_add_jar(i2jrt
   SOURCES i2jrt/ORB.java
           i2jrt/TAOLocalObject.java
           i2jrt/TAOObject.java
   VERSION ${OpenDDS_VERSION}
   OUTPUT_DIR ${CMAKE_BINARY_DIR}/lib
-)
-
-set_target_properties(i2jrt PROPERTIES
-  FOLDER java/idl2jni/runtime
 )
 
 create_javah(GENERATED_FILES i2jrt_headers
@@ -30,7 +26,6 @@ endif()
 ace_add_lib(idl2jni_runtime
   DEFINE_SYMBOL IDL2JNI_RUNTIME_BUILD_DLL
   PACKAGE OpenDDS
-  FOLDER java/idl2jni/runtime
   PUBLIC_INCLUDE_DIRECTORIES ${JNI_INCLUDE_DIRS}
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                              $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java/idl2jni/runtime>

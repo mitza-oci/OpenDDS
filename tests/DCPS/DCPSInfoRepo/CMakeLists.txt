@@ -10,7 +10,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(dcpsinfo_test_Pubsub
   OUTPUT_NAME pubsub
-  FOLDER tests/DCPS/DCPSInfoRepo
+
   LINK_LIBRARIES OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery
 )

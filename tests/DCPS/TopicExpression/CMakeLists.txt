@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_MULTI_TOPIC OPENDDS_HAS_CONTENT_SUBSCRIPTION_CORE OPEND
 
 ace_add_exe(TopicExpressionTest
   OUTPUT_NAME TopicExpressionTest
-  FOLDER tests/DCPS/TopicExpression
+
   LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(TopicExpressionTest

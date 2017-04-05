@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_QUERY_CONDITION OPENDDS_HAS_CONTENT_SUBSCRIPTION)
 
 ace_add_exe(QueryCondition
   OUTPUT_NAME QueryConditionTest
-  FOLDER tests/DCPS/QueryCondition
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

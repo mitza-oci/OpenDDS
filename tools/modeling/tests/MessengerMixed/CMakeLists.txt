@@ -7,6 +7,7 @@ dds_add_model_lib(MessengerMixed
 ace_add_exe(MessengerMixed_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model MessengerMixed
+
 )
 ace_target_cxx_sources(MessengerMixed_xmlPublisher
   SOURCE_FILES publisher.cpp
@@ -15,6 +16,7 @@ ace_target_cxx_sources(MessengerMixed_xmlPublisher
 ace_add_exe(MessengerMixed_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model MessengerMixed
+
 )
 ace_target_cxx_sources(MessengerMixed_xmlSubscriber
   SOURCE_FILES subscriber.cpp

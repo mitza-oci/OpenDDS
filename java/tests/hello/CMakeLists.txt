@@ -2,14 +2,11 @@ if (OPENDDS_SUPPRESS_ANYS)
   set(FLAGS -SS)
 endif()
 
-ace_add_lib(hello_java_client
-  FOLDER java/tests/hello
-)
+ace_add_lib(hello_java_client)
 
 dds_add_taoidl_jar(hello_java_client_jar
   OUTPUT_NAME hello_java_client
   LIB hello_java_client
-  FOLDER java/tests/hello
   TAO_IDL_FLAGS ${FLAGS}
   IDL2JNI_FLAGS -SS
   IDL_FILES Test.idl
@@ -22,10 +19,10 @@ dds_add_taoidl_jar(hello_java_client_jar
 
 if (TARGET Hello_Server)
   ## TAO is part of our source tree
-  set(Hello_Server_LOCATION $<TARGET_FILE:Hello_Server>)
+  set(Hello_Server_LOCATION $<TARGET_PROPERTY:Hello_Server,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:${target},OUTPUT_NAME>)
 else(TARGET Hello_Server)
-  find_file(Hello_Server_LOCATION tests/tests/Hello/server${CMAKE_EXECUTABLE_SUFFIX}
-            PATHS ${TAO_DIR} ${TAO_BINARY_DIR}
+  find_file(Hello_Server_LOCATION server${CMAKE_EXECUTABLE_SUFFIX}
+            PATHS ${TAO_DIR}/tests/Hello ${TAO_BINARY_DIR}/tests/Hello
             NO_DEFAULT_PATH)
 
   if (NOT Hello_Server_LOCATION)

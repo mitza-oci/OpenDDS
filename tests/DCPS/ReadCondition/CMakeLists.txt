@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(ReadCondition
   OUTPUT_NAME ReadConditionTest
-  FOLDER tests/DCPS/ReadCondition
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

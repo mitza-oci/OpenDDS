@@ -11,7 +11,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DCPS_Perf_raw_tcp_latency_subscriber
   OUTPUT_NAME raw_tcp_subscriber
-  FOLDER performance-tests/DCPS/SimpleLatency/raw_tcp/subscriber
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../common
   LINK_LIBRARIES ACE
 )

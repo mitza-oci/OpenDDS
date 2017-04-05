@@ -1,10 +1,6 @@
-add_jar(zerocopy_java_test
+dds_add_jar(zerocopy_java_test
   INCLUDE_JARS ${OPENDDS_JARS} messenger_idl_jar
   SOURCES ZeroCopy.java
-)
-
-set_target_properties(zerocopy_java_test PROPERTIES
-  FOLDER java/tests/zerocopy
 )
 
 

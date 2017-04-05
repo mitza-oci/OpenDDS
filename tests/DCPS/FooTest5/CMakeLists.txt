@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(DcpsFooTest5Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/FooTest5
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Model
                  DcpsFooType5
@@ -21,7 +21,7 @@ ace_target_cxx_sources(DcpsFooTest5Publisher
 
 ace_add_exe(DcpsFooTest5Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/FooTest5
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType5
                  OpenDDS_Default_Discovery

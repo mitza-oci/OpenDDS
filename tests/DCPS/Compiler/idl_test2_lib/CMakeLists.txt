@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(idl_test2_lib
   OUTPUT_NAME idl_test2_lib
-  FOLDER tests/DCPS/Compiler/idl_test2_lib
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

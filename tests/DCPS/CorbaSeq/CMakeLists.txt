@@ -10,7 +10,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(CorbaSeq_Idl
   OUTPUT_NAME CorbaSeq_Idl
-  FOLDER tests/DCPS/CorbaSeq
+
   DEFINE_SYMBOL CORBASEQ_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +26,7 @@ dds_idl_sources(
 
 ace_add_exe(CorbaSeq_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/CorbaSeq
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  CorbaSeq_Idl
                  OpenDDS_Default_Discovery
@@ -40,7 +40,7 @@ ace_target_cxx_sources(CorbaSeq_Publisher
 
 ace_add_exe(CorbaSeq_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/CorbaSeq
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  CorbaSeq_Idl
                  OpenDDS_Default_Discovery

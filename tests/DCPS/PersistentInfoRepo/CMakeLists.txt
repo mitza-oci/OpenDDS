@@ -2,7 +2,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(PersistentInfoRepo_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/PersistentInfoRepo
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestUtils
                  DcpsFooType4
@@ -20,7 +20,7 @@ ace_target_cxx_sources(PersistentInfoRepo_Publisher
 
 ace_add_exe(PersistentInfoRepo_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/PersistentInfoRepo
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestUtils
                  DcpsFooType4

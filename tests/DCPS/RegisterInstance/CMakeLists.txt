@@ -1,6 +1,6 @@
 ace_add_exe(register_instance_Topic
   OUTPUT_NAME register_instance_test
-  FOLDER tests/DCPS/RegisterInstance
+
   LINK_LIBRARIES DcpsFooType
                  OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery

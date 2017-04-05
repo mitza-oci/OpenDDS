@@ -10,7 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 ace_add_exe(Monitor_App
   OUTPUT_NAME monitor
-  FOLDER tools
+  FOLDER OpenDDS/tools
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Qt4::QtGui

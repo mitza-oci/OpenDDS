@@ -9,7 +9,7 @@ endif()
 
 ace_add_exe(DCPS_Perf_raw_tcp_publisher
   OUTPUT_NAME raw_tcp_publisher
-  FOLDER performance-tests/DCPS/TCPProfilingTest/raw_tcp/publisher
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../common
   LINK_LIBRARIES ACE
 )

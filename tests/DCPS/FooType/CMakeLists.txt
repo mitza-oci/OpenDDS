@@ -2,7 +2,7 @@
 
 ace_add_lib(DcpsFooType
   OUTPUT_NAME DcpsFooType
-  FOLDER tests/DCPS/FooType
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(DcpsFooType

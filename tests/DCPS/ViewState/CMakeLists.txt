@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(ViewState
   OUTPUT_NAME main
-  FOLDER tests/DCPS/ViewState
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

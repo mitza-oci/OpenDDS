@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(DDS_TcpReconnect_Idl
   OUTPUT_NAME DDS_TcpReconnect_Idl
-  FOLDER tests/DCPS/TcpReconnect
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_TcpReconnect_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/TcpReconnect
+
   LINK_LIBRARIES OpenDDS_Shmem
                  OpenDDS_Multicast
                  OpenDDS_Tcp
@@ -44,7 +44,7 @@ ace_target_cxx_sources(DDS_TcpReconnect_Publisher
 
 ace_add_exe(DDS_TcpReconnect_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/TcpReconnect
+
   LINK_LIBRARIES OpenDDS_Shmem
                  OpenDDS_Multicast
                  OpenDDS_Tcp
@@ -62,7 +62,7 @@ ace_target_cxx_sources(DDS_TcpReconnect_Subscriber
 
 ace_add_exe(stub
   OUTPUT_NAME stub
-  FOLDER tests/DCPS/TcpReconnect
+
   LINK_LIBRARIES ACE
 )
 ace_target_cxx_sources(stub

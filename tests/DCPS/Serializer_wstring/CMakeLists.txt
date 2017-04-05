@@ -10,7 +10,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(Serializer_wstring_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/Serializer_wstring
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )
@@ -28,7 +28,7 @@ dds_idl_sources(
 
 ace_add_exe(Serializer_wstring_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/Serializer_wstring
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

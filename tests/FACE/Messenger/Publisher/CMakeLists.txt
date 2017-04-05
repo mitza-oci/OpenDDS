@@ -2,7 +2,7 @@
 
 ace_add_exe(FaceMessengerPublisher
   OUTPUT_NAME publisher
-  FOLDER tests/FACE/Messenger/Publisher
+
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_FACE
                  OpenDDS_Rtps_Udp

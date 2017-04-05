@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_CONTENT_FILTERED_TOPIC OPENDDS_HAS_CONTENT_SUBSCRIPTION
 
 ace_add_exe(SubscriberCycle_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/SubscriberCycle
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType
   LINK_LIBRARIES OpenDDS_Transports_For_Test
@@ -20,7 +20,7 @@ ace_target_cxx_sources(SubscriberCycle_Publisher
 
 ace_add_exe(SubscriberCycle_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/SubscriberCycle
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType
   LINK_LIBRARIES OpenDDS_Transports_For_Test

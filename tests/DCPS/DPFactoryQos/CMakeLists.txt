@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(DDS_DPFactoryQos_Idl
   OUTPUT_NAME DDS_DPFactoryQos_Idl
-  FOLDER tests/DCPS/DPFactoryQos
+
   DEFINE_SYMBOL DPFACTORYQOS_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +24,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_DPFactoryQos_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/DPFactoryQos
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_DPFactoryQos_Idl
                  OpenDDS_Default_Discovery
@@ -38,7 +38,7 @@ ace_target_cxx_sources(DDS_DPFactoryQos_Publisher
 
 ace_add_exe(DDS_DPFactoryQos_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/DPFactoryQos
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_DPFactoryQos_Idl
                  OpenDDS_Default_Discovery

@@ -11,7 +11,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(StockQuoter_Common
   OUTPUT_NAME StockQuoterCommon
-  FOLDER examples/DCPS/IntroductionToOpenDDS
+
   PUBLIC_INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   PUBLIC_LINK_LIBRARIES TAO_AnyTypeCode
                         TAO_Svc_Utils
@@ -32,7 +32,7 @@ dds_idl_sources(
 
 ace_add_exe(StockQuoter_Publisher
   OUTPUT_NAME publisher
-  FOLDER examples/DCPS/IntroductionToOpenDDS
+
   INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   LINK_LIBRARIES TAO_AnyTypeCode
                  OpenDDS_Tcp
@@ -47,7 +47,7 @@ ace_target_cxx_sources(StockQuoter_Publisher
 
 ace_add_exe(StockQuoter_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER examples/DCPS/IntroductionToOpenDDS
+
   INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   LINK_LIBRARIES OpenDDS_Tcp
                  StockQuoter_Common

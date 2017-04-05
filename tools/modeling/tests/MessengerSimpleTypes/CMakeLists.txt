@@ -4,6 +4,7 @@ dds_add_model_lib(MessengerSimpleTypes)
 ace_add_exe(MessengerSimpleTypes_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model MessengerSimpleTypes
+
 )
 ace_target_cxx_sources(MessengerSimpleTypes_xmlPublisher
   SOURCE_FILES publisher.cpp
@@ -12,6 +13,7 @@ ace_target_cxx_sources(MessengerSimpleTypes_xmlPublisher
 ace_add_exe(MessengerSimpleTypes_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model MessengerSimpleTypes
+
 )
 ace_target_cxx_sources(MessengerSimpleTypes_xmlSubscriber
   SOURCE_FILES subscriber.cpp

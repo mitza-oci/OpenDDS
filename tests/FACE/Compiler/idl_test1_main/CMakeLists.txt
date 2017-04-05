@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
 
 ace_add_exe(FACE_idl_test1_main
   OUTPUT_NAME idl_test1
-  FOLDER tests/FACE/Compiler/idl_test1_main
+
   LINK_LIBRARIES FACE_idl_test1_lib
                  OpenDDS_FACE
                  OpenDDS_Default_Discovery

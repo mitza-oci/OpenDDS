@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(ZeroCopyDRL_idl
   OUTPUT_NAME ZeroCopyDRL_idl
-  FOLDER tests/DCPS/ZeroCopyDataReaderListener
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +24,7 @@ dds_idl_sources(
 
 ace_add_exe(ZeroCopyDRL_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/ZeroCopyDataReaderListener
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Model
                  ZeroCopyDRL_idl
@@ -45,7 +45,7 @@ ace_target_cxx_sources(ZeroCopyDRL_Publisher
 
 ace_add_exe(ZeroCopyDRL_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/ZeroCopyDataReaderListener
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Model
                  ZeroCopyDRL_idl
@@ -60,7 +60,7 @@ ace_target_cxx_sources(ZeroCopyDRL_Subscriber
 
 ace_add_exe(ZeroCopyDRL_StackSubscriber
   OUTPUT_NAME stack_subscriber
-  FOLDER tests/DCPS/ZeroCopyDataReaderListener
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Model
                  ZeroCopyDRL_idl

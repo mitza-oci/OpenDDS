@@ -11,7 +11,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DCPS_Perf_raw_tcp_latency_publisher
   OUTPUT_NAME raw_tcp_publisher
-  FOLDER performance-tests/DCPS/SimpleLatency/raw_tcp/publisher
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../common
   LINK_LIBRARIES ACE
 )

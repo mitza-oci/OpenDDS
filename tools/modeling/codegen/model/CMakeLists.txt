@@ -4,6 +4,7 @@ ace_add_lib(OpenDDS_Model
   PACKAGE OpenDDS
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+
 )
 
 ace_target_cxx_sources(OpenDDS_Model

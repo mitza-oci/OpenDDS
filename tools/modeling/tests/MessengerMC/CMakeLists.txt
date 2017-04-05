@@ -4,6 +4,7 @@ dds_add_model_lib(MessengerMC)
 ace_add_exe(MessengerMC_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model MessengerMC
+
 )
 ace_target_cxx_sources(MessengerMC_xmlPublisher
   SOURCE_FILES publisher.cpp
@@ -13,6 +14,7 @@ ace_target_cxx_sources(MessengerMC_xmlPublisher
 ace_add_exe(MessengerMC_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model MessengerMC
+
 )
 ace_target_cxx_sources(MessengerMC_xmlSubscriber
   SOURCE_FILES subscriber.cpp

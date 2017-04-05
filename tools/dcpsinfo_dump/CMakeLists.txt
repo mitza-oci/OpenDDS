@@ -2,7 +2,7 @@
 ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(dcpsinfo_dump
-  FOLDER tools
+  FOLDER OpenDDS/tools
   PACKAGE OpenDDS
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )

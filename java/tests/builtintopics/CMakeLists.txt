@@ -1,12 +1,8 @@
 ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
 
-add_jar(builtintopics_test
+dds_add_jar(builtintopics_test
   INCLUDE_JARS ${OPENDDS_JARS} messenger_idl_jar
   SOURCES BuiltinTopicsTest.java
-)
-
-set_target_properties(builtintopics_test PROPERTIES
-  FOLDER java/tests/buildintopics
 )
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)

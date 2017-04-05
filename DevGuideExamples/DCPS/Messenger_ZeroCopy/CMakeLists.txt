@@ -10,7 +10,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(Messenger_ZeroCopy_Idl
   OUTPUT_NAME Messenger_ZeroCopy_Idl
-  FOLDER DevGuideExamples/DCPS/Messenger_ZeroCopy
+
   DEFINE_SYMBOL MESSENGER_ZEROCOPY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(Messenger_ZeroCopy_Publisher
   OUTPUT_NAME publisher
-  FOLDER DevGuideExamples/DCPS/Messenger_ZeroCopy
+
   LINK_LIBRARIES OpenDDS_Tcp
                  Messenger_ZeroCopy_Idl
                  OpenDDS_Default_Discovery
@@ -37,7 +37,7 @@ ace_target_cxx_sources(Messenger_ZeroCopy_Publisher
 
 ace_add_exe(Messenger_ZeroCopy_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER DevGuideExamples/DCPS/Messenger_ZeroCopy
+
   LINK_LIBRARIES OpenDDS_Tcp
                  Messenger_ZeroCopy_Idl
                  OpenDDS_Default_Discovery

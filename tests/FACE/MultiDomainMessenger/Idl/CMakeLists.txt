@@ -2,7 +2,7 @@
 
 ace_add_lib(FaceMultiDomainMessengerIdl
   OUTPUT_NAME FaceMultiDomainMessengerIdl
-  FOLDER tests/FACE/MultiDomainMessenger/Idl
+
   DEFINE_SYMBOL FACEMESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )

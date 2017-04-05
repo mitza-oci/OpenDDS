@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(DDS_BidirMessenger_Idl
   OUTPUT_NAME DDS_BidirMessenger_Idl
-  FOLDER tests/DCPS/BidirMessenger
+
   DEFINE_SYMBOL BIDIRMESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_BidirMessenger_Pubsub
   OUTPUT_NAME pubsub
-  FOLDER tests/DCPS/BidirMessenger
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_BidirMessenger_Idl
                  OpenDDS_Default_Discovery

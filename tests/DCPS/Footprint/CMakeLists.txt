@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(DDS_Footprint_Idl
   OUTPUT_NAME DDS_Footprint_Idl
-  FOLDER tests/DCPS/Footprint
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Footprint_Rtpspublisher
   OUTPUT_NAME rtpspublisher
-  FOLDER tests/DCPS/Footprint
+
   LINK_LIBRARIES DDS_Footprint_Idl
                  OpenDDS_Rtps_Udp
 )
@@ -38,7 +38,7 @@ ace_target_cxx_sources(DDS_Footprint_Rtpspublisher
 
 ace_add_exe(DDS_Footprint_Rtpssubscriber
   OUTPUT_NAME rtpssubscriber
-  FOLDER tests/DCPS/Footprint
+
   LINK_LIBRARIES DDS_Footprint_Idl
                  OpenDDS_Rtps_Udp
 )
@@ -51,7 +51,7 @@ ace_target_cxx_sources(DDS_Footprint_Rtpssubscriber
 
 ace_add_exe(DDS_Footprint_Tcppublisher
   OUTPUT_NAME tcppublisher
-  FOLDER tests/DCPS/Footprint
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Footprint_Idl
                  OpenDDS_Default_Discovery
@@ -71,7 +71,7 @@ ace_target_cxx_sources(DDS_Footprint_Tcppublisher
 
 ace_add_exe(DDS_Footprint_Tcpsubscriber
   OUTPUT_NAME tcpsubscriber
-  FOLDER tests/DCPS/Footprint
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Footprint_Idl
                  OpenDDS_Default_Discovery

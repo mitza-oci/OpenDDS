@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_OBJECT_MODEL_PROFILE)
 
 ace_add_lib(DDS_GroupPresentation_Idl
   OUTPUT_NAME DDS_GroupPresentation_Idl
-  FOLDER tests/DCPS/GroupPresentation
+
   DEFINE_SYMBOL GROUPPRESENTATION_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_GroupPresentation_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/GroupPresentation
+
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_GroupPresentation_Idl
                  OpenDDS_Default_Discovery
@@ -39,7 +39,7 @@ ace_target_cxx_sources(DDS_GroupPresentation_Publisher
 
 ace_add_exe(DDS_GroupPresentation_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/GroupPresentation
+
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_GroupPresentation_Idl
                  OpenDDS_Default_Discovery

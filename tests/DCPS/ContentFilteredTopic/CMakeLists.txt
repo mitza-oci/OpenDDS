@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_CONTENT_FILTERED_TOPIC OPENDDS_HAS_CONTENT_SUBSCRIPTION
 
 ace_add_exe(ContentFilteredTopic
   OUTPUT_NAME ContentFilteredTopicTest
-  FOLDER tests/DCPS/ContentFilteredTopic
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery

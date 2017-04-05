@@ -4,6 +4,7 @@ dds_add_model_lib(Codegen)
 ace_add_exe(Codegen_pub
   OUTPUT_NAME aPublisher
   LINK_LIBRARIES OpenDDS_Model Codegen
+
 )
 ace_target_cxx_sources(Codegen_pub
   SOURCE_FILES aPublisher.cpp
@@ -12,6 +13,7 @@ ace_target_cxx_sources(Codegen_pub
 ace_add_exe(Codegen_sub
   OUTPUT_NAME aSubscriber
   LINK_LIBRARIES OpenDDS_Model Codegen
+
 )
 ace_target_cxx_sources(Codegen_sub
   SOURCE_FILES aSubscriber.cpp

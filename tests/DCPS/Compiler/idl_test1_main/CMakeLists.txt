@@ -2,7 +2,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(idl_test1_main
   OUTPUT_NAME idl_test1
-  FOLDER tests/DCPS/Compiler/idl_test1_main
+
   LINK_LIBRARIES idl_test1_lib
                  OpenDDS_Default_Discovery
 )

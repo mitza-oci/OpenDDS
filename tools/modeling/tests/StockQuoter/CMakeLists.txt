@@ -4,6 +4,7 @@ dds_add_model_lib(StockQuoter)
 ace_add_exe(StockQuoter_xmlPublisher
   OUTPUT_NAME publisher
   LINK_LIBRARIES OpenDDS_Model StockQuoter
+
 )
 ace_target_cxx_sources(StockQuoter_xmlPublisher
   SOURCE_FILES publisher.cpp
@@ -12,6 +13,7 @@ ace_target_cxx_sources(StockQuoter_xmlPublisher
 ace_add_exe(StockQuoter_xmlSubscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Model StockQuoter
+
 )
 ace_target_cxx_sources(StockQuoter_xmlSubscriber
   SOURCE_FILES subscriber.cpp

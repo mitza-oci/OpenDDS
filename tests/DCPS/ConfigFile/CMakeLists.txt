@@ -10,7 +10,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(ConfigFile
   OUTPUT_NAME ConfigFile
-  FOLDER tests/DCPS/ConfigFile
+
   LINK_LIBRARIES OpenDDS_InfoRepoDiscovery
                  OpenDDS_Multicast
                  OpenDDS_Tcp

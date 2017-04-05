@@ -2,7 +2,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(SharedTransport
   OUTPUT_NAME tester
-  FOLDER tests/DCPS/SharedTransport
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestFramework
 )

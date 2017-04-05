@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(DDS_KeyTest_Idl
   OUTPUT_NAME DDS_KeyTest_Idl
-  FOLDER tests/DCPS/KeyTest
+
   DEFINE_SYMBOL KEYTEST_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -31,7 +31,7 @@ endif()
 
 ace_add_exe(DDS_KeyTest_Isbounded
   OUTPUT_NAME IsBounded
-  FOLDER tests/DCPS/KeyTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Rtps
                  DDS_KeyTest_Idl
@@ -44,7 +44,7 @@ ace_target_cxx_sources(DDS_KeyTest_Isbounded
 
 ace_add_exe(DDS_KeyTest_Keymarshalling
   OUTPUT_NAME KeyMarshalling
-  FOLDER tests/DCPS/KeyTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Rtps
                  DDS_KeyTest_Idl
@@ -57,7 +57,7 @@ ace_target_cxx_sources(DDS_KeyTest_Keymarshalling
 
 ace_add_exe(KeyTest_MD5
   OUTPUT_NAME KeyTest_MD5
-  FOLDER tests/DCPS/KeyTest
+
   LINK_LIBRARIES OpenDDS_Rtps
 )
 ace_target_cxx_sources(KeyTest_MD5

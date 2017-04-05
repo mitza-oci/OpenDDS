@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(GuardCondition
   OUTPUT_NAME GuardConditionTest
-  FOLDER tests/DCPS/GuardCondition
+
   LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(GuardCondition

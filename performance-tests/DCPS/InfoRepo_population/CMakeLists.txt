@@ -2,7 +2,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE" "NOT TAO_HAS_MINIMUM_CORBA")
 
 ace_add_exe(InfoRepo_population_Syncserver
   OUTPUT_NAME syncServer
-  FOLDER performance-tests/DCPS/InfoRepo_population
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES Sync_Serverlib
@@ -17,7 +17,7 @@ ace_target_cxx_sources(InfoRepo_population_Syncserver
 
 ace_add_exe(InfoRepo_population_Publisher
   OUTPUT_NAME publisher
-  FOLDER performance-tests/DCPS/InfoRepo_population
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES OpenDDS_Tcp
@@ -35,7 +35,7 @@ ace_target_cxx_sources(InfoRepo_population_Publisher
 
 ace_add_exe(InfoRepo_population_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER performance-tests/DCPS/InfoRepo_population
+
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../Sync
                       ${CMAKE_CURRENT_BINARY_DIR}/../Sync
   LINK_LIBRARIES OpenDDS_Tcp

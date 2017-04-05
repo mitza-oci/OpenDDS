@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(DDS_RecorderReplayer_Idl
   OUTPUT_NAME DDS_RecorderReplayer_Idl
-  FOLDER tests/DCPS/RecorderReplayer
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +24,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_RecorderReplayer_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/RecorderReplayer
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_RecorderReplayer_Idl
                  OpenDDS_Default_Discovery
@@ -36,7 +36,7 @@ ace_target_cxx_sources(DDS_RecorderReplayer_Publisher
 
 ace_add_exe(DDS_RecorderReplayer_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/RecorderReplayer
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_RecorderReplayer_Idl
                  OpenDDS_Default_Discovery
@@ -50,7 +50,7 @@ ace_target_cxx_sources(DDS_RecorderReplayer_Subscriber
 
 ace_add_exe(DDS_RecorderReplayer_Relay
   OUTPUT_NAME relay
-  FOLDER tests/DCPS/RecorderReplayer
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

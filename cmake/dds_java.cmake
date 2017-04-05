@@ -85,6 +85,31 @@ function(dds_idl2jni_command name)
   set(${name}_JAVA_OUTPUTS ${${name}_JAVA_OUTPUTS} PARENT_SCOPE)
 endfunction()
 
+
+function(dds_add_jar _target_name)
+  set(oneValueArgs OUTPUT_NAME VERSION OUTPUT_DIR FOLDER)
+  set(multiValueArgs INCLUDE_JARS SOURCES)
+  cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  add_jar(${_target_name}
+    OUTPUT_NAME "${_arg_OUTPUT_NAME}"
+    OUTPUT_DIR "${_arg_OUTPUT_DIR}"
+    VERSION ${_arg_VERSION}
+    INCLUDE_JARS ${_arg_INCLUDE_JARS}
+    SOURCES ${_arg_SOURCES}
+  )
+
+  if (NOT _arg_FOLDER AND ACEUTIL_TOP_LEVEL_FOLDER_DIR AND ACEUTIL_TOP_LEVEL_FOLDER_NAME)
+    file(RELATIVE_PATH folder ${ACEUTIL_TOP_LEVEL_FOLDER_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+    set(_arg_FOLDER ${ACEUTIL_TOP_LEVEL_FOLDER_NAME}/${folder})
+  endif()
+
+  if (DEFINED _arg_FOLDER)
+    set_target_properties(${_target_name} PROPERTIES FOLDER ${_arg_FOLDER})
+  endif()
+
+endfunction()
+
 function(dds_add_taoidl_jar _target_name)
   set(oneValueArgs OUTPUT_NAME VERSION LIB OUTPUT_DIR FOLDER)
   set(multiValueArgs TAO_IDL_FLAGS IDL2JNI_FLAGS IDL_FILES INCLUDE_JARS SOURCES)
@@ -130,18 +155,13 @@ function(dds_add_taoidl_jar _target_name)
     )
   endif()
 
-  add_jar(${_target_name}
+  dds_add_jar(${_target_name}
     OUTPUT_NAME "${_arg_OUTPUT_NAME}"
     OUTPUT_DIR "${_arg_OUTPUT_DIR}"
     VERSION ${_arg_VERSION}
     INCLUDE_JARS i2jrt ${_arg_INCLUDE_JARS}
     SOURCES ${${_target_name}_idl2jni_JAVA_OUTPUTS} ${_arg_SOURCES}
   )
-
-  if (DEFINED _arg_FOLDER)
-    set_target_properties(${_target_name} PROPERTIES FOLDER ${_arg_FOLDER})
-  endif()
-
 endfunction()
 
 function(dds_add_ddsidl_jar _target_name)
@@ -195,16 +215,11 @@ function(dds_add_ddsidl_jar _target_name)
     )
   endif()
 
-  add_jar(${_target_name}
+  dds_add_jar(${_target_name}
     OUTPUT_NAME "${_arg_OUTPUT_NAME}"
     OUTPUT_DIR "${_arg_OUTPUT_DIR}"
     ${version_option}
     INCLUDE_JARS i2jrt OpenDDS_DCPS_jar  ${_arg_INCLUDE_JARS}
     SOURCES ${${_target_name}_idl2jni_JAVA_OUTPUTS} ${_arg_SOURCES} ${DDS_IDL_JAVA_OUTPUTS}
   )
-
-  if (DEFINED _arg_FOLDER)
-    set_target_properties(${_target_name} PROPERTIES FOLDER ${_arg_FOLDER})
-  endif()
-
 endfunction()

@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(PubScalability_Idl
   OUTPUT_NAME PubScalability_Idl
-  FOLDER tests/DCPS/PubScalability
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
@@ -22,7 +22,7 @@ dds_idl_sources(
 
 ace_add_exe(PubScalability_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/PubScalability
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  PubScalability_Idl
                  OpenDDS_Default_Discovery
@@ -40,7 +40,7 @@ ace_target_cxx_sources(PubScalability_Publisher
 
 ace_add_exe(PubScalability_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/PubScalability
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  PubScalability_Idl
                  OpenDDS_Default_Discovery

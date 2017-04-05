@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(MultiDiscoveryTest
   OUTPUT_NAME MultiDiscoveryTest
-  FOLDER tests/DCPS/MultiDiscovery
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

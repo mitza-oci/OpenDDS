@@ -2,7 +2,7 @@
 
 ace_add_lib(TestFramework
   OUTPUT_NAME TestFramework
-  FOLDER tests/DCPS/TestFramework
+
   DEFINE_SYMBOL TESTFRAMEWORK_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

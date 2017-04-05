@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_CONTENT_SUBSCRIPTION_CORE OPENDDS_HAS_CONTENT_SUBSCRIPT
 
 ace_add_exe(FilterExpressionTest
   OUTPUT_NAME FilterExpressionTest
-  FOLDER tests/DCPS/FilterExpression
+
   LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(FilterExpressionTest

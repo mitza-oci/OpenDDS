@@ -9,7 +9,7 @@ ace_requires(OPENDDS_HAS_CONTENT_SUBSCRIPTION_CORE OPENDDS_HAS_CONTENT_SUBSCRIPT
 
 ace_add_exe(MetaStructTest
   OUTPUT_NAME MetaStructTest
-  FOLDER tests/DCPS/MetaStruct
+
   LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(MetaStructTest

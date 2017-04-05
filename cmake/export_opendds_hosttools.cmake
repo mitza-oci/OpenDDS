@@ -11,9 +11,7 @@ endif()
 get_target_property(IsTaoidlImported TAO_IDL_EXE IMPORTED)
 
 if (IsTaoidlImported)
-  file(GENERATE
-       OUTPUT TAO_IDL_Targets.cmake
-       INPUT ${CMAKE_CURRENT_LIST_DIR}/TAO_IDL_Targets.cmake.in)
+  set(TAO_HOSTTOOLS_DIR ${TAO_PACKAGE_BINARY_DIR})
 else()
   list(APPEND tools TAO_IDL_EXE ace_gperf)
 endif()
@@ -30,4 +28,4 @@ write_basic_package_version_file(
   COMPATIBILITY ExactVersion
 )
 
-configure_file(${CMAKE_CURRENT_LIST_DIR}/OpenDDS_HostToolsConfig.cmake.in OpenDDS_HostToolsConfig.cmake COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/OpenDDS_HostToolsConfig.cmake.in OpenDDS_HostToolsConfig.cmake @ONLY)

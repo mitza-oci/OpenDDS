@@ -1,6 +1,6 @@
 ace_add_exe(dcps_integration_Topic
   OUTPUT_NAME topic_test
-  FOLDER tests/DCPS/DcpsIntegration
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType
                  OpenDDS_Default_Discovery
@@ -16,7 +16,7 @@ ace_target_cxx_sources(dcps_integration_Topic
 
 ace_add_exe(dcps_integration_Infrastructure
   OUTPUT_NAME infrastructure_test
-  FOLDER tests/DCPS/DcpsIntegration
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType
                  OpenDDS_Default_Discovery

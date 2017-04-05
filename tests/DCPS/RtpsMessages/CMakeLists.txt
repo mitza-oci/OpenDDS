@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(RtpsMessages
   OUTPUT_NAME RtpsMessagesTest
-  FOLDER tests/DCPS/RtpsMessages
+
   LINK_LIBRARIES OpenDDS_Rtps
                  OpenDDS_Default_Discovery
 )

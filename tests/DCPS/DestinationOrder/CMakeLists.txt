@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(DestinationOrder
   OUTPUT_NAME tester
-  FOLDER tests/DCPS/DestinationOrder
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TestFramework
 )

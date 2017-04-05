@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.6)
 project(OpenDDS CXX)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+option(BUILD_SHARED_LIBS "" ON)
+set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
+
+
 include(cmake/find_or_download_tao.cmake)
 
 if (NOT OPENDDS_VERSION)
@@ -8,9 +13,8 @@ if (NOT OPENDDS_VERSION)
   string(REGEX MATCH "([0-9]\\.)+[0-9]+" OPENDDS_VERSION ${VERSION_FILE_CONTENT})
 endif()
 
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-option(BUILD_SHARED_LIBS "" ON)
-set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
+set(ACEUTIL_TOP_LEVEL_FOLDER_NAME OpenDDS)
+set(ACEUTIL_TOP_LEVEL_FOLDER_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(cmake/opendds_options.cmake)
 include(cmake/dds_idl_sources.cmake)

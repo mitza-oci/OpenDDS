@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(ZeroCopyRead
   OUTPUT_NAME main
-  FOLDER tests/DCPS/ZeroCopyRead
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

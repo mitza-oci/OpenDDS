@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE OPENDDS_HAS_OBJECT_MODEL_PROFILE)
 
 ace_add_exe(DcpsFooTest4
   OUTPUT_NAME FooTest4
-  FOLDER tests/DCPS/FooTest4
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common

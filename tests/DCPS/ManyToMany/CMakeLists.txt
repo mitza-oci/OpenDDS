@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(DDS_ManyToMany_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/ManyToMany
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_LargeSample_Idl
                  OpenDDS_Default_Discovery
@@ -22,7 +22,7 @@ ace_target_cxx_sources(DDS_ManyToMany_Publisher
 
 ace_add_exe(DDS_ManyToMany_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/ManyToMany
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_LargeSample_Idl
                  OpenDDS_Default_Discovery

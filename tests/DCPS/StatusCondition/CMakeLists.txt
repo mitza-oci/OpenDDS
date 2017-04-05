@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_PERSISTENCE_PROFILE)
 
 ace_add_exe(StatusCondition
   OUTPUT_NAME StatusConditionTest
-  FOLDER tests/DCPS/StatusCondition
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

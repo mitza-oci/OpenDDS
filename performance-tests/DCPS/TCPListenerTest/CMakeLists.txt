@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DCPS_Perf_TCPListener_Pub
   OUTPUT_NAME publisher
-  FOLDER performance-tests/DCPS/TCPListenerTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DCPS_Perf_TypeNoKeyBounded
                  OpenDDS_Default_Discovery
@@ -17,7 +17,7 @@ ace_target_cxx_sources(DCPS_Perf_TCPListener_Pub
 
 ace_add_exe(DCPS_Perf_TCPListener_Sub
   OUTPUT_NAME subscriber
-  FOLDER performance-tests/DCPS/TCPListenerTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DCPS_Perf_TypeNoKeyBounded
                  OpenDDS_Default_Discovery

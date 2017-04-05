@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(DDS_transport_rtps_reliability
   OUTPUT_NAME rtps_reliability
-  FOLDER tests/transport/rtps_reliability
+
   LINK_LIBRARIES OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery
 )

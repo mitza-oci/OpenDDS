@@ -4,7 +4,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DCPS_Perf_UDPNoKey_Pub
   OUTPUT_NAME publisher
-  FOLDER performance-tests/DCPS/UDPNoKeyTest
+
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
                  OpenDDS_Default_Discovery
 )
@@ -27,7 +27,7 @@ ace_target_cxx_sources(DCPS_Perf_UDPNoKey_Pub
 
 ace_add_exe(DCPS_Perf_UDPNoKey_Sub
   OUTPUT_NAME subscriber
-  FOLDER performance-tests/DCPS/UDPNoKeyTest
+
   LINK_LIBRARIES DCPS_Perf_TypeNoKeyBounded
                  OpenDDS_Default_Discovery
 )

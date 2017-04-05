@@ -2,7 +2,7 @@
 
 ace_add_lib(idl_test1_lib
   OUTPUT_NAME idl_test1_lib
-  FOLDER tests/DCPS/Compiler/idl_test1_lib
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

@@ -1,6 +1,6 @@
 ace_add_lib(DDS_ManyTopicMultiProcess_Idl
   OUTPUT_NAME DDS_ManyTopicMultiProcess_Idl
-  FOLDER tests/DCPS/ManyTopicMultiProcess
+
   DEFINE_SYMBOL MANYFOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -17,7 +17,7 @@ dds_idl_sources(
 
 ace_add_exe(ManyTopicMultiProcessPublisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/ManyTopicMultiProcess
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  common
                  DDS_ManyTopicMultiProcess_Idl
@@ -38,7 +38,7 @@ ace_target_cxx_sources(ManyTopicMultiProcessPublisher
 
 ace_add_exe(ManyTopicMultiProcessSubscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/ManyTopicMultiProcess
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  common
                  DDS_ManyTopicMultiProcess_Idl

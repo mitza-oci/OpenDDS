@@ -2,7 +2,7 @@
 
 ace_add_lib(DcpsFooType5
   OUTPUT_NAME DcpsFooType5
-  FOLDER tests/DCPS/FooType5
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

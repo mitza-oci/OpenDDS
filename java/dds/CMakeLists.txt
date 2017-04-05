@@ -43,7 +43,7 @@ dds_idl2jni_command(OpenDDS_Dcps_Java_idl
             ../../dds/DdsDcpsSubscriptionExt.idl
 )
 
-add_jar(OpenDDS_DCPS_jar
+dds_add_jar(OpenDDS_DCPS_jar
   OUTPUT_NAME OpenDDS_DCPS
   OUTPUT_DIR ${PROJECT_BINARY_DIR}/lib
   INCLUDE_JARS i2jrt
@@ -76,9 +76,6 @@ add_jar(OpenDDS_DCPS_jar
           ${OpenDDS_Dcps_Java_idl_JAVA_OUTPUTS}
 )
 
-set_target_properties(OpenDDS_DCPS_jar PROPERTIES
-  FOLDER java/dds
-)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/javah)
 
@@ -123,7 +120,7 @@ ace_add_lib(OpenDDS_DCPS_Java
   OUTPUT_NAME OpenDDS_DCPS_Java
   DEFINE_SYMBOL DCPS_JAVA_BUILD_DLL
   PACKAGE OpenDDS
-  FOLDER java/dds
+
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
                              $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java>

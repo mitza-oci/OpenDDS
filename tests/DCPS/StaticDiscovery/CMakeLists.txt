@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(StaticDiscoveryTest
   OUTPUT_NAME StaticDiscoveryTest
-  FOLDER tests/DCPS/StaticDiscovery
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

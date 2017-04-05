@@ -2,7 +2,7 @@
 
 ace_add_lib(ManyTopicTypes
   OUTPUT_NAME ManyTopicTypes
-  FOLDER tests/DCPS/ManyTopicTypes
+
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

@@ -2,8 +2,8 @@ set(OpenDDS_HostTools_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 include(${OpenDDS_HostTools_DIR}/OpenDDS_HostTools_Targets.cmake)
 
-if (EXISTS ${OpenDDS_HostTools_DIR}/TAO_IDL_Targets.cmake)
-  include(${OpenDDS_HostTools_DIR}/TAO_IDL_Targets.cmake)
+if (NOT TARGET TAO_IDL_EXE)
+  include(@TAO_HOSTTOOLS_DIR@/TAO_HostTools_Targets.cmake)
 endif()
 
 set(OpenDDS_HostTools_FOUND 1)

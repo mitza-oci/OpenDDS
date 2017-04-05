@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(DDS_Priority_Idl
   OUTPUT_NAME DDS_Priority_Idl
-  FOLDER tests/DCPS/Priority
+
   DEFINE_SYMBOL PRIORITY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +26,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Priority_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/Priority
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Priority_Idl
                  OpenDDS_Default_Discovery
@@ -52,7 +52,7 @@ ace_target_cxx_sources(DDS_Priority_Publisher
 
 ace_add_exe(DDS_Priority_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/Priority
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_Priority_Idl
                  OpenDDS_Default_Discovery

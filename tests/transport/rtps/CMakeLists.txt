@@ -8,7 +8,7 @@ endif()
 
 ace_add_exe(DDS_transport_rtps_Pub
   OUTPUT_NAME publisher
-  FOLDER tests/transport/rtps
+
   LINK_LIBRARIES OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery
 )
@@ -19,7 +19,7 @@ ace_target_cxx_sources(DDS_transport_rtps_Pub
 
 ace_add_exe(DDS_transport_rtps_Sub
   OUTPUT_NAME subscriber
-  FOLDER tests/transport/rtps
+
   LINK_LIBRARIES OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery
 )

@@ -23,6 +23,21 @@ sub new {
     # a relative path so add the cwd
     $executable = Cwd::abs_path($executable);
   }
+
+  if ($ENV{'CTEST_CONFIG'} != "") {
+    my ($name,$path,$suffix) = fileparse($executable);
+
+    my $executable_new = $path . $ENV{'CTEST_CONFIG'} . "/" . $name . $suffix;
+    if (-X $executable_new) {
+      $executable = $executable_new;
+    }
+  }
+
+  if (! -X $executable) {
+    print STDERR "ERROR: $executable is not an executable.\n";
+    exit(1)
+  }
+
   my $cov_process = PerlDDS::next_coverage_process();
   my $swap_ext = "/coverage/$cov_process";
   if($executable !~ s/$local_dir/$local_dir$swap_ext/) {

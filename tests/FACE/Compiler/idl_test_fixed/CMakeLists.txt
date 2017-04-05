@@ -10,7 +10,7 @@ ace_requires("TARGET OpenDDS_FACE")
 
 ace_add_exe(FACE_idl_test_fixed
   OUTPUT_NAME TestFixed
-  FOLDER tests/FACE/Compiler/idl_test_fixed
+
   LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FACE_idl_test_fixed

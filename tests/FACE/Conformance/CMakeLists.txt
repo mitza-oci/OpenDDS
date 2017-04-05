@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(FaceConformanceIdl
   OUTPUT_NAME FaceConformanceIdl
-  FOLDER tests/FACE/Conformance
+
   DEFINE_SYMBOL SAMPLEMODEL_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )

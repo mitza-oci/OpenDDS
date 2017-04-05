@@ -10,7 +10,7 @@ ace_requires(OPENDDS_HAS_PERSISTENCE_PROFILE)
 
 ace_add_lib(DDS_PersistentDurability_Idl
   OUTPUT_NAME DDS_PersistentDurability_Idl
-  FOLDER tests/DCPS/PersistentDurability
+
   DEFINE_SYMBOL PERSISTENTDURABILITY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +25,7 @@ dds_idl_sources(
 
 ace_add_exe(DDS_PersistentDurability_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/PersistentDurability
+
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_PersistentDurability_Idl
                  OpenDDS_Default_Discovery
@@ -41,7 +41,7 @@ ace_target_cxx_sources(DDS_PersistentDurability_Publisher
 
 ace_add_exe(DDS_PersistentDurability_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/PersistentDurability
+
   LINK_LIBRARIES OpenDDS_Tcp
                  DDS_PersistentDurability_Idl
                  OpenDDS_Default_Discovery

@@ -2,7 +2,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(ConfigTransports_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/ConfigTransports
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common
@@ -29,7 +29,7 @@ ace_target_cxx_sources(ConfigTransports_Publisher
 
 ace_add_exe(ConfigTransports_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/ConfigTransports
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common

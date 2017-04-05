@@ -11,7 +11,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(BenchProcess
   OUTPUT_NAME testprocess
-  FOLDER performance-tests/Bench/src
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  TAO_AnyTypeCode
                  TAO_Svc_Utils

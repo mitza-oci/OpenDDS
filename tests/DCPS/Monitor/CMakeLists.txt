@@ -11,7 +11,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(Monitor_Messenger_Idl
   OUTPUT_NAME Monitor_Messenger_Idl
-  FOLDER tests/DCPS/Monitor
+
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +26,7 @@ dds_idl_sources(
 
 ace_add_exe(Monitor_Messenger_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/Monitor
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
@@ -41,7 +41,7 @@ ace_target_cxx_sources(Monitor_Messenger_Publisher
 
 ace_add_exe(Monitor_Messenger_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/Monitor
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
@@ -56,7 +56,7 @@ ace_target_cxx_sources(Monitor_Messenger_Subscriber
 
 ace_add_exe(Monitor_Messenger_Monitor
   OUTPUT_NAME monitor
-  FOLDER tests/DCPS/Monitor
+
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl

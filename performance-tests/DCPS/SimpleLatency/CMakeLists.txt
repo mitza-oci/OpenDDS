@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(SimpleLatency_Idl
   OUTPUT_NAME SimpleLatency_Idl
-  FOLDER performance-tests/DCPS/SimpleLatency
+
   DEFINE_SYMBOL SIMPLELATENCY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +26,7 @@ dds_idl_sources(
 ace_add_exe(DDS_SimpleLatency_Pub
   OUTPUT_NAME dds_pub
   REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
-  FOLDER performance-tests/DCPS/SimpleLatency
+
   LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Default_Discovery
 )
@@ -40,7 +40,7 @@ ace_target_cxx_sources(DDS_SimpleLatency_Pub
 ace_add_exe(DDS_SimpleLatency_Sub
   OUTPUT_NAME dds_sub
   REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
-  FOLDER performance-tests/DCPS/SimpleLatency
+
   LINK_LIBRARIES SimpleLatency_Idl
                  OpenDDS_Default_Discovery
 )

@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_exe(MultiDPTest_Publisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/MultiDPTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType5
                  OpenDDS_Default_Discovery
@@ -18,7 +18,7 @@ ace_target_cxx_sources(MultiDPTest_Publisher
 
 ace_add_exe(MultiDPTest_Subscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/MultiDPTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType5
                  OpenDDS_Default_Discovery

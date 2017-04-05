@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OBJECT_MODEL_PROFILE)
 
 ace_add_exe(FooTest3_0_Publisher
   OUTPUT_NAME FooTest3_publisher
-  FOLDER tests/DCPS/FooTest3_0
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType3
                  OpenDDS_Default_Discovery
@@ -22,7 +22,7 @@ ace_target_cxx_sources(FooTest3_0_Publisher
 
 ace_add_exe(FooTest3_0_Subscriber
   OUTPUT_NAME FooTest3_subscriber
-  FOLDER tests/DCPS/FooTest3_0
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType3
                  OpenDDS_Default_Discovery

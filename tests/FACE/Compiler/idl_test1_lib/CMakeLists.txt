@@ -2,7 +2,7 @@
 
 ace_add_lib(FACE_idl_test1_lib
   OUTPUT_NAME FACE_idl_test1_lib
-  FOLDER tests/FACE/Compiler/idl_test1_lib
+
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )

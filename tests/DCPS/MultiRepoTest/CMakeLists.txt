@@ -2,7 +2,7 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(MultiRepoTest_Monitor
   OUTPUT_NAME monitor
-  FOLDER tests/DCPS/MultiRepoTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType5
                  OpenDDS_Default_Discovery
@@ -22,7 +22,7 @@ ace_target_cxx_sources(MultiRepoTest_Monitor
 
 ace_add_exe(MultiRepoTest_System
   OUTPUT_NAME system
-  FOLDER tests/DCPS/MultiRepoTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType5
                  OpenDDS_Default_Discovery

@@ -33,7 +33,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 ace_add_exe(ishapes
   OUTPUT_NAME ishapes
-  FOLDER examples/DCPS/ishapes
+
   INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
   LINK_LIBRARIES OpenDDS_Multicast
                  Qt4::QtGui

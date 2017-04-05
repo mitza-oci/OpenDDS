@@ -1,6 +1,6 @@
 ace_add_exe(ManyTopicTestPublisher
   OUTPUT_NAME publisher
-  FOLDER tests/DCPS/ManyTopicTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  ManyTopicTypes
                  common
@@ -17,7 +17,7 @@ ace_target_cxx_sources(ManyTopicTestPublisher
 
 ace_add_exe(ManyTopicTestSubscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/DCPS/ManyTopicTest
+
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  ManyTopicTypes
                  common

@@ -2,7 +2,7 @@
 
 ace_add_exe(FaceMultiDomainMessengerSubscriber
   OUTPUT_NAME subscriber
-  FOLDER tests/FACE/MultiDomainMessenger/Subscriber
+
   LINK_LIBRARIES FaceMultiDomainMessengerIdl
                  OpenDDS_FACE
                  OpenDDS_Rtps_Udp
