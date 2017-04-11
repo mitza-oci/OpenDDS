@@ -58,7 +58,25 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Subscriber
 )
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
-dds_configure_test_files()
+
+
+if (TAO_INSTALL_DIR)
+  ## we use TAO_INSTALL_DIR to check if tao_nsadd is imported or not;
+  ## TAO_INSTALL_DIR is only defined when TAO is not imported
+  set(replace_tao_imr "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_PROPERTY:tao_imr,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:tao_imr,OUTPUT_NAME>")
+else()
+  set(replace_tao_imr "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_PROPERTY:tao_imr,LOCATION>")
+endif()
+
+set(replacement_list replace_tao_imr)
+
+if (CMAKE_CONFIGURATION_TYPES AND TAO_INSTALL_DIR)
+  # we cannot ignore subdir when the IMR executable are built with DDS
+  set(shoudnt_ignore_exesubdir "\$imr_util->IgnoreExeSubDir(1)\;" " ")
+  list(APPEND replacement_list shoudnt_ignore_exesubdir)
+endif()
+
+dds_configure_test_files(${replacement_list})
 
 dds_add_test("examples/DCPS/Messenger_Imr/run_test.pl"
   COMMAND run_test.pl

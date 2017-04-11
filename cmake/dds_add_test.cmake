@@ -2,19 +2,6 @@
 set(PERLACE_DIR ${ACE_INCLUDE_DIR}/bin)
 set(PERLDDS_DIR ${OpenDDS_BINARY_DIR}/bin)
 
-
-macro(replace_ace_bin_location target)
-  if (TARGET ${target})
-    get_target_property(is_imported ${target} IMPORTED)
-    if (${is_imported})
-      string(REGEX REPLACE "[$]ENV{ACE_ROOT}/bin/${target}" "$<TARGET_PROPERTY:${target},LOCATION>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    else()
-      string(REGEX REPLACE "[$]ENV{ACE_ROOT}/bin/${target}" "$<TARGET_PROPERTY:${target},RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:${target},OUTPUT_NAME>\"" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
-    endif()
-  endif(TARGET ${target})
-endmacro()
-
-
 function(dds_configure_test_files)
   file(GLOB files *.ini *.conf *.xml)
   file(COPY ${files}
@@ -24,10 +11,12 @@ function(dds_configure_test_files)
   foreach(script ${test_scripts})
     file(READ ${script} RUN_TEST_CONTENT)
 
-    replace_ace_bin_location(tao_nsadd)
-    replace_ace_bin_location(tao_imr)
+    foreach(replace_tuple ${ARGN})
+      if (${replace_tuple})
+        string(REPLACE ${${replace_tuple}} RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+      endif()
+    endforeach()
 
-    string(REPLACE "$TAO_ROOT/tests/Hello/server" "${Hello_Server_LOCATION}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "\$ENV{DDS_ROOT}/bin" "${PERLDDS_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "\$ENV{ACE_ROOT}/bin" "${PERLACE_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "$DDS_ROOT/bin" "${PERLDDS_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
@@ -60,12 +49,17 @@ function(dds_add_test name)
   endforeach()
 
   if (CMAKE_CONFIGURATION_TYPES)
-    set(ctest_config_setting "CTEST_CONFIG=$<CONFIG>")
+    list(LENGTH _arg_COMMAND command_len)
+    if (command_len EQUAL 1)
+      list(APPEND _arg_COMMAND -ExeSubDir "$<CONFIG>")
+    else()
+      list(INSERT _arg_COMMAND 1 -ExeSubDir "$<CONFIG>")
+    endif()
   endif(CMAKE_CONFIGURATION_TYPES)
 
   string(REPLACE " " "__" name "${name}")
   add_test(NAME "${name}"
-           COMMAND ${CMAKE_COMMAND} -E env "${ctest_config_setting}" perl ${_arg_COMMAND}
+           COMMAND ${CMAKE_COMMAND} -E env perl ${_arg_COMMAND}
   )
   list(APPEND _arg_RESOURCE_LOCK "${CMAKE_CURRENT_LIST_FILE}")
   # if (RTPS IN_LIST _arg_LABELS)

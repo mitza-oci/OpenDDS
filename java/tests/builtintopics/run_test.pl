@@ -36,6 +36,9 @@ my $DCPSREPO = PerlDDS::create_process ("$DDS_ROOT/bin/DCPSInfoRepo",
                "-ORBLogFile DCPSInfoRepo.log $opts -o $dcpsrepo_ior ");
 
 PerlACE::add_lib_path ("$DDS_ROOT/java/tests/messenger/messenger_idl");
+if ($PerlACE::Process::ExeSubDir ne "./") {
+  PerlACE::add_lib_path("$DDS_ROOT/java/tests/messenger/messenger_idl/$PerlACE::Process::ExeSubDir");
+}
 
 my @classes = ("$DDS_ROOT/java/tests/messenger/messenger_idl/messenger_idl_test.jar");
 if ( -r "builtintopics_test.jar") {

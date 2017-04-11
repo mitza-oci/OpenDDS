@@ -11,14 +11,14 @@ set(files
 )
 
 
-macro(replace_orb_service service_string target_name)
-  get_target_property(is_imported ${target_name} IMPORTED)
-  if (${is_imported})
-    string(REGEX REPLACE "[$]o/${service_string}/\"[^,]+" "$<TARGET_PROPERTY:${target_name},LOCATION>\"" PM_CONTENT "${PM_CONTENT}")
+function(replace_orb_service service_string target_name)
+  if (TAO_INSTALL_DIR)
+    string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"$<TARGET_PROPERTY:${target_name},RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:${target_name},OUTPUT_NAME>\"" PM_CONTENT "${PM_CONTENT}")
   else()
-    string(REGEX REPLACE "[$]o/${service_string}/\"[^,]+" "$<TARGET_PROPERTY:${target_name},RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:${target_name},OUTPUT_NAME>\"" PM_CONTENT "${PM_CONTENT}")
+    string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"$<TARGET_PROPERTY:${target_name},LOCATION>\"" PM_CONTENT "${PM_CONTENT}")
   endif()
-endmacro()
+  set(PM_CONTENT ${PM_CONTENT} PARENT_SCOPE)
+endfunction()
 
 file(COPY ${files}
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

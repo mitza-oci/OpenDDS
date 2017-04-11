@@ -47,7 +47,7 @@ endif()
 
 function(dds_idl2jni_command name)
   ### Warning, all filename in IDL_FILES must be absolute
-  set(multiValueArgs FLAGS IDL_FILES)
+  set(multiValueArgs FLAGS IDL_FILES DEPENDS)
   cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   set(all_cxx_outputs)
@@ -73,7 +73,7 @@ function(dds_idl2jni_command name)
     add_custom_command(
       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${filename_no_dir}.java.list ${cxx_outputs}
       COMMAND idl2jni -j ${BASE_IDL2JNI_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} ${file_idl2jni_flags} ${abs_filename}
-      DEPENDS idl2jni ${abs_filename}
+      DEPENDS idl2jni ${abs_filename} ${_arg_DEPENDS}
     )
   endforeach()
   source_group("Generated Files" FILES ${all_java_lists})
@@ -87,14 +87,20 @@ endfunction()
 
 
 function(dds_add_jar _target_name)
-  set(oneValueArgs OUTPUT_NAME VERSION OUTPUT_DIR FOLDER)
+  set(oneValueArgs OUTPUT_NAME VERSION OUTPUT_DIR FOLDER ENTRY_POINT)
   set(multiValueArgs INCLUDE_JARS SOURCES)
   cmake_parse_arguments(_arg "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  if (_arg_ENTRY_POINT)
+    set(entry_point ENTRY_POINT ${_arg_ENTRY_POINT})
+    message("target=${_target_name} ${entry_point}")
+  endif()
 
   add_jar(${_target_name}
     OUTPUT_NAME "${_arg_OUTPUT_NAME}"
     OUTPUT_DIR "${_arg_OUTPUT_DIR}"
     VERSION ${_arg_VERSION}
+    ${entry_point}
     INCLUDE_JARS ${_arg_INCLUDE_JARS}
     SOURCES ${_arg_SOURCES}
   )

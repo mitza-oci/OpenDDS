@@ -11,5 +11,4 @@ dds_add_jar(sdk_generator_jar
           src/org/opendds/modeling/sdk/model/GeneratorSpecification/Generator/SdkTransformer.java
   OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin
   ENTRY_POINT org.opendds.modeling.sdk.model.GeneratorSpecification.Generator.SdkGenerator
-
 )

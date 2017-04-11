@@ -9,6 +9,7 @@ if (OPENDDS_HAS_BUILT_IN_TOPICS)
           -Wb,stub_export_include=dcps_java_export.h
           -Wb,stub_export_macro=dcps_java_Export
     IDL_FILES ${CMAKE_CURRENT_BINARY_DIR}/../../dds/DdsDcpsCoreTypeSupport.idl
+    DEPENDS OpenDDS_Dcps
   )
 
   add_custom_command(

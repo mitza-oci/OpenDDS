@@ -36,6 +36,9 @@ my $DCPSREPO = PerlDDS::create_process ("$DDS_ROOT/bin/DCPSInfoRepo",
                "-ORBLogFile DCPSInfoRepo.log $opts -o $dcpsrepo_ior ");
 
 PerlACE::add_lib_path ("$DDS_ROOT/java/tests/complex_idl");
+if ($PerlACE::Process::ExeSubDir ne "./") {
+  PerlACE::add_lib_path("$DDS_ROOT/java/tests/complex_idl/$PerlACE::Process::ExeSubDir");
+}
 
 my $classes = [];
 $classes = [ 'complex_idl_test.jar' ] if -r 'complex_idl_test.jar';

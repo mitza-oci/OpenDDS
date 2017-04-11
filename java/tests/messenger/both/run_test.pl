@@ -33,7 +33,9 @@ my $DCPSREPO = PerlDDS::create_process ("$DDS_ROOT/bin/DCPSInfoRepo", "-NOBITS".
             " -ORBDebugLevel 10 -ORBLogFile DCPSInfoRepo.log -o $dcpsrepo_ior");
 
 PerlACE::add_lib_path ("$DDS_ROOT/java/tests/messenger/messenger_idl");
-
+if ($PerlACE::Process::ExeSubDir ne "./") {
+  PerlACE::add_lib_path("$DDS_ROOT/java/tests/messenger/messenger_idl/$PerlACE::Process::ExeSubDir");
+}
 my $PUB = new PerlDDS::Process_Java ('Both', $pub_opts,
                            ["$DDS_ROOT/java/tests/messenger/messenger_idl/".
                             "messenger_idl_test.jar", "java_both_test.jar"]);

@@ -32,7 +32,9 @@ my $DCPSREPO = PerlDDS::create_process("$DDS_ROOT/bin/DCPSInfoRepo", "-NOBITS ".
 
 my $idl_dir = "$DDS_ROOT/java/tests/messenger/messenger_idl";
 PerlACE::add_lib_path($idl_dir);
-
+if ($PerlACE::Process::ExeSubDir ne "./") {
+  PerlACE::add_lib_path("$DDS_ROOT/java/tests/messenger/messenger_idl/$PerlACE::Process::ExeSubDir");
+}
 my @classes = ($idl_dir . "/messenger_idl_test.jar");
 if ( -r 'zerocopy_java_test.jar') {
   push @classes, 'zerocopy_java_test.jar';

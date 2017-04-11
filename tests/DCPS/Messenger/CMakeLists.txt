@@ -70,7 +70,21 @@ ace_target_cxx_sources(DDS_Messenger_Stacksubscriber
 )
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
-dds_configure_test_files()
+if (TAO_INSTALL_DIR)
+  ## we use TAO_INSTALL_DIR to check if tao_nsadd is imported or not;
+  ## TAO_INSTALL_DIR is only defined when TAO is not imported
+  set(replace_nsadd "\$ENV{ACE_ROOT}/bin/tao_nsadd" "$<TARGET_PROPERTY:tao_nsadd,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:tao_nsadd,OUTPUT_NAME>")
+else()
+  set(replace_nsadd "\$ENV{ACE_ROOT}/bin/tao_nsadd" "$<TARGET_PROPERTY:tao_nsadd,LOCATION>")
+endif()
+
+set(replace_nsadd_check_condition  "! -s \$nsadd.\$exec_extn" "0")
+
+if (CMAKE_CONFIGURATION_TYPES AND TAO_INSTALL_DIR)
+  set(shouldnt_ignore_exesubdir "\$NSADD->IgnoreExeSubDir(1)\;" " ")
+endif()
+
+dds_configure_test_files(replace_nsadd replace_nsadd_check_condition shouldnt_ignore_exesubdir)
 
 file(GLOB files *.ini)
 file(COPY ${files} run_test.pl run_corbaloc_test.pl

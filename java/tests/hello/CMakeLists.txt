@@ -19,7 +19,7 @@ dds_add_taoidl_jar(hello_java_client_jar
 
 if (TARGET Hello_Server)
   ## TAO is part of our source tree
-  set(Hello_Server_LOCATION $<TARGET_PROPERTY:Hello_Server,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:${target},OUTPUT_NAME>)
+  set(Hello_Server_LOCATION ${TAO_BINARY_DIR}/tests/Hello/$<TARGET_PROPERTY:Hello_Server,OUTPUT_NAME>)
 else(TARGET Hello_Server)
   find_file(Hello_Server_LOCATION server${CMAKE_EXECUTABLE_SUFFIX}
             PATHS ${TAO_DIR}/tests/Hello ${TAO_BINARY_DIR}/tests/Hello
@@ -32,7 +32,10 @@ endif(TARGET Hello_Server)
 
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
-dds_configure_test_files()
+
+set(replace_hello_server "$TAO_ROOT/tests/Hello/server" "${Hello_Server_LOCATION}")
+
+dds_configure_test_files(replace_hello_server)
 
 dds_add_test("java/tests/hello/run_test.pl"
   COMMAND run_test.pl

@@ -10,6 +10,11 @@ our @ISA = qw(PerlACE::Process);
 PerlACE::add_lib_path("$DDS_ROOT/lib");
 PerlACE::add_lib_path("$ACE_ROOT/lib") if $^O eq 'darwin';
 
+if ($PerlACE::Process::ExeSubDir ne "./") {
+  PerlACE::add_lib_path("$DDS_ROOT/lib/" . $PerlACE::Process::ExeSubDir);
+  PerlACE::add_lib_path($PerlACE::Process::ExeSubDir);
+}
+
 ## Constructor Arguments:
 ## 1. Main Class
 ## 2. Arguments to main() in Java as a string

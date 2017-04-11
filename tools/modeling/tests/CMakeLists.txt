@@ -35,7 +35,6 @@ function(dds_add_model_lib base)
 
   ace_add_lib(${base}
     DEFINE_SYMBOL ${BASE}_BUILD_DLL
-
     PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/model>
     PUBLIC_LINK_LIBRARIES OpenDDS_Model ${_arg_PUBLIC_LINK_LIBRARIES}
   )
@@ -50,7 +49,11 @@ function(dds_add_model_lib base)
     )
   endif(TARGET ${base})
   foreach(lib ${_arg_PUBLIC_LINK_LIBRARIES})
-    list(APPEND INCLUDE_OPTIONS -I$<TARGET_FILE_DIR:${lib}>/model)
+    if (CMAKE_CONFIGURATION_TYPES)
+      list(APPEND INCLUDE_OPTIONS -I$<TARGET_FILE_DIR:${lib}>/../model)
+    else()
+      list(APPEND INCLUDE_OPTIONS -I$<TARGET_FILE_DIR:${lib}>/model)
+    endif()
   endforeach()
 
   dds_idl_sources(

@@ -66,6 +66,9 @@ my $SUB = new PerlDDS::Process_Java('TestSubscriber', $sub_opts,
             ["messenger_idl/messenger_idl_test.jar", $sub_classes]);
 
 PerlACE::add_lib_path("$DDS_ROOT/java/tests/messenger/messenger_idl");
+if ($PerlACE::Process::ExeSubDir ne "./") {
+  PerlACE::add_lib_path("$DDS_ROOT/java/tests/messenger/messenger_idl/$PerlACE::Process::ExeSubDir");
+}
 
 my $pub_classes = 'publisher/classes';
 $pub_classes = 'publisher/publisher_idl_test.jar' if ! -r $pub_classes;
