@@ -2,6 +2,11 @@
 set(PERLACE_DIR ${ACE_INCLUDE_DIR}/bin)
 set(PERLDDS_DIR ${OpenDDS_BINARY_DIR}/bin)
 
+get_property(opendds_test_count GLOBAL PROPERTY opendds_test_count)
+if (NOT opendds_test_count)
+  set_property(GLOBAL PROPERTY opendds_test_count "230")
+endif()
+
 function(dds_configure_test_files)
   file(GLOB files *.ini *.conf *.xml)
   file(COPY ${files}
@@ -57,14 +62,20 @@ function(dds_add_test name)
     endif()
   endif(CMAKE_CONFIGURATION_TYPES)
 
+  if ((RTPS IN_LIST _arg_LABELS) OR (MCAST IN_LIST _arg_LABELS))
+    get_property(old_count GLOBAL PROPERTY opendds_test_count)
+    math( EXPR new_count "${old_count}+1" )
+    set_property(GLOBAL PROPERTY opendds_test_count "${new_count}")
+    set(port_setting "OPENDDS_RTPS_DEFAULT_D0=${new_count}")
+  endif()
+
   string(REPLACE " " "__" name "${name}")
   add_test(NAME "${name}"
-           COMMAND ${CMAKE_COMMAND} -E env perl ${_arg_COMMAND}
+           COMMAND ${CMAKE_COMMAND} -E env ${port_setting} perl ${_arg_COMMAND}
   )
   list(APPEND _arg_RESOURCE_LOCK "${CMAKE_CURRENT_LIST_FILE}")
-  # if (RTPS IN_LIST _arg_LABELS)
-  #   list(APPEND _arg_RESOURCE_LOCK RTPS)
-  # endif()
+
+
   set_tests_properties("${name}" PROPERTIES
     LABELS "${_arg_LABELS}"
     RESOURCE_LOCK "${_arg_RESOURCE_LOCK}"

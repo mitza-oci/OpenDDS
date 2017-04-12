@@ -62,5 +62,4 @@ dds_add_test("tests/DCPS/RtiSerialization/run_test.pl"
 dds_add_test("tests/DCPS/RtiSerialization/run_test.pl rtps"
   COMMAND run_test.pl rtps
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )

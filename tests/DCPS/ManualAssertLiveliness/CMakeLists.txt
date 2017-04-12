@@ -71,7 +71,6 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtps"
   COMMAND run_test.pl rtps
   REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )
 
 
@@ -79,7 +78,6 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtps lost"
   COMMAND run_test.pl rtps lost
   REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )
 
 
@@ -87,7 +85,6 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco"
   COMMAND run_test.pl rtpsdisco
   REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )
 
 
@@ -95,19 +92,16 @@ dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco lost"
   COMMAND run_test.pl rtpsdisco lost
   REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )
 
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco rtps"
   COMMAND run_test.pl rtpsdisco rtps
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )
 
 
 dds_add_test("tests/DCPS/ManualAssertLiveliness/run_test.pl rtpsdisco rtps lost"
   COMMAND run_test.pl rtpsdisco rtps lost
   LABELS RTPS
-  RESOURCE_LOCK RTPS
 )

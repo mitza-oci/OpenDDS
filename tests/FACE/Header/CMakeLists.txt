@@ -19,5 +19,4 @@ dds_configure_test_files()
 dds_add_test("tests/FACE/Header/run_test.pl"
   COMMAND run_test.pl
   LABELS RTPS FACE
-  RESOURCE_LOCK RTPS_FACE
 )
