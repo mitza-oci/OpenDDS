@@ -11,7 +11,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(StockQuoter_Common
   OUTPUT_NAME StockQuoterCommon
-
+  DEFINE_SYMBOL STOCKQUOTERCOMMON_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES ${TAO_INCLUDE_DIR}/orbsvcs
   PUBLIC_LINK_LIBRARIES TAO_AnyTypeCode
                         TAO_Svc_Utils

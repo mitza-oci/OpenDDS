@@ -2,7 +2,7 @@
 
 ace_add_lib(DCPS_Perf_TypeNoKeyBounded
   OUTPUT_NAME DCPS_Perf_TypeNoKeyBounded
-
+  DEFINE_SYMBOL PTTYPELIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

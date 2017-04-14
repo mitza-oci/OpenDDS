@@ -99,7 +99,7 @@ else(OPENDDS_SAFETY_PROFILE)
 
   tao_idl_sources(
     TARGETS OpenDDS_Dcps
-    IDL_FLAGS -I${CMAKE_CUR} ${dcps_flags}
+    IDL_FLAGS  ${dcps_flags}
     IDL_FILES  DdsDcpsConditionSeq.idl
                DdsDcpsDataReaderSeq.idl
   )

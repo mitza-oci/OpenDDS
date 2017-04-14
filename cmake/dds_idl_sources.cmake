@@ -112,7 +112,7 @@ function(dds_idl_command Name)
     add_custom_command(
       OUTPUT ${_cur_idl_outputs} ${_cur_type_support_idl} ${_cur_java_list}
       DEPENDS opendds_idl ${OpenDDS_INCLUDE_DIR}/dds/idl/IDLTemplate.txt ${abs_filename}
-      COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" env "TAO_ROOT=${TAO_INCLUDE_DIR}" $<TARGET_FILE:opendds_idl> -I${_working_source_dir}
+      COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}"  "TAO_ROOT=${TAO_INCLUDE_DIR}" $<TARGET_FILE:opendds_idl> -I${_working_source_dir}
               ${_ddsidl_flags} ${file_dds_idl_flags} ${abs_filename}
       WORKING_DIRECTORY ${_arg_WORKING_DIRECTORY}
     )

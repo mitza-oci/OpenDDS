@@ -11,7 +11,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(Monitor_Messenger_Idl
   OUTPUT_NAME Monitor_Messenger_Idl
-
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +25,6 @@ dds_idl_sources(
 
 ace_add_exe(Monitor_Messenger_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
@@ -41,7 +39,6 @@ ace_target_cxx_sources(Monitor_Messenger_Publisher
 
 ace_add_exe(Monitor_Messenger_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_monitor
                  Monitor_Messenger_Idl
@@ -85,8 +82,3 @@ ace_target_cxx_sources(Monitor_Messenger_Monitor
                TopicMDataReaderListener.h
                TransportMDataReaderListener.h
 )
-
-if (MSVC)
-  target_compile_options(Monitor_Messenger_Monitor /bigobj)
-endif()
-

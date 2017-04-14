@@ -2,7 +2,7 @@
 
 ace_add_lib(idl_test3_lib
   OUTPUT_NAME idl_test3_lib
-
+  DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
@@ -17,8 +17,3 @@ dds_idl_sources(
             FooDef3.idl
             SharedTypes.idl
 )
-
-if (MSVC)
-  target_compile_options(idl_test3_lib /bigobj)
-endif()
-

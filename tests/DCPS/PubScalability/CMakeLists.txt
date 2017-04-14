@@ -8,7 +8,7 @@ endif()
 
 ace_add_lib(PubScalability_Idl
   OUTPUT_NAME PubScalability_Idl
-
+  DEFINE_SYMBOL SAMPLETYPELIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

@@ -49,7 +49,6 @@ ace_target_cxx_sources(OpenDDS_InfoRepoLib
 #############################################
 ace_add_lib(OpenDDS_Federator
   PACKAGE OpenDDS
-
   DEFINE_SYMBOL OPENDDS_FEDERATOR_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   PUBLIC_LINK_LIBRARIES OpenDDS_InfoRepoLib
@@ -84,8 +83,7 @@ dds_idl_sources(
 ###################################################
 ace_add_lib(OpenDDS_InfoRepoServ
   PACKAGE OpenDDS
-
-  DEFINE_SYMBOL OPENDDS_INFOREPOSERV_BUILD_DLL
+  DEFINE_SYMBOL OPENDDS_DCPSINFOREPOSERV_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Federator
 )
 
@@ -97,7 +95,6 @@ ace_target_cxx_sources(OpenDDS_InfoRepoServ
 #####################################################
 ace_add_exe(DCPSInfoRepo
   PACKAGE OpenDDS
-
   LINK_LIBRARIES OpenDDS_InfoRepoServ
 )
 

@@ -40,8 +40,3 @@ ace_target_cxx_sources(OpenDDS_monitor
                TransportMonitorImpl.h
                monitor_export.h
 )
-
-if (MSVC)
-  target_compile_options(OpenDDS_monitor /bigobj)
-endif(MSVC)
-

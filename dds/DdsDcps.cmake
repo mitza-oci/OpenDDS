@@ -8,11 +8,11 @@ else()
   add_subdirectory(CORBA)
 endif()
 
-
 ace_add_lib(OpenDDS_Dcps
   PACKAGE OpenDDS
   FOLDER OpenDDS/dds
   DEFINE_SYMBOL OPENDDS_DCPS_BUILD_DLL
+  COMPILE_DEFINITIONS $<$<PLATFORM_ID:Windows>:USING_PCH>
   PUBLIC_COMPILE_DEFINITIONS "${DCPS_CXX_COMPILE_DEFINITIONS}"
   PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
@@ -24,13 +24,6 @@ ace_target_cxx_sources(OpenDDS_Dcps
   HEADER_FILES Version.h
                Versioned_Namespace.h
 )
-
-## set MSVC precompiled headers
-if (MSVC)
-   set_target_properties(OpenDDS_Dcps PROPERTIES COMPILE_FLAGS "/YuDCPS\\DdsDcps_pch.h")
-   set_source_files_properties(DCPS/DdsDcps_pch.cpp PROPERTIES COMPILE_FLAGS "/YcDCPS\\DdsDcps_pch.h")
-   list(APPEND dcps_compile_definitions NOMINMAX)
-endif(MSVC)
 
 
 # flags used by all directories under $DDS_ROOT/dds
@@ -50,7 +43,12 @@ include(dcps_optional_safety.cmake)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CorbaSeq)
 include(CorbaSeq/CMakeLists.txt)
-
 include(DCPS/CMakeLists.txt)
 include(DCPS/transport/framework/CMakeLists.txt)
 include(DCPS/yard/CMakeLists.txt)
+
+if (MSVC)
+   set_target_properties(OpenDDS_Dcps PROPERTIES COMPILE_FLAGS "/YuDCPS\\DdsDcps_pch.h")
+   set_source_files_properties(DCPS/DdsDcps_pch.cpp PROPERTIES COMPILE_FLAGS "/YcDCPS\\DdsDcps_pch.h")
+   list(APPEND dcps_compile_definitions NOMINMAX)
+endif(MSVC)

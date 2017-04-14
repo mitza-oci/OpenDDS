@@ -17,7 +17,6 @@ ace_requires(
 
 ace_add_lib(DDS_Messenger_Imr_Idl
   OUTPUT_NAME DDS_Messenger_Imr_Idl
-
   DEFINE_SYMBOL MESSENGER_IMR_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

@@ -2,7 +2,7 @@
 
 ace_add_lib(DcpsFooType3Unbounded
   OUTPUT_NAME DcpsFooType3Unbounded
-
+  DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

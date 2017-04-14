@@ -5,7 +5,7 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 ace_add_lib(Sync_Serverlib
   OUTPUT_NAME SyncServer
   REQUIRES "NOT TAO_HAS_MINIMUM_CORBA"
-
+  DEFINE_SYMBOL SYNC_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
                              ${CMAKE_CURRENT_BINARY_DIR}
   PUBLIC_LINK_LIBRARIES TAO_PortableServer
@@ -19,7 +19,7 @@ ace_target_cxx_sources(Sync_Serverlib
 
 ace_add_lib(Sync_Clientlib
   OUTPUT_NAME SyncClient
-
+  DEFINE_SYMBOL SYNC_BUILD_DLL
   PUBLIC_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
                              ${CMAKE_CURRENT_BINARY_DIR}
   PUBLIC_LINK_LIBRARIES TAO_PortableServer

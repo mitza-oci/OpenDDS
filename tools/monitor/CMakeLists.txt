@@ -56,8 +56,3 @@ ace_target_qt_sources(Monitor_App
            RepoDialog.ui
   RESOURCE_FILES Monitor.qrc
 )
-
-if (MSVC)
-  target_compile_options(Monitor_App /bigobj)
-endif()
-

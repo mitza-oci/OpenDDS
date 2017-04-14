@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(DDS_KeyTest_Idl
   OUTPUT_NAME DDS_KeyTest_Idl
-
   DEFINE_SYMBOL KEYTEST_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,14 +23,8 @@ dds_idl_sources(
             BoundTest2.idl
 )
 
-if (MSVC)
-  target_compile_options(DDS_KeyTest_Idl /bigobj)
-endif()
-
-
 ace_add_exe(DDS_KeyTest_Isbounded
   OUTPUT_NAME IsBounded
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Rtps
                  DDS_KeyTest_Idl

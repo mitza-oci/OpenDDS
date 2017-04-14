@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(DcpsFooType3NoKey
   OUTPUT_NAME DcpsFooType3NoKey
-
+  DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(

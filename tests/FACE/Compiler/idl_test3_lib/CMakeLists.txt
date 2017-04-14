@@ -2,7 +2,6 @@
 
 ace_add_lib(FACE_idl_test3_lib
   OUTPUT_NAME FACE_idl_test3_lib
-
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
@@ -19,8 +18,3 @@ dds_idl_sources(
             ../../../DCPS/Compiler/idl_test3_lib/FooDef3.idl
             ../../../DCPS/Compiler/idl_test3_lib/SharedTypes.idl
 )
-
-if (MSVC)
-  target_compile_options(FACE_idl_test3_lib /bigobj)
-endif()
-

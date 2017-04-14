@@ -9,7 +9,7 @@ endif()
 
 ace_add_lib(idl_test2_lib
   OUTPUT_NAME idl_test2_lib
-
+  DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
 dds_idl_sources(
