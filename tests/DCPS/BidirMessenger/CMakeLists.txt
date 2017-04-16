@@ -9,7 +9,6 @@ endif()
 
 ace_add_lib(DDS_BidirMessenger_Idl
   OUTPUT_NAME DDS_BidirMessenger_Idl
-
   DEFINE_SYMBOL BIDIRMESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

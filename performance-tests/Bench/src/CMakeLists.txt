@@ -11,11 +11,10 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(BenchProcess
   OUTPUT_NAME testprocess
-
-  LINK_LIBRARIES OpenDDS_Transports_For_Test
-                 TAO_AnyTypeCode
+  LINK_LIBRARIES TAO_AnyTypeCode
                  TAO_Svc_Utils
                  OpenDDS_Default_Discovery
+                 OpenDDS_Transports_For_Test
 )
 ace_target_cxx_sources(BenchProcess
   SOURCE_FILES DataReaderListener.cpp

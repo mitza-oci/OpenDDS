@@ -10,7 +10,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(DDS_transport_simple_Publisher
   OUTPUT_NAME simple_publisher
-
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Shmem
                  OpenDDS_Default_Discovery
@@ -26,7 +25,6 @@ ace_target_cxx_sources(DDS_transport_simple_Publisher
 
 ace_add_exe(DDS_transport_simple_Subscriber
   OUTPUT_NAME simple_subscriber
-
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Shmem
                  OpenDDS_Default_Discovery

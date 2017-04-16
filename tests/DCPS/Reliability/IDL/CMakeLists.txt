@@ -2,7 +2,6 @@
 
 ace_add_lib(Reliability
   OUTPUT_NAME Reliability
-
   DEFINE_SYMBOL RELIABILITY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

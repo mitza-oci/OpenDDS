@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(SetQosPartition_Idl
   OUTPUT_NAME SetQosPartition_Idl
-
   DEFINE_SYMBOL SETQOSPARTITION_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(SetQosPartition_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  SetQosPartition_Idl
                  OpenDDS_Model
@@ -39,7 +37,6 @@ ace_target_cxx_sources(SetQosPartition_Publisher
 
 ace_add_exe(SetQosPartition_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  SetQosPartition_Idl
                  OpenDDS_Default_Discovery

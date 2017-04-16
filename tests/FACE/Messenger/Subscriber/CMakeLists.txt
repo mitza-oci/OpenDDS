@@ -1,8 +1,7 @@
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(FaceMessengerSubscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES FaceMessengerIdl
                  OpenDDS_FACE
                  OpenDDS_Rtps_Udp

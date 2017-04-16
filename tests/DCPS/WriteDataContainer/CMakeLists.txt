@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(WriteDataContainer
   OUTPUT_NAME WriteDataContainerTest
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(WriteDataContainer

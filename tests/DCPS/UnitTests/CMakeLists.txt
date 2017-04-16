@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(UnitTests_Disjointsequence
   OUTPUT_NAME UnitTests_Disjointsequence
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Disjointsequence
@@ -18,7 +17,6 @@ ace_target_cxx_sources(UnitTests_Disjointsequence
 
 ace_add_exe(UnitTests_Livelinesscompatibility
   OUTPUT_NAME UnitTests_Livelinesscompatibility
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Livelinesscompatibility
@@ -28,7 +26,6 @@ ace_target_cxx_sources(UnitTests_Livelinesscompatibility
 
 ace_add_exe(UnitTests_Sequencenumber
   OUTPUT_NAME UnitTests_Sequencenumber
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Sequencenumber
@@ -38,7 +35,6 @@ ace_target_cxx_sources(UnitTests_Sequencenumber
 
 ace_add_exe(UnitTests_Durationtotimevalue
   OUTPUT_NAME UnitTests_Durationtotimevalue
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Durationtotimevalue
@@ -48,7 +44,6 @@ ace_target_cxx_sources(UnitTests_Durationtotimevalue
 
 ace_add_exe(UnitTests_Timetsubtraction
   OUTPUT_NAME UnitTests_Timetsubtraction
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Timetsubtraction
@@ -58,7 +53,6 @@ ace_target_cxx_sources(UnitTests_Timetsubtraction
 
 ace_add_exe(UnitTests_Fragmentation
   OUTPUT_NAME UnitTests_Fragmentation
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Fragmentation
@@ -68,7 +62,6 @@ ace_target_cxx_sources(UnitTests_Fragmentation
 
 ace_add_exe(UnitTests_Reassembly
   OUTPUT_NAME UnitTests_Reassembly
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
 )
 ace_target_cxx_sources(UnitTests_Reassembly
@@ -78,7 +71,6 @@ ace_target_cxx_sources(UnitTests_Reassembly
 
 ace_add_exe(UnitTests_Rtpsfragmentation
   OUTPUT_NAME UnitTests_Rtpsfragmentation
-
   LINK_LIBRARIES OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery
 )
@@ -89,7 +81,6 @@ ace_target_cxx_sources(UnitTests_Rtpsfragmentation
 
 ace_add_exe(UnitTests_Guidgenerator
   OUTPUT_NAME UnitTests_Guidgenerator
-
   LINK_LIBRARIES OpenDDS_Rtps
 )
 ace_target_cxx_sources(UnitTests_Guidgenerator
@@ -99,7 +90,6 @@ ace_target_cxx_sources(UnitTests_Guidgenerator
 
 ace_add_exe(UnitTests_Parameterlistconverter
   OUTPUT_NAME UnitTests_Parameterlistconverter
-
   LINK_LIBRARIES OpenDDS_Rtps
 )
 ace_target_cxx_sources(UnitTests_Parameterlistconverter
@@ -109,7 +99,6 @@ ace_target_cxx_sources(UnitTests_Parameterlistconverter
 
 ace_add_exe(UnitTests_Repoidsequence
   OUTPUT_NAME UnitTests_Repoidsequence
-
   LINK_LIBRARIES OpenDDS_Rtps
 )
 ace_target_cxx_sources(UnitTests_Repoidsequence
@@ -120,7 +109,6 @@ ace_target_cxx_sources(UnitTests_Repoidsequence
 ace_add_exe(UnitTests_Bit_datareader
   OUTPUT_NAME UnitTests_Bit_datareader
   REQUIRES OPENDDS_HAS_BUILT_IN_TOPICS
-
   LINK_LIBRARIES OpenDDS_Default_Discovery
                  OpenDDS_Rtps_Udp
 )

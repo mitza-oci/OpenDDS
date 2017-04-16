@@ -1,6 +1,5 @@
 ace_add_exe(LivelinessTimeout_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common
@@ -19,7 +18,6 @@ ace_target_cxx_sources(LivelinessTimeout_Publisher
 
 ace_add_exe(LivelinessTimeout_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common

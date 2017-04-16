@@ -1,5 +1,5 @@
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(FaceMultiDomainMessengerSubscriber
   OUTPUT_NAME subscriber
 

@@ -10,7 +10,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(DDS_LivelinessKeepAliveTest_Idl
   OUTPUT_NAME DDS_LivelinessKeepAliveTest_Idl
-
   DEFINE_SYMBOL LIVELINESSKEEPALIVETEST_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +25,6 @@ dds_idl_sources(
 
 ace_add_exe(LivelinessKeepAliveTestPublisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_LivelinessKeepAliveTest_Idl
                  OpenDDS_Default_Discovery

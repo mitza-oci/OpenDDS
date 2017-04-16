@@ -5,7 +5,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 option(BUILD_SHARED_LIBS "" ON)
 set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
 
-
 include(cmake/find_or_download_tao.cmake)
 
 if (NOT OPENDDS_VERSION)

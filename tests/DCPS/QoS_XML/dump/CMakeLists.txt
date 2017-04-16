@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(qos_dump
   OUTPUT_NAME qos_dump
-
   LINK_LIBRARIES OpenDDS_QOS_XML_XSC_Handler
 )
 ace_target_cxx_sources(qos_dump

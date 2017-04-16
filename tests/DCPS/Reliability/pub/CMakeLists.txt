@@ -2,7 +2,6 @@
 
 ace_add_exe(Reliability_Publisher
   OUTPUT_NAME publisher
-
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../IDL
                       ${CMAKE_CURRENT_BINARY_DIR}/../IDL
                       ${CMAKE_CURRENT_SOURCE_DIR}/..

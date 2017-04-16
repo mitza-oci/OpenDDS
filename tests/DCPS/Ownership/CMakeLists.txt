@@ -10,7 +10,6 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE OPENDDS_HAS_OWNERSHIP_KIND_EXCLUSIVE)
 
 ace_add_lib(DDS_Ownership_Idl
   OUTPUT_NAME DDS_Ownership_Idl
-
   DEFINE_SYMBOL OWNERSHIP_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -25,7 +24,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_Ownership_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Multicast
                  OpenDDS_Tcp
                  DDS_Ownership_Idl
@@ -43,7 +41,6 @@ ace_target_cxx_sources(DDS_Ownership_Publisher
 
 ace_add_exe(DDS_Ownership_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Multicast
                  OpenDDS_Tcp
                  DDS_Ownership_Idl

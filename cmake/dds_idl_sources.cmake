@@ -186,7 +186,6 @@ function(dds_idl_sources)
     list(APPEND packages ${PACKAGE_OF_${target}})
   endforeach()
 
-  set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON PARENT_SCOPE)
   set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
 
   source_group("Generated Files" FILES ${_idl_OUTPUT_FILES} )

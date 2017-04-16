@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(DDS_ManualAssertLiveliness_Idl
   OUTPUT_NAME DDS_ManualAssertLiveliness_Idl
-
   DEFINE_SYMBOL MANUALASSERTLIVELINESS_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_ManualAssertLiveliness_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_ManualAssertLiveliness_Idl
                  OpenDDS_Default_Discovery
@@ -40,7 +38,6 @@ ace_target_cxx_sources(DDS_ManualAssertLiveliness_Publisher
 
 ace_add_exe(DDS_ManualAssertLiveliness_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_ManualAssertLiveliness_Idl
                  OpenDDS_Default_Discovery

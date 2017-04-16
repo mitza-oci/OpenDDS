@@ -10,7 +10,6 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_lib(WaitForAck_Idl
   OUTPUT_NAME WaitForAck_Idl
-
   DEFINE_SYMBOL WAITFORACK_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +25,6 @@ dds_idl_sources(
 
 ace_add_exe(WaitForAck_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  WaitForAck_Idl
                  OpenDDS_Default_Discovery
@@ -45,7 +43,6 @@ ace_target_cxx_sources(WaitForAck_Publisher
 
 ace_add_exe(WaitForAck_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  WaitForAck_Idl
                  OpenDDS_Default_Discovery

@@ -10,7 +10,6 @@ ace_requires("TARGET OpenDDS_FACE")
 
 ace_add_exe(FaceUnitTests_Qossettings
   OUTPUT_NAME QosSettingsTest
-
   LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Qossettings
@@ -20,7 +19,6 @@ ace_target_cxx_sources(FaceUnitTests_Qossettings
 
 ace_add_exe(FaceUnitTests_Memorypool
   OUTPUT_NAME MemoryPoolTest
-
   LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Memorypool
@@ -30,7 +28,6 @@ ace_target_cxx_sources(FaceUnitTests_Memorypool
 
 ace_add_exe(FaceUnitTests_Freeindex
   OUTPUT_NAME FreeIndexTest
-
   LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Freeindex
@@ -41,7 +38,6 @@ ace_target_cxx_sources(FaceUnitTests_Freeindex
 ace_add_exe(FaceUnitTests_Safetyprofilepool
   OUTPUT_NAME SafetyProfilePoolTest
   REQUIRES OPENDDS_SAFETY_PROFILE
-
   LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
@@ -51,7 +47,6 @@ ace_target_cxx_sources(FaceUnitTests_Safetyprofilepool
 
 ace_add_exe(FaceUnitTests_Sequences
   OUTPUT_NAME SequencesTest
-
   LINK_LIBRARIES OpenDDS_FACE
 )
 ace_target_cxx_sources(FaceUnitTests_Sequences

@@ -10,7 +10,6 @@ ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
 ace_add_lib(DDS_TransientLocalTest_Idl
   OUTPUT_NAME DDS_TransientLocalTest_Idl
-
   DEFINE_SYMBOL TRANSIENTLOCALTEST_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +25,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_TransientLocalTest_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_TransientLocalTest_Idl
                  OpenDDS_Default_Discovery

@@ -10,7 +10,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(CorbaSeq_Idl
   OUTPUT_NAME CorbaSeq_Idl
-
   DEFINE_SYMBOL CORBASEQ_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

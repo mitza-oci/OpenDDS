@@ -9,7 +9,6 @@ endif()
 
 ace_add_lib(FaceMessenger_Idl
   OUTPUT_NAME FaceMessenger_Idl
-
   DEFINE_SYMBOL FACEMESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_FACE
 )
@@ -25,7 +24,6 @@ dds_idl_sources(
 
 ace_add_exe(FaceMessenger_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_FACE
                  FaceMessenger_Idl
                  OpenDDS_Rtps_Udp
@@ -37,7 +35,6 @@ ace_target_cxx_sources(FaceMessenger_Publisher
 
 ace_add_exe(FaceMessenger_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_FACE
                  FaceMessenger_Idl
                  OpenDDS_Rtps_Udp

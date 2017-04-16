@@ -1,8 +1,7 @@
 ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
-
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 ace_add_lib(DDS_LargeSample_Idl
   OUTPUT_NAME DDS_LargeSample_Idl
-
   DEFINE_SYMBOL LARGESAMPLE_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -18,7 +17,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_LargeSample_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_LargeSample_Idl
                  OpenDDS_Default_Discovery
@@ -32,7 +30,6 @@ ace_target_cxx_sources(DDS_LargeSample_Publisher
 
 ace_add_exe(DDS_LargeSample_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_LargeSample_Idl
                  OpenDDS_Default_Discovery

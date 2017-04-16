@@ -1,5 +1,5 @@
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(FaceHeaderSubscriber
   OUTPUT_NAME subscriber
 

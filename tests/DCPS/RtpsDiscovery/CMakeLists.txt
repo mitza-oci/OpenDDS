@@ -10,7 +10,6 @@ ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
 
 ace_add_exe(RtpsDiscovery
   OUTPUT_NAME RtpsDiscoveryTest
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Model
                  OpenDDS_Default_Discovery

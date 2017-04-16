@@ -9,7 +9,6 @@ endif()
 
 ace_add_lib(DDS_Footprint_Idl
   OUTPUT_NAME DDS_Footprint_Idl
-
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

@@ -10,7 +10,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(sub_init_loop_Idl
   OUTPUT_NAME sub_init_loop_Idl
-
   DEFINE_SYMBOL SUBINITLOOP_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -26,7 +25,6 @@ dds_idl_sources(
 
 ace_add_exe(sub_init_loop_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  sub_init_loop_Idl
                  OpenDDS_Default_Discovery
@@ -40,7 +38,6 @@ ace_target_cxx_sources(sub_init_loop_Publisher
 
 ace_add_exe(sub_init_loop_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  sub_init_loop_Idl
                  OpenDDS_Default_Discovery

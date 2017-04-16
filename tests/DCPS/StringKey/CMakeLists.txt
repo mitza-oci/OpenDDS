@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(DDS_StringKey_Idl
   OUTPUT_NAME DDS_StringKey_Idl
-
   DEFINE_SYMBOL STRINGKEY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_StringKey_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_StringKey_Idl
                  OpenDDS_Default_Discovery
@@ -38,7 +36,6 @@ ace_target_cxx_sources(DDS_StringKey_Publisher
 
 ace_add_exe(DDS_StringKey_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_StringKey_Idl
                  OpenDDS_Default_Discovery

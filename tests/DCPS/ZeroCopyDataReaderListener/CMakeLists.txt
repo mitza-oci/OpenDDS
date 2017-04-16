@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(ZeroCopyDRL_idl
   OUTPUT_NAME ZeroCopyDRL_idl
-
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(ZeroCopyDRL_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Model
                  ZeroCopyDRL_idl

@@ -1,5 +1,5 @@
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 ace_add_lib(DcpsFooType3Unbounded
   OUTPUT_NAME DcpsFooType3Unbounded
   DEFINE_SYMBOL FOOLIB_BUILD_DLL

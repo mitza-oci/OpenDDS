@@ -10,7 +10,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(FileSystemStorage
   OUTPUT_NAME FileSystemStorageTest
-
   LINK_LIBRARIES OpenDDS_Dcps
 )
 ace_target_cxx_sources(FileSystemStorage

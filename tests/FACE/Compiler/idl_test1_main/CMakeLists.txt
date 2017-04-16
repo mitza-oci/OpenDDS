@@ -1,8 +1,7 @@
 ace_requires(OPENDDS_HAS_BUILT_IN_TOPICS)
-
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(FACE_idl_test1_main
   OUTPUT_NAME idl_test1
-
   LINK_LIBRARIES FACE_idl_test1_lib
                  OpenDDS_FACE
                  OpenDDS_Default_Discovery

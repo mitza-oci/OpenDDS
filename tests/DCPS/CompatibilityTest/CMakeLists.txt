@@ -1,6 +1,5 @@
 ace_add_exe(CompatibilityTest_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common
@@ -19,7 +18,6 @@ ace_target_cxx_sources(CompatibilityTest_Publisher
 
 ace_add_exe(CompatibilityTest_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DcpsFooType4
                  common

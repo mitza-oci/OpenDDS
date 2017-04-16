@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(DDS_transport_rtps_Pub
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Rtps_Udp
                  OpenDDS_Default_Discovery
 )

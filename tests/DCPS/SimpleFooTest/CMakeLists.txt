@@ -2,7 +2,6 @@
 
 ace_add_exe(DcpsSimpleFooTest
   OUTPUT_NAME SimpleFooTest
-
   LINK_LIBRARIES DcpsFooType
                  OpenDDS_Default_Discovery
 )

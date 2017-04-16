@@ -11,7 +11,6 @@ ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_lib(perf_Priority_Idl
   OUTPUT_NAME perf_Priority_Idl
-
   DEFINE_SYMBOL PRIORITY_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )

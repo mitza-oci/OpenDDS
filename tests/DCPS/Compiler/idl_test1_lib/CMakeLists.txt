@@ -1,5 +1,5 @@
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 ace_add_lib(idl_test1_lib
   OUTPUT_NAME idl_test1_lib
   DEFINE_SYMBOL FOOLIB_BUILD_DLL

@@ -10,7 +10,6 @@ ace_requires(OPENDDS_HAS_MULTI_TOPIC OPENDDS_HAS_CONTENT_SUBSCRIPTION)
 
 ace_add_exe(MultiTopicTest
   OUTPUT_NAME MultiTopicTest
-
   LINK_LIBRARIES OpenDDS_Tcp
                  OpenDDS_Default_Discovery
 )

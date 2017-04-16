@@ -2,7 +2,6 @@ ace_requires(OPENDDS_HAS_OBJECT_MODEL_PROFILE)
 
 ace_add_exe(Presentation
   OUTPUT_NAME tester
-
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../FooType
                       ${CMAKE_CURRENT_BINARY_DIR}/../FooType
   LINK_LIBRARIES OpenDDS_Tcp

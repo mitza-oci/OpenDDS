@@ -1,4 +1,5 @@
-project(ViewState CXX)
+
+project(UnregisterTypeTest CXX)
 cmake_minimum_required(VERSION 3.3)
 
 if (NOT OpenDDS_INCLUDE_DIR)
@@ -8,25 +9,24 @@ endif()
 
 ace_requires(OPENDDS_HAS_OWNERSHIP_PROFILE)
 
-ace_add_exe(ViewState
-  OUTPUT_NAME main
-  LINK_LIBRARIES OpenDDS_Transports_For_Test
-                 OpenDDS_Default_Discovery
+ace_add_exe(UnregisterTypeTest
+  OUTPUT_NAME unregister_type_test
+  LINK_LIBRARIES OpenDDS_Rtps_Udp
 )
-ace_target_cxx_sources(ViewState
-  SOURCE_FILES main.cpp
+ace_target_cxx_sources(UnregisterTypeTest
+  SOURCE_FILES unregister_type.cpp
 )
 
 dds_idl_sources(
-  TARGETS ViewState
+  TARGETS UnregisterTypeTest
   TAO_IDL_FLAGS -SS
-  IDL_FILES Simple.idl
+  IDL_FILES Test.idl
 )
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
 
-dds_add_test("tests/DCPS/ViewState/run_test.pl"
+dds_add_test("tests/DCPS/UnregisterType/run_test.pl"
   COMMAND run_test.pl
 )

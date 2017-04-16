@@ -116,14 +116,16 @@ foreach(input ${OpenDDS_DCPS_jar_headers})
 endforeach()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
+
 ace_add_lib(OpenDDS_DCPS_Java
   OUTPUT_NAME OpenDDS_DCPS_Java
   DEFINE_SYMBOL DCPS_JAVA_BUILD_DLL
   PACKAGE OpenDDS
-
-  PUBLIC_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                             $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
-                             $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java>
+  PUBLIC_INCLUDE_DIRECTORIES $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/java>
+                             $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}/dds>
+                             $<BUILD_INTERFACE:${OpenDDS_SOURCE_DIR}/dds>
+                             $<BUILD_INTERFACE:${OpenDDS_BINARY_DIR}/dds>
   PUBLIC_LINK_LIBRARIES idl2jni_runtime
                         OpenDDS_Tcp
                         OpenDDS_Udp

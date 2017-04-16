@@ -6,7 +6,7 @@ if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 ace_add_lib(idl_test2_lib
   OUTPUT_NAME idl_test2_lib
   DEFINE_SYMBOL FOOLIB_BUILD_DLL

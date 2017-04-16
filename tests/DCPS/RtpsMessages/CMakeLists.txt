@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(RtpsMessages
   OUTPUT_NAME RtpsMessagesTest
-
   LINK_LIBRARIES OpenDDS_Rtps
                  OpenDDS_Default_Discovery
 )

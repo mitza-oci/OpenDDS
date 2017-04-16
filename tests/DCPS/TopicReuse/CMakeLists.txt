@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(DDS_TopicReuse_Idl
   OUTPUT_NAME DDS_TopicReuse_Idl
-
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_TopicReuse_Topicreuse
   OUTPUT_NAME tpreuse
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_TopicReuse_Idl
                  OpenDDS_Default_Discovery

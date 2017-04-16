@@ -6,7 +6,7 @@ if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
-
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(CallbackAndReceivePublisher
   OUTPUT_NAME publisher
 

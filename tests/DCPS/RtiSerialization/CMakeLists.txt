@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(DDS_RtiSerialization_Idl
   OUTPUT_NAME DDS_RtiSerialization_Idl
-
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_RtiSerialization_Publisher
   OUTPUT_NAME publisher
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_RtiSerialization_Idl
                  OpenDDS_Default_Discovery
@@ -38,7 +36,6 @@ ace_target_cxx_sources(DDS_RtiSerialization_Publisher
 
 ace_add_exe(DDS_RtiSerialization_Subscriber
   OUTPUT_NAME subscriber
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_RtiSerialization_Idl
                  OpenDDS_Default_Discovery

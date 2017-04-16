@@ -8,7 +8,6 @@ endif()
 
 ace_add_lib(DDS_DpShutdown_Idl
   OUTPUT_NAME DDS_DpShutdown_Idl
-
   DEFINE_SYMBOL MESSENGER_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
 )
@@ -24,7 +23,6 @@ dds_idl_sources(
 
 ace_add_exe(DDS_DpShutdown
   OUTPUT_NAME dpshutdown
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  DDS_DpShutdown_Idl
                  OpenDDS_Default_Discovery

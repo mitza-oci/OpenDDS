@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(ReadCondition
   OUTPUT_NAME ReadConditionTest
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

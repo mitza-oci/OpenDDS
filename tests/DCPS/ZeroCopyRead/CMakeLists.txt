@@ -8,7 +8,6 @@ endif()
 
 ace_add_exe(ZeroCopyRead
   OUTPUT_NAME main
-
   LINK_LIBRARIES OpenDDS_Transports_For_Test
                  OpenDDS_Default_Discovery
 )

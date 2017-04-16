@@ -1,5 +1,6 @@
 ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ace_add_exe(idl_test3_main
   OUTPUT_NAME idl_test3
 
