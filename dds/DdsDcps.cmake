@@ -8,6 +8,10 @@ else()
   add_subdirectory(CORBA)
 endif()
 
+if (MSVC)
+  list(APPEND DCPS_CXX_COMPILE_DEFINITIONS _SCL_SECURE_NO_WARNINGS)
+endif(MSVC)
+
 ace_add_lib(OpenDDS_Dcps
   PACKAGE OpenDDS
   FOLDER OpenDDS/dds
