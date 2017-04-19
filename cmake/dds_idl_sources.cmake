@@ -186,7 +186,16 @@ function(dds_idl_sources)
     list(APPEND packages ${PACKAGE_OF_${target}})
   endforeach()
 
-  set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
+  if (_arg_DDS_IDL_FLAGS MATCHES "-Wb,export_macro=")
+    set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
+  else()
+    ## include only ${CMAKE_CURRENT_BINARY_DIR} when the IDL generated files do not include
+    ## some export file. Usually, it's not a problem to include ${CMAKE_CURRENT_SOURCE_DIR} as well;
+    ## however, it doesn't work for performance_tests/Bench/src on Windows. That directory
+    ## contains a "Process.h" conflicting with the system "process.h" due to the case-insesitive
+    ## file system on Windows.
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+  endif()
 
   source_group("Generated Files" FILES ${_idl_OUTPUT_FILES} )
   source_group("IDL Files" FILES ${_arg_IDL_FILES})
