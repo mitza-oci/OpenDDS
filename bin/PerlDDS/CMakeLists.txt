@@ -1,7 +1,6 @@
 
 set(PERLACE_DIR ${ACE_INCLUDE_DIR}/bin)
 
-
 set(files
   Cross_Sync_Common.pm
   Cross_Sync.pm
@@ -9,7 +8,6 @@ set(files
   ProcessFactory.pm
   Run_Test.pm
 )
-
 
 function(replace_orb_service service_string target_name)
   if (TAO_INSTALL_DIR)
@@ -37,7 +35,19 @@ replace_orb_service(Naming_Service Naming_Service)
 replace_orb_service(ImplRepo_Service ImR_Locator_Service)
 replace_orb_service(ImR_Activator ImR_Activator_Service)
 
-string(REPLACE "use File::Spec;" "use File::Spec;\n\$ENV{'ACE_ROOT'}=\"${ACE_INCLUDE_DIR}\";\n$ACE_ROOT=\"${ACE_INCLUDE_DIR}\";\n$DDS_ROOT=\"${OpenDDS_BINARY_DIR}\";" PM_CONTENT "${PM_CONTENT}")
+if (WIN32)
+  set(libpaths ${OpenDDS_LIB_DIR} ${ACE_LIB_DIR} ${TAO_LIB_DIR})
+  list(REMOVE_DUPLICATES libpaths)
+  foreach(libpath ${libpaths})
+    set(quoted_libpath "\"${libpath}\"")
+    if (CMAKE_CONFIGURATION_TYPES)
+      set(quoted_libpath "${quoted_libpath} . $PerlACE::Process::ExeSubDir")
+    endif()
+    list(APPEND add_libpath_stmt "PerlACE::add_lib_path(${quoted_libpath});\n")
+  endforeach()
+endif(WIN32)
+
+string(REPLACE "use File::Spec;" "use File::Spec;\n\$ENV{'ACE_ROOT'}=\"${ACE_INCLUDE_DIR}\";\n$ACE_ROOT=\"${ACE_INCLUDE_DIR}\";\n$DDS_ROOT=\"${OpenDDS_BINARY_DIR}\";${add_libpath_stmt}" PM_CONTENT "${PM_CONTENT}")
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Run_Test.pm" CONTENT "${PM_CONTENT}")
 
 file(READ Process_Java.pm PM_CONTENT)
