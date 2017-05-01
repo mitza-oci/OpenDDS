@@ -209,7 +209,7 @@ function(dds_idl_sources)
   endif()
 
   foreach (package ${packages})
-    set(package_root ${${package}_ROOT})
+    set(package_root ${${package}_SOURCE_DIR})
     set(package_install_dir ${${package}_INSTALL_DIR})
     file(RELATIVE_PATH rel_path ${package_root} ${CMAKE_CURRENT_LIST_DIR})
     install(FILES ${_arg_IDL_FILES} ${_idl_HEADER_FILES}
