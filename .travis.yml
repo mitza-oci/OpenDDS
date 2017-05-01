@@ -85,3 +85,4 @@ script:
   - mkdir build
   - cd build
   - cmake -GNinja -DCMAKE_CXX_COMPILER=$COMPILER $DDS_BUILD_FLAGS .. && ninja && ctest --output-on-failure -j 8
+
