@@ -8,6 +8,8 @@ env:
     - STATIC=1 NO_DEBUG=1
 #    - SAFETY_PROFILE=1
     - USES_WCHAR=1
+  global:
+    - COMPILER=g++-6
 
 matrix:
   include:
@@ -17,9 +19,9 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - openjdk-7-jdk
             - libxerces-c-dev
             - g++-6
+            - openjdk-7-jdk
       env: USE_JAVA=1 NO_DEBUG=1
     - compiler: clang
       addons:
@@ -77,8 +79,7 @@ before_script:
 
 
 script:
-  - which cmake
-  - which ninja
   - mkdir build
   - cd build
+  - echo DDS_BUILD_FLAGS=$DDS_BUILD_FLAGS
   - cmake -GNinja -DCMAKE_CXX_COMPILER=$COMPILER $DDS_BUILD_FLAGS .. && ninja && ctest --output-on-failure -j 8
