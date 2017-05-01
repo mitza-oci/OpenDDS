@@ -1,9 +1,6 @@
 sudo: false
 language: cpp
 
-compiler:
-  - gcc
-
 env:
   matrix:
     - NO_INLINE=1
@@ -11,8 +8,6 @@ env:
     - STATIC=1 NO_DEBUG=1
 #    - SAFETY_PROFILE=1
     - USES_WCHAR=1
-  global:
-    - COMPILER=g++-6
 
 matrix:
   include:
@@ -52,9 +47,9 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
       export PATH="$HOME/usr/bin:$PATH";
-      wget https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh;
+      wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh;
       chmod +x cmake-3.7.2-Linux-x86_64.sh;
-      ./cmake-3.7.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
+      ./cmake-3.7.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license ;
       curl -L https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-linux.zip -o ninja-linux.zip;
       unzip ninja-linux.zip -d $HOME/usr/bin;
     fi
@@ -82,7 +77,6 @@ before_script:
 
 
 script:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export PATH="$HOME/usr/bin:$PATH"; fi
   - which cmake
   - which ninja
   - mkdir build
