@@ -79,7 +79,8 @@ before_script:
 
 
 script:
+  - export CXX=$COMPILER
   - mkdir build
   - cd build
   - echo DDS_BUILD_FLAGS=$DDS_BUILD_FLAGS
-  - cmake -GNinja -DCMAKE_CXX_COMPILER=$COMPILER $DDS_BUILD_FLAGS .. && ninja && ctest --output-on-failure -j 8
+  - cmake -GNinja $DDS_BUILD_FLAGS .. && ninja && ctest --output-on-failure -j 8
