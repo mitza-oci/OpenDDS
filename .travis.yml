@@ -4,9 +4,10 @@ cache: ccache
 
 env:
   matrix:
+    - NO_DEBUG=0
+    - NO_DEBUG=1
     - NO_INLINE=1
     - NO_BIT=1
-    - NO_DEBUG=1
     - STATIC=1 NO_DEBUG=1
 #    - SAFETY_PROFILE=1
     - USES_WCHAR=1
@@ -14,16 +15,6 @@ env:
     - COMPILER=g++-6
 
 matrix:
-  include:
-    - compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - libxerces-c-dev
-            - g++-6
-            - ninja-build
     - compiler: clang
       addons:
         apt:
