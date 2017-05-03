@@ -121,35 +121,19 @@ string to_macro(const char* fn)
   }
 
   // Add some random characters since two files of the same name (in different
-  // directories) could be used in the same translation unit.  The algorithm
-  // for randomness comes from TAO_IDL's implementation.
+  // directories) could be used in the same translation unit.
 
-  const size_t NUM_CHARS = 6;
-
-  const ACE_Time_Value now = ACE_OS::gettimeofday();
-  ACE_UINT64 msec;
-  now.msec(msec);
-
-  msec += ACE_OS::getpid() + (size_t) ACE_OS::thr_self();
-
-  unsigned int seed = static_cast<unsigned int>(msec);
-#ifdef max
-#undef max
-#endif
-  const float MAX_VAL = static_cast<float>(numeric_limits<char>::max());
-  const float coefficient = static_cast<float>(MAX_VAL / (RAND_MAX + 1.0f));
-
-  if (ret[ret.size() - 1] != '_') ret += '_';
-
-  for (unsigned int n = 0; n < NUM_CHARS; ++n) {
-    char r;
-    do {
-      r = static_cast<char>(coefficient * ACE_OS::rand_r(&seed));
-    } while (!isalnum(r));
-
-    ret += static_cast<char>(toupper(r));
+  char cwd_path[MAXPATHLEN+1];
+  if (ACE_OS::getcwd(cwd_path, MAXPATHLEN+1) == 0) {
+    ACE_ERROR((LM_ERROR, ACE_TEXT("Could not get current directory\n")));
   }
+  int len = ACE_OS::strlen(cwd_path);
+  ACE_OS::snprintf( cwd_path + len, MAXPATHLEN+1-len, "/%s", fn);
+  u_long hash_value = ACE::hash_pjw(cwd_path);
+  char buf[sizeof(u_long)+2];
 
+  ACE_OS::snprintf(buf,sizeof(u_long)+2, "_%lX", hash_value);
+  ret += buf;
   return ret;
 }
 
