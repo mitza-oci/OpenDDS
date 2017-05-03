@@ -1,3 +1,4 @@
+dist: trusty
 sudo: false
 language: cpp
 cache: ccache
@@ -15,12 +16,13 @@ env:
     - COMPILER=g++-6
 
 matrix:
+  include:
     - compiler: clang
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.9
+            - llvm-toolchain-trusty-3.9
           packages:
             - libxerces-c-dev
             - clang++-3.9
