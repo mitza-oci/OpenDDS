@@ -10,7 +10,7 @@
 
 #include "monitor_export.h"
 #include "dds/DCPS/MonitorFactory.h"
-#include "monitorTypeSupportImpl.h"
+#include "dds/monitor/monitorTypeSupportImpl.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 #pragma once
