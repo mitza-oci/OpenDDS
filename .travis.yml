@@ -1,16 +1,16 @@
 dist: trusty
 sudo: false
 language: cpp
-cache: ccache
+# cache: ccache
 
 env:
   matrix:
-    - NO_DEBUG=0
-    - NO_DEBUG=1
+    - DEBUG=0
+    - DEBUG=1
     - NO_INLINE=1
     - NO_BIT=1
-    - STATIC=1 NO_DEBUG=1
-#    - SAFETY_PROFILE=1
+    - STATIC=1
+    - SAFETY_PROFILE=1
     - USES_WCHAR=1
   global:
     - COMPILER=g++-6
@@ -69,8 +69,15 @@ before_script:
   - if [ "$NO_INLINE" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_INLINE=OFF"; fi
   - if [ "$NO_BIT" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$STATIC" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
-  - if [ "$NO_DEBUG" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE"; else DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG"; fi
-  - if [ "$SAFETY_PROFILE" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE"; fi
+  - if [ "$DEBUG" == "1" ]; then
+      # travis ci does not have enough resource to cache debug build, so we have to disable ccache for debug build
+      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG -DCCACHE_PROGRAM=OFF";
+    else
+      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
+    fi
+  - if [ "$SAFETY_PROFILE" == "1" ]; then
+         DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
+    fi
   - if [ "$USES_WCHAR" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
 
 
