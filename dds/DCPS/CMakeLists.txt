@@ -6,7 +6,6 @@ ace_target_cxx_sources(OpenDDS_Dcps
                ConfigUtils.cpp
                ContentFilteredTopicImpl.cpp
                DCPS_Utils.cpp
-               DdsDcps_pch.cpp
                DataDurabilityCache.cpp
                DataReaderImpl.cpp
                DataSampleElement.cpp
