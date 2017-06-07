@@ -31,6 +31,10 @@ replace_orb_service(Naming_Service Naming_Service)
 replace_orb_service(ImplRepo_Service ImR_Locator_Service)
 replace_orb_service(ImR_Activator ImR_Activator_Service)
 
+if (OPENDDS_SAFETY_PROFILE)
+  string(REPLACE "$config->check_config(\"OPENDDS_SAFETY_PROFILE\")" "1" PM_CONTENT "${PM_CONTENT}")
+endif()
+
 if(CMAKE_CONFIGURATION_TYPES)
   set(set_default_exesubdir_stmt "$PerlACE::Process::ExeSubDir ||= 'Debug';\n")
 endif(CMAKE_CONFIGURATION_TYPES)
