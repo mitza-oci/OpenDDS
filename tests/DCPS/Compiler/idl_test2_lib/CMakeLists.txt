@@ -11,6 +11,7 @@ ace_add_lib(idl_test2_lib
   OUTPUT_NAME idl_test2_lib
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  RUNTIME_OUTPUT_DIRECTORY ${OpenDDS_BIN_DIR}
 )
 dds_idl_sources(
   TARGETS idl_test2_lib

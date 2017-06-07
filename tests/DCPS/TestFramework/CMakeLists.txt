@@ -4,6 +4,7 @@ ace_add_lib(TestFramework
   OUTPUT_NAME TestFramework
   DEFINE_SYMBOL TESTFRAMEWORK_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps
+  RUNTIME_OUTPUT_DIRECTORY ${OpenDDS_BIN_DIR}
 )
 ace_target_cxx_sources(TestFramework
   SOURCE_FILES TestFramework.cpp

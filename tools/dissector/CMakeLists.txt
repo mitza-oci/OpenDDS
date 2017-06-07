@@ -9,6 +9,7 @@ ace_add_lib(OpenDDS_Dissector
   COMPILE_DEFINITIONS NOMINMAX
   PUBLIC_INCLUDE_LIBRARIES ${Wireshark_INCLUDE_DIR}
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps ${Wireshark_LIBRARY}
+  PACKAGE OpenDDS
 )
 
 ace_target_cxx_sources(OpenDDS_Dissector
