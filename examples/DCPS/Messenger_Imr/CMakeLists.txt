@@ -69,7 +69,7 @@ endif()
 
 set(replacement_list replace_tao_imr)
 
-if (CMAKE_CONFIGURATION_TYPES AND TAO_INSTALL_DIR)
+if (ACE_MULTI_CONFIGURATION_GENERATOR AND TAO_INSTALL_DIR)
   # we cannot ignore subdir when the IMR executable are built with DDS
   set(shoudnt_ignore_exesubdir "\$imr_util->IgnoreExeSubDir(1)\;" " ")
   list(APPEND replacement_list shoudnt_ignore_exesubdir)

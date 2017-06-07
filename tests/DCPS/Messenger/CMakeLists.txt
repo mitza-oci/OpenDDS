@@ -76,7 +76,7 @@ endif()
 
 set(replace_nsadd_check_condition  "! -s \$nsadd.\$exec_extn" "0")
 
-if (CMAKE_CONFIGURATION_TYPES AND TAO_INSTALL_DIR)
+if (ACE_MULTI_CONFIGURATION_GENERATOR AND TAO_INSTALL_DIR)
   set(shouldnt_ignore_exesubdir "\$NSADD->IgnoreExeSubDir(1)\;" " ")
 endif()
 
