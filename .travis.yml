@@ -1,7 +1,6 @@
 dist: trusty
 sudo: false
 language: cpp
-# cache: ccache
 
 env:
   matrix:
@@ -50,7 +49,7 @@ before_install:
       export PATH="$HOME/usr/bin:$PATH";
       wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh;
       chmod +x cmake-3.7.2-Linux-x86_64.sh;
-      ./cmake-3.7.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license ;
+      ./cmake-3.7.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
     fi
 
 branches:
@@ -70,8 +69,7 @@ before_script:
   - if [ "$NO_BIT" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$STATIC" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
   - if [ "$DEBUG" == "1" ]; then
-      # travis ci does not have enough resource to cache debug build, so we have to disable ccache for debug build
-      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG -DCCACHE_PROGRAM=OFF";
+      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
     else
       DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
     fi
