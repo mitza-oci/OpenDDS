@@ -10,7 +10,7 @@ endif()
 ace_requires("NOT OPENDDS_SAFETY_PROFILE")
 
 ace_add_exe(BenchProcess
-  OUTPUT_NAME testprocess
+  OUTPUT_NAME ../bin/testprocess
   LINK_LIBRARIES TAO_AnyTypeCode
                  TAO_Svc_Utils
                  OpenDDS_Default_Discovery
