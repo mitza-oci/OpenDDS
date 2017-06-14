@@ -46,6 +46,12 @@ function(dds_add_test name)
     endforeach()
   endif(_arg_REQUIRES)
 
+  get_property(SKIPPED_TARGETS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY ACE_CURRENT_SKIPPED_TARGETS)
+
+  if (SKIPPED_TARGETS)
+    return()
+  endif()
+
   foreach(label ${_arg_LABELS})
     if (";${TEST_EXCLUDE_LABELS};" MATCHES ";${label};")
       message("excluding test: ${name}")

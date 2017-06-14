@@ -93,7 +93,6 @@ function(dds_add_jar _target_name)
 
   if (_arg_ENTRY_POINT)
     set(entry_point ENTRY_POINT ${_arg_ENTRY_POINT})
-    message("target=${_target_name} ${entry_point}")
   endif()
 
   add_jar(${_target_name}
