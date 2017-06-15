@@ -6,4 +6,5 @@ dds_add_jar(i2jrt_compact
   SOURCES org/omg/CORBA
 )
 
-install_jar(i2jrt_compact ${OpenDDS_INSTALL_DIR}/lib)
+install_jar(i2jrt_compact ${OpenDDS_INSTALL_DIR}/lib
+            COMPONENT OpenDDS_devel)

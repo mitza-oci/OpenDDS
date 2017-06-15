@@ -46,4 +46,5 @@ ace_target_cxx_sources(opendds_idl
 
 configure_file(IDLTemplate.txt IDLTemplate.txt COPYONLY)
 install(FILES IDLTemplate.txt
-        DESTINATION ${OpenDDS_INSTALL_DIR}/dds/idl)
+        DESTINATION ${OpenDDS_INSTALL_DIR}/dds/idl
+        COMPONENT OpenDDS_devel)

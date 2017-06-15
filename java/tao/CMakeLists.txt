@@ -43,5 +43,7 @@ dds_add_jar(tao_java_jar
 )
 
 
-install_jar(tao_java_jar DESTINATION ${OpenDDS_INSTALL_DIR}/lib)
+install_jar(tao_java_jar
+            DESTINATION ${OpenDDS_INSTALL_DIR}/lib
+            COMPONENT OpenDDS_devel)
 
