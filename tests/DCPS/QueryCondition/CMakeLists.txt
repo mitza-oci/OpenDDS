@@ -30,3 +30,8 @@ dds_configure_test_files()
 dds_add_test("tests/DCPS/QueryCondition/run_test.pl"
   COMMAND run_test.pl
 )
+
+dds_add_test("tests/DCPS/QueryCondition/run_test.pl rtps_disc"
+  COMMAND run_test.pl rtps_disc
+  LABELS RTPS
+)
