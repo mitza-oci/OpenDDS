@@ -1,14 +1,11 @@
 
-string(REGEX REPLACE "^~"  "$ENV{HOME}" DESTDIR "$ENV{DESTDIR}")
-set(INSTALL_PREFIX ${DESTDIR}@CMAKE_INSTALL_PREFIX@)
-
 function(symlink source target)
   execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${source} ${target})
   message("creating symoblic link ${target} --> ${source}")
 endfunction()
 
-file(MAKE_DIRECTORY ${INSTALL_PREFIX}/include/tools/modeling)
+file(MAKE_DIRECTORY $ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/include/tools/modeling)
 
-symlink(../@OpenDDS_INSTALL_DIR@/dds ${INSTALL_PREFIX}/include/dds)
-symlink(../../../@OpenDDS_INSTALL_DIR@/tools/modeling/codegen ${INSTALL_PREFIX}/include/tools/modeling/codegen)
+symlink(../@OpenDDS_INSTALL_DIR@/dds $ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/include/dds)
+symlink(../../../@OpenDDS_INSTALL_DIR@/tools/modeling/codegen $ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/include/tools/modeling/codegen)
 

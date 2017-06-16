@@ -5,6 +5,7 @@ if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
+ace_requires("TARGET tao_nsadd")
 
 ace_add_lib(DDS_Messenger_Idl
   OUTPUT_NAME DDS_Messenger_Idl

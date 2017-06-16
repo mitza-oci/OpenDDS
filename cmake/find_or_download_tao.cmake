@@ -19,7 +19,9 @@ endfunction()
 
 if (OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
   find_package(OpenDDS_HostTools CONFIG)
+
   if (NOT OpenDDS_HostTools_FOUND)
+    message("-- OpenDDS_HostTools not found")
     if(NOT ACE_TAO_SOURCE_DIR)
       download_ace_tao()
     else()
@@ -31,8 +33,20 @@ if (OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
                         BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/hosttools_build"
                         CMAKE_ARGS "-DACE_TAO_SOURCE_DIR=${ACE_TAO_SOURCE_DIR}" "-DBUILD_SHARED_LIBS=OFF" "-DCMAKE_BUILD_TYPE=RELEASE" "-DHOSTTOOLS_ONLY=ON"
                         BUILD_COMMAND ${CMAKE_COMMAND} --build .
+                        BUILD_BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/ace_gperf
+                                         ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/tao_idl
+                                         ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/opendds_idl
                         INSTALL_COMMAND "")
-    find_package(OpenDDS_HostTools CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build NO_DEFAULT_PATH)
+    add_executable(opendds_idl IMPORTED)
+    set_property(TARGET opendds_idl PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/opendds_idl )
+
+    add_executable(TAO_IDL_EXE IMPORTED)
+    set_property(TARGET TAO_IDL_EXE PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/tao_idl )
+
+    add_executable(ace_gperf IMPORTED)
+    set_property(TARGET ace_gperf PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/ace_gperf )
+  else()
+    message("-- Found OpenDDS_HostTools at ${OpenDDS_HostTools_DIR}")
   endif(NOT OpenDDS_HostTools_FOUND)
 endif(OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
 

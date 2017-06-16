@@ -10,12 +10,14 @@ set(files
 )
 
 function(replace_orb_service service_string target_name)
-  if (TAO_INSTALL_DIR)
-    string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"${TAO_BIN_DIR}/$<TARGET_PROPERTY:${target_name},OUTPUT_NAME>\"" PM_CONTENT "${PM_CONTENT}")
-  else()
-    string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"$<TARGET_PROPERTY:${target_name},LOCATION>\"" PM_CONTENT "${PM_CONTENT}")
+  if (TARGET target_name)
+    if (TAO_INSTALL_DIR)
+      string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"${TAO_BIN_DIR}/$<TARGET_PROPERTY:${target_name},OUTPUT_NAME>\"" PM_CONTENT "${PM_CONTENT}")
+    else()
+      string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"$<TARGET_PROPERTY:${target_name},LOCATION>\"" PM_CONTENT "${PM_CONTENT}")
+    endif()
+    set(PM_CONTENT ${PM_CONTENT} PARENT_SCOPE)
   endif()
-  set(PM_CONTENT ${PM_CONTENT} PARENT_SCOPE)
 endfunction()
 
 file(COPY ${files}
