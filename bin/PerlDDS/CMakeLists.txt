@@ -10,7 +10,7 @@ set(files
 )
 
 function(replace_orb_service service_string target_name)
-  if (TARGET target_name)
+  if (TARGET ${target_name})
     if (TAO_INSTALL_DIR)
       string(REGEX REPLACE "${service_string}' => [^,]+" "${service_string}' => \"${TAO_BIN_DIR}/$<TARGET_PROPERTY:${target_name},OUTPUT_NAME>\"" PM_CONTENT "${PM_CONTENT}")
     else()
