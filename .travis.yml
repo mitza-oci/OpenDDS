@@ -3,13 +3,13 @@ language: cpp
 
 env:
   matrix:
-    - DEBUG=0
-    - DEBUG=1
-    - NO_INLINE=1
-    - NO_BIT=1
-    - STATIC=1
-    - SAFETY_PROFILE=1
-    - USES_WCHAR=1
+    - DEBUG=0 DESC="Release"
+    - DEBUG=1 DESC="Debug"
+    - NO_INLINE=1 DESC="NoInline"
+    - NO_BIT=1 DESC="NoBuildInTopic"
+    - STATIC=1 DESC="Static"
+    - SAFETY_PROFILE=1 DESC="SafetyProfile"
+    - USES_WCHAR=1 DESC="WChar"
   global:
     - COMPILER=g++-6
 
@@ -25,7 +25,7 @@ matrix:
             - libxerces-c-dev
             - clang++-3.9
             - ninja-build
-      env: COMPILER=clang++-3.9
+      env: COMPILER=clang++-3.9 DESC="Clang"
     # - os: osx
     #   osx_image: xcode8.3
     #   env: COMPILER=c++
@@ -42,6 +42,7 @@ addons:
       - g++-6
       - ninja-build
 
+cache: pip
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
@@ -50,6 +51,9 @@ before_install:
       chmod +x cmake-3.7.2-Linux-x86_64.sh;
       ./cmake-3.7.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
     fi
+  - pip install --user awscli
+  - mkdir -p ~/.cache
+  - aws s3 sync s3://com.ociweb.opendds/$TRAVIS_BRANCH/$DESC/.ccache ~/.ccache
 
 branches:
   only:
@@ -77,10 +81,14 @@ before_script:
     fi
   - if [ "$USES_WCHAR" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
 
-
 script:
   - export CXX=$COMPILER
   - mkdir build
   - cd build
   - echo DDS_BUILD_FLAGS=$DDS_BUILD_FLAGS
   - cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j 6
+
+after_success:
+  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$DESC/.ccache
+after_failure:
+  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$DESC/.ccache
