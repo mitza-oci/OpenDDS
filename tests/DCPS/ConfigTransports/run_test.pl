@@ -13,20 +13,18 @@ use Getopt::Std;
 use Data::Dumper;
 use strict;
 
-use vars qw/ $opt_d $opt_t /;
-getopts('d:t:');
-my $debug = $opt_d;
+my %opts;
+getopts('d:i:t:', \%opts);
+my $debug = $opts{d};
 
 PerlDDS::add_lib_path('../FooType4');
 PerlDDS::add_lib_path('../common');
 
 # An hour should be enough of a timeout for debugging ...
-my $pub_time = $opt_t || ($debug ? 3600 : 30);
+my $pub_time = $opts{t} || ($debug ? 3600 : 30);
 my $pub_addr = "localhost:";
-my $port=29804;
 
 my $sub_time = $pub_time;
-my $sub_addr = "localhost:16701";
 
 my $qos = {
     autoenable    => undef,
@@ -369,6 +367,9 @@ my @scenario = (
 
 );
 
+if ($opts{i} or $opts{i} eq 0) {
+  @scenario = @scenario[$opts{i}]
+}
 
 # Returns an array of publisher or subscriber command lines
 sub parse($$$) {
@@ -454,15 +455,17 @@ for my $hasbuiltins (@builtinscases) {
         my $test = new PerlDDS::TestFramework();
         $test->enable_console_logging();
         $test->report_unused_flags();
+        my $ior_file = "repo$opts{i}.ior";
+        $test->{info_repo}->{file}=$ior_file;
 
         # Setup the InfoRepo.
         my $info_params = "-NOBITS" unless $hasbuiltins;
         $test->setup_discovery($info_params);
 
-        my $sub_parameters = parse('subscriber', $hasbuiltins, \%$i) . " -x $sub_time";
+        my $sub_parameters = parse('subscriber', $hasbuiltins, \%$i) . " -x $sub_time -DCPSInfoRepo file://$ior_file";
         $test->process("subscriber", "subscriber", $sub_parameters);
 
-        my $pub_parameters = parse('publisher', $hasbuiltins, \%$i) . " -x $pub_time";
+        my $pub_parameters = parse('publisher', $hasbuiltins, \%$i) . " -x $pub_time -DCPSInfoRepo file://$ior_file";
         $test->process("publisher", "publisher", $pub_parameters);
 
         # What if start fails?
