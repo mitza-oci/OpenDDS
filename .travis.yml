@@ -3,13 +3,13 @@ language: cpp
 
 env:
   matrix:
-    - DEBUG=0 DESC="Release"
-    - DEBUG=1 DESC="Debug"
-    - NO_INLINE=1 DESC="NoInline"
-    - NO_BIT=1 DESC="NoBuildInTopic"
-    - STATIC=1 DESC="Static"
-    - SAFETY_PROFILE=1 DESC="SafetyProfile"
-    - USES_WCHAR=1 DESC="WChar"
+    - DEBUG=0 PIPELINE="Release"
+    - DEBUG=1 PIPELINE="Debug"
+    - NO_INLINE=1 PIPELINE="NoInline"
+    - NO_BIT=1 PIPELINE="NoBuildInTopic"
+    - STATIC=1 PIPELINE="Static"
+    - SAFETY_PROFILE=1 PIPELINE="SafetyProfile"
+    - USES_WCHAR=1 PIPELINE="WChar"
   global:
     - COMPILER=g++-6
 
@@ -25,7 +25,7 @@ matrix:
             - libxerces-c-dev
             - clang++-3.9
             - ninja-build
-      env: COMPILER=clang++-3.9 DESC="Clang"
+      env: COMPILER=clang++-3.9 PIPELINE="Clang"
     # - os: osx
     #   osx_image: xcode8.3
     #   env: COMPILER=c++
@@ -44,6 +44,7 @@ addons:
 
 cache: pip
 before_install:
+  - git clone -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
       export PATH="$HOME/usr/bin:$PATH";
@@ -53,7 +54,7 @@ before_install:
     fi
   - pip install --user awscli
   - mkdir -p ~/.cache
-  - aws s3 sync s3://com.ociweb.opendds/$TRAVIS_BRANCH/$DESC/.ccache ~/.ccache
+  - aws s3 sync s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache ~/.ccache
 
 branches:
   only:
@@ -80,6 +81,7 @@ before_script:
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
     fi
   - if [ "$USES_WCHAR" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
+  - DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO"
 
 script:
   - export CXX=$COMPILER
@@ -89,6 +91,6 @@ script:
   - cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j 6
 
 after_success:
-  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$DESC/.ccache
+  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache
 after_failure:
-  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$DESC/.ccache
+  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache
