@@ -5,8 +5,8 @@ env:
   matrix:
     - DEBUG=0 PIPELINE="Release"
     - DEBUG=1 PIPELINE="Debug"
-    - NO_INLINE=1 PIPELINE="NoInline"
-    - NO_BIT=1 PIPELINE="NoBuildInTopic"
+    - INLINE=0 PIPELINE="NoInline"
+    - BIT=0 PIPELINE="NoBuildInTopic"
     - STATIC=1 PIPELINE="Static"
     - SAFETY_PROFILE=1 PIPELINE="SafetyProfile"
     - USES_WCHAR=1 PIPELINE="WChar"
@@ -69,13 +69,13 @@ before_script:
         tar xzf modeling_plugins.tar.gz;
         rm modeling_plugins.tar.gz;
     fi
-  - if [ "$NO_INLINE" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_INLINE=OFF"; fi
-  - if [ "$NO_BIT" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
+  - if [ "$INLINE" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_INLINE=OFF"; fi
+  - if [ "$BIT" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$STATIC" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
-  - if [ "$DEBUG" == "1" ]; then
-      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
-    else
+  - if [ "$DEBUG" == "0" ]; then
       DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
+    else
+      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
     fi
   - if [ "$SAFETY_PROFILE" == "1" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
