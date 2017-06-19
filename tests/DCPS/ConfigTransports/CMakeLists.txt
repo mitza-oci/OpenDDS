@@ -54,8 +54,9 @@ ace_target_cxx_sources(ConfigTransports_Subscriber
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
-
-dds_add_test("tests/DCPS/ConfigTransports/run_test.pl"
-  COMMAND run_test.pl
-  LABELS LONG_TEST
-)
+foreach(i RANGE 16)
+  dds_add_test("tests/DCPS/ConfigTransports/run_test.pl -i ${i}"
+    COMMAND run_test.pl -i ${i}
+    NO_LOCK
+  )
+endforeach()
