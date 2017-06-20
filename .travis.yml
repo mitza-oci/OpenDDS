@@ -54,7 +54,7 @@ before_install:
     fi
   - pip install --user awscli
   - mkdir -p ~/.cache
-  - aws s3 sync s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache ~/.ccache
+  - aws s3 sync --quiet s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache ~/.ccache || true
 
 branches:
   only:
@@ -91,6 +91,6 @@ script:
   - cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j 6
 
 after_success:
-  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache
+  - aws s3 sync --quiet ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache || true
 after_failure:
-  - aws s3 sync ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache
+  - aws s3 sync --quiet ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache || true
