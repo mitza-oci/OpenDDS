@@ -88,9 +88,10 @@ script:
   - mkdir build
   - cd build
   - echo DDS_BUILD_FLAGS=$DDS_BUILD_FLAGS
+  - ccache -s 450M
   - cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j 6
 
 after_success:
-  - aws s3 sync --quiet ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache || true
+  - aws s3 sync --quiet --delete ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache || true
 after_failure:
-  - aws s3 sync --quiet ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache || true
+  - aws s3 sync --quiet --delete ~/.ccache s3://com.ociweb.opendds/$TRAVIS_BRANCH/$PIPELINE/.ccache || true
