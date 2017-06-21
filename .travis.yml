@@ -1,5 +1,6 @@
 ## "sudo: true" environment is much slower than the "sudo: false" environment even though it provides larger memory.
 sudo: false
+dist: trusty
 language: cpp
 
 addons:
@@ -83,8 +84,9 @@ jobs:
     - stage: test
       script:
           - aws s3 cp s3://com.ociweb.opendds/$TRAVIS_BRANCH/$BUILD_NAME/build.tar.gz .
-          - tar zxvf build.tar.gz
+          - tar zxf build.tar.gz
           - cd build
           - ctest -j 4
-          - aws s3 cp Testing/Temporary/LastTest.log s3://com.ociweb.opendds/Logs/${TRAVIS_JOB_NUMBER}/LastTest.log
       env: BUILD_NAME=Debug
+      after_failure:
+          - aws s3 cp Testing/Temporary/LastTest.log s3://com.ociweb.opendds/Logs/${TRAVIS_JOB_NUMBER}/LastTest.log
