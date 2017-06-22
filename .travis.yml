@@ -7,7 +7,7 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.9
+      - llvm-toolchain-trusty-3.9
     packages:
       - libxerces-c-dev
       - ninja-build
@@ -87,6 +87,5 @@ jobs:
           - tar zxf build.tar.gz
           - cd build
           - ctest -j 4
-      env: BUILD_NAME=Debug
-      after_failure:
           - aws s3 cp Testing/Temporary/LastTest.log s3://com.ociweb.opendds/Logs/${TRAVIS_JOB_NUMBER}/LastTest.log
+      env: BUILD_NAME=Debug
