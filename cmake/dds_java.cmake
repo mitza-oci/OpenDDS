@@ -113,6 +113,10 @@ function(dds_add_jar _target_name)
     set_target_properties(${_target_name} PROPERTIES FOLDER ${_arg_FOLDER})
   endif()
 
+  if (_arg_OUTPUT_DIR AND NOT EXISTS "${_arg_OUTPUT_DIR}/CMakeFiles/${_target_name}.dir")
+    file(MAKE_DIRECTORY "${_arg_OUTPUT_DIR}/CMakeFiles/${_target_name}.dir")
+  endif()
+
 endfunction()
 
 function(dds_add_taoidl_jar _target_name)
