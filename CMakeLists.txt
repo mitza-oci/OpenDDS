@@ -14,6 +14,8 @@ include(find_or_download_tao)
 include(opendds_options)
 include(dds_idl_sources)
 
+ace_try_enable_ccache()
+
 ace_add_package(OpenDDS
   VERSION ${OPENDDS_VERSION}
 )

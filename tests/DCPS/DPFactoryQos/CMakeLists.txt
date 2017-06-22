@@ -56,5 +56,5 @@ dds_add_test("tests/DCPS/DPFactoryQos/run_test.pl"
 
 dds_add_test("tests/DCPS/DPFactoryQos/run_test.pl rtps_disc"
   COMMAND run_test.pl rtps_disc
-  LABELS RPTS
+  LABELS RTPS
 )

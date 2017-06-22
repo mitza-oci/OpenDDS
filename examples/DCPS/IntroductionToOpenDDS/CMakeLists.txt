@@ -61,3 +61,7 @@ ace_target_cxx_sources(StockQuoter_Subscriber
                QuoteDataReaderListenerImpl.h
 )
 
+include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
+dds_configure_test_files()
+
+
