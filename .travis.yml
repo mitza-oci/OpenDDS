@@ -53,7 +53,7 @@ before_script:
   - if [ "$USES_WCHAR" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
   ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
   ## does not have enough disk space to cache all OpenDDS object code
-  - DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO -DCCACHE_PROGRAM=OFF"
+  - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO -DCCACHE_PROGRAM=OFF"
 
 jobs:
   include:
