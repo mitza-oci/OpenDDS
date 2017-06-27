@@ -82,10 +82,26 @@ jobs:
       script: ./travis_build.sh Clang
       env: COMPILER=clang++-3.9
     - stage: test
-      script:
-          - aws s3 cp s3://com.ociweb.opendds/$TRAVIS_BRANCH/$BUILD_NAME/build.tar.gz .
-          - tar zxf build.tar.gz
-          - cd build
-          - ctest -j 4
-          - aws s3 cp Testing/Temporary/LastTest.log s3://com.ociweb.opendds/Logs/${TRAVIS_JOB_NUMBER}/LastTest.log
-      env: BUILD_NAME=Debug
+      script: ./travis_run_tests.sh Debug
+      env: DEBUG=0 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh Release
+      env: DEBUG=1 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh NoInline
+      env: INLINE=0 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh NoBit
+      env: Bit=0 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh Static
+      env: STATIC=1 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh SafetyProfile
+      env: SAFETY_PROFILE=1 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh WChar
+      env: USE_WCHAR=1 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh Clang
+      env: COMPILER=clang++-3.9
