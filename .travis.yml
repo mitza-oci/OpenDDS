@@ -71,7 +71,8 @@ jobs:
       env: BIT=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh Static
-      env: STATIC=1 COMPILER=g++-6
+      ## static debug build would cause out of disk space error on travis ci
+      env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh SafetyProfile
       env: SAFETY_PROFILE=1 COMPILER=g++-6
@@ -95,7 +96,7 @@ jobs:
       env: Bit=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh Static
-      env: STATIC=1 COMPILER=g++-6
+      env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh SafetyProfile
       env: SAFETY_PROFILE=1 COMPILER=g++-6
