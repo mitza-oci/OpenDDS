@@ -36,6 +36,7 @@ else()
       TAO_Async_ImR_Client_IDL TAO_ImR_Activator_IDL TAO_ImR_Locator_IDL TAO_ImR_Activator
       TAO_ImR_Locator ImR_Locator_Service ImR_Activator_Service tao_imr
       TAO_CosNaming_Skel TAO_CosNaming TAO_CosNaming_Serv Naming_Service Hello_Server tao_nsadd
+      TAO_PortableGroup TAO_FTORB_Utils TAO_FT_ServerORB TAO_FT_ClientORB
       CACHE STRING "" FORCE
     )
   endif()

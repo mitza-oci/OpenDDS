@@ -33,8 +33,8 @@ dds_idl_sources(
 ace_add_exe(DDS_Messenger_IOGR_Imr_Aggregator
   OUTPUT_NAME Aggregator
 
-  LINK_LIBRARIES TAO_FT_ServerORB
-                 TAO_AnyTypeCode
+  LINK_LIBRARIES For_OrbsvcsExe
+                 TAO_FT_ServerORB
                  TAO_FT_ClientORB
                  TAO_Valuetype
                  TAO_IORManip
