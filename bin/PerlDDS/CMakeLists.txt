@@ -9,6 +9,56 @@ set(files
   Run_Test.pm
 )
 
+if (TARGET tao_imr)
+  if (TAO_INSTALL_DIR)
+    ## we use TAO_INSTALL_DIR to check if tao_nsadd is imported or not;
+    ## TAO_INSTALL_DIR is only defined when TAO is not imported
+    set(tao_imr_location  "$<TARGET_PROPERTY:tao_imr,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:tao_imr,OUTPUT_NAME>")
+  else()
+    set(tao_imr_location "$<TARGET_PROPERTY:tao_imr,LOCATION>")
+  endif()
+
+  set(sub_tao_imr
+    "sub tao_imr {\n  return '${tao_imr_location}';\n}\n\n"
+  )
+endif()
+
+
+if (TARGET tao_nsadd)
+  if (TAO_INSTALL_DIR)
+    ## we use TAO_INSTALL_DIR to check if tao_nsadd is imported or not;
+    ## TAO_INSTALL_DIR is only defined when TAO is not imported
+    set(tao_nsadd_location  "$<TARGET_PROPERTY:tao_nsadd,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:tao_nsadd,OUTPUT_NAME>")
+  else()
+    set(tao_nsadd_location "$<TARGET_PROPERTY:tao_nsadd,LOCATION>")
+  endif()
+
+  set(sub_tao_nsadd
+    "sub tao_nsadd {\n  return '${tao_nsadd_location}';\n}\n\n"
+  )
+endif()
+
+
+if (TARGET Hello_Server)
+  ## TAO is part of our source tree
+  set(hello_server_location ${TAO_BINARY_DIR}/tests/Hello/$<TARGET_PROPERTY:Hello_Server,OUTPUT_NAME>)
+else(TARGET Hello_Server)
+  find_file(hello_server_location server${CMAKE_EXECUTABLE_SUFFIX}
+            PATHS ${TAO_DIR}/tests/Hello ${TAO_BINARY_DIR}/tests/Hello
+            NO_DEFAULT_PATH)
+endif(TARGET Hello_Server)
+
+if (hello_server_location)
+  set(sub_hello_server
+    "sub hello_server {\n  return '${hello_server_location}';\n}\n\n"
+  )
+endif(hello_server_location)
+
+set(sub_opendds_idl
+  "sub opendds_idl {\n  return '$<TARGET_PROPERTY:opendds_idl,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:opendds_idl,OUTPUT_NAME>';\n}\n\n"
+)
+
+
 function(replace_orb_service service_string target_name)
   if (TARGET ${target_name})
     if (TAO_INSTALL_DIR)
@@ -24,6 +74,8 @@ file(COPY ${files}
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 file(READ Run_Test.pm PM_CONTENT)
+
+string(REPLACE "package PerlDDS;" "package PerlDDS;\n${sub_tao_nsadd}${sub_tao_imr}${sub_hello_server}${sub_opendds_idl}" PM_CONTENT "${PM_CONTENT}")
 
 if (TARGET DCPSInfoRepo)
   string(REPLACE "\$ENV{DDS_ROOT}/bin/DCPSInfoRepo" "${OpenDDS_BIN_DIR}/DCPSInfoRepo" PM_CONTENT "${PM_CONTENT}")

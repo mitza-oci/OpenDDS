@@ -59,7 +59,7 @@ ace_target_cxx_sources(KeyTest_MD5
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 
-set(replace_opendds_idl "\$ENV{DDS_ROOT}/dds/idl/opendds_idl" "$<TARGET_PROPERTY:opendds_idl,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:opendds_idl,OUTPUT_NAME>")
+set(replace_opendds_idl "\"\$ENV{DDS_ROOT}/dds/idl/opendds_idl\"" "PerlDDS::opendds_idl()")
 dds_configure_test_files(replace_opendds_idl)
 
 

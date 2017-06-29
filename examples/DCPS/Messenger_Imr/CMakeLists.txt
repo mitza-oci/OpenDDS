@@ -59,13 +59,8 @@ ace_target_cxx_sources(DDS_Messenger_Imr_Subscriber
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 
 
-if (TAO_INSTALL_DIR)
-  ## we use TAO_INSTALL_DIR to check if tao_nsadd is imported or not;
-  ## TAO_INSTALL_DIR is only defined when TAO is not imported
-  set(replace_tao_imr "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_PROPERTY:tao_imr,RUNTIME_OUTPUT_DIRECTORY>/$<TARGET_PROPERTY:tao_imr,OUTPUT_NAME>")
-else()
-  set(replace_tao_imr "\$ENV{ACE_ROOT}/bin/tao_imr" "$<TARGET_PROPERTY:tao_imr,LOCATION>")
-endif()
+
+set(replace_tao_imr "\"\$ENV{ACE_ROOT}/bin/tao_imr\"" "PerlDDS::tao_imr()")
 
 set(replacement_list replace_tao_imr)
 
