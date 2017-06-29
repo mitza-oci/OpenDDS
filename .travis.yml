@@ -42,26 +42,29 @@ before_script:
   - if [ "$INLINE" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_INLINE=OFF"; fi
   - if [ "$BIT" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$STATIC" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
-  - if [ "$DEBUG" == "0" ]; then
-      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
-    else
+  - if [ "$DEBUG" == "1" ]; then
       DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
+    else
+      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
     fi
+  ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
+  ## does not have enough disk space to cache all OpenDDS object code
+  - if [ "$CCACHE" == "" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCCACHE=OFF"; fi
+  - if [ "$JAVA" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_DISABLE_FIND_PACKAGE_JAVA=TRUE"; fi
   - if [ "$SAFETY_PROFILE" == "1" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
     fi
   - if [ "$USES_WCHAR" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
-  ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
-  ## does not have enough disk space to cache all OpenDDS object code
-  - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO -DCCACHE_PROGRAM=OFF"
+
+  - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO"
 
 jobs:
   include:
     - stage: build
-      script: ./travis_build.sh Debug
-      env: DEBUG=0 COMPILER=g++-6
-    - stage: build
       script: ./travis_build.sh Release
+      env: DEBUG=0 COMPILER=g++-6 CCACHE=1
+    - stage: build
+      script: ./travis_build.sh Debug
       env: DEBUG=1 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh NoInline
@@ -72,7 +75,7 @@ jobs:
     - stage: build
       script: ./travis_build.sh Static
       ## static debug build would cause out of disk space error on travis ci
-      env: STATIC=1 DEBUG=0 COMPILER=g++-6
+      env: STATIC=1 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh SafetyProfile
       env: SAFETY_PROFILE=1 COMPILER=g++-6
@@ -82,11 +85,12 @@ jobs:
     - stage: build
       script: ./travis_build.sh Clang
       env: COMPILER=clang++-3.9
-    - stage: test
-      script: ./travis_run_tests.sh Debug
-      env: DEBUG=0 COMPILER=g++-6
+
     - stage: test
       script: ./travis_run_tests.sh Release
+      env: DEBUG=0 COMPILER=g++-6
+    - stage: test
+      script: ./travis_run_tests.sh Debug
       env: DEBUG=1 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh NoInline
