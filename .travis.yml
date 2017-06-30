@@ -85,6 +85,7 @@ jobs:
       script: ./travis_build.sh Clang
       env: DEBUG=0 COMPILER=clang++-3.9
     - stage: build
+      os: osx
       osx_image: xcode9
       install:
         - brew install ninja
