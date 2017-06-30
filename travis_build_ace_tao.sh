@@ -6,7 +6,7 @@ cd ACE_TAO/build
 echo BUILD_FLAGS=$BUILD_FLAGS
 
 
-cmake -GNinja $BUILD_FLAGS .. && ninja -j 6 && ninja install
+cmake -GNinja -C $TRAVIS_BUILD_DIR/ACE_TAO_for_DDS.cmake $BUILD_FLAGS .. && ninja -j 6 && ninja install
 status=$?
 
 cd ../..
