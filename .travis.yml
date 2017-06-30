@@ -68,23 +68,23 @@ jobs:
       env: DEBUG=1 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh NoInline
-      env: INLINE=0 COMPILER=g++-6
+      env: INLINE=0 DEBUG=1 COMPILER=g++-6 CCACHE=1
     - stage: build
       script: ./travis_build.sh NoBit
-      env: BIT=0 COMPILER=g++-6
+      env: BIT=0 DEBUG=0 COMPILER=g++-6 CCACHE=1
     - stage: build
       script: ./travis_build.sh Static
       ## static debug build would cause out of disk space error on travis ci
-      env: STATIC=1 COMPILER=g++-6
+      env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh SafetyProfile
-      env: SAFETY_PROFILE=1 COMPILER=g++-6
+      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6 CCACHE=1
     - stage: build
       script: ./travis_build.sh WChar
-      env: USE_WCHAR=1 COMPILER=g++-6
+      env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6 CCACHE=1
     - stage: build
       script: ./travis_build.sh Clang
-      env: COMPILER=clang++-3.9
+      env: DEBUG=0 COMPILER=clang++-3.9 CCACHE=1
 
     - stage: test
       script: ./travis_run_tests.sh Release
@@ -94,19 +94,19 @@ jobs:
       env: DEBUG=1 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh NoInline
-      env: INLINE=0 COMPILER=g++-6
+      env: INLINE=0 DEBUG=1 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh NoBit
-      env: Bit=0 COMPILER=g++-6
+      env: Bit=0 DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh Static
       env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh SafetyProfile
-      env: SAFETY_PROFILE=1 COMPILER=g++-6
+      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh WChar
-      env: USE_WCHAR=1 COMPILER=g++-6
+      env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh Clang
-      env: COMPILER=clang++-3.9
+      env: DEBUG=0 COMPILER=clang++-3.9
