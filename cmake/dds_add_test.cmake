@@ -36,8 +36,8 @@ function(dds_configure_test_files)
 endfunction()
 
 function(dds_add_test name)
-  set(multiValueArgs COMMAND REQUIRES LABELS RESOURCE_LOCK)
-  cmake_parse_arguments(_arg "NO_LOCK" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  set(multiValueArgs COMMAND REQUIRES LABELS RESOURCE_LOCK )
+  cmake_parse_arguments(_arg "NO_LOCK" "COST" "${multiValueArgs}" ${ARGN})
 
   if (_arg_REQUIRES)
     foreach(cond ${_arg_REQUIRES})
@@ -89,6 +89,7 @@ function(dds_add_test name)
     set_tests_properties("${name}" PROPERTIES
       LABELS "${_arg_LABELS}"
       RESOURCE_LOCK "${_arg_RESOURCE_LOCK}"
+      COST "${_arg_COST}"
     )
   endif()
 endfunction()

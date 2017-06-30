@@ -37,18 +37,24 @@ dds_configure_test_files()
 
 dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES "NOT OPENDDS_SAFETY_PROFILE" LONG_TEST
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
+  COST 500
+  NO_LOCK
 )
 
 
 dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc"
-  COMMAND run_test.pl rtps_disc LONG_TEST
-  LABELS RTPS
+  COMMAND run_test.pl rtps_disc
+  LABELS RTPS LONG_TEST
+  COST 500
+  NO_LOCK
 )
 
 
 dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc_tcp"
   COMMAND run_test.pl rtps_disc_tcp
-  REQUIRES "NOT OPENDDS_SAFETY_PROFILE" LONG_TEST
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
   LABELS RTPS
+  COST 500
+  NO_LOCK
 )

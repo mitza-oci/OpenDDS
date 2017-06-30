@@ -78,7 +78,7 @@ endif()
 dds_configure_test_files(replace_nsadd replace_nsadd_check_condition shouldnt_ignore_exesubdir)
 
 file(GLOB files *.ini)
-file(COPY ${files} run_test.pl run_corbaloc_test.pl
+file(COPY ${files}
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 
