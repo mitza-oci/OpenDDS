@@ -35,56 +35,61 @@ before_script:
   - if [ "$FUZZ" == "1" ]; then
         tar czf modeling_plugins.tar.gz tools/modeling/plugins;
         rm -rf tools/modeling/plugins tools/IntermediateTypeLang/cpp/rapidjson;
-        perl $DDS_ROOT/tools/scripts/dds_fuzz.pl;
+        perl tools/scripts/dds_fuzz.pl;
         tar xzf modeling_plugins.tar.gz;
         rm modeling_plugins.tar.gz;
     fi
-  - if [ "$INLINE" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_INLINE=OFF"; fi
-  - if [ "$BIT" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
-  - if [ "$STATIC" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
+  - if [ "$INLINE" == "0" ]; then BUILD_FLAGS="$BUILD_FLAGS -DACE_INLINE=OFF"; fi
+  - if [ "$STATIC" == "1" ]; then BUILD_FLAGS="$BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
   - if [ "$DEBUG" == "1" ]; then
-      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
+      BUILD_FLAGS="$BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
     else
-      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
+      BUILD_FLAGS="$BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
     fi
-  ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
-  ## does not have enough disk space to cache all OpenDDS object code
-  - if [ "$CCACHE" == "" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCCACHE=OFF"; fi
+  - if [ "$USES_WCHAR" == "1" ]; then BUILD_FLAGS="$BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
+  - if [ "$BIT" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$JAVA" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_DISABLE_FIND_PACKAGE_JAVA=TRUE"; fi
   - if [ "$SAFETY_PROFILE" == "1" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
     fi
-  - if [ "$USES_WCHAR" == "1" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
-
-  - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO"
+  ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
+  ## does not have enough disk space or network bandwidth to cache all OpenDDS object code
+  - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF"
+  - export DDS_BUILD_FLAGS = "$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO $BUILD_FLAGS"
 
 jobs:
   include:
     - stage: build
       script: ./travis_build.sh Release
-      env: DEBUG=0 COMPILER=g++-6 CCACHE=1
+      env: DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh Debug
       env: DEBUG=1 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh NoInline
-      env: INLINE=0 DEBUG=1 COMPILER=g++-6 CCACHE=1
+      env: INLINE=0 DEBUG=1 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh NoBit
-      env: BIT=0 DEBUG=0 COMPILER=g++-6 CCACHE=1
+      env: BIT=0 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh Static
       ## static debug build would cause out of disk space error on travis ci
       env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh SafetyProfile
-      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6 CCACHE=1
+      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh WChar
-      env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6 CCACHE=1
+      env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh Clang
-      env: DEBUG=0 COMPILER=clang++-3.9 CCACHE=1
+      env: DEBUG=0 COMPILER=clang++-3.9
+    - stage: build
+      osx_image: xcode9
+      install:
+        - brew install ninja
+      script: ./travis_build_ace_tao.sh MacOS
+      env: DEBUG=0 JAVA=0 COMPILER=c++
 
     - stage: test
       script: ./travis_run_tests.sh Release
