@@ -8,6 +8,7 @@ ace_add_lib(OpenDDS_Multicast
 )
 
 ace_target_cxx_sources(OpenDDS_Multicast
+  GLOB_HEADERS
   SOURCE_FILES BestEffortSession.cpp
                BestEffortSessionFactory.cpp
                Multicast.cpp
@@ -21,27 +22,4 @@ ace_target_cxx_sources(OpenDDS_Multicast
                MulticastTransport.cpp
                ReliableSession.cpp
                ReliableSessionFactory.cpp
-  HEADER_FILES BestEffortSession.h
-               BestEffortSessionFactory.h
-               Multicast.h
-               MulticastDataLink.h
-               MulticastDataLink_rch.h
-               MulticastInst.h
-               MulticastInst_rch.h
-               MulticastLoader.h
-               MulticastReceiveStrategy.h
-               MulticastReceiveStrategy_rch.h
-               MulticastSendStrategy.h
-               MulticastSendStrategy_rch.h
-               MulticastSession.h
-               MulticastSessionFactory.h
-               MulticastSessionFactory_rch.h
-               MulticastSession_rch.h
-               MulticastTransport.h
-               MulticastTypes.h
-               Multicast_Export.h
-               ReliableSession.h
-               ReliableSessionFactory.h
-  INLINE_FILES MulticastDataLink.inl
-               MulticastSession.inl
 )

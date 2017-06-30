@@ -27,6 +27,7 @@ ace_add_lib(OpenDDS_Dcps
 ace_target_cxx_sources(OpenDDS_Dcps
   HEADER_FILES Version.h
                Versioned_Namespace.h
+               DCPS/yard
 )
 
 # flags used by all directories under $DDS_ROOT/dds
@@ -48,4 +49,3 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CorbaSeq)
 include(CorbaSeq/CMakeLists.txt)
 include(DCPS/CMakeLists.txt)
 include(DCPS/transport/framework/CMakeLists.txt)
-include(DCPS/yard/CMakeLists.txt)

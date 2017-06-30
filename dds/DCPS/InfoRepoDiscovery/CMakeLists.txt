@@ -5,20 +5,16 @@ ace_add_lib(OpenDDS_InfoRepoDiscovery
   PACKAGE OpenDDS
   FOLDER OpenDDS/dds/DCPS
   DEFINE_SYMBOL OPENDDS_INFOREPODISCOVERY_BUILD_DLL
-  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../..
+  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../..
   PUBLIC_LINK_LIBRARIES OpenDDS_Dcps OpenDDS_Tcp
 )
 
 ace_target_cxx_sources(OpenDDS_InfoRepoDiscovery
+  GLOB_HEADERS
   SOURCE_FILES DataReaderRemoteImpl.cpp
                DataWriterRemoteImpl.cpp
                FailoverListener.cpp
                InfoRepoDiscovery.cpp
-  HEADER_FILES DataReaderRemoteImpl.h
-               DataWriterRemoteImpl.h
-               FailoverListener.h
-               InfoRepoDiscovery.h
-               InfoRepoDiscovery_Export.h
 )
 
 

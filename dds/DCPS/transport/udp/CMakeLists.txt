@@ -8,6 +8,7 @@ ace_add_lib(OpenDDS_Udp
 )
 
 ace_target_cxx_sources(OpenDDS_Udp
+  GLOB_HEADERS
   SOURCE_FILES Udp.cpp
                UdpDataLink.cpp
                UdpInst.cpp
@@ -15,18 +16,5 @@ ace_target_cxx_sources(OpenDDS_Udp
                UdpReceiveStrategy.cpp
                UdpSendStrategy.cpp
                UdpTransport.cpp
-  HEADER_FILES Udp.h
-               UdpDataLink.h
-               UdpDataLink_rch.h
-               UdpInst.h
-               UdpInst_rch.h
-               UdpLoader.h
-               UdpReceiveStrategy.h
-               UdpReceiveStrategy_rch.h
-               UdpSendStrategy.h
-               UdpSendStrategy_rch.h
-               UdpTransport.h
-               Udp_Export.h
-  INLINE_FILES UdpDataLink.inl
 )
 

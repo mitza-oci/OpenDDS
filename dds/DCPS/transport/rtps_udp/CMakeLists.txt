@@ -8,6 +8,7 @@ ace_add_lib(OpenDDS_Rtps_Udp
 )
 
 ace_target_cxx_sources(OpenDDS_Rtps_Udp
+  GLOB_HEADERS
   SOURCE_FILES RtpsCustomizedElement.cpp
                RtpsSampleHeader.cpp
                RtpsTransportHeader.cpp
@@ -18,23 +19,4 @@ ace_target_cxx_sources(OpenDDS_Rtps_Udp
                RtpsUdpReceiveStrategy.cpp
                RtpsUdpSendStrategy.cpp
                RtpsUdpTransport.cpp
-  HEADER_FILES RtpsCustomizedElement.h
-               RtpsSampleHeader.h
-               RtpsTransportHeader.h
-               RtpsUdp.h
-               RtpsUdpDataLink.h
-               RtpsUdpDataLink_rch.h
-               RtpsUdpInst.h
-               RtpsUdpInst_rch.h
-               RtpsUdpLoader.h
-               RtpsUdpReceiveStrategy.h
-               RtpsUdpReceiveStrategy_rch.h
-               RtpsUdpSendStrategy.h
-               RtpsUdpSendStrategy_rch.h
-               RtpsUdpTransport.h
-               Rtps_Udp_Export.h
-  INLINE_FILES RtpsCustomizedElement.inl
-               RtpsSampleHeader.inl
-               RtpsTransportHeader.inl
-               RtpsUdpDataLink.inl
 )

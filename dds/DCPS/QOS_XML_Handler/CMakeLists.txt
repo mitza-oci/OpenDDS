@@ -12,6 +12,7 @@ ace_add_lib(OpenDDS_QOS_XML_XSC_Handler
 )
 
 ace_target_cxx_sources(OpenDDS_QOS_XML_XSC_Handler
+  GLOB_HEADERS
   SOURCE_FILES DataReaderQos_Handler.cpp
                DataWriterQos_Handler.cpp
                ParticipantQos_Handler.cpp
@@ -22,27 +23,5 @@ ace_target_cxx_sources(OpenDDS_QOS_XML_XSC_Handler
                TopicQos_Handler.cpp
                XML_File_Intf.cpp
                dds_qos.cpp
-  HEADER_FILES DataReaderQos_Handler.h
-               DataWriterQos_Handler.h
-               ParticipantQos_Handler.h
-               PublisherQos_Handler.h
-               QOS_Common.h
-               QOS_DataReader_T.h
-               QOS_DataWriter_T.h
-               QOS_DwDrTp_Base_T.h
-               QOS_DwTp_Base_T.h
-               QOS_PubSub_T.h
-               QOS_Topic_T.h
-               QOS_XML_Loader.h
-               SubscriberQos_Handler.h
-               TopicQos_Handler.h
-               XML_File_Intf.h
-               XML_QOS_Handler_Export.h
-  TEMPLATE_FILES QOS_DataReader_T.cpp
-                 QOS_DataWriter_T.cpp
-                 QOS_DwDrTp_Base_T.cpp
-                 QOS_DwTp_Base_T.cpp
-                 QOS_PubSub_T.cpp
-                 QOS_Topic_T.cpp
 )
 

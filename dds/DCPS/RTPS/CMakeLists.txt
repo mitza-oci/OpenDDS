@@ -8,22 +8,13 @@ ace_add_lib(OpenDDS_Rtps
 )
 
 ace_target_cxx_sources(OpenDDS_Rtps
+  GLOB_HEADERS
   SOURCE_FILES GuidGenerator.cpp
                ParameterListConverter.cpp
                RtpsDiscovery.cpp
                Sedp.cpp
                Spdp.cpp
                md5.cpp
-  HEADER_FILES BaseMessageTypes.h
-               BaseMessageUtils.h
-               GuidGenerator.h
-               MessageTypes.h
-               ParameterListConverter.h
-               RtpsDiscovery.h
-               Sedp.h
-               Spdp.h
-               md5.h
-               rtps_export.h
 )
 
 

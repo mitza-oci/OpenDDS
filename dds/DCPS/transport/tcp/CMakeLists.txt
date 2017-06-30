@@ -8,6 +8,7 @@ ace_add_lib(OpenDDS_Tcp
 )
 
 ace_target_cxx_sources(OpenDDS_Tcp
+  GLOB_HEADERS
   SOURCE_FILES Tcp.cpp
                TcpAcceptor.cpp
                TcpConnection.cpp
@@ -21,28 +22,4 @@ ace_target_cxx_sources(OpenDDS_Tcp
                TcpSynchResource.cpp
                TcpTransport.cpp
                Tcp_pch.cpp
-  HEADER_FILES Tcp.h
-               TcpAcceptor.h
-               TcpConnection.h
-               TcpConnectionReplaceTask.h
-               TcpConnection_rch.h
-               TcpDataLink.h
-               TcpDataLink_rch.h
-               TcpInst.h
-               TcpInst_rch.h
-               TcpLoader.h
-               TcpReceiveStrategy.h
-               TcpReceiveStrategy_rch.h
-               TcpReconnectTask.h
-               TcpSendStrategy.h
-               TcpSendStrategy_rch.h
-               TcpSynchResource.h
-               TcpTransport.h
-               TcpTransport_rch.h
-               Tcp_export.h
-               Tcp_pch.h
-  INLINE_FILES TcpConnection.inl
-               TcpDataLink.inl
-               TcpInst.inl
-               TcpReceiveStrategy.inl
 )
