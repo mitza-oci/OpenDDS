@@ -34,27 +34,32 @@ ace_target_cxx_sources(CompatibilityTest_Subscriber
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
+foreach(i RANGE 1 10)
 
-dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl"
-  COMMAND run_test.pl
-  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
-  COST 500
-  NO_LOCK
-)
+  if ((${i} EQUAL 1) AND (NOT OPENDDS_HAS_PERSISTENCE_PROFILE))
+    continue()
+  endif()
+
+  dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl__-i__${i}"
+    COMMAND run_test.pl -i ${i}
+    REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
+    NO_LOCK
+  )
+
+  dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl__-i__${i}__rtps_disc"
+    COMMAND run_test.pl -i ${i} rtps_disc
+    LABELS RTPS
+    NO_LOCK
+  )
+
+  dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl__-i__${i}__rtps_disc_tcp"
+    COMMAND run_test.pl -i ${i} rtps_disc_tcp
+    REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
+    LABELS RTPS
+    NO_LOCK
+  )
+
+endforeach()
 
 
-dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc"
-  COMMAND run_test.pl rtps_disc
-  LABELS RTPS LONG_TEST
-  COST 500
-  NO_LOCK
-)
 
-
-dds_add_test("tests/DCPS/CompatibilityTest/run_test.pl rtps_disc_tcp"
-  COMMAND run_test.pl rtps_disc_tcp
-  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
-  LABELS RTPS
-  COST 500
-  NO_LOCK
-)
