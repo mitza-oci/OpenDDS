@@ -15,14 +15,6 @@ ace_target_cxx_sources(DCPS_Perf_UDPNoKey_Pub
                Writer.h
                common.h
 )
-ace_target_cxx_sources(DCPS_Perf_UDPNoKey_Pub
-  SOURCE_FILES Writer.cpp
-               publisher.cpp
-  HEADER_FILES TestException.h
-               Writer.h
-               common.h
-)
-
 
 
 ace_add_exe(DCPS_Perf_UDPNoKey_Sub

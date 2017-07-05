@@ -14,15 +14,6 @@ ace_target_cxx_sources(LivelinessTestPublisher
   HEADER_FILES Writer.h
                common.h
 )
-ace_target_cxx_sources(LivelinessTestPublisher
-  SOURCE_FILES Writer.cpp
-               common.cpp
-               publisher.cpp
-  HEADER_FILES Writer.h
-               common.h
-)
-
-
 
 ace_add_exe(LivelinessTestSubscriber
   OUTPUT_NAME subscriber

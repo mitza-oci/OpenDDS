@@ -34,12 +34,6 @@ ace_target_cxx_sources(DDS_BuiltInTopicTest_Publisher
                publisher.cpp
   HEADER_FILES Writer.h
 )
-ace_target_cxx_sources(DDS_BuiltInTopicTest_Publisher
-  SOURCE_FILES Writer.cpp
-               publisher.cpp
-  HEADER_FILES Writer.h
-)
-
 
 
 ace_add_exe(DDS_BuiltInTopicTest_Subscriber

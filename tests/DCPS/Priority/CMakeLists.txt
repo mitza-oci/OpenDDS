@@ -37,16 +37,6 @@ ace_target_cxx_sources(DDS_Priority_Publisher
                Publisher.h
   INLINE_FILES Options.inl
 )
-ace_target_cxx_sources(DDS_Priority_Publisher
-  SOURCE_FILES Options.cpp
-               Publisher.cpp
-               publisher_main.cpp
-  HEADER_FILES Options.h
-               Publisher.h
-  INLINE_FILES Options.inl
-)
-
-
 
 ace_add_exe(DDS_Priority_Subscriber
   OUTPUT_NAME subscriber

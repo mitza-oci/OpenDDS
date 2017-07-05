@@ -21,9 +21,6 @@ ace_add_exe(ConfigFile
 ace_target_cxx_sources(ConfigFile
   SOURCE_FILES ConfigFile.cpp
 )
-ace_target_cxx_sources(ConfigFile
-  SOURCE_FILES ConfigFile.cpp
-)
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()

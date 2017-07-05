@@ -10,9 +10,6 @@ ace_add_exe(idl_test3_main
 ace_target_cxx_sources(idl_test3_main
   SOURCE_FILES main.cpp
 )
-ace_target_cxx_sources(idl_test3_main
-  SOURCE_FILES main.cpp
-)
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
