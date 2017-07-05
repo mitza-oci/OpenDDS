@@ -1,5 +1,5 @@
 // -*- C++ -*-
-
+#pragma once
 #include "dds/DdsDcpsDomainC.h"
 #include "dds/DdsDcpsSubscriptionExtC.h"
 #include "dds/DCPS/transport/framework/TransportImpl_rch.h"
