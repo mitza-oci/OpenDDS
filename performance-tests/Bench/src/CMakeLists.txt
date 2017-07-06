@@ -43,3 +43,12 @@ dds_idl_sources(
                 -I${TAO_INCLUDE_DIR}/orbsvcs
   IDL_FILES Test.idl
 )
+
+ace_add_exe(BenchUdpLatency
+  OUTPUT_NAME ../bin/udp_latency
+  LINK_LIBRARIES ACE
+)
+
+ace_target_cxx_sources(BenchUdpLatency
+  SOURCE_FILES udp_latency.cpp
+)
