@@ -58,11 +58,18 @@ before_script:
   ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
   ## does not have enough disk space or network bandwidth to cache all OpenDDS object code
   - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF -DACE_UNITY_BUILD=ON"
-  - export BUILD_JOBS=6
+  - export BUILD_JOBS=4
   - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO $BUILD_FLAGS"
 
 jobs:
   include:
+    - stage: build
+      os: osx
+      osx_image: xcode9
+      install:
+        - brew install ninja
+      script: ./travis_build.sh MacOS
+      env: DEBUG=0 COMPILER=c++
     - stage: build
       script: ./travis_build.sh Release
       env: DEBUG=0 COMPILER=g++-6
@@ -80,21 +87,14 @@ jobs:
       ## static debug build would cause out of disk space error on travis ci
       env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: build
-      script: ./travis_build.sh SafetyProfile
-      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6
-    - stage: build
       script: ./travis_build.sh WChar
       env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh Clang
       env: DEBUG=0 COMPILER=clang++-3.9
     - stage: build
-      os: osx
-      osx_image: xcode9
-      install:
-        - brew install ninja
-      script: ./travis_build.sh MacOS
-      env: DEBUG=0 COMPILER=c++
+      script: ./travis_build.sh SafetyProfile
+      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6
 
     - stage: test
       script: ./travis_run_tests.sh Release
