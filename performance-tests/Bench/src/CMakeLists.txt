@@ -15,16 +15,18 @@ ace_add_exe(BenchProcess
                  TAO_Svc_Utils
                  OpenDDS_Default_Discovery
                  OpenDDS_Transports_For_Test
+  UNITY_CXX_MINIMUM_PARTITIONS 2
 )
 ace_target_cxx_sources(BenchProcess
-  SOURCE_FILES DataReaderListener.cpp
-               EntityProfiles.cpp
+  SOURCE_FILES EntityProfiles.cpp
                Options.cpp
                Process.cpp
-               Publication.cpp
                StatisticalValue.cpp
                Subscription.cpp
                testprocess.cpp
+
+               DataReaderListener.cpp
+               Publication.cpp
   HEADER_FILES DataReaderListener.h
                EntityProfiles.h
                Options.h
@@ -51,4 +53,13 @@ ace_add_exe(BenchUdpLatency
 
 ace_target_cxx_sources(BenchUdpLatency
   SOURCE_FILES udp_latency.cpp
+)
+
+ace_add_exe(BenchTcpLatency
+  OUTPUT_NAME ../bin/tcp_latency
+  LINK_LIBRARIES ACE
+)
+
+ace_target_cxx_sources(BenchTcpLatency
+  SOURCE_FILES tcp_latency.cpp
 )
