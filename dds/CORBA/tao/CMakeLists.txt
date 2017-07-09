@@ -9,6 +9,7 @@ ace_add_lib(OpenDDS_Corba
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
                              $<INSTALL_INTERFACE:${OpenDDS_INSTALL_DIR}>
   PUBLIC_LINK_LIBRARIES ACE
+  NO_UNITY_BUILD
 )
 
 set(TAO_Core_idl_FLAGS ${TAO_VERSIONING_IDL_FLAGS}

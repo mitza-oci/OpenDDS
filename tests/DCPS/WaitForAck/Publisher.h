@@ -3,6 +3,10 @@
 #pragma once
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
+#ifndef PUBLISHER_H_96CE2642
+#define PUBLISHER_H_96CE2642
+
+
 #include "dds/DdsDcpsDomainC.h"
 #include "dds/DCPS/transport/framework/TransportImpl_rch.h"
 #include "dds/DCPS/WaitSet.h"
@@ -51,4 +55,6 @@ class Publisher {
 };
 
 } // End of namespace Test
+
+#endif /* end of include guard: PUBLISHER_H_96CE2642 */
 

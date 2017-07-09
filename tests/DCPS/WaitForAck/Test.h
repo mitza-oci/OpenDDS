@@ -3,6 +3,9 @@
 #pragma once
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
+#ifndef TEST_H_1497B882
+#define TEST_H_1497B882
+
 #include <exception>
 
 namespace Test {
@@ -61,3 +64,4 @@ namespace Test {
 
 } // End of namespace Test
 
+#endif /* end of include guard: TEST_H_1497B882 */

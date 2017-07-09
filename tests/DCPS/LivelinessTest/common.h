@@ -12,6 +12,10 @@
 #pragma once
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
+#ifndef COMMON_H_7B9E1A1A
+#define COMMON_H_7B9E1A1A
+
+
 #ifdef ACE_AS_STATIC_LIBS
 # include "dds/DCPS/RTPS/RtpsDiscovery.h"
 # include "dds/DCPS/transport/rtps_udp/RtpsUdp.h"
@@ -44,3 +48,5 @@ extern int history_depth;
 extern int use_take;
 
 extern ACE_TString temp_file_prefix;
+
+#endif /* end of include guard: COMMON_H_7B9E1A1A */

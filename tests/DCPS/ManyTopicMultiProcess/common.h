@@ -11,6 +11,9 @@
 #pragma once
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
+#ifndef COMMON_H_F1A98BA6
+#define COMMON_H_F1A98BA6
+
 #include "DataReaderListener.h"
 
 #include "ace/OS_NS_unistd.h"
@@ -92,3 +95,6 @@ inline void wait_for_file(const ACE_TCHAR* topic, const ACE_TString& suffix)
 
   ACE_OS::fclose(file);
 }
+
+
+#endif /* end of include guard: COMMON_H_F1A98BA6 */
