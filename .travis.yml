@@ -52,9 +52,12 @@ before_script:
   - if [ "$SAFETY_PROFILE" == "1" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
     fi
+  - if [ "$NO_TEST" == "1" ]; then
+      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOpenDDS_SUBDIRS=\"dds;examples;performance-tests;DevGuideExamples\"";
+    fi
   ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
   ## does not have enough disk space or network bandwidth to cache all OpenDDS object code
-  - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF"
+  - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF -DACE_UNITY_BUILD=ON"
   - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO $BUILD_FLAGS"
 
 jobs:
@@ -89,8 +92,8 @@ jobs:
       osx_image: xcode9
       install:
         - brew install ninja
-      script: ./travis_build_ace_tao.sh MacOS
-      env: DEBUG=0 JAVA=0 COMPILER=c++
+      script: ./travis_build.sh MacOS
+      env: DEBUG=0 COMPILER=c++
 
     - stage: test
       script: ./travis_run_tests.sh Release
