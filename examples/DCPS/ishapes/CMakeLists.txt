@@ -33,7 +33,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 ace_add_exe(ishapes
   OUTPUT_NAME ishapes
-
   INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
   LINK_LIBRARIES OpenDDS_Multicast
                  Qt4::QtGui
@@ -41,21 +40,23 @@ ace_add_exe(ishapes
                  OpenDDS_Udp
                  OpenDDS_Default_Discovery
                  OpenDDS_Rtps_Udp
+  UNITY_CXX_MINIMUM_PARTITIONS 2
 )
 ace_target_cxx_sources(ishapes
-  SOURCE_FILES BouncingShapeDynamics.cpp
-               Circle.cpp
-               DDSShapeDynamics.cpp
+  SOURCE_FILES Circle.cpp
                FilterDialog.cpp
                ReaderQosDialog.cpp
                Shape.cpp
                ShapeDynamics.cpp
-               ShapesDialog.cpp
                ShapesWidget.cpp
                Square.cpp
                Triangle.cpp
                WriterQosDialog.cpp
                main.cpp
+               ###
+               BouncingShapeDynamics.cpp
+               ShapesDialog.cpp
+               DDSShapeDynamics.cpp
 )
 
 dds_idl_sources(

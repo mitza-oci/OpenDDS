@@ -19,8 +19,7 @@ ace_add_lib(OpenDDS_InfoRepoLib
 )
 
 ace_target_cxx_sources(OpenDDS_InfoRepoLib
-  SOURCE_FILES  DCPSInfo_i.cpp
-                DcpsInfo_pch.cpp
+  SOURCE_FILES  DcpsInfo_pch.cpp
                 DCPS_IR_Domain.cpp
                 DCPS_IR_Participant.cpp
                 DCPS_IR_Publication.cpp
@@ -31,6 +30,8 @@ ace_target_cxx_sources(OpenDDS_InfoRepoLib
                 FederationId.cpp
                 PersistenceUpdater.cpp
                 UpdateManager.cpp
+                ###
+                DCPSInfo_i.cpp
   HEADER_FILES  DCPSInfo_i.h
                 DcpsInfo_pch.h
                 DCPS_IR_Domain.h
