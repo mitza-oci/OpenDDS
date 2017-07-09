@@ -5,7 +5,7 @@ mkdir build
 cd build
 echo DDS_BUILD_FLAGS=$DDS_BUILD_FLAGS
 
-cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j 6
+cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j $BUILD_JOBS
 status=$?
 
 cd ..
