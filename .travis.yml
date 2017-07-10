@@ -67,7 +67,7 @@ jobs:
       os: osx
       osx_image: xcode9
       install:
-        - brew install ninja
+        - brew install ninja awscli
       script: ./travis_build.sh MacOS
       env: DEBUG=0 COMPILER=c++
     - stage: build
