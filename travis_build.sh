@@ -5,12 +5,10 @@ mkdir build
 cd build
 echo DDS_BUILD_FLAGS=$DDS_BUILD_FLAGS
 
+set -e
 cmake -GNinja $DDS_BUILD_FLAGS .. && ninja -j $BUILD_JOBS
-status=$?
 
+set +e
 cd ..
-tar czf build.tar.gz build  --exclude=*.o
+tar  --exclude='*.o' -czf build.tar.gz build
 aws s3 cp build.tar.gz s3://com.ociweb.opendds/$TRAVIS_BRANCH/$BUILD_NAME/build.tar.gz
-
-
-exit $status
