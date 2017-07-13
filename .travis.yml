@@ -49,8 +49,8 @@ before_script:
   - if [ "$USES_WCHAR" == "1" ]; then BUILD_FLAGS="$BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
   - if [ "$BIT" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
   - if [ "$JAVA" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_DISABLE_FIND_PACKAGE_JAVA=TRUE"; fi
-  - if [ "$SAFETY_PROFILE" == "1" ]; then
-         DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=BASE";
+  - if [ -n "$SAFETY_PROFILE" ]; then
+         DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=$SAFETY_PROFILE -DACE_FACE_DEV=ON";
     fi
   - if [ "$NO_TEST" == "1" ]; then
       DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOpenDDS_SUBDIRS=\"dds;examples;performance-tests;DevGuideExamples\"";
@@ -94,7 +94,7 @@ jobs:
       env: DEBUG=0 COMPILER=clang++-3.9
     - stage: build
       script: ./travis_build.sh SafetyProfile
-      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6
+      env: SAFETY_PROFILE=BASE DEBUG=0 COMPILER=g++-6
 
     - stage: test
       script: ./travis_run_tests.sh Release
@@ -113,7 +113,7 @@ jobs:
       env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh SafetyProfile
-      env: SAFETY_PROFILE=1 DEBUG=0 COMPILER=g++-6
+      env: SAFETY_PROFILE=BASE DEBUG=0 COMPILER=g++-6
     - stage: test
       script: ./travis_run_tests.sh WChar
       env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6

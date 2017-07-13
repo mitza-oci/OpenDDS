@@ -86,7 +86,10 @@ replace_orb_service(ImplRepo_Service ImR_Locator_Service)
 replace_orb_service(ImR_Activator ImR_Activator_Service)
 
 if (OPENDDS_SAFETY_PROFILE)
-  string(REPLACE "$config->check_config(\"OPENDDS_SAFETY_PROFILE\")" "1" PM_CONTENT "${PM_CONTENT}")
+  if (${OPENDDS_SAFETY_PROFILE} STREQUAL "BASE")
+    set(safety_base_config "$config->add_one_config('SAFETY_BASE');")
+  endif()
+  string(REPLACE "PerlACE::ConfigList;" "PerlACE::ConfigList;\n$config->add_one_config('OPENDDS_SAFETY_PROFILE');\n$config->add_one_config('RTPS');\n${safety_base_config}" PM_CONTENT "${PM_CONTENT}")
 endif()
 
 if(ACE_MULTI_CONFIGURATION_GENERATOR)

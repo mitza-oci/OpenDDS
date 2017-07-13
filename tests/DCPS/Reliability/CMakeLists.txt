@@ -14,7 +14,7 @@ dds_configure_test_files()
 
 dds_add_test("tests/DCPS/Reliability/run_test.pl"
   COMMAND run_test.pl
-  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
@@ -26,6 +26,7 @@ dds_add_test("tests/DCPS/Reliability/run_test.pl rtps"
 
 dds_add_test("tests/DCPS/Reliability/run_test.pl keep-last-one"
   COMMAND run_test.pl keep-last-one
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 
