@@ -37,7 +37,7 @@ endfunction()
 
 function(dds_add_test name)
   set(multiValueArgs COMMAND REQUIRES LABELS RESOURCE_LOCK )
-  cmake_parse_arguments(_arg "NO_LOCK;RUN_SERIAL" "COST" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments(_arg "NO_LOCK;RUN_SERIAL" "COST;TIMEOUT" "${multiValueArgs}" ${ARGN})
 
   if (_arg_REQUIRES)
     foreach(cond ${_arg_REQUIRES})
@@ -83,14 +83,23 @@ function(dds_add_test name)
            COMMAND ${CMAKE_COMMAND} -E env ${port_setting} perl ${_arg_COMMAND}
   )
 
+  set_tests_properties("${name}" PROPERTIES
+    LABELS "${_arg_LABELS}"
+    COST "${_arg_COST}"
+    RUN_SERIAL "${_arg_RUN_SERIAL}"
+  )
+
   if (NOT _arg_NO_LOCK)
     list(APPEND _arg_RESOURCE_LOCK "${CMAKE_CURRENT_LIST_FILE}")
 
     set_tests_properties("${name}" PROPERTIES
-      LABELS "${_arg_LABELS}"
       RESOURCE_LOCK "${_arg_RESOURCE_LOCK}"
-      COST "${_arg_COST}"
-      RUN_SERIAL "${_arg_RUN_SERIAL}"
+    )
+  endif()
+
+  if (_arg_TIMEOUT)
+    set_tests_properties("${name}" PROPERTIES
+      TIMEOUT "${_arg_TIMEOUT}"
     )
   endif()
 endfunction()

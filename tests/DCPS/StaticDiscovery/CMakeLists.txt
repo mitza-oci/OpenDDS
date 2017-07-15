@@ -69,5 +69,6 @@ dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mw"
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mpmrmw"
   COMMAND run_test.pl mpmrmw
   LABELS MCAST HOST
+  TIMEOUT 20
   ${RUN_SERIAL_IF_TRAVIS}
 )

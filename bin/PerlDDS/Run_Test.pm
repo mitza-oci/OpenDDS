@@ -87,6 +87,9 @@ sub print_file {
       print STDERR "\n<<<<<  end $file  >>>>>\n\n";
       close FILE;
   }
+  else {
+    print STDERR "Unable to open log file $file\n";
+  }
 }
 
 sub report_errors_in_file {
