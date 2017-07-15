@@ -26,38 +26,48 @@ dds_idl_sources(
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
+set(TRAVIS $ENV{TRAVIS})
+if (TRAVIS)
+  set(RUN_SERIAL_IF_TRAVIS RUN_SERIAL)
+endif()
 
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl"
   COMMAND run_test.pl
   LABELS MCAST
+  ${RUN_SERIAL_IF_TRAVIS}
 )
 
 
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mp"
   COMMAND run_test.pl mp
   LABELS MCAST
+  ${RUN_SERIAL_IF_TRAVIS}
 )
 
 
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mp delay"
   COMMAND run_test.pl mp delay
   LABELS MCAST
+  ${RUN_SERIAL_IF_TRAVIS}
 )
 
 
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mr"
   COMMAND run_test.pl mr
   LABELS MCAST
+  ${RUN_SERIAL_IF_TRAVIS}
 )
 
 
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mw"
   COMMAND run_test.pl mw
   LABELS MCAST
+  ${RUN_SERIAL_IF_TRAVIS}
 )
 
 
 dds_add_test("tests/DCPS/StaticDiscovery/run_test.pl mpmrmw"
   COMMAND run_test.pl mpmrmw
   LABELS MCAST HOST
+  ${RUN_SERIAL_IF_TRAVIS}
 )

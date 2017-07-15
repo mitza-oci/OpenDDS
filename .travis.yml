@@ -48,6 +48,7 @@ before_script:
     fi
   - if [ "$USES_WCHAR" == "1" ]; then BUILD_FLAGS="$BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
   - if [ "$BIT" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
+  - if [ "$MULTI_TOPIC" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_MULTI_TOPIC=OFF"; fi
   - if [ "$JAVA" == "0" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DCMAKE_DISABLE_FIND_PACKAGE_JAVA=TRUE"; fi
   - if [ -n "$SAFETY_PROFILE" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=$SAFETY_PROFILE -DACE_FACE_DEV=ON";
@@ -82,6 +83,9 @@ jobs:
     - stage: build
       script: ./travis_build.sh NoBit
       env: BIT=0 DEBUG=0 COMPILER=g++-6
+    - stage: build
+      script: ./travis_build.sh NoMultiTopic
+      env: MULTI_TOPIC=0 DEBUG=0 COMPILER=g++-6
     - stage: build
       script: ./travis_build.sh Static
       ## static debug build would cause out of disk space error on travis ci

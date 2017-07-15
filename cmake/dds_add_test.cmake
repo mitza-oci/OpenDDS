@@ -37,7 +37,7 @@ endfunction()
 
 function(dds_add_test name)
   set(multiValueArgs COMMAND REQUIRES LABELS RESOURCE_LOCK )
-  cmake_parse_arguments(_arg "NO_LOCK" "COST" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments(_arg "NO_LOCK;RUN_SERIAL" "COST" "${multiValueArgs}" ${ARGN})
 
   if (_arg_REQUIRES)
     foreach(cond ${_arg_REQUIRES})
@@ -90,6 +90,7 @@ function(dds_add_test name)
       LABELS "${_arg_LABELS}"
       RESOURCE_LOCK "${_arg_RESOURCE_LOCK}"
       COST "${_arg_COST}"
+      RUN_SERIAL "${_arg_RUN_SERIAL}"
     )
   endif()
 endfunction()
