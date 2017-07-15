@@ -1,5 +1,5 @@
 find_package(Java)
-ace_requires(JAVA_FOUND "NOT OPENDDS_SAFETY_PROFILE" BUILD_SHARED_LIBS)
+ace_requires(JAVA_FOUND "NOT OPENDDS_SAFETY_PROFILE" OPENDDS_HAS_MULTI_TOPIC BUILD_SHARED_LIBS)
 include(../../cmake/dds_java.cmake)
 add_subdirectory(plugins)
 add_subdirectory(tests)
