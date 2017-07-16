@@ -53,6 +53,7 @@ dds_configure_test_files()
 dds_add_test("tests/DCPS/RtiSerialization/run_test.pl"
   COMMAND run_test.pl
   LABELS TCP
+  REQUIRES "NOT OPENDDS_SAFETY_PROFILE"
 )
 
 

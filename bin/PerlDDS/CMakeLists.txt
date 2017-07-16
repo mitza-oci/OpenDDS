@@ -85,12 +85,36 @@ replace_orb_service(Naming_Service Naming_Service)
 replace_orb_service(ImplRepo_Service ImR_Locator_Service)
 replace_orb_service(ImR_Activator ImR_Activator_Service)
 
+set(config_options)
 if (OPENDDS_SAFETY_PROFILE)
+  list(APPEND config_options OPENDDS_SAFETY_PROFILE RTPS)
   if (${OPENDDS_SAFETY_PROFILE} STREQUAL "BASE")
-    set(safety_base_config "$config->add_one_config('SAFETY_BASE');")
+    list(APPEND config_options SAFETY_BASE)
   endif()
-  string(REPLACE "PerlACE::ConfigList;" "PerlACE::ConfigList;\n$config->add_one_config('OPENDDS_SAFETY_PROFILE');\n$config->add_one_config('RTPS');\n${safety_base_config}" PM_CONTENT "${PM_CONTENT}")
 endif()
+
+if (NOT BUILD_SHARED_LIBS)
+  list(APPEND config_options STATIC)
+endif()
+
+if (ACE_HAS_IPV6)
+  list(APPEND config_options IPV6)
+endif()
+
+if (NOT OPENDDS_HAS_PERSISTENCE_PROFILE)
+  list(APPEND config_options OPENDDS_NO_PERSISTENCE_PROFILE)
+endif()
+
+if (NOT OPENDDS_HAS_BUILD_IN_TOPICS)
+  list(APPEND config_options NO_BUILD_IN_TOPICS)
+endif()
+
+set(add_one_config_statements)
+foreach(opt ${config_options})
+  set(add_one_config_statements "${add_one_config_statements}$config->add_one_config('${opt}');\n")
+endforeach()
+
+string(REPLACE "PerlACE::ConfigList;" "PerlACE::ConfigList;\n${add_one_config_statements}" PM_CONTENT "${PM_CONTENT}")
 
 if(ACE_MULTI_CONFIGURATION_GENERATOR)
   set(set_default_exesubdir_stmt "$PerlACE::Process::ExeSubDir ||= 'Debug';\n")
