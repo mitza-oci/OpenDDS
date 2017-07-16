@@ -133,7 +133,7 @@ for my $index ( 1 .. $repoCount) {
 
 my $appOpts;
 if ($for_monitor_test == 1) {
-    $appOpts = new PerlACE::ConfigList->check_config ('STATIC') ? ''
+    $appOpts = PerlDDS::check_config ('STATIC') ? ''
       : "-ORBSvcConf ../../../tools/monitor/monitor.conf ";
 }
 

@@ -12,7 +12,7 @@ use PerlDDS::Run_Test;
 use strict;
 
 my $status = 0;
-my $use_svc_config = !new PerlACE::ConfigList->check_config ('STATIC');
+my $use_svc_config = !PerlDDS::check_config ('STATIC');
 
 my $opts = $use_svc_config ? "-ORBSvcConf monitor.conf" : '';
 my $repo_bit_opt = $opts;

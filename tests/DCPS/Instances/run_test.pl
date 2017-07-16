@@ -34,7 +34,7 @@ my $app_bit_conf = '-DCPSBit 0';
 
 my $config_file = "";
 
-if ((new PerlACE::ConfigList)->check_config('OPENDDS_SAFETY_PROFILE')) {
+if ($PerlDDS::SafetyProfile) {
   $config_file = "-DCPSConfigFile rtps.ini";
 }
 

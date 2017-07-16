@@ -97,7 +97,7 @@ my $iniFile   = PerlACE::LocalFile( $iniFile);
 my $confOpts = "";
 $confOpts = "-ORBSvcConf $cFile " if $cFile;
 
-my $commonOpts = new PerlACE::ConfigList->check_config('STATIC')?
+my $commonOpts = PerlDDS::check_config('STATIC')?
                      "": $confOpts;
 $commonOpts .= "-ORBVerboseLogging 1 " if $orbVerbose;
 $commonOpts .= "-ORBLogFile $debugFile " if $debugFile;

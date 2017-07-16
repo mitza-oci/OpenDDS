@@ -107,7 +107,7 @@ elsif ($ARGV[$arg] eq 'all') {
     my @tests = ('', qw/udp multicast default_tcp default_udp default_multicast
                         nobits shmem
                         rtps rtps_disc rtps_unicast rtps_disc_tcp/);
-    push(@tests, 'ipv6') if new PerlACE::ConfigList->check_config('IPV6');
+    push(@tests, 'ipv6') if PerlDDS::check_config('IPV6');
     for my $test (@tests) {
         $status += system($^X, $0, @original_ARGV, $test);
     }

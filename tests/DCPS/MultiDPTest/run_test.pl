@@ -20,7 +20,7 @@ my $num_samples_per_instance = 10;
 my $args = "-m $num_instances_per_writer -i $num_samples_per_instance";
 $args .= " -DCPSDebugLevel 3";
 
-if ((new PerlACE::ConfigList)->check_config('OPENDDS_SAFETY_PROFILE')) {
+if ($PerlDDS::SafetyProfile) {
   $args .= " -DCPSConfigFile memory_pool.ini"
 }
 

@@ -37,7 +37,7 @@ if (PerlACE::waitforfile_timed ($dcpsrepo_ior, 30) == -1) {
 copy($dcpsrepo_ior, $dcpsrepo2_ior);
 copy($dcpsrepo_ior, $dcpsrepo3_ior);
 
-my $cfg = new PerlACE::ConfigList->check_config('NO_BUILT_IN_TOPICS')
+my $cfg = PerlDDS::check_config('NO_BUILT_IN_TOPICS')
           ? 'test1_nobits.ini' : 'test1.ini';
 my $TST = PerlDDS::create_process("ConfigFile", "-DCPSConfigFile $cfg");
 print $TST->CommandLine() . "\n";
