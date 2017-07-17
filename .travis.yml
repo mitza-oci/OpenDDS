@@ -53,9 +53,6 @@ before_script:
   - if [ -n "$SAFETY_PROFILE" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=$SAFETY_PROFILE -DACE_FACE_DEV=ON";
     fi
-  - if [ "$NO_TEST" == "1" ]; then
-      DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOpenDDS_SUBDIRS=\"dds;examples;performance-tests;DevGuideExamples\"";
-    fi
   ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
   ## does not have enough disk space or network bandwidth to cache all OpenDDS object code
   - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF -DACE_UNITY_BUILD=ON"
