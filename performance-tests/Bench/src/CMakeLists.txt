@@ -49,6 +49,7 @@ dds_idl_sources(
 ace_add_exe(BenchUdpLatency
   OUTPUT_NAME ../bin/udp_latency
   LINK_LIBRARIES ACE
+  COMPILE_DEFINITIONS NOMINMAX
 )
 
 ace_target_cxx_sources(BenchUdpLatency
@@ -58,6 +59,7 @@ ace_target_cxx_sources(BenchUdpLatency
 ace_add_exe(BenchTcpLatency
   OUTPUT_NAME ../bin/tcp_latency
   LINK_LIBRARIES ACE
+  COMPILE_DEFINITIONS NOMINMAX
 )
 
 ace_target_cxx_sources(BenchTcpLatency
