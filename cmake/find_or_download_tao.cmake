@@ -31,7 +31,8 @@ if (OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
     externalproject_add(host_tools
                         SOURCE_DIR "${PROJECT_SOURCE_DIR}"
                         BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/hosttools_build"
-                        CMAKE_ARGS "-DACE_TAO_SOURCE_DIR=${ACE_TAO_SOURCE_DIR}" "-DBUILD_SHARED_LIBS=OFF" "-DCMAKE_BUILD_TYPE=RELEASE" "-DHOSTTOOLS_ONLY=ON"
+                        CMAKE_COMMAND ${CMAKE_COMMAND} -E env --unset=CC --unset=CXX --unset=AS --unset=AR --unset=LD ${CMAKE_COMMAND}
+                        CMAKE_ARGS "-DACE_TAO_SOURCE_DIR=${ACE_TAO_SOURCE_DIR}" "-DBUILD_SHARED_LIBS=OFF" "-DCMAKE_BUILD_TYPE=RELEASE" "-DHOSTTOOLS_ONLY=ON" "-DACE_UNITY_BUILD=ON"
                         BUILD_COMMAND ${CMAKE_COMMAND} --build .
                         BUILD_BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/ace_gperf
                                          ${CMAKE_CURRENT_BINARY_DIR}/hosttools_build/bin/tao_idl

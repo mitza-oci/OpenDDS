@@ -11,7 +11,7 @@ function(dds_add_model_lib base)
   add_custom_command(
     OUTPUT model/${base}.idl model/${base}Traits.h model/${base}Traits.cpp model/${base}_T.h model/${base}_T.cpp
     DEPENDS sdk_generator_jar ${codegen_file} ${base}.opendds
-    COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" ${Java_JAVA_EXECUTABLE} -jar ${PROJECT_BINARY_DIR}/tools/modeling/plugins/org.opendds.modeling.sdk.model.editor/bin/sdk_generator.jar ${CMAKE_CURRENT_SOURCE_DIR}/${codegen_file}
+    COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" "TAO_ROOT=${TAO_INCLUDE_DIR}" ${Java_JAVA_EXECUTABLE} -jar ${PROJECT_BINARY_DIR}/tools/modeling/plugins/org.opendds.modeling.sdk.model.editor/bin/sdk_generator.jar ${CMAKE_CURRENT_SOURCE_DIR}/${codegen_file}
   )
   add_custom_command(
     OUTPUT model/${base}_export.h
