@@ -58,6 +58,17 @@ before_script:
   - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF -DACE_UNITY_BUILD=ON"
   - export BUILD_JOBS=4
   - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO $BUILD_FLAGS"
+  - if [ "$ANDROID" == "1" ]; then
+      export ANDROID_NDK_REVISION=13b;
+      export ANDROID_API_VERSION=21;
+      export TARGET_ARCH=arm;
+      export TERM=dumb;
+      curl -L http://dl.google.com/android/repository/android-ndk-r${ANDROID_NDK_REVISION}-linux-x86_64.zip -O;
+      unzip -q android-ndk-r${ANDROID_NDK_REVISION}-linux-x86_64.zip;
+      export CROSS_ROOT=`pwd`/arm-linux-androideabi;
+      cd android-ndk-r${ANDROID_NDK_REVISION} && ./build/tools/make_standalone_toolchain.py --arch ${TARGET_ARCH} --api ${ANDROID_API_VERSION} --install-dir=${CROSS_ROOT};
+      cd ..;
+    fi
 
 jobs:
   include:
@@ -96,6 +107,9 @@ jobs:
     - stage: build
       script: ./travis_build.sh SafetyProfile
       env: SAFETY_PROFILE=BASE DEBUG=0 COMPILER=g++-6
+    - stage: build
+      script: ./travis_build.sh Android
+      env: ANDROID=1 DEBUG=0
 
     - stage: test
       script: ./travis_run_tests.sh Release
