@@ -9,7 +9,7 @@ ace_add_lib(FACE_idl_test3_lib
   OUTPUT_NAME FACE_idl_test3_lib
   DEFINE_SYMBOL FOOLIB_BUILD_DLL
   PUBLIC_LINK_LIBRARIES OpenDDS_FACE
-  PUBLIC_COMPILE_DEFINITION "${no_test_wstring_def}"
+  PUBLIC_COMPILE_DEFINITIONS "${no_test_wstring_def}"
   NO_UNITY_BUILD
 )
 dds_idl_sources(
