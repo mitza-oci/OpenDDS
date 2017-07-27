@@ -98,6 +98,9 @@ jobs:
       ## static debug build would cause out of disk space error on travis ci
       env: STATIC=1 DEBUG=0 COMPILER=g++-6
     - stage: build
+      script: ./travis_build.sh Android
+      env: ANDROID=1 DEBUG=0
+    - stage: build
       script: ./travis_build.sh WChar
       env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6
     - stage: build
@@ -106,9 +109,6 @@ jobs:
     - stage: build
       script: ./travis_build.sh SafetyProfile
       env: SAFETY_PROFILE=BASE DEBUG=0 COMPILER=g++-6
-    - stage: build
-      script: ./travis_build.sh Android
-      env: ANDROID=1 DEBUG=0
 
     - stage: test
       script: ./travis_run_tests.sh Release
