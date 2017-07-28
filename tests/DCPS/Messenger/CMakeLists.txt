@@ -173,6 +173,11 @@ dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_disc_tcp"
   LABELS MCAST RTPS
 )
 
+dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_disc_tcp_udp"
+  COMMAND run_test.pl rtps_disc_tcp_udp
+  REQUIRES OPENDDS_HAS_OWNERSHIP_PROFILE "NOT OPENDDS_SAFETY_PROFILE"
+  LABELS MCAST RTPS
+)
 
 dds_add_test("tests/DCPS/Messenger/run_test.pl rtps_disc_tcp thread_per"
   COMMAND run_test.pl rtps_disc_tcp thread_per
