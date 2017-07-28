@@ -18,7 +18,7 @@ function(ensure_valid_ace_tao_source_tree)
 endfunction()
 
 if (OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
-  find_package(OpenDDS_HostTools CONFIG)
+  find_package(OpenDDS_HostTools ${OPENDDS_VERSION} CONFIG)
 
   if (NOT OpenDDS_HostTools_FOUND)
     message("-- OpenDDS_HostTools not found")

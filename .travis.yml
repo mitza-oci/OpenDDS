@@ -24,6 +24,10 @@ before_install:
       bash ./cmake-3.9.0-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
     fi
   - pip install --user awscli
+  - if [ "$ANDROID" == "1" ]; then
+      export ANDROID_NDK=$HOME/usr/android-ndk;
+      git clone -b strip --depth=1 git://github.com/urho3d/android-ndk.git $ANDROID_NDK;
+    fi
 
 branches:
   only:
@@ -52,22 +56,15 @@ before_script:
   - if [ -n "$SAFETY_PROFILE" ]; then
          DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_SAFETY_PROFILE=$SAFETY_PROFILE -DACE_FACE_DEV=ON";
     fi
+  - if [ "$ANDROID" == "1" ]; then
+      BUILD_FLAGS="$BUILD_FLAGS -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY";
+    fi
   ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
   ## does not have enough disk space or network bandwidth to cache all OpenDDS object code
   - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF -DACE_UNITY_BUILD=ON"
   - export BUILD_JOBS=4
   - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO $BUILD_FLAGS"
-  - if [ "$ANDROID" == "1" ]; then
-      export ANDROID_NDK_REVISION=13b;
-      export ANDROID_API_VERSION=21;
-      export TARGET_ARCH=arm;
-      export TERM=dumb;
-      curl -L http://dl.google.com/android/repository/android-ndk-r${ANDROID_NDK_REVISION}-linux-x86_64.zip -O;
-      unzip -q android-ndk-r${ANDROID_NDK_REVISION}-linux-x86_64.zip;
-      export CROSS_ROOT=`pwd`/arm-linux-androideabi;
-      cd android-ndk-r${ANDROID_NDK_REVISION} && ./build/tools/make_standalone_toolchain.py --arch ${TARGET_ARCH} --api ${ANDROID_API_VERSION} --install-dir=${CROSS_ROOT};
-      cd ..;
-    fi
+
 
 jobs:
   include:
