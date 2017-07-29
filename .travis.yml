@@ -20,14 +20,14 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
       export PATH="$HOME/usr/bin:$PATH";
-      wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.sh;
-      bash ./cmake-3.9.0-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
+      wget --no-check-certificate https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh;
+      bash ./cmake-3.7.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
     fi
   - pip install --user awscli
-  - if [ "$ANDROID" == "1" ]; then
-      export ANDROID_NDK=$HOME/usr/android-ndk;
-      git clone -b strip --depth=1 git://github.com/urho3d/android-ndk.git $ANDROID_NDK;
-    fi
+  # - if [ "$ANDROID" == "1" ]; then
+  #     export ANDROID_NDK=$HOME/usr/android-ndk;
+  #     git clone -b strip --depth=1 git://github.com/urho3d/android-ndk.git $ANDROID_NDK;
+  #   fi
 
 branches:
   only:
@@ -94,9 +94,9 @@ jobs:
       script: ./travis_build.sh Static
       ## static debug build would cause out of disk space error on travis ci
       env: STATIC=1 DEBUG=0 COMPILER=g++-6
-    - stage: build
-      script: ./travis_build.sh Android
-      env: ANDROID=1 DEBUG=0
+    # - stage: build
+    #   script: ./travis_build.sh Android
+    #   env: ANDROID=1 DEBUG=0
     - stage: build
       script: ./travis_build.sh WChar
       env: USE_WCHAR=1 DEBUG=0 COMPILER=g++-6
