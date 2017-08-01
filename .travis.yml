@@ -66,7 +66,7 @@ jobs:
 
     script:
       - CXX=$COMPILER cmake -GNinja -H. -Bbuild $DDS_BUILD_FLAGS
-      - cmake --build build -- -j 4
+      - cmake --build build -- -j 5
     after_success:
       - tar --exclude='*.o' -czf build.tar.gz build
       - aws s3 cp build.tar.gz s3://com.ociweb.opendds/$TRAVIS_BRANCH/$MATRIX_NAME/build.tar.gz
@@ -77,7 +77,7 @@ jobs:
     script:
       - aws s3 cp s3://com.ociweb.opendds/$TRAVIS_BRANCH/$MATRIX_NAME/build.tar.gz .
       - tar zxf build.tar.gz
-      - cd build && ctest -j 6
+      - cd build && ctest -j 6 --test-timeout 240
     after_script:
       - export TRAVIS_BUILD_JOB_DIR=${TRAVIS_JOB_NUMBER/./\/}
       - $TRAVIS_BUILD_DIR/ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/${TTRAVIS_BUILD_JOB_DIR}
@@ -117,6 +117,7 @@ jobs:
     env: "MATRIX_NAME=MacOS COMPILER=c++"
 
   include:
+    ## Build stages are sorted on the build times to minimize the total completion time
     - <<: *build-staging
       <<: *macos-Env
     - <<: *build-staging
@@ -124,16 +125,16 @@ jobs:
     - <<: *build-staging
       env: &Debug-Env "MATRIX_NAME=Debug DEBUG=1"
     - <<: *build-staging
+      ## static debug build would cause out of disk space error on travis ci
+      env: &Static-Env "MATRIX_NAME=Static DEBUG=0"
+    - <<: *build-staging
+      <<: *android-Env
+    - <<: *build-staging
       env: &NoInline-Env "MATRIX_NAME=NoInline DEBUG=1"
     - <<: *build-staging
       env: &NoBit-Env "MATRIX_NAME=NoBit"
     - <<: *build-staging
       env: &NoMultiTopic-Env "MATRIX_NAME=NoMultiTopic"
-    - <<: *build-staging
-      ## static debug build would cause out of disk space error on travis ci
-      env: &Static-Env "MATRIX_NAME=Static DEBUG=0"
-    - <<: *build-staging
-      <<: *android-Env
     - <<: *build-staging
       env: &WChar-Env "MATRIX_NAME=WChar"
     - <<: *build-staging
