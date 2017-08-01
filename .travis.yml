@@ -31,10 +31,8 @@ before_script:
   - if [ "$MATRIX_NAME" == "Static" ]; then BUILD_FLAGS="$BUILD_FLAGS -DBUILD_SHARED_LIBS=OFF"; fi
   - if [ "$DEBUG" == "0" ]; then
       BUILD_FLAGS="$BUILD_FLAGS -DCMAKE_BUILD_TYPE=RELEASE";
-      NUM_COMPILE_JOSBS=4;
     else
       BUILD_FLAGS="$BUILD_FLAGS -DCMAKE_BUILD_TYPE=DEBUG";
-      NUM_COMPILE_JOSBS=6;
     fi
   - if [ "$MATRIX_NAME" == "WChar" ]; then BUILD_FLAGS="$BUILD_FLAGS -DACE_USES_WCHAR=ON"; fi
   - if [ "$MATRIX_NAME" == "NoBit" ]; then DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DOPENDDS_HAS_BUILT_IN_TOPICS=OFF"; fi
@@ -68,7 +66,7 @@ jobs:
 
     script:
       - CXX=$COMPILER cmake -GNinja -H. -Bbuild $DDS_BUILD_FLAGS
-      - cmake --build build -- -j $NUM_COMPILE_JOSBS
+      - cmake --build build -- -j 4
     after_success:
       - tar --exclude='*.o' -czf build.tar.gz build
       - aws s3 cp build.tar.gz s3://com.ociweb.opendds/$TRAVIS_BRANCH/$MATRIX_NAME/build.tar.gz
