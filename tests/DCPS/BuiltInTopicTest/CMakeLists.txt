@@ -63,10 +63,14 @@ ace_target_cxx_sources(DDS_BuiltInTopicTest_Monitor
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()
 
+if (OPENDDS_SAFETY_PROFILE)
+  set(run_serial_on_safty_profile RUN_SERIAL)
+endif()
 
 dds_add_test("tests/DCPS/BuiltInTopicTest/run_test.pl"
   COMMAND run_test.pl
   LABELS HOST
+  ${run_serial_on_safty_profile}
 )
 
 
