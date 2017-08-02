@@ -9,8 +9,8 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
       export PATH="$HOME/usr/bin:$PATH";
-      wget --no-check-certificate https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.sh;
-      bash ./cmake-3.8.2-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
+      wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.sh;
+      bash ./cmake-3.9.0-Linux-x86_64.sh --prefix=$HOME/usr --exclude-subdir --skip-license;
     fi
   - pip install --user awscli
 
@@ -61,9 +61,10 @@ jobs:
           - ninja-build
           - g++-6
     install:
-      - export COMPILER=g++-6
+      - export CXX=g++-6
     script:
-      - CXX=$COMPILER cmake -GNinja -H. -Bbuild $DDS_BUILD_FLAGS
+      - echo $DDS_BUILD_FLAGS
+      - cmake -GNinja -H. -Bbuild $DDS_BUILD_FLAGS
       - cmake --build build -- -j 4
     after_success:
       - echo $TRAVIS_COMMIT > build/OpenDDS.commit
@@ -83,15 +84,6 @@ jobs:
       - $TRAVIS_BUILD_DIR/ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/${TTRAVIS_BUILD_JOB_DIR}
                                            --output_dir=travis_tests/${TRAVIS_BUILD_JOB_DIR}
       - aws s3 sync --quiet travis_tests/${TRAVIS_BUILD_NUMBER} s3://com.ociweb.opendds/tests/${TRAVIS_BUILD_NUMBER}
-      - aws s3 sync --quiet s3://com.ociweb.opendds/tests/${TRAVIS_BUILD_NUMBER} travis_tests/${TRAVIS_BUILD_NUMBER} --exclude "*.txt"
-      - export NUM_TEST_STAGES=`grep '*test-staging' $TRAVIS_BUILD_DIR/.travis.yml | wc -l`
-      - export NUM_TESTS_JSON_FILES=`find travis_tests/${TRAVIS_BUILD_NUMBER} -name "tests.json" | wc -l`
-
-      - if [ $NUM_TEST_STAGES == ${NUM_TESTS_JSON_FILES} ]; then
-          text=`echo "["; find travis_tests/${TRAVIS_BUILD_NUMBER} -name "tests.json" -exec cat {} \; | paste -sd "," - ; echo "]"`;
-          echo $text > travis_tests/${TRAVIS_BUILD_NUMBER}/report.json;
-          aws s3 cp --quiet travis_tests/${TRAVIS_BUILD_NUMBER}/report.json s3://com.ociweb.opendds/tests/${TRAVIS_BUILD_NUMBER}/report.json;
-        fi
 
   _clang-Env: &clang-Env
     addons:
@@ -103,7 +95,7 @@ jobs:
            - ninja-build
            - clang++-3.9
     install:
-      - export COMPILER=clang++-3.9
+      - export CXX=clang++-3.9
     env: "MATRIX_NAME=Clang"
   _android-Env: &android-Env
     env: "MATRIX_NAME=Android"
@@ -116,7 +108,7 @@ jobs:
     osx_image: xcode9
     install:
       - brew install ninja awscli
-      - export COMPILER=c++
+      - export CXX=c++
     env: "MATRIX_NAME=MacOS"
 
   include:
