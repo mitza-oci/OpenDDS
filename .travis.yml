@@ -6,6 +6,7 @@ language: cpp
 cache: pip
 before_install:
   - git clone -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
+  - export ACE_TAO_SOURCE_DIR=$PWD/ACE_TAO
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
       export PATH="$HOME/usr/bin:$PATH";
@@ -47,7 +48,7 @@ before_script:
   ## we need to disable ccahe explicitly because it is installed in the travis ci environment but the environment
   ## does not have enough disk space or network bandwidth to cache all OpenDDS object code
   - export BUILD_FLAGS="$BUILD_FLAGS -DCCACHE=OFF -DACE_UNITY_BUILD=ON"
-  - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$TRAVIS_BUILD_DIR/ACE_TAO $BUILD_FLAGS"
+  - export DDS_BUILD_FLAGS="$DDS_BUILD_FLAGS -DACE_TAO_SOURCE_DIR=$ACE_TAO_SOURCE_DIR $BUILD_FLAGS"
 
 jobs:
   _build-staging: &build-staging
@@ -68,9 +69,9 @@ jobs:
       - cmake --build build -- -j 4
     after_success:
       - echo $TRAVIS_COMMIT > build/OpenDDS.commit
-      - git remote get-url origin > build/OpenDDS.repo
+      - echo "-b $TRAVIS_BRANCH $(git remote get-url origin)"> build/OpenDDS.clone_loc
+      - echo "-b $(git --git-dir=ACE_TAO/.git symbolic-ref --short HEAD) $(git --git-dir=ACE_TAO/.git remote get-url origin)" > build/ACE_TAO.clone_loc
       - git --git-dir=ACE_TAO/.git rev-parse HEAD > build/ACE_TAO.commit
-      - git --git-dir=ACE_TAO/.git remote get-url origin > build/ACE_TAO.repo
       - tar --exclude='*.o' -czf build.tar.gz build
       - aws s3 cp build.tar.gz s3://com.ociweb.opendds/artifacts/${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD_NUMBER}.tar.gz
 
@@ -120,14 +121,14 @@ jobs:
     - <<: *build-staging
       env: &Release-Env "MATRIX_NAME=Release DEBUG=0"
     - <<: *build-staging
+      env: &NoInline-Env "MATRIX_NAME=NoInline DEBUG=1"
+    - <<: *build-staging
       env: &Debug-Env "MATRIX_NAME=Debug DEBUG=1"
     - <<: *build-staging
       ## static debug build would cause out of disk space error on travis ci
       env: &Static-Env "MATRIX_NAME=Static DEBUG=0"
     - <<: *build-staging
       <<: *android-Env
-    - <<: *build-staging
-      env: &NoInline-Env "MATRIX_NAME=NoInline DEBUG=1"
     - <<: *build-staging
       env: &NoBit-Env "MATRIX_NAME=NoBit"
     - <<: *build-staging
@@ -146,12 +147,12 @@ jobs:
     - <<: *test-staging
       env: *NoInline-Env
     - <<: *test-staging
+      <<: *clang-Env
+    - <<: *test-staging
       env: *NoBit-Env
     - <<: *test-staging
       env: *Static-Env
     - <<: *test-staging
-      env: *SafetyBase-Env
-    - <<: *test-staging
       env: *WChar-Env
     - <<: *test-staging
-      <<: *clang-Env
+      env: *SafetyBase-Env
