@@ -9,6 +9,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "" ON)
 
+set(CTEST_TEST_TIMEOUT 240)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(find_or_download_tao)
 include(opendds_options)

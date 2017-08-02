@@ -70,15 +70,15 @@ jobs:
       - echo $TRAVIS_COMMIT > build/OpenDDS.commit
       - git --git-dir=ACE_TAO/.git rev-parse HEAD > build/ACE_TAO.commit
       - tar --exclude='*.o' -czf build.tar.gz build
-      - aws s3 cp build.tar.gz s3://com.ociweb.opendds/artifacts/${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD}.tar.gz
+      - aws s3 cp build.tar.gz s3://com.ociweb.opendds/artifacts/${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD_NUMBER}.tar.gz
 
   _test-staging: &test-staging
     stage: test
     addons: *gcc-addons
     script:
-      - aws s3 cp s3://com.ociweb.opendds/artifacts/${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD}.tar.gz build.tar.gz
+      - aws s3 cp s3://com.ociweb.opendds/artifacts/${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD_NUMBER}.tar.gz build.tar.gz
       - tar zxf build.tar.gz
-      - cd build && ctest -j 6 --test-timeout 240
+      - cd build && ctest -j 6
     after_script:
       - export TRAVIS_BUILD_JOB_DIR=${TRAVIS_JOB_NUMBER/./\/}
       - $TRAVIS_BUILD_DIR/ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/${TTRAVIS_BUILD_JOB_DIR}
