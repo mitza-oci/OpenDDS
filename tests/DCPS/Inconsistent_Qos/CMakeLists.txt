@@ -5,6 +5,7 @@ if (NOT OpenDDS_INCLUDE_DIR)
   find_package(OpenDDS REQUIRED CONFIG)
 endif()
 
+ace_requires(BUILD_SHARED_LIBS)
 
 ace_add_lib(DDS_Inconsistent_Qos_Idl
   OUTPUT_NAME DDS_Inconsistent_Qos_Idl
