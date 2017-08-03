@@ -5,7 +5,7 @@ language: cpp
 
 cache: pip
 before_install:
-  - git clone -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
+  - git clone --recursive -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
   - export ACE_TAO_SOURCE_DIR=$PWD/ACE_TAO
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       mkdir $HOME/usr;
@@ -82,6 +82,8 @@ jobs:
       - aws s3 cp s3://com.ociweb.opendds/artifacts/${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD_NUMBER}.tar.gz build.tar.gz
       - tar zxf build.tar.gz
       - cd build && ctest -j 6
+    after_failure:
+      - echo You can debug this build using \"docker run -it huangminghuang/opendds-travis-build ${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD_NUMBER}\"
     after_script:
       - export TRAVIS_BUILD_JOB_DIR=${TRAVIS_JOB_NUMBER/./\/}
       - $TRAVIS_BUILD_DIR/ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/${TTRAVIS_BUILD_JOB_DIR}
