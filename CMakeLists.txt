@@ -9,6 +9,12 @@ endif()
 
 option(BUILD_SHARED_LIBS "" ON)
 
+if (EXISTS "${ACE_TAO_SOURCE_DIR}/externals/sanitizers-cmake/cmake/FindSanitizers.cmake")
+  message("Found Sanitizer module")
+  set(CMAKE_MODULE_PATH "${ACE_TAO_SOURCE_DIR}/externals/sanitizers-cmake/cmake" ${CMAKE_MODULE_PATH})
+  find_package(Sanitizers)
+endif()
+
 set(CTEST_TEST_TIMEOUT 240)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(find_or_download_tao)
