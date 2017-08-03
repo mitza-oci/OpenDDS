@@ -11,12 +11,19 @@ find_package(Qt4)
 ace_requires(QT4_FOUND)
 
 
-include(CheckCXXSymbolExists)
-set(CMAKE_REQUIRED_LIBRARIES ACE)
-check_cxx_symbol_exists(ACE_HAS_CPP11 ace/ACE.h ACE_HAS_CPP11)
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles(
+  "int main() {
+   #if __cplusplus<201103L
+   #error Not C++11
+   #endif
+    return 0;
+  }
+  "
+  HAS_CPP11
+)
 
-
-if (NOT ACE_HAS_CPP11)
+if (NOT HAS_CPP11)
   find_package(Boost)
   if (NOT Boost_FOUND)
     message("Skipping ishapes because neither C++11 nor boost is found")
