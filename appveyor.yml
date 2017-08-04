@@ -9,7 +9,7 @@ clone_depth: 15
 install:
   - git clone -q -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
-  - cmake -Bbuild -H. -A %platform%
+  - cmake -Bbuild -H. -A %platform% -DACE_UNITY_BUILD=ON
 
 platform:
   - x64
