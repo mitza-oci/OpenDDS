@@ -7,11 +7,9 @@ os: Visual Studio 2017
 clone_depth: 15
 
 install:
-  - mkdir ext && cd ext
   - git clone -q -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
-  - cd ..
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
-  - cmake -Bbuild -H.
+  - cmake -Bbuild -H. -A %platform%
 
 platform:
   - x64
@@ -19,7 +17,7 @@ platform:
 configuration:
   - Debug
 
-build_script:
+build:
   project: build/OpenDDS.sln
 
 test: off
