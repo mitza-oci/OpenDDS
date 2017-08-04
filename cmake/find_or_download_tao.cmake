@@ -22,6 +22,11 @@ if (OPENDDS_SAFETY_PROFILE OR CMAKE_CROSSCOMPILING)
 
   if (NOT OpenDDS_HostTools_FOUND)
     message("-- OpenDDS_HostTools not found")
+
+    if (NOT ACE_TAO_SOURCE_DIR AND EXISTS ${PROJECT_SOURCE_DIR}/ACE_TAO/CMakeLists.txt)
+      set(ACE_TAO_SOURCE_DIR ${PROJECT_SOURCE_DIR}/ACE_TAO)
+    endif()
+
     if(NOT ACE_TAO_SOURCE_DIR)
       download_ace_tao()
     else()
