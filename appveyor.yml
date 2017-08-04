@@ -1,6 +1,6 @@
 branches:
   only:
-    - master
+    - cmake
 
 os: Visual Studio 2017
 
@@ -8,13 +8,10 @@ clone_depth: 15
 
 install:
   - mkdir ext && cd ext
-  - git clone --depth 1 git://github.com/DOCGroup/MPC.git
-  - git clone -q -b Latest_Micro --depth 1 git://github.com/DOCGroup/ACE_TAO.git
+  - git clone -q -b cmake --depth 1 git://github.com/huangminghuang/ACE_TAO.git
   - cd ..
-  - set MPC_ROOT=%CD%\ext\MPC
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
-  - call configure --no-tests --ace=ext\ACE_TAO\ACE
-  - perl ext\ACE_TAO\ACE\bin\mwc.pl -type vs2017 tests\DCPS\Messenger
+  - cmake -Bbuild -H.
 
 platform:
   - x64
@@ -22,16 +19,7 @@ platform:
 configuration:
   - Debug
 
-#build:
-#  parallel: true
-#  project: DDS_TAOv2.sln
-
 build_script:
-  - msbuild DDS_TAOv2.sln /m /p:Configuration=Debug;Platform=x64
-  - msbuild tests\DCPS\Messenger\Messenger.sln /m /p:Configuration=Debug;Platform=x64
-
-after_build:
-  - cd tests\DCPS\Messenger && run_test.pl rtps
-  - cd ..\..\..\DevGuideExamples\DCPS\Messenger && appveyor_run_test.pl
+  project: build/OpenDDS.sln
 
 test: off
