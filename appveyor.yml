@@ -18,6 +18,7 @@ configuration:
   - Debug
 
 build:
+  parallel: true
   project: build/OpenDDS.sln
 
 test: off
