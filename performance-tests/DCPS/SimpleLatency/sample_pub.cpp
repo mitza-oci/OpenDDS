@@ -52,7 +52,6 @@ void set_rt()
 }
 
 
-CORBA::Long size = 4;
 long total_samples = 500;
 
 int ACE_TMAIN(int argc, ACE_TCHAR *argv[])
@@ -188,7 +187,7 @@ int ACE_TMAIN(int argc, ACE_TCHAR *argv[])
                                                            ::OpenDDS::DCPS::DEFAULT_STATUS_MASK);
 
        /* Create the listener for datareader */
-       DDS::DataReaderListener_var listener (new AckDataReaderListenerImpl (size));
+       DDS::DataReaderListener_var listener (new AckDataReaderListenerImpl);
        AckDataReaderListenerImpl* listener_servant =
          dynamic_cast<AckDataReaderListenerImpl*>(listener.in());
 

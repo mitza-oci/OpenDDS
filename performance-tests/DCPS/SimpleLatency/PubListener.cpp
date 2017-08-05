@@ -89,7 +89,7 @@ static stats_type round_trip;
 #define TOTAL_PRIMER_SAMPLES      500
 extern long total_samples;
 
-AckDataReaderListenerImpl::AckDataReaderListenerImpl(CORBA::Long /*size*/)
+AckDataReaderListenerImpl::AckDataReaderListenerImpl()
   :writer_ (),
    reader_ (),
    dr_servant_ (),

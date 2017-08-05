@@ -16,7 +16,7 @@ class AckDataReaderListenerImpl
   : public virtual OpenDDS::DCPS::LocalObject<DDS::DataReaderListener>
 {
 public:
-  AckDataReaderListenerImpl (CORBA::Long size);
+  AckDataReaderListenerImpl ();
 
   void init (DDS::DataReader_ptr dr, DDS::DataWriter_ptr dw, bool use_zero_copy_read);
 
