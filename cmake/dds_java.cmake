@@ -58,6 +58,7 @@ function(dds_idl2jni_command name)
     get_filename_component(basename ${file} NAME_WE)
     get_filename_component(filename_no_dir ${file} NAME)
     get_filename_component(abs_filename ${file} ABSOLUTE)
+    file(TO_NATIVE_PATH ${abs_filename} abs_native_filename)
     set(cxx_outputs ${basename}JC.h ${basename}JC.cpp)
 
     get_property(file_idl2jni_flags SOURCE ${file} PROPERTY IDL2JNI_FLAGS)
@@ -72,7 +73,7 @@ function(dds_idl2jni_command name)
 
     add_custom_command(
       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${filename_no_dir}.java.list ${cxx_outputs}
-      COMMAND idl2jni -j ${BASE_IDL2JNI_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} ${file_idl2jni_flags} ${abs_filename}
+      COMMAND idl2jni -j ${BASE_IDL2JNI_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} ${file_idl2jni_flags} ${abs_native_filename}
       DEPENDS idl2jni ${abs_filename} ${_arg_DEPENDS}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
@@ -160,7 +161,7 @@ function(dds_add_taoidl_jar _target_name)
   )
 
   if (${_target_name}_idl2jni_CXX_OUTPUTS)
-    target_sources(${_arg_LIB} PRIVATE
+    ace_target_sources(${_arg_LIB} PRIVATE
       ${${_target_name}_idl2jni_CXX_OUTPUTS}
     )
   endif()
@@ -220,7 +221,7 @@ function(dds_add_ddsidl_jar _target_name)
   )
 
   if (${_target_name}_idl2jni_CXX_OUTPUTS)
-    target_sources(${_arg_LIB} PRIVATE
+    ace_target_sources(${_arg_LIB} PRIVATE
       ${${_target_name}_idl2jni_CXX_OUTPUTS}
     )
   endif()

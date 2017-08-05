@@ -12,10 +12,13 @@ if (OPENDDS_HAS_BUILT_IN_TOPICS)
     DEPENDS OpenDDS_Dcps
   )
 
+
+  file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../dds/DdsDcpsCore.idl DdsDcpsCore_idl_native_path)
+
   add_custom_command(
     OUTPUT BitsJC.cpp DdsDcpsCore.idl.TypeSupportImpl.java.list
     COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" "TAO_ROOT=${TAO_INCLUDE_DIR}" $<TARGET_FILE:opendds_idl>
-              -j ${DDS_BASE_IDL_FLAGS} -Wb,java=BitsJC.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../../dds/DdsDcpsCore.idl
+              -j ${DDS_BASE_IDL_FLAGS} -Wb,java=BitsJC.cpp ${DdsDcpsCore_idl_native_path}
     DEPENDS opendds_idl ../../dds/DdsDcpsCore.idl
   )
 
