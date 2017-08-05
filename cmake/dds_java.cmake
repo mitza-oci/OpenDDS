@@ -74,6 +74,7 @@ function(dds_idl2jni_command name)
       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${filename_no_dir}.java.list ${cxx_outputs}
       COMMAND idl2jni -j ${BASE_IDL2JNI_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR} ${file_idl2jni_flags} ${abs_filename}
       DEPENDS idl2jni ${abs_filename} ${_arg_DEPENDS}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
   endforeach()
   source_group("Generated Files" FILES ${all_java_lists})
