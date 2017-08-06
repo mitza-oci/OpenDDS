@@ -577,7 +577,7 @@ BE_GlobalData::gen_java_list()
     return;
 
   std::string filebase(this->filename_);
-  size_t idx = filebase.rfind('/');
+  size_t idx = filebase.find_last_of("/\\");
 
   if (idx != string::npos) {
     filebase = filebase.substr(idx + 1);
