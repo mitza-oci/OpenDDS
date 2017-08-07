@@ -86,7 +86,7 @@ jobs:
       - echo You can debug this build using \"docker run -it huangminghuang/opendds-travis-build ${TRAVIS_BRANCH}-${MATRIX_NAME}-${TRAVIS_BUILD_NUMBER}\"
     after_script:
       - export TRAVIS_BUILD_JOB_DIR=${TRAVIS_JOB_NUMBER/./\/}
-      - $TRAVIS_BUILD_DIR/ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/${TTRAVIS_BUILD_JOB_DIR}
+      - $TRAVIS_BUILD_DIR/ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/${TRAVIS_BUILD_JOB_DIR}
                                            --output_dir=travis_tests/${TRAVIS_BUILD_JOB_DIR}
       - aws s3 sync --quiet travis_tests/${TRAVIS_BUILD_NUMBER} s3://com.ociweb.opendds/tests/${TRAVIS_BUILD_NUMBER}
 
