@@ -19,12 +19,6 @@ ace_target_cxx_sources(Serializer_wstring_Publisher
   HEADER_FILES Writer.h
 )
 
-dds_idl_sources(
-  TARGETS Serializer_wstring_Publisher
-  IDL_FILES Messenger.idl
-)
-
-
 ace_add_exe(Serializer_wstring_Subscriber
   OUTPUT_NAME subscriber
   LINK_LIBRARIES OpenDDS_Transports_For_Test
@@ -37,7 +31,7 @@ ace_target_cxx_sources(Serializer_wstring_Subscriber
 )
 
 dds_idl_sources(
-  TARGETS Serializer_wstring_Subscriber
+  TARGETS Serializer_wstring_Publisher Serializer_wstring_Subscriber
   IDL_FILES Messenger.idl
 )
 

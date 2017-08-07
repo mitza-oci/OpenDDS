@@ -185,6 +185,7 @@ function(dds_idl_sources)
     ace_target_sources(${target} PRIVATE ${_idl_OUTPUT_FILES} ${_arg_IDL_FILES})
     list(APPEND packages ${PACKAGE_OF_${target}})
   endforeach()
+  tao_add_targets_dependencies(${_arg_TARGETS} DEPEND ${_idl_OUTPUT_FILES})
 
   if (_arg_DDS_IDL_FLAGS MATCHES "-Wb,export_macro=")
     set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
