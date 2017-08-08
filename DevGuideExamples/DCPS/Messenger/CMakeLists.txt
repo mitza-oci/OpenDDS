@@ -18,12 +18,6 @@ ace_target_cxx_sources(Messenger_Publisher
   SOURCE_FILES Publisher.cpp
 )
 
-dds_idl_sources(
-  TARGETS Messenger_Publisher
-  IDL_FILES Messenger.idl
-)
-
-
 ace_add_exe(Messenger_Subscriber
   OUTPUT_NAME subscriber
 
@@ -37,10 +31,10 @@ ace_target_cxx_sources(Messenger_Subscriber
 )
 
 dds_idl_sources(
-  TARGETS Messenger_Subscriber
+  TARGETS Messenger_Publisher
+          Messenger_Subscriber
   IDL_FILES Messenger.idl
 )
-
 
 include(${OpenDDS_INCLUDE_DIR}/cmake/dds_add_test.cmake)
 dds_configure_test_files()

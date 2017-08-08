@@ -25,7 +25,7 @@ function(dds_idl_command Name)
   set(dds_idl_command_usage "dds_idl_command(<Name> TAO_IDL_FLAGS flags DDS_IDL_FLAGS flags IDL_FILES Input1 Input2 ...]")
 
   set(multiValueArgs TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES WORKING_DIRECTORY)
-  cmake_parse_arguments(_arg "NO_TAO_IDL" "" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments(_arg "NO_TAO_IDL;EXCLUDE_CPPS_FROM_COMMAND_OUTPUT" "" "${multiValueArgs}" ${ARGN})
 
   if (NOT IS_ABSOLUTE "${_arg_WORKING_DIRECTORY}")
     set(_working_binary_dir ${CMAKE_CURRENT_BINARY_DIR}/${_arg_WORKING_DIRECTORY})
@@ -33,6 +33,10 @@ function(dds_idl_command Name)
   else()
     set(_working_binary_dir ${_arg_WORKING_DIRECTORY})
     set(_working_source_dir ${CMAKE_CURRENT_SOURCE_DIR})
+  endif()
+
+  if (_arg_EXCLUDE_CPPS_FROM_COMMAND_OUTPUT)
+    set(EXCLUDE_CPPS_FROM_COMMAND_OUTPUT "EXCLUDE_CPPS_FROM_COMMAND_OUTPUT")
   endif()
 
   ## remove trailing slashes
@@ -56,6 +60,8 @@ function(dds_idl_command Name)
   # cmake_parse_arguments(_ddsidl_cmd_arg "-SI;-GfaceTS" "-o" "" ${_ddsidl_flags})
 
   set(_dds_idl_outputs)
+  set(_dds_idl_cpp_files)
+  set(_dds_idl_headers)
   set(_type_support_idls)
   set(_type_support_javas)
   set(_taoidl_inputs)
@@ -88,18 +94,18 @@ function(dds_idl_command Name)
     endif()
 
     set(_cur_idl_headers ${output_prefix}TypeSupportImpl.h)
-    set(_cur_idl_outputs ${output_prefix}TypeSupportImpl.cpp ${_cur_idl_headers})
+    set(_cur_idl_cpp_files ${output_prefix}TypeSupportImpl.cpp)
 
     if (_ddsidl_cmd_arg_-GfaceTS)
       list(APPEND _cur_idl_headers ${output_prefix}C.h ${output_prefix}_TS.hpp)
-      list(APPEND _cur_idl_outputs ${output_prefix}C.h ${output_prefix}_TS.hpp ${output_prefix}_TS.cpp)
+      list(APPEND _cur_idl_cpp_files ${output_prefix}_TS.cpp)
       ## if this is FACE IDL, do not reprocess the original idl file throught tao_idl
     else()
       list(APPEND _taoidl_inputs ${input})
     endif()
 
-    list(APPEND _dds_idl_outputs ${_cur_idl_outputs})
     list(APPEND _dds_idl_headers ${_cur_idl_headers})
+    list(APPEND _dds_idl_cpp_files ${_cur_idl_cpp_files})
 
     if (_ddsidl_cmd_arg_-Wb,java)
       set(_cur_java_list "${output_prefix}${file_ext}.TypeSupportImpl.java.list")
@@ -109,9 +115,15 @@ function(dds_idl_command Name)
       unset(_cur_java_list)
     endif()
 
+    set(_cur_idl_outputs ${_cur_idl_headers})
+    if (NOT EXCLUDE_CPPS_FROM_COMMAND_OUTPUT)
+      list(APPEND _cur_idl_outputs ${_cur_idl_cpp_files})
+    endif()
+
     add_custom_command(
       OUTPUT ${_cur_idl_outputs} ${_cur_type_support_idl} ${_cur_java_list}
-      DEPENDS opendds_idl ${OpenDDS_INCLUDE_DIR}/dds/idl/IDLTemplate.txt ${abs_filename}
+      DEPENDS opendds_idl ${OpenDDS_INCLUDE_DIR}/dds/idl/IDLTemplate.txt
+      MAIN_DEPENDENCY ${abs_filename}
       COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}"  "TAO_ROOT=${TAO_INCLUDE_DIR}" $<TARGET_FILE:opendds_idl> -I${_working_source_dir}
               ${_ddsidl_flags} ${file_dds_idl_flags} ${abs_filename}
       WORKING_DIRECTORY ${_arg_WORKING_DIRECTORY}
@@ -123,14 +135,25 @@ function(dds_idl_command Name)
     tao_idl_command(${Name}
       IDL_FLAGS -I${OpenDDS_INCLUDE_DIR} ${_arg_TAO_IDL_FLAGS}
       IDL_FILES ${_taoidl_inputs}
+      ${EXCLUDE_CPPS_FROM_COMMAND_OUTPUT}
     )
   endif()
 
-  list(APPEND ${Name}_OUTPUT_FILES ${_dds_idl_outputs} ${_type_support_idls})
-  list(APPEND ${Name}_HEADER_FILES ${_dds_idl_headers} ${_type_support_idls})
+  list(APPEND ${Name}_CPP_FILES ${_dds_idl_cpp_files})
+  list(APPEND ${Name}_HEADER_FILES ${_dds_idl_headers})
   list(APPEND ${Name}_TYPESUPPORT_IDLS ${_type_support_idls})
   list(APPEND ${Name}_JAVA_OUTPUTS ${_type_support_javas})
+  list(APPEND ${Name}_OUTPUT_FILES ${_dds_idl_cpp_files} ${_dds_idl_headers} ${_type_support_idls} ${_type_support_javas})
+
+  if (EXCLUDE_CPPS_FROM_COMMAND_OUTPUT)
+    add_custom_command(
+      OUTPUT ${_dds_idl_cpp_files}
+      COMMAND ${CMAKE_COMMAND} -E echo ""
+    )
+  endif()
+
   set(${Name}_OUTPUT_FILES ${${Name}_OUTPUT_FILES} PARENT_SCOPE)
+  set(${Name}_CPP_FILES ${${Name}_CPP_FILES} PARENT_SCOPE)
   set(${Name}_HEADER_FILES ${${Name}_HEADER_FILES} PARENT_SCOPE)
   set(${Name}_TYPESUPPORT_IDLS ${${Name}_TYPESUPPORT_IDLS} PARENT_SCOPE)
   set(${Name}_JAVA_OUTPUTS ${${Name}_JAVA_OUTPUTS} PARENT_SCOPE)
@@ -143,14 +166,18 @@ function(dds_idl_sources)
 
   set(is_face OFF)
 
+  tao_filter_valid_targets(_arg_TARGETS)
+
+  if (NOT _arg_TARGETS)
+    return()
+  endif()
+
   foreach(target ${_arg_TARGETS})
-    if (TARGET ${target})
-      get_property(target_link_libs TARGET ${target} PROPERTY LINK_LIBRARIES)
-      if ("OpenDDS_FACE" IN_LIST target_link_libs)
-        set(is_face ON)
-      endif()
-      break()
+    get_property(target_link_libs TARGET ${target} PROPERTY LINK_LIBRARIES)
+    if ("OpenDDS_FACE" IN_LIST target_link_libs)
+      set(is_face ON)
     endif()
+    break()
   endforeach()
 
   foreach(path ${_arg_IDL_FILES})
@@ -160,6 +187,7 @@ function(dds_idl_sources)
       list(APPEND _result ${CMAKE_CURRENT_LIST_DIR}/${path})
     endif()
   endforeach()
+
   set(_arg_IDL_FILES ${_result})
 
   file(RELATIVE_PATH rel_path ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR})
@@ -173,19 +201,26 @@ function(dds_idl_sources)
     list(APPEND _arg_DDS_IDL_FLAGS ${FACE_DDS_IDL_FLAGS})
   endif()
 
+
+  tao_setup_visual_studio_idl_dependency(
+    vs_and_used_by_multiple_targets
+    "${_arg_TARGETS}" ${_arg_IDL_FILES}
+  )
+
   dds_idl_command(_idl
     ${OPTIONAL_TAO_IDL}
     TAO_IDL_FLAGS ${_arg_TAO_IDL_FLAGS}
     DDS_IDL_FLAGS ${_arg_DDS_IDL_FLAGS}
     IDL_FILES ${_arg_IDL_FILES}
+    ${vs_and_used_by_multiple_targets}
     WORKING_DIRECTORY ${rel_path}
   )
 
   foreach(target ${_arg_TARGETS})
-    ace_target_sources(${target} PRIVATE ${_idl_OUTPUT_FILES} ${_arg_IDL_FILES})
+    ace_target_sources(${target} ${_idl_CPP_FILES})
     list(APPEND packages ${PACKAGE_OF_${target}})
   endforeach()
-  tao_add_targets_dependencies(${_arg_TARGETS} DEPEND ${_idl_OUTPUT_FILES})
+
 
   if (_arg_DDS_IDL_FLAGS MATCHES "-Wb,export_macro=")
     set(CMAKE_INCLUDE_CURRENT_DIR ON PARENT_SCOPE)
