@@ -24,8 +24,12 @@ set(FACE_DDS_IDL_FLAGS -GfaceTS -Lface)
 function(dds_idl_command Name)
   set(dds_idl_command_usage "dds_idl_command(<Name> TAO_IDL_FLAGS flags DDS_IDL_FLAGS flags IDL_FILES Input1 Input2 ...]")
 
-  set(multiValueArgs TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES WORKING_DIRECTORY)
-  cmake_parse_arguments(_arg "NO_TAO_IDL;EXCLUDE_CPPS_FROM_COMMAND_OUTPUT" "" "${multiValueArgs}" ${ARGN})
+  set(multiValueArgs TAO_IDL_FLAGS DDS_IDL_FLAGS IDL_FILES USED_BY WORKING_DIRECTORY)
+  cmake_parse_arguments(_arg "NO_TAO_IDL" "" "${multiValueArgs}" ${ARGN})
+
+  if ((CMAKE_GENERATOR MATCHES "Visual Studio") AND (_arg_USED_BY MATCHES ";"))
+    set(exclude_cpps_from_command_output ON)
+  endif()
 
   if (NOT IS_ABSOLUTE "${_arg_WORKING_DIRECTORY}")
     set(_working_binary_dir ${CMAKE_CURRENT_BINARY_DIR}/${_arg_WORKING_DIRECTORY})
@@ -33,10 +37,6 @@ function(dds_idl_command Name)
   else()
     set(_working_binary_dir ${_arg_WORKING_DIRECTORY})
     set(_working_source_dir ${CMAKE_CURRENT_SOURCE_DIR})
-  endif()
-
-  if (_arg_EXCLUDE_CPPS_FROM_COMMAND_OUTPUT)
-    set(EXCLUDE_CPPS_FROM_COMMAND_OUTPUT "EXCLUDE_CPPS_FROM_COMMAND_OUTPUT")
   endif()
 
   ## remove trailing slashes
@@ -116,7 +116,7 @@ function(dds_idl_command Name)
     endif()
 
     set(_cur_idl_outputs ${_cur_idl_headers})
-    if (NOT EXCLUDE_CPPS_FROM_COMMAND_OUTPUT)
+    if (NOT exclude_cpps_from_command_output)
       list(APPEND _cur_idl_outputs ${_cur_idl_cpp_files})
     endif()
 
@@ -135,7 +135,7 @@ function(dds_idl_command Name)
     tao_idl_command(${Name}
       IDL_FLAGS -I${OpenDDS_INCLUDE_DIR} ${_arg_TAO_IDL_FLAGS}
       IDL_FILES ${_taoidl_inputs}
-      ${EXCLUDE_CPPS_FROM_COMMAND_OUTPUT}
+      USED_BY ${_arg_USED_BY}
     )
   endif()
 
@@ -201,19 +201,19 @@ function(dds_idl_sources)
     list(APPEND _arg_DDS_IDL_FLAGS ${FACE_DDS_IDL_FLAGS})
   endif()
 
-
-  tao_setup_visual_studio_idl_dependency(
-    vs_and_used_by_multiple_targets
-    "${_arg_TARGETS}" ${_arg_IDL_FILES}
-  )
-
   dds_idl_command(_idl
     ${OPTIONAL_TAO_IDL}
     TAO_IDL_FLAGS ${_arg_TAO_IDL_FLAGS}
     DDS_IDL_FLAGS ${_arg_DDS_IDL_FLAGS}
     IDL_FILES ${_arg_IDL_FILES}
-    ${vs_and_used_by_multiple_targets}
     WORKING_DIRECTORY ${rel_path}
+    USED_BY "${_arg_TARGETS}"
+  )
+
+  tao_setup_visual_studio_custom_command_fanout_dependencies(
+    TARGETS "${_arg_TARGETS}"
+    DEPENDS "${_arg_IDL_FILES};${_idl_TYPESUPPORT_IDLS}"
+    OUTPUT  "${_idl_CPP_FILES}"
   )
 
   foreach(target ${_arg_TARGETS})
