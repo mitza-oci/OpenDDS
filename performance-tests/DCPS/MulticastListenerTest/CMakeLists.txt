@@ -1,6 +1,12 @@
 
+if (WIN32)
+  string(LENGTH "${CMAKE_CURRENT_BINARY_DIR}" binary_dir_len)
+  if (binary_dir_len GREATER 100)
+    set(CURRENT_BINARY_DIR_TOO_LONG ON)
+  endif()
+endif(WIN32)
 
-ace_requires("NOT OPENDDS_SAFETY_PROFILE")
+ace_requires("NOT OPENDDS_SAFETY_PROFILE" "NOT CURRENT_BINARY_DIR_TOO_LONG")
 
 ace_add_exe(DCPS_Perf_MulticastListenerTest_Pub
   OUTPUT_NAME publisher
