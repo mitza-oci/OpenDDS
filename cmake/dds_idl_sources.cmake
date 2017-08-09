@@ -212,7 +212,7 @@ function(dds_idl_sources)
 
   tao_setup_visual_studio_custom_command_fanout_dependencies(
     TARGETS "${_arg_TARGETS}"
-    DEPENDS "${_arg_IDL_FILES};${_idl_TYPESUPPORT_IDLS}"
+    DEPENDS "${_arg_IDL_FILES};${_idl_TYPESUPPORT_IDLS};${_idl_HEADER_FILES}"
     OUTPUT  "${_idl_CPP_FILES}"
   )
 
