@@ -4,6 +4,12 @@ define_property(SOURCE PROPERTY DDS_IDL_FLAGS
   FULL_DOCS "sets additional opendds_idl compiler flags used to build sources within the target"
 )
 
+define_property(SOURCE PROPERTY DDS_IDL_MAIN_TARGET
+  BRIEF_DOCS "the main target to process the IDL file"
+  FULL_DOCS "the main target to process the IDL file"
+)
+
+
 set(DDS_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 if (NOT DEFINED DDS_BASE_IDL_FLAGS)
@@ -177,10 +183,19 @@ function(dds_idl_sources)
     if ("OpenDDS_FACE" IN_LIST target_link_libs)
       set(is_face ON)
     endif()
+    set(first_target ${target})
     break()
   endforeach()
 
   foreach(path ${_arg_IDL_FILES})
+    get_property(main_target SOURCE ${path} PROPERTY DDS_IDL_MAIN_TARGET)
+
+    if (main_target)
+      message(FATAL_ERROR "${path} is added twice in ${CMAKE_CURRENT_LIST_FILE}")
+    else()
+      set_property(SOURCE ${path} PROPERTY DDS_IDL_MAIN_TARGET "${first_target}")
+    endif()
+
     if (IS_ABSOLUTE ${path})
       list(APPEND _result ${path})
     else()
