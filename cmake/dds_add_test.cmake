@@ -28,6 +28,14 @@ function(dds_configure_test_files)
     string(REPLACE "$ACE_ROOT/bin" "${PERLACE_DIR}" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "use PerlDDS::Process_Java;" "use PerlDDS::Process_Java;\nPerlACE::add_lib_path(\"$DDS_ROOT/lib\");" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
     string(REPLACE "use PerlACE::TestTarget;" "use PerlACE::TestTarget;\n\$ENV{ACE_ROOT}=\"${ACE_INCLUDE_DIR}\";" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+
+    if (CMAKE_CURRENT_SOURCE_DIR MATCHES "tools/modeling/tests")
+      string(REPLACE "PerlDDS::add_lib_path(\"./model\");" "" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+      string(REGEX REPLACE "add_lib_path\\(\"(.+)/model\"\\)" "add_lib_path(\"\\1\")" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+    endif()
+
+    string(REPLACE "$DDS_ROOT/java/tests" "${OpenDDS_BINARY_DIR}/java/tests" RUN_TEST_CONTENT "${RUN_TEST_CONTENT}")
+
     file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/${script}" "${RUN_TEST_CONTENT}")
     if (UNIX)
       execute_process(COMMAND chmod +x "${CMAKE_CURRENT_BINARY_DIR}/${script}")
