@@ -141,6 +141,7 @@ file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Run_Test.pm" CONTENT "${PM_CON
 file(READ Process_Java.pm PM_CONTENT)
 string(REPLACE "$JAVA_HOME/bin/java" "${Java_JAVA_EXECUTABLE}" PM_CONTENT "${PM_CONTENT}")
 string(REPLACE "$ACE_ROOT/bin" "${PERLACE_DIR}" PM_CONTENT "${PM_CONTENT}")
+string(REPLACE "-Dopendds.native.debug=true" "" PM_CONTENT "${PM_CONTENT}")
 
 if (CMAKE_CONFIGURATION_TYPES AND NOT WIN32)
   # only used by XCode for now
