@@ -22,12 +22,6 @@ ace_target_cxx_sources(DCPS_Perf_TCPProfiling_Pub
                common.h
 )
 
-dds_idl_sources(
-  TARGETS DCPS_Perf_TCPProfiling_Pub
-  IDL_FILES testMessage.idl
-)
-
-
 ace_add_exe(DCPS_Perf_TCPProfiling_Sub
   OUTPUT_NAME subscriber
 
@@ -42,7 +36,8 @@ ace_target_cxx_sources(DCPS_Perf_TCPProfiling_Sub
 )
 
 dds_idl_sources(
-  TARGETS DCPS_Perf_TCPProfiling_Sub
+  TARGETS DCPS_Perf_TCPProfiling_Pub
+          DCPS_Perf_TCPProfiling_Sub
   IDL_FILES testMessage.idl
 )
 

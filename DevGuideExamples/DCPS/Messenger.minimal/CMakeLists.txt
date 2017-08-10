@@ -21,11 +21,6 @@ ace_target_cxx_sources(MessengerMinimal_Publisher
   HEADER_FILES Boilerplate.h
 )
 
-dds_idl_sources(
-  TARGETS MessengerMinimal_Publisher
-  IDL_FILES Messenger.idl
-)
-
 
 ace_add_exe(MessengerMinimal_Subscriber
   OUTPUT_NAME subscriber
@@ -42,6 +37,7 @@ ace_target_cxx_sources(MessengerMinimal_Subscriber
 )
 
 dds_idl_sources(
-  TARGETS MessengerMinimal_Subscriber
+  TARGETS MessengerMinimal_Publisher
+          MessengerMinimal_Subscriber
   IDL_FILES Messenger.idl
 )
