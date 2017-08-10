@@ -121,18 +121,21 @@ if(ACE_MULTI_CONFIGURATION_GENERATOR)
 endif(ACE_MULTI_CONFIGURATION_GENERATOR)
 
 if (WIN32)
-  set(libpaths ${OpenDDS_BIN_DIR} ${ACE_BIN_DIR} ${TAO_BIN_DIR})
+  set(libpaths . ${OpenDDS_BIN_DIR} ${ACE_BIN_DIR} ${TAO_BIN_DIR})
   list(REMOVE_DUPLICATES libpaths)
   foreach(libpath ${libpaths})
-    set(quoted_libpath "\"${libpath}/\"")
-    if (ACE_MULTI_CONFIGURATION_GENERATOR)
-      set(quoted_libpath "${quoted_libpath} . $PerlACE::Process::ExeSubDir")
-    endif()
-    list(APPEND add_libpath_stmt "PerlACE::add_lib_path(${quoted_libpath});\n")
+    set(add_libpath_stmt "${add_libpath_stmt}\nadd_lib_path ('${libpath}');")
   endforeach()
+
+  string(REPLACE "add_lib_path ('.');" "${add_libpath_stmt}" PM_CONTENT "${PM_CONTENT}")
+
+  if (ACE_MULTI_CONFIGURATION_GENERATOR)
+    string(REPLACE "PerlACE::add_lib_path($dir)" "PerlACE::add_lib_path($dir . '/' . $PerlACE::Process::ExeSubDir)"
+           PM_CONTENT "${PM_CONTENT}")
+  endif()
 endif(WIN32)
 
-string(REPLACE "use File::Spec;" "use File::Spec;\n\$ENV{'ACE_ROOT'}=\"${ACE_INCLUDE_DIR}\";\n$ACE_ROOT=\"${ACE_INCLUDE_DIR}\";\n$DDS_ROOT=\"${OpenDDS_BINARY_DIR}\";\n${set_default_exesubdir_stmt}${add_libpath_stmt}" PM_CONTENT "${PM_CONTENT}")
+string(REPLACE "use File::Spec;" "use File::Spec;\n\$ENV{'ACE_ROOT'}=\"${ACE_INCLUDE_DIR}\";\n$ACE_ROOT=\"${ACE_INCLUDE_DIR}\";\n$DDS_ROOT=\"${OpenDDS_BINARY_DIR}\";\n${set_default_exesubdir_stmt}" PM_CONTENT "${PM_CONTENT}")
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/Run_Test.pm" CONTENT "${PM_CONTENT}")
 
 file(READ Process_Java.pm PM_CONTENT)
