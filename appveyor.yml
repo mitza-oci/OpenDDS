@@ -26,7 +26,8 @@ test_script:
         ctest -C $env:configuration -j 6 | % {
           Write-Host $_
           if ($_ -match 'Start\s+(\d+):\s+([^ ]+)') {
-            Add-AppveyorTest -Name $matches[1] -Framework xunit -Filename $matches[2] -OutCome Running
+            $name = $matches[2].replace('__', ' ')
+            Add-AppveyorTest -Name $name -Framework xunit -Filename $matches[1] -OutCome Running
           } elseif ($_ -match '\d+/\d+ Test\s+#(\d+)') {
             $items = $_.trim() -split '\s+|\*\*\*'
             $outcome = $items[5]
@@ -35,13 +36,13 @@ test_script:
             }
             [float]$duration=$items[6]
             $duration *= 1000
-            Add-AppveyorTest -Name $matches[1] -Framework xunit -Filename $items[3] -OutCome $outcome -Duration $duration
+            $name = $items[3].replace('__', ' ')
+            Add-AppveyorTest -Name $name -Framework xunit -Filename $matches[1] -OutCome $outcome -Duration $duration
           }
         }
-after_test:
+on_finish:
   - ps: cd $env:APPVEYOR_BUILD_FOLDER\build
-  - python ..\ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/appveyor/%APPVEYOR_BUILD_NUMBER%/%APPVEYOR_JOB_NUMBER%
-                               --output_dir=appveyor_tests
+  - python ..\ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/appveyor/%APPVEYOR_BUILD_NUMBER%/%APPVEYOR_JOB_NUMBER% --output_dir=appveyor_tests
   - ps: $root = Resolve-Path $env:APPVEYOR_BUILD_FOLDER\build\appveyor_tests; [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % { Push-AppveyorArtifact $_ -FileName $_.Substring($root.Path.Length + 1) -DeploymentName to-publish }
 
 deploy:
