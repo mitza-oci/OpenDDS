@@ -22,4 +22,42 @@ build:
 
 test_script:
   - ps: cd build
-  - ctest -C %configuration% -j 6
+  - ps: |
+        ctest -C %configuration% -j 6 | % {
+          Write-Host $_
+          if ($_ -match 'Start\s+(\d+):\s+([^ ]+)') {
+            Add-Appveyor Test -Name $matches[1]
+                              -Framework xunit
+                              -Filename $matches[2]
+                              -OutCome Running
+          } elseif ($_ -match '\d+/\d+ Test\s+#(\d+)') {
+            $items = $_.trim() -split '\s+|\*\*\*'
+            $outcome = $item[5]
+            if ($outcome -eq 'Timeout'){
+              $outcome = 'Cancelled'
+            }
+            [float]$duration=$items[6]
+            $duration *= 1000
+            Add-Appveyor Test -Name $matches[1]
+                              -Framework xunit
+                              -Filename $items[3]
+                              -OutCome $outcome
+                              -Duration $duration
+          }
+        }
+after_test:
+  - ps: cd %APPVEYOR_BUILD_FOLDER%\build
+  - python ..\ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/appveyor/%APPVEYOR_BUILD_NUMBER%/%APPVEYOR_JOB_NUMBER%
+                               --output_dir=appveyor_tests
+
+deploy:
+  - provider: S3
+    access_key_id:
+        secure: IeVa1jj7bYXS9IpKngm7FYKI1AaRl5IzVNrN87F/3sg=
+    secret_access_key:
+        secure: JcIGXaS/GimRpZ2TyVdVnSUvTT2hmHCp4DDhpln+x4u/l8njhWC0kHfxJ3FQFm/u
+    bucket: com.ociweb.opendds
+    region: us-east-1
+    folder: tests/appveyor/$(APPVEYOR_BUILD_NUMBER)/$(APPVEYOR_JOB_NUMBER)
+    artifact: build/appveyor_tests
+    set_public: true
