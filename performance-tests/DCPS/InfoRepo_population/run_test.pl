@@ -24,6 +24,8 @@ if( $debug) {
   $debugfile  = "log.out";
 }
 
+PerlDDS::add_lib_path('../Sync');
+
 unlink $debugfile if $debugfile;
 
 my $intermittent ;# = 1;
