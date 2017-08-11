@@ -140,9 +140,9 @@ def get_system_info():
 def get_repo_info(dir):
     return{
         'origin': subprocess.check_output(["git", "remote", "get-url", "origin"], cwd=dir),
-        'branch': os.getenv('TRAVIS_BRANCH') or subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"], cwd=dir),
-        'commit': os.getenv('TRAVIS_COMMIT') or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=dir),
-        'message': os.getenv('TRAVIS_COMMIT_MESSAGE') or subprocess.check_output(["git", "log", "-1", "--pretty=%B"])
+        'branch': os.getenv('TRAVIS_BRANCH') or os.getenv('APPVEYOR_REPO_BRANCH') or subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"], cwd=dir),
+        'commit': os.getenv('TRAVIS_COMMIT') or os.getenv('APPVEYOR_REPO_COMMIT') or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=dir),
+        'message': os.getenv('TRAVIS_COMMIT_MESSAGE') or os.getenv('APPVEYOR_REPO_COMMIT_MESSAGE') or subprocess.check_output(["git", "log", "-1", "--pretty=%B"])
     }
 
 
@@ -185,7 +185,11 @@ def main():
      result['CMakeCache'] = parse_cmake_cache()
      result['repo'] = get_repo_info(result['CMakeCache']['CMAKE_HOME_DIRECTORY'])
      result['platform'] = get_system_info()
-     result['matrix'] = os.getenv('MATRIX_NAME') or "Unknown"
+
+     result['matrix'] = os.getenv('MATRIX_NAME') or \
+                        "Windows-{}-{}".format(os.getenv('platform'), os.getenv('configuration')) if os.getenv('APPVEYOR') or \
+                        "Unknown"
+
      result['build_flags'] = os.getenv('DDS_BUILD_FLAGS') or ""
 
      with open(os.path.join(config.output_dir ,"tests.json"), 'w') as f:
