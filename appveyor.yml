@@ -23,7 +23,7 @@ build:
 test_script:
   - ps: cd build
   - ps: |
-        ctest -C %configuration% -j 6 | % {
+        ctest -C $env:configuration -j 6 | % {
           Write-Host $_
           if ($_ -match 'Start\s+(\d+):\s+([^ ]+)') {
             Add-AppveyorTest -Name $matches[1] -Framework xunit -Filename $matches[2] -OutCome Running
@@ -39,10 +39,10 @@ test_script:
           }
         }
 after_test:
-  - ps: cd %APPVEYOR_BUILD_FOLDER%\build
+  - ps: cd $env:APPVEYOR_BUILD_FOLDER\build
   - python ..\ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/appveyor/%APPVEYOR_BUILD_NUMBER%/%APPVEYOR_JOB_NUMBER%
                                --output_dir=appveyor_tests
-  - ps: $root = Resolve-Path %APPVEYOR_BUILD_FOLDER%\build\appveyor_tests; [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % { Push-AppveyorArtifact $_ -FileName $_.Substring($root.Path.Length + 1) -DeploymentName to-publish }
+  - ps: $root = Resolve-Path $env:APPVEYOR_BUILD_FOLDER\build\appveyor_tests; [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % { Push-AppveyorArtifact $_ -FileName $_.Substring($root.Path.Length + 1) -DeploymentName to-publish }
 
 deploy:
   - provider: S3
