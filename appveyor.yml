@@ -26,10 +26,7 @@ test_script:
         ctest -C %configuration% -j 6 | % {
           Write-Host $_
           if ($_ -match 'Start\s+(\d+):\s+([^ ]+)') {
-            Add-AppveyorTest -Name $matches[1]
-                             -Framework xunit
-                             -Filename $matches[2]
-                             -OutCome Running
+            Add-AppveyorTest -Name $matches[1] -Framework xunit -Filename $matches[2] -OutCome Running
           } elseif ($_ -match '\d+/\d+ Test\s+#(\d+)') {
             $items = $_.trim() -split '\s+|\*\*\*'
             $outcome = $item[5]
@@ -38,11 +35,7 @@ test_script:
             }
             [float]$duration=$items[6]
             $duration *= 1000
-            Add-AppveyorTest -Name $matches[1]
-                             -Framework xunit
-                             -Filename $items[3]
-                             -OutCome $outcome
-                             -Duration $duration
+            Add-AppveyorTest -Name $matches[1] -Framework xunit -Filename $items[3] -OutCome $outcome -Duration $duration
           }
         }
 after_test:
