@@ -187,7 +187,7 @@ def main():
      result['platform'] = get_system_info()
 
      result['matrix'] = os.getenv('MATRIX_NAME') or \
-                        "Windows-{}-{}".format(os.getenv('platform'), os.getenv('configuration')) if os.getenv('APPVEYOR') or \
+                        "Windows-{}-{}".format(os.getenv('platform'), os.getenv('configuration')) if os.getenv('APPVEYOR') else \
                         "Unknown"
 
      result['build_flags'] = os.getenv('DDS_BUILD_FLAGS') or ""
