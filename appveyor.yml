@@ -4,6 +4,15 @@ branches:
 
 os: Visual Studio 2017
 
+# environment variables
+environment:
+  aws_access_key_id:
+    secure: IeVa1jj7bYXS9IpKngm7FYKI1AaRl5IzVNrN87F/3sg=
+  aws_secret_access_key:
+    secure: JcIGXaS/GimRpZ2TyVdVnSUvTT2hmHCp4DDhpln+x4u/l8njhWC0kHfxJ3FQFm/u
+  aws_region: us-east-1
+  s3_bucket: com.ociweb.opendds
+
 clone_depth: 15
 
 install:
@@ -21,8 +30,8 @@ build:
   project: build/OpenDDS.sln
 
 test_script:
-  - ps: cd build
   - ps: |
+        cd build
         ctest -C $env:configuration -j 6 | % {
           Write-Host $_
           if ($_ -match 'Start\s+(\d+):\s+([^ ]+)') {
@@ -41,18 +50,20 @@ test_script:
           }
         }
 on_finish:
-  - ps: cd $env:APPVEYOR_BUILD_FOLDER\build
-  - python ..\ctestlog2json.py --generated_url_prefix=http://com.ociweb.opendds.s3-website-us-east-1.amazonaws.com/tests/appveyor/%APPVEYOR_BUILD_NUMBER%/%APPVEYOR_JOB_NUMBER% --output_dir=appveyor_tests
-  - ps: $root = Resolve-Path $env:APPVEYOR_BUILD_FOLDER\build\appveyor_tests; [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % { Push-AppveyorArtifact $_ -FileName $_.Substring($root.Path.Length + 1) -DeploymentName to-publish }
+  - ps: >
+      cd $env:APPVEYOR_BUILD_FOLDER\build;
+      $aws_website="http://$($env:s3_bucket).s3-website-$($env:aws_region).amazonaws.com";
+      $prefix="tests/appveyor/$($env:APPVEYOR_BUILD_NUMBER)/$($env:APPVEYOR_JOB_NUMBER)";
+      python ..\ctestlog2json.py --generated_url_prefix=$aws_website/$prefix --output_dir=appveyor_tests;
 
-deploy:
-  - provider: S3
-    access_key_id:
-        secure: IeVa1jj7bYXS9IpKngm7FYKI1AaRl5IzVNrN87F/3sg=
-    secret_access_key:
-        secure: JcIGXaS/GimRpZ2TyVdVnSUvTT2hmHCp4DDhpln+x4u/l8njhWC0kHfxJ3FQFm/u
-    bucket: com.ociweb.opendds
-    region: us-east-1
-    folder: tests/appveyor/$(APPVEYOR_BUILD_NUMBER)/$(APPVEYOR_JOB_NUMBER)
-    artifact: to-publish
-    set_public: true
+      Set-AWSCredential -AccessKey $env:aws_access_key_id -SecretKey $env:aws_secret_access_key -StoreAs default;
+      Initialize-AWSDefaultConfiguration -ProfileName default -Region $env:aws_region;
+
+      $root = Resolve-Path $env:APPVEYOR_BUILD_FOLDER\build\appveyor_tests;
+
+      [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % {
+        $f = $_.Substring($root.Path.Length + 1);
+        Push-AppveyorArtifact $_ -FileName $f -DeploymentName to-publish;
+        Write-S3Object -BucketName $env:s3_bucket -File $_ -Key $prefix/$f -CannedACLName public-read;
+      }
+
