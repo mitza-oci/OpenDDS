@@ -56,9 +56,6 @@ on_finish:
       $prefix="tests/appveyor/$($env:APPVEYOR_BUILD_NUMBER)/$($env:APPVEYOR_JOB_NUMBER)";
       python ..\ctestlog2json.py --generated_url_prefix=$aws_website/$prefix --output_dir=appveyor_tests;
 
-      Set-AWSCredential -AccessKey $env:aws_access_key_id -SecretKey $env:aws_secret_access_key -StoreAs default;
-      Initialize-AWSDefaultConfiguration -ProfileName default -Region $env:aws_region;
-
       $root = Resolve-Path $env:APPVEYOR_BUILD_FOLDER\build\appveyor_tests;
 
       [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % {
