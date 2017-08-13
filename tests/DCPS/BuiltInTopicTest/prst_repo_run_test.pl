@@ -63,10 +63,10 @@ $Publisher2 = PerlDDS::create_process ("publisher", " $pub_opts");
 $data_file = "test_run_prst.data";
 unlink $data_file;
 
-open (OLDOUT, ">&STDOUT");
-open (STDOUT, ">$data_file") or die "can't redirect stdout: $!";
-open (OLDERR, ">&STDERR");
-open (STDERR, ">&STDOUT") or die "can't redirect stderror: $!";
+# open (OLDOUT, ">&STDOUT");
+# open (STDOUT, ">$data_file") or die "can't redirect stdout: $!";
+# open (OLDERR, ">&STDERR");
+# open (STDERR, ">&STDOUT") or die "can't redirect stderror: $!";
 
 print "Spawning DCPSInfoRepo.\n";
 
@@ -163,10 +163,10 @@ if ($ir != 0) {
     $status = 1;
 }
 
-close (STDERR);
-close (STDOUT);
-open (STDOUT, ">&OLDOUT");
-open (STDERR, ">&OLDERR");
+# close (STDERR);
+# close (STDOUT);
+# open (STDOUT, ">&OLDOUT");
+# open (STDERR, ">&OLDERR");
 
 unlink $dcpsrepo_ior;
 #unlink $data_file;

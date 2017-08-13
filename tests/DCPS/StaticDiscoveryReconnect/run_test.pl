@@ -11,16 +11,20 @@ use strict;
 use warnings;
 
 my $result = 0;
+my $scenario = shift;
+$scenario |= "";
 
+if ($scenario ne "reader_first")
 {
     my $test = new PerlDDS::TestFramework();
     $test->enable_console_logging();
     $test->{wait_after_first_proc} = 40;
+    $test->{dcps_debug_level} = 10;
 
-    $test->process("writer1", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -writer");
+    $test->process("writer1", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -ORBLogFile writer1.log -writer");
     $test->start_process("writer1");
 
-    $test->process("reader1", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -reader -toggle");
+    $test->process("reader1", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -ORBLogFile reader1.log -reader -toggle");
     $test->start_process("reader1");
 
     my $res = $test->finish(40);
@@ -30,15 +34,17 @@ my $result = 0;
     }
 }
 
+if ($scenario ne "writer_first")
 {
     my $test = new PerlDDS::TestFramework();
     $test->enable_console_logging();
     $test->{wait_after_first_proc} = 40;
+    $test->{dcps_debug_level} = 10;
 
-    $test->process("reader2", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -reader");
+    $test->process("reader2", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -ORBLogFile reader2.log -reader");
     $test->start_process("reader2");
 
-    $test->process("writer2", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -writer -toggle");
+    $test->process("writer2", 'StaticDiscoveryTest', "-DCPSConfigFile config.ini -ORBLogFile writer2.log -writer -toggle");
     $test->start_process("writer2");
 
     my $res = $test->finish(40);
