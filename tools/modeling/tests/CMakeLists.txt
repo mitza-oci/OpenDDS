@@ -1,4 +1,6 @@
 
+file(GLOB XSL_FILES ${OpenDDS_INCLUDE_DIR}/tools/modeling/plugins/org.opendds.modeling.sdk.model/xsl/*.*)
+
 function(dds_add_model_lib base)
 
   set(multiValueArgs PUBLIC_LINK_LIBRARIES)
@@ -10,7 +12,7 @@ function(dds_add_model_lib base)
 
   add_custom_command(
     OUTPUT model/${base}.idl model/${base}Traits.h model/${base}Traits.cpp model/${base}_T.h model/${base}_T.cpp
-    DEPENDS sdk_generator_jar ${codegen_file} ${base}.opendds
+    DEPENDS sdk_generator_jar ${codegen_file} ${base}.opendds ${XSL_FILES}
     COMMAND ${CMAKE_COMMAND} -E env "DDS_ROOT=${OpenDDS_INCLUDE_DIR}" "TAO_ROOT=${TAO_INCLUDE_DIR}" ${Java_JAVA_EXECUTABLE} -jar ${PROJECT_BINARY_DIR}/tools/modeling/plugins/org.opendds.modeling.sdk.model.editor/bin/sdk_generator.jar ${CMAKE_CURRENT_SOURCE_DIR}/${codegen_file}
   )
   add_custom_command(
