@@ -264,6 +264,8 @@ Service_Participant::shutdown()
     TransportRegistry::close();
     ACE_GUARD(TAO_SYNCH_MUTEX, guard, this->factory_lock_);
 
+    dp_factory_servant_->cleanup();
+
     domainRepoMap_.clear();
 
     if (0 != reactor_) {
