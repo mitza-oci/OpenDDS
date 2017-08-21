@@ -2,7 +2,7 @@
 find_package(Java)
 find_package(JNI)
 
-ace_requires(JAVA_FOUND JNI_FOUND "NOT OPENDDS_SAFETY_PROFILE")
+ace_requires(JAVA_FOUND JNI_FOUND "NOT OPENDDS_SAFETY_PROFILE" "NOT SANITIZE_ADDRESS")
 
 option(FULL_JRE "" ON)
 set(OPENDDS_JARS i2jrt OpenDDS_DCPS_jar CACHE INTERNAL "")
