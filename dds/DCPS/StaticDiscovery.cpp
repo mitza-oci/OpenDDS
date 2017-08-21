@@ -201,7 +201,7 @@ void StaticEndpointManager::assign_publication_key(RepoId& rid,
   DDS::DataWriterQos qos3(pos->second.qos);
 
   if (qos2 != qos3) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) WARNING: StaticEndpointManager::assign_publication_key: dynamic and static QoS differ\n")));
+    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) ERROR: StaticEndpointManager::assign_publication_key: dynamic and static QoS differ\n")));
   }
 }
 
@@ -230,7 +230,7 @@ void StaticEndpointManager::assign_subscription_key(RepoId& rid,
   qos2.user_data = pos->second.qos.user_data;
 
   if (qos2 != pos->second.qos) {
-    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) WARNING: StaticEndpointManager::assign_subscription_key: dynamic and static QoS differ\n")));
+    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) ERROR: StaticEndpointManager::assign_subscription_key: dynamic and static QoS differ\n")));
   }
 }
 
