@@ -112,6 +112,7 @@ jobs:
     os: osx
     osx_image: xcode9
     install:
+      - brew update
       - brew install ninja awscli
       - export CXX=c++
     env: "MATRIX_NAME=MacOS"
