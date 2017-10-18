@@ -52,10 +52,13 @@ function(dds_idl_command Name)
   ## opendds_idl would generate different codes with the -I flag followed by absolute path
   ## or relative path, if it's a relatvie path we need to keep it a relative path to the binary tree
   file(RELATIVE_PATH _rel_path_to_source_tree ${_working_binary_dir} ${_working_source_dir})
+  if (_rel_path_to_source_tree)
+    string(APPEND _rel_path_to_source_tree "/")
+  endif ()
 
   foreach(flag ${_arg_DDS_IDL_FLAGS})
     if ("${flag}" MATCHES "^-I(\\.\\..*)")
-       list(APPEND _converted_dds_idl_flags -I${_rel_path_to_source_tree}/${CMAKE_MATCH_1})
+       list(APPEND _converted_dds_idl_flags -I${_rel_path_to_source_tree}${CMAKE_MATCH_1})
      else()
        list(APPEND _converted_dds_idl_flags ${flag})
     endif()
@@ -267,5 +270,3 @@ function(dds_idl_sources)
             DESTINATION ${package_install_dir}/${rel_path})
   endforeach()
 endfunction()
-
-
