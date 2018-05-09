@@ -12,7 +12,7 @@ import Messenger.*;
 
 public class Both {
 
-    private static final int N_MSGS = 40;
+    private static final int N_MSGS = 1;
 
     public static void main(String[] args) {
 
@@ -97,7 +97,7 @@ public class Both {
                 return;
             }
 
-            if (matched.value.current_count >= 1) {
+            if (matched.value.current_count >= 2) {
                 break;
             }
 
@@ -110,9 +110,12 @@ public class Both {
 
         ws.detach_condition(sc);
 
+        final String process = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+        final int pid = Integer.parseInt(process.split("@")[0]);
+
         MessageDataWriter mdw = MessageDataWriterHelper.narrow(dw);
         Message msg = new Message();
-        msg.subject_id = 99;
+        msg.subject_id = pid;
         int handle = mdw.register_instance(msg);
         msg.from = "OpenDDS-Java";
         msg.subject = "Review";
@@ -145,13 +148,10 @@ public class Both {
                 System.err.println("ERROR: take_next_sample");
                 return;
             }
-            if (infoholder.value.publication_handle != dw_handle) {
-                System.err.println("ERROR: publication_handle " +
-                    infoholder.value.publication_handle + " != dw_handle " +
-                    dw_handle);
-            }
+            final boolean local = infoholder.value.publication_handle == dw_handle;
+            System.out.println((local ? "Local " : "Remote ") + mholder.value.subject_id);
             msg = mholder.value;
-            if (msg.count == N_MSGS - 1) {
+            if (msg.count > N_MSGS - 1) {
                 System.out.println("Got last expected message.");
                 break;
             }
