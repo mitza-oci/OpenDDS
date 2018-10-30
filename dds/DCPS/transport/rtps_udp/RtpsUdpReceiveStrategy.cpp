@@ -16,12 +16,29 @@
 
 #include "ace/Reactor.h"
 
+#if defined IP_RECVDSTADDR
+# define DSTADDR_SOCKOPT IP_RECVDSTADDR
+# define DSTADDR_DATASIZE (CMSG_SPACE(sizeof(struct in_addr)))
+# define dstaddr(x) (CMSG_DATA(x))
+#elif defined IP_PKTINFO
+# define DSTADDR_SOCKOPT IP_PKTINFO
+# define DSTADDR_DATASIZE (CMSG_SPACE(sizeof(struct in_pktinfo)))
+# define dstaddr(x) (&(((struct in_pktinfo *)(CMSG_DATA(x)))->ipi_addr))
+#else
+# error "can't determine socket option"
+#endif
+
+union control_data {
+    struct cmsghdr  cmsg;
+    u_char          data[DSTADDR_DATASIZE];
+};
+
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
 
 namespace OpenDDS {
 namespace DCPS {
 
-RtpsUdpReceiveStrategy::RtpsUdpReceiveStrategy(RtpsUdpDataLink* link, const GuidPrefix_t& local_prefix)
+  RtpsUdpReceiveStrategy::RtpsUdpReceiveStrategy(RtpsUdpDataLink* link, const GuidPrefix_t& local_prefix)
   : link_(link)
   , last_received_()
   , recvd_sample_(0)
@@ -45,7 +62,8 @@ ssize_t
 RtpsUdpReceiveStrategy::receive_bytes(iovec iov[],
                                       int n,
                                       ACE_INET_Addr& remote_address,
-                                      ACE_HANDLE fd)
+                                      ACE_HANDLE fd,
+                                      bool& stop)
 {
   const ACE_SOCK_Dgram& socket =
     (fd == link_->unicast_socket().get_handle())
@@ -63,9 +81,73 @@ RtpsUdpReceiveStrategy::receive_bytes(iovec iov[],
   }
   const ssize_t ret = (scatter < 0) ? scatter : (iter - buffer);
 #else
-  const ssize_t ret = socket.recv(iov, n, remote_address);
+
+  struct msghdr       msg;
+  union control_data  cmsg;
+  struct sockaddr_in  cliaddr;
+
+  memset(&msg, 0, sizeof msg);
+  msg.msg_name       = &cliaddr;
+  msg.msg_namelen    = sizeof cliaddr;
+  msg.msg_iov        = iov;
+  msg.msg_iovlen     = n;
+  msg.msg_control    = &cmsg;
+  msg.msg_controllen = sizeof cmsg;
+
+  const ssize_t ret = recvmsg(socket.get_handle(), &msg, 0);
+
+  if (ret == -1) {
+    perror("recvfrom");
+    exit(EXIT_FAILURE);
+  }
+
+  remote_address = ACE_INET_Addr(&cliaddr, sizeof cliaddr);
+  ACE_INET_Addr local_address;
+
+  for (struct cmsghdr     * cmsgptr = CMSG_FIRSTHDR(&msg);
+       cmsgptr != NULL;
+       cmsgptr = CMSG_NXTHDR(&msg, cmsgptr)) {
+
+    if (cmsgptr->cmsg_level == IPPROTO_IP &&
+        cmsgptr->cmsg_type == DSTADDR_SOCKOPT) {
+      local_address.set((u_short)0 /* TODO: fix this */, ntohl(reinterpret_cast<struct in_addr *>(dstaddr(cmsgptr))->s_addr));
+    }
+  }
+
+  //const ssize_t ret = socket.recv(iov, n, remote_address);
 #endif
   remote_address_ = remote_address;
+
+  if (n > 0 && ret > 0 && iov[0].iov_len >= 4 && memcmp(iov[0].iov_base, "RTPS", 4) != 0) {
+    // Assume STUN
+    stop = true;
+    size_t bytes = ret;
+    size_t block_size = std::min(bytes, static_cast<size_t>(iov[0].iov_len));
+    ACE_Message_Block* head = new ACE_Message_Block(static_cast<const char*>(iov[0].iov_base), block_size);
+    head->length(block_size);
+    bytes -= block_size;
+
+    ACE_Message_Block* tail = head;
+    for (int i = 1; i < n && bytes != 0; ++i) {
+      block_size = std::min(bytes, static_cast<size_t>(iov[i].iov_len));
+      ACE_Message_Block* mb = new ACE_Message_Block(static_cast<const char*>(iov[i].iov_base), block_size);
+      mb->length(block_size);
+      tail->cont(mb);
+      tail = mb;
+      bytes -= block_size;
+    }
+
+    DCPS::Serializer serializer(head, true);
+    STUN::Message message;
+    message.block = head;
+    if (serializer >> message) {
+      link_->get_ice_agent()->receive(local_address, remote_address, message);
+    } else {
+      // TODO:  Not RTPS and not STUN.
+    }
+    head->release();
+  }
+
   return ret;
 }
 

@@ -18,7 +18,10 @@
 #include "dds/DCPS/Service_Participant.h"
 #include "dds/DCPS/BuiltInTopicUtils.h"
 #include "dds/DCPS/GuidConverter.h"
+#include "dds/DCPS/GuidUtils.h"
 #include "dds/DCPS/Qos_Helper.h"
+
+#include "dds/DCPS/STUN/Ice.h"
 
 #ifdef OPENDDS_SECURITY
 #include "SecurityHelpers.h"
@@ -30,6 +33,8 @@
 
 #include <cstring>
 #include <stdexcept>
+
+#include "ace/Auto_Ptr.h"
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -115,6 +120,7 @@ void Spdp::init(DDS::DomainId_t /*domain*/,
                        RtpsDiscovery* disco)
 {
   guid = guid_; // may have changed in SpdpTransport constructor
+
   sedp_.ignore(guid);
   sedp_.init(guid_, *disco, domain_);
 
@@ -519,6 +525,133 @@ Spdp::data_received(const DataSubmessage& data, const ParameterList& plist)
   DCPS::MessageId msg_id = (data.inlineQos.length() && disposed(data.inlineQos)) ? DCPS::DISPOSE_INSTANCE : DCPS::SAMPLE_DATA;
 
   handle_participant_data(msg_id, pdata);
+
+  ICE::AbstractAgent* ice_agent = sedp_.get_ice_agent();
+  if (!ice_agent) {
+    return;
+  }
+
+  // Form the set of guids.
+  std::vector<ICE::GuidPair> guids;
+  const BuiltinEndpointSet_t& avail = pdata.participantProxy.availableBuiltinEndpoints;
+  RepoId r = guid, l = guid_;
+
+  // See RTPS v2.1 section 8.5.5.1
+  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_DETECTOR) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_DETECTOR) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_ANNOUNCER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_ANNOUNCER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+
+#ifdef OPENDDS_SECURITY
+  using namespace DDS::Security;
+  // See DDS-Security v1.1 section 7.3.7.1
+  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_READER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_WRITER) {
+    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
+    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_READER) {
+    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
+    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
+    guids.push_back(ICE::GuidPair(l, r));
+  }
+#endif
+
+  for (std::vector<ICE::GuidPair>::const_iterator pos = guids.begin(), limit = guids.end(); pos != limit; ++pos) {
+    ice_agent->start_ice(*pos);
+  }
+
+  ICE::AgentInfo agent_info;
+  bool have_agent_info;
+  if (ParameterListConverter::from_param_list(plist, agent_info, have_agent_info) < 0) {
+    ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) ERROR: Spdp::data_received - ")
+      ACE_TEXT("failed to convert from ParameterList to ")
+      ACE_TEXT("ICE::AgentInfo\n")));
+    return;
+  }
+
+  if (have_agent_info) {
+    // TODO:  Call remove_remote_agent when liveliness is lost.
+    for (std::vector<ICE::GuidPair>::const_iterator pos = guids.begin(), limit = guids.end(); pos != limit; ++pos) {
+      ice_agent->update_remote_agent_info(*pos, agent_info);
+    }
+  }
 }
 
 void
@@ -1529,6 +1662,19 @@ Spdp::SpdpTransport::write_i()
     return;
   }
 
+  ICE::AbstractAgent* ice_agent = outer_->sedp_.get_ice_agent();
+
+  if (ice_agent) {
+    const ICE::AgentInfo& agent_info = ice_agent->get_local_agent_info();
+    if (ParameterListConverter::to_param_list(agent_info, plist) < 0) {
+      ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) ERROR: ")
+                 ACE_TEXT("Spdp::SpdpTransport::write() - ")
+                 ACE_TEXT("failed to convert from ICE::AgentInfo ")
+                 ACE_TEXT("to ParameterList\n")));
+      return;
+    }
+  }
+
   wbuff_.reset();
   CORBA::UShort options = 0;
   DCPS::Serializer ser(&wbuff_, false, DCPS::Serializer::ALIGN_CDR);
@@ -1704,6 +1850,18 @@ Spdp::SpdpTransport::acknowledge()
 {
   ACE_Reactor* reactor = outer_->reactor();
   reactor->notify(this);
+}
+
+void
+Spdp::SpdpTransport::remove_send_addr(const ACE_INET_Addr& addr)
+{
+  send_addrs_.erase(addr);
+}
+
+void
+Spdp::SpdpTransport::insert_send_addr(const ACE_INET_Addr& addr)
+{
+  send_addrs_.insert(addr);
 }
 
 void
@@ -1884,6 +2042,63 @@ Spdp::lookup_participant_auth_state(const DCPS::RepoId& id) const
   return result;
 }
 #endif
+
+void
+Spdp::remove_send_addr(const ACE_INET_Addr& addr)
+{
+  tport_->remove_send_addr(addr);
+}
+
+void
+Spdp::add_send_addr(const ACE_INET_Addr& addr)
+{
+  tport_->insert_send_addr(addr);
+}
+
+bool
+operator==(const DCPS::Locator_t& x, const DCPS::Locator_t& y)
+{
+  return x.kind == y.kind && x.port == y.port && x.address == y.address;
+}
+
+bool
+operator!=(const DCPS::Locator_t& x, const DCPS::Locator_t& y)
+{
+  return x.kind != y.kind && x.port != y.port && x.address != y.address;
+}
+
+void
+Spdp::remove_sedp_unicast(const ACE_INET_Addr& addr)
+{
+  DCPS::Locator_t locator;
+  locator.kind = address_to_kind(addr);
+  locator.port = addr.get_port_number();
+  RTPS::address_to_bytes(locator.address, addr);
+
+  DCPS::LocatorSeq new_sedp_unicast;
+  for (size_t idx = 0; idx != sedp_unicast_.length(); ++idx) {
+    if (sedp_unicast_[idx] != locator) {
+      size_t out_idx = new_sedp_unicast.length();
+      new_sedp_unicast.length(out_idx + 1);
+      new_sedp_unicast[out_idx] = sedp_unicast_[idx];
+    }
+  }
+
+  sedp_unicast_ = new_sedp_unicast;
+}
+
+void
+Spdp::add_sedp_unicast(const ACE_INET_Addr& addr)
+{
+  DCPS::Locator_t locator;
+  locator.kind = address_to_kind(addr);
+  locator.port = addr.get_port_number();
+  RTPS::address_to_bytes(locator.address, addr);
+
+  size_t idx = sedp_unicast_.length();
+  sedp_unicast_.length(idx + 1);
+  sedp_unicast_[idx] = locator;
+}
 
 }
 }

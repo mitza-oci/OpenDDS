@@ -151,6 +151,16 @@ public:
     sedp_rtps_relay_address_ = address;
   }
 
+  const ACE_INET_Addr& sedp_stun_server_address() const { return sedp_stun_server_address_; }
+  void sedp_stun_server_address(const ACE_INET_Addr& address) {
+    sedp_stun_server_address_ = address;
+  }
+
+  bool use_ice() const { return use_ice_; }
+  void use_ice(bool ui) {
+    use_ice_ = ui;
+  }
+
 private:
   ACE_Time_Value resend_period_;
   u_short pb_, dg_, pg_, d0_, d1_, dx_;
@@ -162,6 +172,8 @@ private:
   AddrVec spdp_send_addrs_;
   ACE_INET_Addr spdp_rtps_relay_address_;
   ACE_INET_Addr sedp_rtps_relay_address_;
+  ACE_INET_Addr sedp_stun_server_address_;
+  bool use_ice_;
 
   /// Guids will be unique within this RTPS configuration
   GuidGenerator guid_gen_;

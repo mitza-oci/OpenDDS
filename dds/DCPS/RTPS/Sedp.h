@@ -16,6 +16,8 @@
 #include "dds/DCPS/RTPS/BaseMessageTypes.h"
 #include "dds/DCPS/RTPS/BaseMessageUtils.h"
 
+#include "dds/DCPS/STUN/Stun.h"
+
 #include "dds/DCPS/RcHandle_T.h"
 #include "dds/DCPS/GuidUtils.h"
 #include "dds/DCPS/DataReaderCallbacks.h"
@@ -147,6 +149,9 @@ public:
 #endif
 
   static const bool host_is_bigendian_;
+
+  ICE::AbstractAgent* get_ice_agent();
+
 private:
   Spdp& spdp_;
 
@@ -181,13 +186,13 @@ private:
     union {
       const ParticipantData_t* dpdata_;
 
-      const DCPS::DiscoveredWriterData* wdata_;
+      const DiscoveredPublication* wdata_;
 
 #ifdef OPENDDS_SECURITY
       const DiscoveredWriterData_SecurityWrapper* wdata_secure_;
 #endif
 
-      const DCPS::DiscoveredReaderData* rdata_;
+      const DiscoveredSubscription* rdata_;
 
 #ifdef OPENDDS_SECURITY
       const DiscoveredReaderData_SecurityWrapper* rdata_secure_;
@@ -204,7 +209,7 @@ private:
     Msg(MsgType mt, DCPS::MessageId id, const ParticipantData_t* dpdata)
       : type_(mt), id_(id), dpdata_(dpdata) {}
 
-    Msg(MsgType mt, DCPS::MessageId id, const DCPS::DiscoveredWriterData* wdata)
+    Msg(MsgType mt, DCPS::MessageId id, const DiscoveredPublication* wdata)
       : type_(mt), id_(id), wdata_(wdata) {}
 
 #ifdef OPENDDS_SECURITY
@@ -212,7 +217,7 @@ private:
       : type_(mt), id_(id), wdata_secure_(wdata) {}
 #endif
 
-    Msg(MsgType mt, DCPS::MessageId id, const DCPS::DiscoveredReaderData* rdata)
+    Msg(MsgType mt, DCPS::MessageId id, const DiscoveredSubscription* rdata)
       : type_(mt), id_(id), rdata_(rdata) {}
 
 #ifdef OPENDDS_SECURITY
@@ -442,8 +447,8 @@ private:
 
     void enqueue(DCPS::MessageId id, DCPS::unique_ptr<ParticipantData_t> pdata);
 
-    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DCPS::DiscoveredWriterData> wdata);
-    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DCPS::DiscoveredReaderData> rdata);
+    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredPublication> wdata);
+    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredSubscription> rdata);
 
 #ifdef OPENDDS_SECURITY
     void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredWriterData_SecurityWrapper> wrapper);
@@ -471,8 +476,8 @@ private:
     void svc_secure_i(DCPS::MessageId id, const Security::SPDPdiscoveredParticipantData* pdata);
 #endif
 
-    void svc_i(DCPS::MessageId id, const DCPS::DiscoveredWriterData* wdata);
-    void svc_i(DCPS::MessageId id, const DCPS::DiscoveredReaderData* rdata);
+    void svc_i(DCPS::MessageId id, const DiscoveredPublication* wdata);
+    void svc_i(DCPS::MessageId id, const DiscoveredSubscription* rdata);
 
 #ifdef OPENDDS_SECURITY
     void svc_i(DCPS::MessageId id, const DiscoveredWriterData_SecurityWrapper* wrapper);
@@ -529,7 +534,7 @@ private:
                                       );
 
   void data_received(DCPS::MessageId message_id,
-                     const DCPS::DiscoveredWriterData& wdata);
+                     const DiscoveredPublication& wdata);
 
 #ifdef OPENDDS_SECURITY
   void data_received(DCPS::MessageId message_id,
@@ -545,7 +550,7 @@ private:
                                       );
 
   void data_received(DCPS::MessageId message_id,
-                     const DCPS::DiscoveredReaderData& rdata);
+                     const DiscoveredSubscription& rdata);
 
 #ifdef OPENDDS_SECURITY
   void data_received(DCPS::MessageId message_id,
@@ -570,12 +575,12 @@ private:
                                         const DDS::Security::ParticipantVolatileMessageSecure& data);
 #endif
 
-  typedef std::pair<DCPS::MessageId, DCPS::DiscoveredWriterData> MsgIdWtrDataPair;
+  typedef std::pair<DCPS::MessageId, DiscoveredPublication> MsgIdWtrDataPair;
   typedef OPENDDS_MAP_CMP(DCPS::RepoId, MsgIdWtrDataPair,
                    DCPS::GUID_tKeyLessThan) DeferredPublicationMap;
   DeferredPublicationMap deferred_publications_;  // Publications that Spdp has not discovered.
 
-  typedef std::pair<DCPS::MessageId, DCPS::DiscoveredReaderData> MsgIdRdrDataPair;
+  typedef std::pair<DCPS::MessageId, DiscoveredSubscription> MsgIdRdrDataPair;
   typedef OPENDDS_MAP_CMP(DCPS::RepoId, MsgIdRdrDataPair,
                    DCPS::GUID_tKeyLessThan) DeferredSubscriptionMap;
   DeferredSubscriptionMap deferred_subscriptions_; // Subscriptions that Sedp has not discovered.
@@ -690,6 +695,15 @@ protected:
   DDS::DomainId_t get_domain_id() const;
 #endif
 
+  virtual void setup_remote_reader(DCPS::DataWriterCallbacks* dwr, const DCPS::RepoId& writer, const DCPS::RepoId& reader);
+  virtual void setup_remote_writer(DCPS::DataReaderCallbacks* drr, const DCPS::RepoId& reader, const DCPS::RepoId& writer);
+
+  struct IceSignalingChannel : public ICE::SignalingChannel {
+    Sedp& sedp;
+
+    IceSignalingChannel(Sedp& a_sedp) : sedp(a_sedp) {}
+    virtual void update_agent_info(const ICE::GuidPair& guidp, const ICE::AgentInfo& agent_info);
+  } ice_signaling_channel_;
 };
 
 /// A class to wait on acknowledgments from other threads

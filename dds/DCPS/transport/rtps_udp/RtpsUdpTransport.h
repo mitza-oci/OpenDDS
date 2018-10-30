@@ -20,6 +20,8 @@
 
 #include "dds/DCPS/RTPS/RtpsCoreC.h"
 
+#include "dds/DCPS/STUN/Stun.h"
+
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
 
 namespace OpenDDS {
@@ -31,6 +33,8 @@ class OpenDDS_Rtps_Udp_Export RtpsUdpTransport : public TransportImpl {
 public:
   RtpsUdpTransport(RtpsUdpInst& inst);
   RtpsUdpInst& config() const;
+  virtual ICE::Agent* get_ice_agent() const { return ice_agent_; }
+
 private:
   virtual AcceptConnectResult connect_datalink(const RemoteTransport& remote,
                                                const ConnectionAttribs& attribs,
@@ -120,6 +124,20 @@ private:
 #if defined(OPENDDS_SECURITY)
   DDS::Security::ParticipantCryptoHandle local_crypto_handle_;
 #endif
+
+  struct StunHandler : public ACE_Event_Handler, public ICE::StunSender {
+    RtpsUdpTransport& transport;
+
+    StunHandler(RtpsUdpTransport& a_transport)
+      : transport(a_transport) {}
+
+    virtual int handle_input(ACE_HANDLE fd);
+    virtual ICE::AddressListType host_addresses() const;
+    virtual void send(const ACE_INET_Addr& address, const STUN::Message& message);
+    virtual bool reactor_is_shut_down() const;
+  };
+  StunHandler stun_handler_;
+  ICE::Agent* ice_agent_;
 
 };
 

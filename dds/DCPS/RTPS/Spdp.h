@@ -1,3 +1,5 @@
+
+
 /*
  *
  *
@@ -118,6 +120,11 @@ public:
   DCPS::AuthState lookup_participant_auth_state(const DCPS::RepoId& id) const;
 #endif
 
+  void remove_send_addr(const ACE_INET_Addr& addr);
+  void add_send_addr(const ACE_INET_Addr& addr);
+  void remove_sedp_unicast(const ACE_INET_Addr& addr);
+  void add_sedp_unicast(const ACE_INET_Addr& addr);
+
 protected:
   Sedp& endpoint_manager() { return sedp_; }
 
@@ -173,6 +180,8 @@ private:
     void dispose_unregister();
     bool open_unicast_socket(u_short port_common, u_short participant_id);
     void acknowledge();
+    void remove_send_addr(const ACE_INET_Addr& addr);
+    void insert_send_addr(const ACE_INET_Addr& addr);
 
     Spdp* outer_;
     Header hdr_;
@@ -216,6 +225,7 @@ private:
 
   DDS::Security::ParticipantSecurityAttributes participant_sec_attr_;
 #endif
+
 };
 
 }

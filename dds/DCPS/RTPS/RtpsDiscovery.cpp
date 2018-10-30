@@ -51,6 +51,7 @@ RtpsDiscovery::RtpsDiscovery(const RepoKey& key)
   , ttl_(1)
   , sedp_multicast_(true)
   , default_multicast_group_("239.255.0.1")
+  , use_ice_(true)
 {
 }
 
@@ -102,9 +103,12 @@ RtpsDiscovery::Config::discovery_config(ACE_Configuration_Heap& cf)
       OPENDDS_STRING spdpaddr;
       ACE_INET_Addr spdp_rtps_relay_address;
       ACE_INET_Addr sedp_rtps_relay_address;
+      ACE_INET_Addr sedp_stun_server_address;
       bool has_resend = false, has_pb = false, has_dg = false, has_pg = false,
         has_d0 = false, has_d1 = false, has_dx = false, has_sm = false,
         has_ttl = false, sm = false;
+      bool has_use_ice = false;
+      bool use_ice = true;
 
       // spdpaddr defaults to DCPSDefaultAddress if set
       if (!TheServiceParticipant->default_address().empty()) {
@@ -234,6 +238,20 @@ RtpsDiscovery::Config::discovery_config(ACE_Configuration_Heap& cf)
           spdp_rtps_relay_address = ACE_INET_Addr(it->second.c_str());
         } else if (name == "SedpRtpsRelayAddress") {
           sedp_rtps_relay_address = ACE_INET_Addr(it->second.c_str());
+        } else if (name == "SedpStunServerAddress") {
+          sedp_stun_server_address = ACE_INET_Addr(it->second.c_str());
+        } else if (name == "UseIce") {
+          const OPENDDS_STRING& value = it->second;
+          int smInt;
+          has_use_ice = DCPS::convertToInteger(value, smInt);
+          if (!has_sm) {
+            ACE_ERROR_RETURN((LM_ERROR,
+                              ACE_TEXT("(%P|%t) RtpsDiscovery::Config::discovery_config ")
+                              ACE_TEXT("Invalid entry (%C) for UseIce in ")
+                              ACE_TEXT("[rtps_discovery/%C] section.\n"),
+                              value.c_str(), rtps_name.c_str()), -1);
+          }
+          use_ice = bool(smInt);
         } else {
           ACE_ERROR_RETURN((LM_ERROR,
                             ACE_TEXT("(%P|%t) RtpsDiscovery::Config::discovery_config(): ")
@@ -258,9 +276,11 @@ RtpsDiscovery::Config::discovery_config(ACE_Configuration_Heap& cf)
       discovery->spdp_send_addrs().swap(spdp_send_addrs);
       discovery->spdp_rtps_relay_address(spdp_rtps_relay_address);
       discovery->sedp_rtps_relay_address(sedp_rtps_relay_address);
+      discovery->sedp_stun_server_address(sedp_stun_server_address);
       discovery->sedp_local_address(sla);
       discovery->guid_interface(gi);
       discovery->spdp_local_address(spdpaddr);
+      if (has_use_ice) discovery->use_ice(use_ice);
       TheServiceParticipant->add_discovery(discovery);
     }
   }
