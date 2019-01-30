@@ -18,21 +18,6 @@ jobs:
         BuildPlatform: Win32
         BuildConfiguration: Release
   steps:
-  - powershell: |
-      $client = new-object System.Net.WebClient
-      $client.DownloadFile("http://strawberryperl.com/download/5.28.0.1/strawberry-perl-5.28.0.1-64bit-portable.zip", "strawberry-perl.zip");
-    displayName: Download perl
-  - task: ExtractFiles@1
-    displayName: Extract perl
-    inputs:
-      archiveFilePatterns: strawberry-perl.zip
-      destinationFolder: ext\strawberry
-  - task: BatchScript@1
-    displayName: Put perl on PATH
-    inputs:
-      filename: tools\scripts\prepend_path
-      arguments: '%CD%\ext\strawberry\perl\bin'
-      modifyEnvironment: true
   - script: |
       git clone --depth 1 git://github.com/Microsoft/vcpkg
       call vcpkg\bootstrap-vcpkg
@@ -42,11 +27,9 @@ jobs:
       vcpkg\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
       rmdir /s/q vcpkg\packages vcpkg\buildtrees
       echo ##vso[task.setvariable variable=VcPkgInst]%CD%\vcpkg\installed\%VCPKG_ARCH%
-      dir /s/b cmake.exe
       where cmake
       "C:\Program Files\CMake\bin\cmake" --version
-      dir C:\Strawberry\c\bin
-    displayName: Vcpkg
+     displayName: Vcpkg
   - task: BatchScript@1
     displayName: VcVars
     inputs:
