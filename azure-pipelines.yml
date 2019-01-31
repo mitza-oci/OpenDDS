@@ -27,11 +27,6 @@ jobs:
       vcpkg\vcpkg install --triplet %VCPKG_ARCH% openssl xerces-c
       rmdir /s/q vcpkg\packages vcpkg\buildtrees
       echo ##vso[task.setvariable variable=VcPkgInst]%CD%\vcpkg\installed\%VCPKG_ARCH%
-      where cmake
-      "C:\Program Files\CMake\bin\cmake" --version
-      where perl
-      perl --version
-      perl -e "print $^O"
     displayName: Vcpkg
   - task: BatchScript@1
     displayName: VcVars
@@ -39,9 +34,16 @@ jobs:
       filename: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"'
       arguments: $(VcVarsArch)
       modifyEnvironment: true
+  - task: BatchScript@1
+    displayName: Put perl on PATH
+    inputs:
+      filename: tools\scripts\prepend_path
+      arguments: 'C:\Strawberry\perl\bin'
+      modifyEnvironment: true
   - script: |
+      perl -e"print join qq(\n), split /;/, $ENV{PATH}"
       if %BuildConfiguration%==Release set OPT=--no-tests --no-debug --optimize
-      call configure -v --host=win32 --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) %OPT%
+      call configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) %OPT%
       if %BuildConfiguration%==Release (set SLN=DDS_TAOv2.sln) else set SLN=DDS_TAOv2_all.sln
       echo ##vso[task.setvariable variable=BuildSolution]%SLN%
     displayName: Run configure script
