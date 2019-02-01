@@ -299,6 +299,7 @@ my %specific =
 sub which {
   my $file = shift;
   for my $p (File::Spec->path()) {
+    next if $p eq '.';
     if (-x "$p/$file") {
       return "$p/$file";
     }
