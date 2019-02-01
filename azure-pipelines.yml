@@ -41,6 +41,9 @@ jobs:
       arguments: 'C:\Strawberry\perl\bin'
       modifyEnvironment: true
   - script: |
+      where perl cmake
+      dir /b C:\Strawberry\perl\bin
+      dir /b "C:\Program Files\CMake\bin"
       perl -e"print join qq(\n), split /;/, $ENV{PATH}"
       if %BuildConfiguration%==Release set OPT=--no-tests --no-debug --optimize
       call configure -v --ace-github-latest --security --xerces3=$(VcPkgInst) --openssl=$(VcPkgInst) %OPT%
