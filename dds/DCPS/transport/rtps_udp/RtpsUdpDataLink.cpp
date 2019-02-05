@@ -2937,13 +2937,14 @@ ACE_INET_Addr
 OpenDDS::DCPS::RtpsUdpDataLink::get_address(const RepoId& guid) const {
   ACE_INET_Addr addr;
 
-  if (this->config().use_ice_) {
-    addr = this->impl().get_ice_agent()->get_address(guid);
-    if (addr != ACE_INET_Addr()) {
-      //    std::cout << "Using ICE " << addr.get_host_addr() << ':' << addr.get_port_number() << " for " << guid << std::endl;
-      return addr;
-    }
-  }
+  // TODO(jrw972)
+  // if (this->config().use_ice_) {
+  //   addr = ICE::Agent::instance()->get_address(get_ice_endpoint(), guid);
+  //   if (addr != ACE_INET_Addr()) {
+  //     //    std::cout << "Using ICE " << addr.get_host_addr() << ':' << addr.get_port_number() << " for " << guid << std::endl;
+  //     return addr;
+  //   }
+  // }
 
   typedef OPENDDS_MAP_CMP(RepoId, RemoteInfo, GUID_tKeyLessThan)::const_iterator iter_t;
   iter_t pos = locators_.find(guid);
@@ -2955,9 +2956,9 @@ OpenDDS::DCPS::RtpsUdpDataLink::get_address(const RepoId& guid) const {
   return ACE_INET_Addr();
 }
 
-ICE::AbstractAgent*
-OpenDDS::DCPS::RtpsUdpDataLink::get_ice_agent() {
-  return this->impl().get_ice_agent();
+ICE::Endpoint*
+OpenDDS::DCPS::RtpsUdpDataLink::get_ice_endpoint() const {
+  return this->impl().get_ice_endpoint();
 }
 
 } // namespace DCPS

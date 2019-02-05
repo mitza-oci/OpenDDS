@@ -150,7 +150,7 @@ public:
 
   static const bool host_is_bigendian_;
 
-  ICE::AbstractAgent* get_ice_agent();
+  ICE::Endpoint* get_ice_endpoint();
 
 private:
   Spdp& spdp_;
@@ -697,13 +697,6 @@ protected:
 
   virtual void setup_remote_reader(DCPS::DataWriterCallbacks* dwr, const DCPS::RepoId& writer, const DCPS::RepoId& reader);
   virtual void setup_remote_writer(DCPS::DataReaderCallbacks* drr, const DCPS::RepoId& reader, const DCPS::RepoId& writer);
-
-  struct IceSignalingChannel : public ICE::SignalingChannel {
-    Sedp& sedp;
-
-    IceSignalingChannel(Sedp& a_sedp) : sedp(a_sedp) {}
-    virtual void update_agent_info(const ICE::GuidPair& guidp, const ICE::AgentInfo& agent_info);
-  } ice_signaling_channel_;
 };
 
 /// A class to wait on acknowledgments from other threads

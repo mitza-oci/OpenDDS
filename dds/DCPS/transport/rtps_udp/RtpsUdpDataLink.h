@@ -134,7 +134,7 @@ public:
 
   virtual void send_final_acks(const RepoId& readerid);
 
-  virtual ICE::AbstractAgent* get_ice_agent();
+  virtual ICE::Endpoint* get_ice_endpoint() const;
 
 #ifdef OPENDDS_SECURITY
   Security::SecurityConfig_rch security_config() const

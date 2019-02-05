@@ -135,7 +135,7 @@ public:
                                      const RepoId& /*readerid*/,
                                      const RepoId& /*writerid*/);
 
-  virtual ICE::AbstractAgent* get_ice_agent() { return 0; }
+  virtual ICE::Endpoint* get_ice_endpoint() { return 0; }
 
 protected:
   virtual void remove_associations_i(const WriterIdSeq& writers, bool callback);

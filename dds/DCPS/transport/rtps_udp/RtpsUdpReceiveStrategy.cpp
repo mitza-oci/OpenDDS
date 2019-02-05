@@ -141,7 +141,7 @@ RtpsUdpReceiveStrategy::receive_bytes(iovec iov[],
     STUN::Message message;
     message.block = head;
     if (serializer >> message) {
-      link_->get_ice_agent()->receive(local_address, remote_address, message);
+      ICE::Agent::instance()->receive(link_->get_ice_endpoint(), local_address, remote_address, message);
     } else {
       // TODO:  Not RTPS and not STUN.
     }

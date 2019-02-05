@@ -101,7 +101,7 @@ public:
                              const RepoId& readerid,
                              const RepoId& writerid);
 
-  ICE::AbstractAgent* get_ice_agent();
+  ICE::Endpoint* get_ice_endpoint();
 
   // Data transfer:
 

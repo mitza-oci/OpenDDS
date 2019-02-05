@@ -50,12 +50,12 @@ RtpsUdpTransport::RtpsUdpTransport(RtpsUdpInst& inst)
 #if defined(OPENDDS_SECURITY)
   , local_crypto_handle_(DDS::HANDLE_NIL)
 #endif
-  , stun_handler_(*this)
-  , ice_agent_(0)
+  , ice_endpoint_(*this)
 {
   if (! (configure_i(inst) && open())) {
     throw Transport::UnableToCreate();
   }
+  ICE::Agent::instance()->add_endpoint(&ice_endpoint_);
 }
 
 RtpsUdpInst&
@@ -338,7 +338,7 @@ RtpsUdpTransport::configure_i(RtpsUdpInst& config)
 
   create_reactor_task();
 
-  if (reactor()->register_handler(unicast_socket_.get_handle(), &stun_handler_,
+  if (reactor()->register_handler(unicast_socket_.get_handle(), &ice_endpoint_,
                                   ACE_Event_Handler::READ_MASK) != 0) {
     ACE_ERROR_RETURN((LM_ERROR,
                       ACE_TEXT("(%P|%t) ERROR: ")
@@ -348,8 +348,6 @@ RtpsUdpTransport::configure_i(RtpsUdpInst& config)
                       unicast_socket_.get_handle()),
                      false);
   }
-
-  ice_agent_ = new ICE::Agent(config.use_ice_, &stun_handler_, config.stun_server_address(), reactor(), reactor_owner());
 
   if (config.opendds_discovery_default_listener_) {
     link_= make_datalink(config.opendds_discovery_guid_.guidPrefix);
@@ -389,7 +387,7 @@ RtpsUdpTransport::map_ipv4_to_ipv6() const
 }
 
 int
-RtpsUdpTransport::StunHandler::handle_input(ACE_HANDLE /*fd*/)
+RtpsUdpTransport::IceEndpoint::handle_input(ACE_HANDLE /*fd*/)
 {
   struct msghdr       msg;
   union control_data  cmsg;
@@ -440,7 +438,7 @@ RtpsUdpTransport::StunHandler::handle_input(ACE_HANDLE /*fd*/)
   STUN::Message message;
   message.block = &block;
   if (serializer >> message) {
-    transport.config().impl()->get_ice_agent()->receive(local_address, remote_address, message);
+    ICE::Agent::instance()->receive(transport.config().impl()->get_ice_endpoint(), local_address, remote_address, message);
   } else {
     // TODO:  Not RTPS and not STUN.
   }
@@ -486,12 +484,12 @@ namespace {
 }
 
 ICE::AddressListType
-RtpsUdpTransport::StunHandler::host_addresses() const {
+RtpsUdpTransport::IceEndpoint::host_addresses() const {
   return transport.config().host_addresses();
 }
 
 void
-RtpsUdpTransport::StunHandler::send(const ACE_INET_Addr& destination, const STUN::Message& message)
+RtpsUdpTransport::IceEndpoint::send(const ACE_INET_Addr& destination, const STUN::Message& message)
 {
   ACE_SOCK_Dgram& socket = (!transport.link_.is_nil()) ? transport.link_->unicast_socket() : transport.unicast_socket_;
 
@@ -510,9 +508,9 @@ RtpsUdpTransport::StunHandler::send(const ACE_INET_Addr& destination, const STUN
   }
 }
 
-bool
-RtpsUdpTransport::StunHandler::reactor_is_shut_down() const {
-  return transport.is_shut_down();
+ACE_INET_Addr
+RtpsUdpTransport::IceEndpoint::stun_server_address() const {
+  return transport.config().stun_server_address();
 }
 
 } // namespace DCPS

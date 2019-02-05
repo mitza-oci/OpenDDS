@@ -249,8 +249,7 @@ Sedp::Sedp(const RepoId& participant_id, Spdp& owner, ACE_Thread_Mutex& lock) :
 #endif
 
   automatic_liveliness_seq_ (DCPS::SequenceNumber::SEQUENCENUMBER_UNKNOWN()),
-  manual_liveliness_seq_ (DCPS::SequenceNumber::SEQUENCENUMBER_UNKNOWN()),
-  ice_signaling_channel_(*this)
+  manual_liveliness_seq_ (DCPS::SequenceNumber::SEQUENCENUMBER_UNKNOWN())
 {
   pub_bit_key_.value[0] = pub_bit_key_.value[1] = pub_bit_key_.value[2] = 0;
   sub_bit_key_.value[0] = sub_bit_key_.value[1] = sub_bit_key_.value[2] = 0;
@@ -1807,10 +1806,9 @@ Sedp::data_received(DCPS::MessageId message_id,
         LocalSubscriptionIter lsi = local_subscriptions_.find(*it);
         if (lsi != local_subscriptions_.end() &&
             lsi->second.matched_endpoints_.count(guid)) {
-          ICE::AbstractAgent* agent = lsi->second.subscription_->get_ice_agent();
-          if (agent) {
-            agent->update_remote_agent_info(ICE::GuidPair(*it, guid),
-                                            dpub.ice_agent_info_);
+          ICE::Endpoint* endpoint = lsi->second.subscription_->get_ice_endpoint();
+          if (endpoint) {
+            ICE::Agent::instance()->start_ice(endpoint, *it, guid, dpub.ice_agent_info_);
           }
         }
       }
@@ -2160,10 +2158,9 @@ Sedp::data_received(DCPS::MessageId message_id,
         LocalPublicationIter lpi = local_publications_.find(*it);
         if (lpi != local_publications_.end() &&
             lpi->second.matched_endpoints_.count(guid)) {
-          ICE::AbstractAgent* agent = lpi->second.publication_->get_ice_agent();
-          if (agent) {
-            agent->update_remote_agent_info(ICE::GuidPair(*it, guid),
-                                            dsub.ice_agent_info_);
+          ICE::Endpoint* endpoint = lpi->second.publication_->get_ice_endpoint();
+          if (endpoint) {
+            ICE::Agent::instance()->start_ice(endpoint, *it, guid, dsub.ice_agent_info_);
           }
         }
       }
@@ -2536,10 +2533,10 @@ Sedp::signal_liveliness_secure(DDS::LivelinessQosPolicyKind kind)
 }
 #endif
 
-ICE::AbstractAgent* Sedp::get_ice_agent() {
+ICE::Endpoint* Sedp::get_ice_endpoint() {
   DCPS::RtpsUdpInst_rch rtps_inst =
     DCPS::static_rchandle_cast<DCPS::RtpsUdpInst>(transport_inst_);
-  return rtps_inst->impl()->get_ice_agent();
+  return rtps_inst->impl()->get_ice_endpoint();
 }
 
 
@@ -4226,42 +4223,41 @@ DDS::DomainId_t Sedp::get_domain_id() const {
 
 void
 Sedp::setup_remote_reader(DCPS::DataWriterCallbacks* dwr, const DCPS::RepoId& writer, const DCPS::RepoId& reader) {
-  dwr->get_ice_agent()->start_ice(ICE::GuidPair(writer, reader), &ice_signaling_channel_);
   LocalPublicationIter pos = local_publications_.find(writer);
   pos->second.have_ice_agent_info = true;
-  pos->second.ice_agent_info = dwr->get_ice_agent()->get_local_agent_info();
+  pos->second.ice_agent_info = ICE::Agent::instance()->get_local_agent_info(dwr->get_ice_endpoint());
   write_publication_data(writer, pos->second);
 }
 
 void
 Sedp::setup_remote_writer(DCPS::DataReaderCallbacks* drr, const DCPS::RepoId& reader, const DCPS::RepoId& writer) {
-  drr->get_ice_agent()->start_ice(ICE::GuidPair(reader, writer), &ice_signaling_channel_);
   LocalSubscriptionIter pos = local_subscriptions_.find(reader);
   pos->second.have_ice_agent_info = true;
-  pos->second.ice_agent_info = drr->get_ice_agent()->get_local_agent_info();
+  pos->second.ice_agent_info = ICE::Agent::instance()->get_local_agent_info(drr->get_ice_endpoint());
   write_subscription_data(reader, pos->second);
 }
 
-void
-Sedp::IceSignalingChannel::update_agent_info(const ICE::GuidPair& guidp, const ICE::AgentInfo& agent_info) {
-  {
-    LocalPublicationIter pos = sedp.local_publications_.find(guidp.local);
-    if (pos != sedp.local_publications_.end()) {
-      pos->second.have_ice_agent_info = true;
-      pos->second.ice_agent_info = agent_info;
-      sedp.write_publication_data(guidp.local, pos->second);
-    }
-  }
+// TODO(jrw972)
+// void
+// Sedp::IceSignalingChannel::update_agent_info(const ICE::GuidPair& guidp, const ICE::AgentInfo& agent_info) {
+//   {
+//     LocalPublicationIter pos = sedp.local_publications_.find(guidp.local);
+//     if (pos != sedp.local_publications_.end()) {
+//       pos->second.have_ice_agent_info = true;
+//       pos->second.ice_agent_info = agent_info;
+//       sedp.write_publication_data(guidp.local, pos->second);
+//     }
+//   }
 
-  {
-    LocalSubscriptionIter pos = sedp.local_subscriptions_.find(guidp.local);
-    if (pos != sedp.local_subscriptions_.end()) {
-      pos->second.have_ice_agent_info = true;
-      pos->second.ice_agent_info = agent_info;
-      sedp.write_subscription_data(guidp.local, pos->second);
-    }
-  }
-}
+//   {
+//     LocalSubscriptionIter pos = sedp.local_subscriptions_.find(guidp.local);
+//     if (pos != sedp.local_subscriptions_.end()) {
+//       pos->second.have_ice_agent_info = true;
+//       pos->second.ice_agent_info = agent_info;
+//       sedp.write_subscription_data(guidp.local, pos->second);
+//     }
+//   }
+// }
 
 WaitForAcks::WaitForAcks()
 : cond_(lock_)

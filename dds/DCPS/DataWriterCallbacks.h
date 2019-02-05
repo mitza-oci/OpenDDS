@@ -62,7 +62,7 @@ public:
                                      const RepoId& /*writerid*/,
                                      const RepoId& /*readerid*/) { }
 
-  virtual ICE::AbstractAgent* get_ice_agent() = 0;
+  virtual ICE::Endpoint* get_ice_endpoint() = 0;
 };
 
 } // namespace DCPS

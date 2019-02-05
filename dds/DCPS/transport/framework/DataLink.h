@@ -256,7 +256,7 @@ public:
 
   virtual void send_final_acks (const RepoId& readerid);
 
-  virtual ICE::AbstractAgent* get_ice_agent() { return 0; }
+  virtual ICE::Endpoint* get_ice_endpoint() const { return 0; }
 
 protected:
 

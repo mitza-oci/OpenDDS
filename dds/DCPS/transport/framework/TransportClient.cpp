@@ -687,15 +687,15 @@ TransportClient::unregister_for_writer(const RepoId& participant,
   }
 }
 
-ICE::AbstractAgent*
-TransportClient::get_ice_agent()
+ICE::Endpoint*
+TransportClient::get_ice_endpoint()
 {
   ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, lock_, 0);
   for (ImplsType::iterator pos = impls_.begin(), limit = impls_.end();
        pos != limit;
        ++pos) {
-    ICE::AbstractAgent* agent = (*pos)->get_ice_agent();
-    if (agent) { return agent; }
+    ICE::Endpoint* endpoint = (*pos)->get_ice_endpoint();
+    if (endpoint) { return endpoint; }
   }
 
   // DataLinkSet::GuardType guard(links_.lock());
@@ -705,7 +705,7 @@ TransportClient::get_ice_agent()
   //   if (agent) { return agent; }
   // }
 
-  std::cerr << "NO AGENTS" << std::endl;
+  std::cerr << "NO ENDPOINTS" << std::endl;
   return 0;
 }
 
