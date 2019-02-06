@@ -82,7 +82,11 @@ namespace ICE {
     const_iterator begin() const { return candidates.begin(); }
     const_iterator end() const { return candidates.end(); }
     bool operator==(const AgentInfo& other) const {
-      return this->candidates == other.candidates && this->type == other.type && this->username == other.username && this->password == other.password;
+      return
+        this->username == other.username &&
+        this->password == other.password &&
+        this->type == other.type &&
+        this->candidates == other.candidates;
     }
     bool operator!=(const AgentInfo& other) const { return !(*this == other); }
   };
@@ -97,15 +101,28 @@ namespace ICE {
     virtual ACE_INET_Addr stun_server_address() const = 0;
   };
 
+  class AgentInfoListener {
+  public:
+    virtual ~AgentInfoListener() {}
+    virtual void update_agent_info(DCPS::RepoId const & a_local_guid,
+                                   AgentInfo const & a_agent_info) = 0;
+  };
+
   class OpenDDS_Stun_Export Agent {
   public:
     virtual void add_endpoint(Endpoint * a_endpoint) = 0;
     virtual AgentInfo get_local_agent_info(Endpoint * a_endpoint) const = 0;
+    virtual void add_local_agent_info_listener(Endpoint * a_endpoint,
+                                               DCPS::RepoId const & a_local_guid,
+                                               AgentInfoListener * a_agent_info_listener) = 0;
+    virtual void remove_local_agent_info_listener(Endpoint * a_endpoint,
+                                                  DCPS::RepoId const & a_local_guid) = 0;
     virtual void start_ice(Endpoint * a_endpoint,
                            DCPS::RepoId const & a_local_guid,
                            DCPS::RepoId const & a_remote_guid,
                            AgentInfo const & a_remote_agent_info) = 0;
-    virtual void stop_ice(DCPS::RepoId const & a_local_guid,
+    virtual void stop_ice(Endpoint * a_endpoint,
+                          DCPS::RepoId const & a_local_guid,
                           DCPS::RepoId const & a_remote_guid) = 0;
     virtual ACE_INET_Addr get_address(Endpoint * a_endpoint,
                                       DCPS::RepoId const & a_local_guid,

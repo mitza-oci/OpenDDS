@@ -698,14 +698,6 @@ TransportClient::get_ice_endpoint()
     if (endpoint) { return endpoint; }
   }
 
-  // DataLinkSet::GuardType guard(links_.lock());
-  // // TODO:  Return a set of agents or separate ice agents from transport and allow one ice agent to service multiple transports.
-  // for (DataLinkSet::MapType::const_iterator itr = links_.map().begin(); itr != links_.map().end(); ++itr) {
-  //   ICE::AbstractAgent* agent = itr->second->get_ice_agent();
-  //   if (agent) { return agent; }
-  // }
-
-  std::cerr << "NO ENDPOINTS" << std::endl;
   return 0;
 }
 

@@ -51,7 +51,7 @@ RtpsDiscovery::RtpsDiscovery(const RepoKey& key)
   , ttl_(1)
   , sedp_multicast_(true)
   , default_multicast_group_("239.255.0.1")
-  , use_ice_(true)
+  , use_ice_(false)
 {
 }
 
@@ -244,7 +244,7 @@ RtpsDiscovery::Config::discovery_config(ACE_Configuration_Heap& cf)
           const OPENDDS_STRING& value = it->second;
           int smInt;
           has_use_ice = DCPS::convertToInteger(value, smInt);
-          if (!has_sm) {
+          if (!has_use_ice) {
             ACE_ERROR_RETURN((LM_ERROR,
                               ACE_TEXT("(%P|%t) RtpsDiscovery::Config::discovery_config ")
                               ACE_TEXT("Invalid entry (%C) for UseIce in ")

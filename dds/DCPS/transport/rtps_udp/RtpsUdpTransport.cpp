@@ -55,13 +55,21 @@ RtpsUdpTransport::RtpsUdpTransport(RtpsUdpInst& inst)
   if (! (configure_i(inst) && open())) {
     throw Transport::UnableToCreate();
   }
-  ICE::Agent::instance()->add_endpoint(&ice_endpoint_);
+  if(config().use_ice_) {
+    ICE::Agent::instance()->add_endpoint(&ice_endpoint_);
+  }
 }
 
 RtpsUdpInst&
 RtpsUdpTransport::config() const
 {
   return static_cast<RtpsUdpInst&>(TransportImpl::config());
+}
+
+ICE::Endpoint*
+RtpsUdpTransport::get_ice_endpoint()
+{
+  return (config().use_ice_) ? &ice_endpoint_ : 0;
 }
 
 RtpsUdpDataLink_rch
@@ -74,16 +82,17 @@ RtpsUdpTransport::make_datalink(const GuidPrefix_t& local_prefix)
   link->local_crypto_handle(local_crypto_handle_);
 #endif
 
-  if (reactor()->remove_handler(unicast_socket_.get_handle(), ACE_Event_Handler::READ_MASK) != 0) {
-    ACE_ERROR_RETURN((LM_ERROR,
-                      ACE_TEXT("(%P|%t) ERROR: ")
-                      ACE_TEXT("RtpsUdpReceiveStrategy::start_i: ")
-                      ACE_TEXT("failed to unregister handler for unicast ")
-                      ACE_TEXT("socket %d\n"),
-                      unicast_socket_.get_handle()),
-                     RtpsUdpDataLink_rch());
+  if (config().use_ice_) {
+    if (reactor()->remove_handler(unicast_socket_.get_handle(), ACE_Event_Handler::READ_MASK) != 0) {
+      ACE_ERROR_RETURN((LM_ERROR,
+                        ACE_TEXT("(%P|%t) ERROR: ")
+                        ACE_TEXT("RtpsUdpReceiveStrategy::start_i: ")
+                        ACE_TEXT("failed to unregister handler for unicast ")
+                        ACE_TEXT("socket %d\n"),
+                        unicast_socket_.get_handle()),
+                       RtpsUdpDataLink_rch());
+    }
   }
-
   if (!link->open(unicast_socket_)) {
     ACE_ERROR((LM_ERROR,
                       ACE_TEXT("(%P|%t) ERROR: ")
@@ -338,15 +347,17 @@ RtpsUdpTransport::configure_i(RtpsUdpInst& config)
 
   create_reactor_task();
 
-  if (reactor()->register_handler(unicast_socket_.get_handle(), &ice_endpoint_,
-                                  ACE_Event_Handler::READ_MASK) != 0) {
-    ACE_ERROR_RETURN((LM_ERROR,
-                      ACE_TEXT("(%P|%t) ERROR: ")
-                      ACE_TEXT("RtpsUdpReceiveStrategy::start_i: ")
-                      ACE_TEXT("failed to register handler for unicast ")
-                      ACE_TEXT("socket %d\n"),
-                      unicast_socket_.get_handle()),
-                     false);
+  if (config.use_ice_) {
+    if (reactor()->register_handler(unicast_socket_.get_handle(), &ice_endpoint_,
+                                    ACE_Event_Handler::READ_MASK) != 0) {
+      ACE_ERROR_RETURN((LM_ERROR,
+                        ACE_TEXT("(%P|%t) ERROR: ")
+                        ACE_TEXT("RtpsUdpReceiveStrategy::start_i: ")
+                        ACE_TEXT("failed to register handler for unicast ")
+                        ACE_TEXT("socket %d\n"),
+                        unicast_socket_.get_handle()),
+                       false);
+    }
   }
 
   if (config.opendds_discovery_default_listener_) {
@@ -438,7 +449,7 @@ RtpsUdpTransport::IceEndpoint::handle_input(ACE_HANDLE /*fd*/)
   STUN::Message message;
   message.block = &block;
   if (serializer >> message) {
-    ICE::Agent::instance()->receive(transport.config().impl()->get_ice_endpoint(), local_address, remote_address, message);
+    ICE::Agent::instance()->receive(this, local_address, remote_address, message);
   } else {
     // TODO:  Not RTPS and not STUN.
   }

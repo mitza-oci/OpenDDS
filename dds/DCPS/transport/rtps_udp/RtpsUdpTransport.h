@@ -33,7 +33,7 @@ class OpenDDS_Rtps_Udp_Export RtpsUdpTransport : public TransportImpl {
 public:
   RtpsUdpTransport(RtpsUdpInst& inst);
   RtpsUdpInst& config() const;
-  virtual ICE::Endpoint* get_ice_endpoint() { return &ice_endpoint_; }
+  virtual ICE::Endpoint* get_ice_endpoint();
 
 private:
   virtual AcceptConnectResult connect_datalink(const RemoteTransport& remote,

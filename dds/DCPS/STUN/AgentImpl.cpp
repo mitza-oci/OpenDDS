@@ -89,12 +89,25 @@ namespace ICE {
   AgentInfo  AgentImpl::get_local_agent_info(Endpoint * a_endpoint) const {
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(const_cast<ACE_Recursive_Thread_Mutex&>(m_mutex));
     EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
-    if (pos != m_endpoint_managers.end()) {
-      return pos->second->agent_info();
-    }
+    assert(pos != m_endpoint_managers.end());
+    return pos->second->agent_info();
+  }
 
-    // TODO(jrw972):  Error.
-    return AgentInfo();
+  void AgentImpl::add_local_agent_info_listener(Endpoint * a_endpoint,
+                                                DCPS::RepoId const & a_local_guid,
+                                                AgentInfoListener * a_agent_info_listener) {
+    ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
+    EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
+    assert(pos != m_endpoint_managers.end());
+    pos->second->add_agent_info_listener(a_local_guid, a_agent_info_listener);
+  }
+
+  void AgentImpl::remove_local_agent_info_listener(Endpoint * a_endpoint,
+                                                   DCPS::RepoId const & a_local_guid) {
+    ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
+    EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
+    assert(pos != m_endpoint_managers.end());
+    pos->second->remove_agent_info_listener(a_local_guid);
   }
 
   void  AgentImpl::start_ice(Endpoint * a_endpoint,
@@ -104,20 +117,20 @@ namespace ICE {
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
     check_invariants();
     EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
-    if (pos != m_endpoint_managers.end()) {
-      pos->second->start_ice(a_local_guid, a_remote_guid, a_remote_agent_info);
-      check_invariants();
-      return;
-    }
-
-    // TODO(jrw972):  Error.
+    assert(pos != m_endpoint_managers.end());
+    pos->second->start_ice(a_local_guid, a_remote_guid, a_remote_agent_info);
+    check_invariants();
   }
 
-  void AgentImpl::stop_ice(DCPS::RepoId const & /*local_guid*/,
-                           DCPS::RepoId const & /*remote_guid*/) {
+  void AgentImpl::stop_ice(Endpoint * a_endpoint,
+                           DCPS::RepoId const & a_local_guid,
+                           DCPS::RepoId const & a_remote_guid) {
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
     check_invariants();
-    // TODO
+    EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
+    assert(pos != m_endpoint_managers.end());
+    pos->second->stop_ice(a_local_guid, a_remote_guid);
+    check_invariants();
   }
 
   ACE_INET_Addr  AgentImpl::get_address(Endpoint * a_endpoint,
@@ -125,12 +138,8 @@ namespace ICE {
                                         DCPS::RepoId const & a_remote_guid) const {
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(const_cast<ACE_Recursive_Thread_Mutex&>(m_mutex));
     EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
-    if (pos != m_endpoint_managers.end()) {
-      return pos->second->get_address(a_local_guid, a_remote_guid);
-    }
-
-    // TODO(jrw972):  Error.
-    return ACE_INET_Addr();
+    assert(pos != m_endpoint_managers.end());
+    return pos->second->get_address(a_local_guid, a_remote_guid);
   }
 
   // Receive a STUN message.
@@ -141,13 +150,9 @@ namespace ICE {
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
     check_invariants();
     EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
-    if (pos != m_endpoint_managers.end()) {
-      pos->second->receive(a_local_address, a_remote_address, a_message);
-      check_invariants();
-      return;
-    }
-
-    // TODO(jrw972):  Error.
+    assert(pos != m_endpoint_managers.end());
+    pos->second->receive(a_local_address, a_remote_address, a_message);
+    check_invariants();
   }
 
   void AgentImpl::unfreeze(FoundationType const & a_foundation) {

@@ -594,8 +594,8 @@ private:
   void remove_from_bit_i(const DiscoveredPublication& pub);
   void remove_from_bit_i(const DiscoveredSubscription& sub);
 
-  virtual DDS::ReturnCode_t remove_publication_i(const DCPS::RepoId& publicationId);
-  virtual DDS::ReturnCode_t remove_subscription_i(const DCPS::RepoId& subscriptionId);
+  virtual DDS::ReturnCode_t remove_publication_i(const DCPS::RepoId& publicationId, LocalPublication& pub);
+  virtual DDS::ReturnCode_t remove_subscription_i(const DCPS::RepoId& subscriptionId, LocalSubscription& sub);
 
   // Topic:
 
@@ -640,6 +640,9 @@ private:
 
   void write_durable_participant_message_data(const DCPS::RepoId& reader);
 
+  DDS::ReturnCode_t add_publication_i(const DCPS::RepoId& rid,
+                                      LocalPublication& pub);
+
   DDS::ReturnCode_t write_publication_data(const DCPS::RepoId& rid,
                                            LocalPublication& pub,
                                            const DCPS::RepoId& reader = DCPS::GUID_UNKNOWN);
@@ -653,6 +656,10 @@ private:
   DDS::ReturnCode_t write_publication_data_unsecure(const DCPS::RepoId& rid,
                                                     LocalPublication& pub,
                                                     const DCPS::RepoId& reader = DCPS::GUID_UNKNOWN);
+
+  DDS::ReturnCode_t add_subscription_i(const DCPS::RepoId& rid,
+                                       LocalSubscription& sub);
+
 
   DDS::ReturnCode_t write_subscription_data(const DCPS::RepoId& rid,
                                             LocalSubscription& pub,
@@ -695,8 +702,20 @@ protected:
   DDS::DomainId_t get_domain_id() const;
 #endif
 
-  virtual void setup_remote_reader(DCPS::DataWriterCallbacks* dwr, const DCPS::RepoId& writer, const DCPS::RepoId& reader);
-  virtual void setup_remote_writer(DCPS::DataReaderCallbacks* drr, const DCPS::RepoId& reader, const DCPS::RepoId& writer);
+  struct PublicationAgentInfoListener : public ICE::AgentInfoListener {
+    Sedp & sedp;
+    PublicationAgentInfoListener(Sedp& a_sedp) : sedp(a_sedp) {}
+    void update_agent_info(DCPS::RepoId const & a_local_guid,
+                           ICE::AgentInfo const & a_agent_info);
+  } publication_agent_info_listener_;
+
+  struct SubscriptionAgentInfoListener : public ICE::AgentInfoListener {
+    Sedp & sedp;
+    SubscriptionAgentInfoListener(Sedp& a_sedp) : sedp(a_sedp) {}
+    void update_agent_info(DCPS::RepoId const & a_local_guid,
+                           ICE::AgentInfo const & a_agent_info);
+  } subscription_agent_info_listener_;
+
 };
 
 /// A class to wait on acknowledgments from other threads

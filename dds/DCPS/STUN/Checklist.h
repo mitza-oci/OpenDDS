@@ -122,7 +122,7 @@ namespace ICE {
 
     GuidSetType guids() const { return m_guids; }
 
-    ACE_INET_Addr selected_address() const { return m_selected_address; }
+    ACE_INET_Addr selected_address() const;
 
     AgentInfo const & original_remote_agent_info() const { return m_original_remote_agent_info; }
 
@@ -130,6 +130,8 @@ namespace ICE {
       m_remote_agent_info.password = a_password;
       m_original_remote_agent_info.password = a_password;
     }
+
+    void indication();
 
   private:
     bool m_scheduled_for_destruction;
@@ -154,7 +156,8 @@ namespace ICE {
     // These are iterators into m_valid_list.
     CandidatePairsType::const_iterator m_nominating;
     CandidatePairsType::const_iterator m_nominated;
-    ACE_INET_Addr m_selected_address;
+    ACE_Time_Value m_nominated_is_live;
+    ACE_Time_Value m_last_indication;
     ACE_Time_Value m_check_interval;
     ACE_Time_Value m_max_check_interval;
     typedef std::list<ConnectivityCheck> ConnectivityChecksType;

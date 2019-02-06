@@ -40,7 +40,7 @@ RtpsUdpInst::RtpsUdpInst(const OPENDDS_STRING& name)
   , heartbeat_response_delay_(0, 500*1000 /*microseconds*/) // default from RTPS
   , handshake_timeout_(30) // default syn_timeout in OpenDDS_Multicast
   , durable_data_timeout_(60)
-  , use_ice_(true)
+  , use_ice_(false)
   , opendds_discovery_guid_(GUID_UNKNOWN)
 {
 }
@@ -115,6 +115,7 @@ RtpsUdpInst::load(ACE_Configuration_Heap& cf,
   }
 
   GET_CONFIG_VALUE(cf, sect, ACE_TEXT("UseIce"), use_ice_, bool);
+  std::cout << "use_ice_ = " << use_ice_ << std::endl;
 
   return 0;
 }

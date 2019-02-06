@@ -21,14 +21,14 @@ namespace STUN {
   uint16_t Attribute::length() const {
     switch (type) {
     case MAPPED_ADDRESS:
-      // TODO:  Handle IPv6.
+      // TODO(jrw972):  Handle IPv6.
       return 8;
     case USERNAME:
       return username.size();
     case MESSAGE_INTEGRITY:
       return 20;
     case XOR_MAPPED_ADDRESS:
-      // TODO:  Handle IPv6.
+      // TODO(jrw972):  Handle IPv6.
       return 8;
     case PRIORITY:
       return 4;
@@ -47,7 +47,7 @@ namespace STUN {
   Attribute make_mapped_address(const ACE_INET_Addr& addr) {
     Attribute attribute;
     attribute.type = MAPPED_ADDRESS;
-    // TODO:  Handle IPv6
+    // TODO(jrw972):  Handle IPv6.
     attribute.mapped_address = addr;
     return attribute;
   }
@@ -68,7 +68,7 @@ namespace STUN {
   Attribute make_xor_mapped_address(const ACE_INET_Addr& addr) {
     Attribute attribute;
     attribute.type = XOR_MAPPED_ADDRESS;
-    // TODO:  Handle IPv6
+    // TODO(jrw972):  Handle IPv6.
     attribute.mapped_address = addr;
     return attribute;
   }
@@ -149,8 +149,7 @@ namespace STUN {
           }
           attribute = make_mapped_address(ACE_INET_Addr(port, address));
         } else if (family == IPv6) {
-          // TODO:  Implement.
-          std::cerr << "TODO: Implement MAPPED_ADDRESS IPv6" << std::endl;
+          // TODO(jrw972):  Handle IPv6.
         }
       }
       break;
@@ -196,8 +195,7 @@ namespace STUN {
           address ^= MAGIC_COOKIE;
           attribute = make_xor_mapped_address(ACE_INET_Addr(port, address));
         } else if (family == IPv6) {
-          // TODO:  Implement.
-          std::cerr << "TODO: Implement XOR_MAPPED_ADDRESS IPv6" << std::endl;
+          // TODO(jrw972):  Handle IPv6.
         }
       }
       break;
@@ -270,7 +268,7 @@ namespace STUN {
         serializer << static_cast<ACE_CDR::Char>(IPv4);
         serializer << static_cast<uint16_t>(attribute.mapped_address.get_port_number());
         serializer << attribute.mapped_address.get_ip_address();
-        // TODO:  Handle IPv6.
+        // TODO(jrw972):  Handle IPv6.
       }
       break;
     case USERNAME:
@@ -289,7 +287,7 @@ namespace STUN {
         serializer << static_cast<ACE_CDR::Char>(IPv4);
         serializer << static_cast<uint16_t>(attribute.mapped_address.get_port_number() ^ (MAGIC_COOKIE >> 16));
         serializer << (attribute.mapped_address.get_ip_address() ^ MAGIC_COOKIE);
-        // TODO:  Handle IPv6.
+        // TODO(jrw972):  Handle IPv6.
       }
       break;
     case PRIORITY:

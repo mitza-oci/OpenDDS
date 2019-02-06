@@ -17,11 +17,14 @@ namespace ICE {
   const uint32_t PEER_REFLEXIVE_PRIORITY = (110 << 24) + (65535 << 8) + ((256 - 1) << 0);  // No local preference, component 1.
 
   // Repeat a check for this long before failing it.
-  const ACE_Time_Value connectivity_check_lifetime(5 * 60);
+  const ACE_Time_Value connectivity_check_ttl(5 * 60);
   // Run all of the ordinary checks in a checklist in this amount of time.
   const ACE_Time_Value checklist_period(15);
+  // Send an indication at this interval once an address is selected.
+  const ACE_Time_Value indication_interval(15);
+  // The nominated pair will still be valid if an indication has been received within this amount of time.
+  const ACE_Time_Value nominated_ttl(5 * 60);
 
-  // TODO(jrw972):  Speed-up concluding.
 
   CandidatePair::CandidatePair(const Candidate& a_local,
                                const Candidate& a_remote,
@@ -84,6 +87,7 @@ namespace ICE {
     , m_ice_tie_breaker(a_ice_tie_breaker)
     , m_nominating(m_valid_list.end())
     , m_nominated(m_valid_list.end())
+    , m_nominated_is_live(false)
   {
     std::cout << this << " new checklist for " << m_local_agent_info.username << ' ' << m_remote_agent_info.username << std::endl;
     m_endpoint_manager->set_responsible_checklist(m_remote_agent_info.username, this);
@@ -108,7 +112,7 @@ namespace ICE {
     m_valid_list.clear();
     m_nominating = m_valid_list.end();
     m_nominated = m_valid_list.end();
-    m_selected_address = ACE_INET_Addr();
+    m_nominated_is_live = false;
     m_check_interval = ACE_Time_Value();
     m_max_check_interval = ACE_Time_Value();
     m_connectivity_checks.clear();
@@ -315,6 +319,10 @@ namespace ICE {
     }
 
     add_triggered_check(cp);
+    // This can move something from failed to in progress.
+    // In that case, we need to schedule.
+    m_check_interval = T_a;
+    enqueue(ACE_Time_Value().now());
   }
 
   void Checklist::succeeded(const ConnectivityCheck& cc) {
@@ -330,6 +338,8 @@ namespace ICE {
     if (cp.use_candidate) {
       if (m_local_is_controlling) {
         m_nominated = m_nominating;
+        m_nominated_is_live = true;
+        m_last_indication = ACE_Time_Value().now();
         m_nominating = m_valid_list.end();
       } else {
         m_nominated = std::find(m_valid_list.begin(), m_valid_list.end(), cp);
@@ -338,15 +348,14 @@ namespace ICE {
           m_valid_list.push_front(cp);
           m_nominated = m_valid_list.begin();
         }
+        m_nominated_is_live = true;
+        m_last_indication = ACE_Time_Value().now();
       }
-      m_selected_address = m_nominated->remote.address;
 
       for (GuidSetType::const_iterator pos = m_guids.begin(), limit = m_guids.end(); pos != limit; ++pos) {
-        std::cout << this << ' ' << m_local_agent_info.username << " nominate " << m_selected_address << " for " << m_remote_agent_info.username << ' ' << *pos << " local_is_controlling=" << m_local_is_controlling << std::endl;
+        std::cout << this << ' ' << m_local_agent_info.username << " nominate " << selected_address() << " for " << m_remote_agent_info.username << ' ' << *pos << " local_is_controlling=" << m_local_is_controlling << std::endl;
       }
     }
-
-    // TODO(jrw972):  Do we really need to set the valid pair to succeeded?
 
     m_endpoint_manager->agent_impl->unfreeze(cp.foundation);
   }
@@ -358,14 +367,9 @@ namespace ICE {
     m_failed.push_back(cp);
     m_failed.sort(CandidatePair::priority_sorted);
 
-    if (cp.use_candidate) {
-      if (m_local_is_controlling) {
-        m_valid_list.pop_front();
-        m_nominating = m_valid_list.end();
-      } else {
-        std::cerr << "TODO: FAIL THIS CHECKLIST" << std::endl;
-        assert(false);
-      }
+    if (cp.use_candidate && m_local_is_controlling) {
+      m_valid_list.pop_front();
+      m_nominating = m_valid_list.end();
     }
 
     std::cout << m_local_agent_info.username << " failed " << size() << " remaining for " << m_remote_agent_info.username << std::endl;
@@ -464,7 +468,7 @@ namespace ICE {
       CandidatePair cp = m_triggered_check_queue.front();
       m_triggered_check_queue.pop_front();
 
-      ConnectivityCheck cc(cp, m_local_agent_info, m_remote_agent_info, m_ice_tie_breaker, a_now + connectivity_check_lifetime);
+      ConnectivityCheck cc(cp, m_local_agent_info, m_remote_agent_info, m_ice_tie_breaker, a_now + connectivity_check_ttl);
 
       m_waiting.remove(cp);
       m_in_progress.push_back(cp);
@@ -485,7 +489,7 @@ namespace ICE {
       CandidatePair cp = m_waiting.front();
       m_waiting.pop_front();
 
-      ConnectivityCheck cc(cp, m_local_agent_info, m_remote_agent_info, m_ice_tie_breaker, a_now + connectivity_check_lifetime);
+      ConnectivityCheck cc(cp, m_local_agent_info, m_remote_agent_info, m_ice_tie_breaker, a_now + connectivity_check_ttl);
 
       m_in_progress.push_back(cp);
       m_in_progress.sort(CandidatePair::priority_sorted);
@@ -549,14 +553,30 @@ namespace ICE {
       std::cout << "enqueue " << m_check_interval << std::endl;
       enqueue(ACE_Time_Value().now() + m_check_interval);
       return;
-    } else if (!is_failed()) {
+    }
+
+    if (is_completed()) {
       // Send an indication.
-      // TODO(jr972)
-      std::cout << "INDICATION" << std::endl;
-      //m_endpoint_manager->endpoint->send(cc.candidate_pair().remote.address, cc.request());
+      STUN::Message message;
+      message.class_ = STUN::INDICATION;
+      message.method = STUN::BINDING;
+      message.generate_transaction_id();
+      message.append_attribute(STUN::make_username(m_remote_agent_info.username + ":" + m_local_agent_info.username));
+      message.password = m_remote_agent_info.password;
+      message.append_attribute(STUN::make_message_integrity());
+      message.append_attribute(STUN::make_fingerprint());
+      std::cout << "sending indication to " << selected_address() << std::endl;
+      m_endpoint_manager->endpoint->send(selected_address(), message);
+      enqueue(ACE_Time_Value().now() + indication_interval);
 
       // Check that we are receiving indications.
+      m_nominated_is_live = (a_now - m_last_indication) < nominated_ttl;
+      std::cout << "m_nominated_is_live " << m_nominated_is_live << std::endl;
+
+      return;
     }
+
+    // The checklist has failed.  Don't schedule.
   }
 
   void Checklist::add_guid(GuidPair const & a_guid_pair) {
@@ -592,6 +612,16 @@ namespace ICE {
     }
   }
 
+  ACE_INET_Addr Checklist::selected_address() const {
+    if (m_nominated_is_live && m_nominated != m_valid_list.end()) {
+      return m_nominated->remote.address;
+    }
+    return ACE_INET_Addr();
+  }
+
+  void Checklist::indication() {
+    m_last_indication = ACE_Time_Value().now();
+  }
 } // namespace ICE
 } // namespace OpenDDS
 

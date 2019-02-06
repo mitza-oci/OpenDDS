@@ -21,6 +21,16 @@ namespace ICE {
   const ACE_Time_Value server_reflexive_address_period(30);
   // Send this many binding indications to the STUN server before sending a binding request.
   const size_t server_reflexive_indication_count = 10;
+  // Lifetime of a deferred triggered check.
+  const ACE_Time_Value deferred_triggered_check_ttl(5 * 60);
+
+  std::string stringify(unsigned char x[32]) {
+    char retval[32];
+    for (size_t idx = 0; idx != 32; ++idx) {
+      retval[idx] = (x[idx] % 26) + 97;
+    }
+    return std::string(retval, 32);
+  }
 
   EndpointManager::EndpointManager(AgentImpl * a_agent_impl, Endpoint * a_endpoint) :
     Task(a_agent_impl),
@@ -78,9 +88,21 @@ namespace ICE {
       return;
     }
 
-    // Re-using username.
-    // TODO(jrw972)
-    assert(false);
+    // The remote agent changed its info without changing its username.
+    GuidSetType const guids = username_checklist->guids();
+    username_checklist->remove_guids();
+    username_checklist = create_checklist(a_remote_agent_info);
+    username_checklist->add_guids(guids);
+  }
+
+  void EndpointManager::stop_ice(DCPS::RepoId const & a_local_guid,
+                                 DCPS::RepoId const & a_remote_guid) {
+    GuidPair guidp(a_local_guid, a_remote_guid);
+
+    GuidPairToChecklistType::const_iterator pos = m_guid_pair_to_checklist.find(guidp);
+    assert(pos != m_guid_pair_to_checklist.end());
+    Checklist * guid_checklist = pos->second;
+    guid_checklist->remove_guid(guidp);
   }
 
   ACE_INET_Addr EndpointManager::get_address(DCPS::RepoId const & a_local_guid,
@@ -103,7 +125,7 @@ namespace ICE {
       request(a_local_address, a_remote_address, a_message);
       break;
     case STUN::INDICATION:
-      // Do nothing.
+      indication(a_message);
       break;
     case STUN::SUCCESS_RESPONSE:
       success_response(a_local_address, a_remote_address, a_message);
@@ -115,10 +137,19 @@ namespace ICE {
   }
 
   void EndpointManager::set_host_addresses(AddressListType const & a_host_addresses) {
-    // TODO(jrw972):  Filter out addresses not allowed by the spec.
-    // TODO(jrw972):  Set up periodic task to repopulate these.
-    if (m_host_addresses != a_host_addresses) {
-      m_host_addresses = a_host_addresses;
+    // Section IETF RFC 8445 5.1.1.1
+    // TODO(jrw972):  Handle IPv6.
+    AddressListType host_addresses;
+    for (AddressListType::const_iterator pos = a_host_addresses.begin(), limit = a_host_addresses.end();
+         pos != limit; ++pos) {
+      if (pos->is_loopback()) {
+        continue;
+      }
+      host_addresses.push_back(*pos);
+    }
+
+    if (m_host_addresses != host_addresses) {
+      m_host_addresses = host_addresses;
       regenerate_agent_info();
     }
   }
@@ -149,37 +180,46 @@ namespace ICE {
     AgentInfo::CandidatesType::iterator last = std::unique(m_agent_info.candidates.begin (), m_agent_info.candidates.end (), candidates_equal);
     m_agent_info.candidates.erase(last, m_agent_info.candidates.end());
 
-    int rc =  RAND_bytes(reinterpret_cast<unsigned char*>(&m_ice_tie_breaker), sizeof(m_ice_tie_breaker));
-    unsigned long err = ERR_get_error();
-    if (rc != 1) {
-      /* RAND_bytes failed */
-      /* `err` is valid    */
-      // TODO(jrw972)
-    }
-
     // Set the type.
     m_agent_info.type = FULL;
 
-    // Generate username and password.
-    uint32_t username = 0;
-    rc = RAND_bytes(reinterpret_cast<unsigned char*>(&username), sizeof(username));
-    err = ERR_get_error();
+    // Generate the username, password, and tie breaker.
+    unsigned char username[32] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int rc = RAND_bytes(username, sizeof(username));
     if (rc != 1) {
-      /* RAND_bytes failed */
-      /* `err` is valid    */
-      // TODO(jrw972)
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
     }
     m_agent_info.username = stringify(username);
 
-    uint64_t password[2] = { 0, 0 };
-    rc = RAND_bytes(reinterpret_cast<unsigned char*>(&password[0]), sizeof(password));
-    err = ERR_get_error();
+    unsigned char password[32] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    rc = RAND_bytes(password, sizeof(password));
     if (rc != 1) {
-      /* RAND_bytes failed */
-      /* `err` is valid    */
-      // TODO(jrw972)
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
     }
-    m_agent_info.password = stringify(password[0]) + stringify(password[1]);
+    m_agent_info.password = stringify(password);
+
+    rc =  RAND_bytes(reinterpret_cast<unsigned char*>(&m_ice_tie_breaker), sizeof(m_ice_tie_breaker));
+    if (rc != 1) {
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
+    }
 
     std::cout << m_agent_info << std::endl;
 
@@ -197,10 +237,16 @@ namespace ICE {
       new_checklist->add_guids(guids);
     }
 
-    // TODO(jrw972):  Propagate changed info up.
+    // Propagate changed agent info.
+    // If necessary, we could do this asynchronously.
+    for (AgentInfoListenersType::const_iterator pos = m_agent_info_listeners.begin(),
+           limit =  m_agent_info_listeners.end(); pos != limit; ++pos) {
+      pos->second->update_agent_info(pos->first, m_agent_info);
+    }
   }
 
   void EndpointManager::execute(ACE_Time_Value const & a_now) {
+    // Request and maintain a server-reflexive address.
     m_next_stun_server_address = endpoint->stun_server_address();
     if (m_next_stun_server_address != ACE_INET_Addr()) {
       m_binding_request = STUN::Message();
@@ -218,6 +264,26 @@ namespace ICE {
       m_requesting = true;
       m_send_count = 0;
     }
+
+    // Remove expired deferred checks.
+    std::cout << "Deferred checks " << m_deferred_triggered_checks.size() << std::endl;
+    for (DeferredTriggeredChecksType::iterator pos = m_deferred_triggered_checks.begin(),
+           limit = m_deferred_triggered_checks.end(); pos != limit;) {
+      DeferredTriggeredCheckListType & list = pos->second;
+      while (!list.empty() && list.front().expiration_date < a_now) {
+        std::cout << "Deleting deferred check" << std::endl;
+        list.pop_front();
+      }
+      if (list.empty()) {
+        m_deferred_triggered_checks.erase(pos++);
+      } else {
+        pos++;
+      }
+    }
+
+    // Repopulate the host addresses.
+    set_host_addresses(endpoint->host_addresses());
+
     enqueue(a_now + server_reflexive_address_period);
   }
 
@@ -345,7 +411,66 @@ namespace ICE {
           checklist->generate_triggered_check(local_address, remote_address, priority, use_candidate);
         } else {
           std::pair<DeferredTriggeredChecksType::iterator, bool> x = m_deferred_triggered_checks.insert(std::make_pair(remote_username, DeferredTriggeredCheckListType()));
-          x.first->second.push_back(DeferredTriggeredCheck(local_address, remote_address, priority, use_candidate));
+          x.first->second.push_back(DeferredTriggeredCheck(local_address, remote_address, priority, use_candidate, ACE_Time_Value().now() + deferred_triggered_check_ttl));
+          std::cout << "Deferred checks = " << m_deferred_triggered_checks.size() << std::endl;
+        }
+      }
+      break;
+    default:
+      // Unknown method.  Stop processing.
+      std::cerr << "TODO: Send error for unsupported method" << std::endl;
+      break;
+    }
+  }
+
+  void EndpointManager::indication(STUN::Message const & a_message) {
+    if (a_message.contains_unknown_comprehension_required_attributes()) {
+      std::cerr << "TODO: Send 420 with unknown attributes" << std::endl;
+      return;
+    }
+
+    if (!a_message.has_fingerprint()) {
+      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      return;
+    }
+
+        std::string username;
+    if (!a_message.get_username(username)) {
+      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      return;
+    }
+    if (!a_message.has_message_integrity()) {
+      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      return;
+    }
+
+    size_t idx = username.find(':');
+    if (idx == std::string::npos) {
+      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      return;
+    }
+
+    if (username.substr(0, idx) != m_agent_info.username) {
+      std::cerr << "TODO: Send 401 (Unauthorized)" << std::endl;
+      return;
+    }
+
+    const std::string remote_username = username.substr(++idx);
+
+    // Check the message_integrity.
+    if (!a_message.verify_message_integrity(m_agent_info.password)) {
+      std::cerr << "TODO: Send 401 (Unauthorized)" << std::endl;
+      return;
+    }
+
+    switch (a_message.method) {
+    case STUN::BINDING:
+      {
+        // Section 11
+        UsernameToChecklistType::const_iterator pos = m_username_to_checklist.find(remote_username);
+        if (pos != m_username_to_checklist.end()) {
+          // We have a checklist.
+          pos->second->indication();
         }
       }
       break;

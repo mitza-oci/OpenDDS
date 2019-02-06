@@ -78,7 +78,7 @@ ShmemReceiveStrategy::receive_bytes(iovec iov[],
                                     int n,
                                     ACE_INET_Addr& /*remote_address*/,
                                     ACE_HANDLE /*fd*/,
-                                    bool& stop)
+                                    bool& /*stop*/)
 {
   VDBG((LM_DEBUG,
         "(%P|%t) ShmemReceiveStrategy::receive_bytes link %@\n", link_));

@@ -118,7 +118,9 @@ RtpsUdpReceiveStrategy::receive_bytes(iovec iov[],
 #endif
   remote_address_ = remote_address;
 
-  if (n > 0 && ret > 0 && iov[0].iov_len >= 4 && memcmp(iov[0].iov_base, "RTPS", 4) != 0) {
+  ICE::Endpoint * endpoint = link_->get_ice_endpoint();
+
+  if (endpoint && n > 0 && ret > 0 && iov[0].iov_len >= 4 && memcmp(iov[0].iov_base, "RTPS", 4) != 0) {
     // Assume STUN
     stop = true;
     size_t bytes = ret;
@@ -141,7 +143,7 @@ RtpsUdpReceiveStrategy::receive_bytes(iovec iov[],
     STUN::Message message;
     message.block = head;
     if (serializer >> message) {
-      ICE::Agent::instance()->receive(link_->get_ice_endpoint(), local_address, remote_address, message);
+      ICE::Agent::instance()->receive(endpoint, local_address, remote_address, message);
     } else {
       // TODO:  Not RTPS and not STUN.
     }

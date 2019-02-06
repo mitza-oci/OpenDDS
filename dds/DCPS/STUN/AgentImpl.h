@@ -70,13 +70,21 @@ namespace ICE {
 
     AgentInfo get_local_agent_info(Endpoint * a_endpoint) const;
 
+    void add_local_agent_info_listener(Endpoint * a_endpoint,
+                                       DCPS::RepoId const & a_local_guid,
+                                       AgentInfoListener * a_agent_info_listener);
+
+    void remove_local_agent_info_listener(Endpoint * a_endpoint,
+                                          DCPS::RepoId const & a_local_guid);
+
     void start_ice(Endpoint * a_endpoint,
                    DCPS::RepoId const & a_local_guid,
                    DCPS::RepoId const & a_remote_guid,
                    AgentInfo const & a_remote_agent_info);
 
-    void stop_ice(DCPS::RepoId const & /*local_guid*/,
-                  DCPS::RepoId const & /*remote_guid*/);
+    void stop_ice(Endpoint * a_endpoint,
+                  DCPS::RepoId const & a_local_guid,
+                  DCPS::RepoId const & a_remote_guid);
 
     ACE_INET_Addr get_address(Endpoint * a_endpoint,
                               DCPS::RepoId const & a_local_guid,

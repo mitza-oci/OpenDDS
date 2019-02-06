@@ -32,15 +32,18 @@ namespace ICE {
     ACE_INET_Addr remote_address;
     uint32_t priority;
     bool use_candidate;
+    ACE_Time_Value expiration_date;
 
-    DeferredTriggeredCheck(const ACE_INET_Addr& a_local_address,
-                           const ACE_INET_Addr& a_remote_address,
+    DeferredTriggeredCheck(ACE_INET_Addr const & a_local_address,
+                           ACE_INET_Addr const & a_remote_address,
                            uint32_t a_priority,
-                           bool a_use_candidate)
+                           bool a_use_candidate,
+                           ACE_Time_Value const & a_expiration_date)
       : local_address(a_local_address)
       , remote_address(a_remote_address)
       , priority(a_priority)
       , use_candidate(a_use_candidate)
+      , expiration_date(a_expiration_date)
     {}
   };
 
@@ -52,9 +55,21 @@ namespace ICE {
 
     AgentInfo const & agent_info() const { return m_agent_info; }
 
-    void start_ice(DCPS::RepoId const & local_guid,
-                   DCPS::RepoId const & remote_guid,
-                   AgentInfo const & remote_agent_info);
+    void add_agent_info_listener(DCPS::RepoId const & a_local_guid,
+                                 AgentInfoListener * a_agent_info_listener) {
+      m_agent_info_listeners[a_local_guid] = a_agent_info_listener;
+    }
+
+    void remove_agent_info_listener(DCPS::RepoId const & a_local_guid) {
+      m_agent_info_listeners.erase(a_local_guid);
+    }
+
+    void start_ice(DCPS::RepoId const & a_local_guid,
+                   DCPS::RepoId const & a_remote_guid,
+                   AgentInfo const & a_remote_agent_info);
+
+    void stop_ice(DCPS::RepoId const & local_guid,
+                  DCPS::RepoId const & remote_guid);
 
     ACE_INET_Addr get_address(DCPS::RepoId const & a_local_guid,
                               DCPS::RepoId const & a_remote_guid) const;
@@ -126,8 +141,7 @@ namespace ICE {
     ACE_INET_Addr m_next_stun_server_address;
     STUN::Message m_binding_request;       // Binding request sent to STUN server.
 
-    // TODO(jrw972):  Timeout deferred checks.
-    typedef std::vector<DeferredTriggeredCheck> DeferredTriggeredCheckListType;
+    typedef std::deque<DeferredTriggeredCheck> DeferredTriggeredCheckListType;
     typedef std::map<std::string, DeferredTriggeredCheckListType> DeferredTriggeredChecksType;
     DeferredTriggeredChecksType m_deferred_triggered_checks;
 
@@ -142,6 +156,9 @@ namespace ICE {
     // Managed by checklists.
     typedef std::map<GuidPair, Checklist*> GuidPairToChecklistType;
     GuidPairToChecklistType m_guid_pair_to_checklist;
+
+    typedef std::map<DCPS::RepoId, AgentInfoListener *, DCPS::GUID_tKeyLessThan> AgentInfoListenersType;
+    AgentInfoListenersType m_agent_info_listeners;
 
     void set_host_addresses(AddressListType const & a_host_addresses);
 
@@ -160,6 +177,8 @@ namespace ICE {
     void request(ACE_INET_Addr const & a_local_address,
                  ACE_INET_Addr const & a_remote_address,
                  STUN::Message const & a_message);
+
+    void indication(STUN::Message const & a_message);
 
     void success_response(ACE_INET_Addr const & a_local_address,
                           ACE_INET_Addr const & a_remote_address,
