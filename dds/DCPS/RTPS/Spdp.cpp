@@ -286,6 +286,10 @@ Spdp::~Spdp()
     {
       DiscoveredParticipantIter part = participants_.find(*participant_id);
       if (part != participants_.end()) {
+        ICE::Endpoint* endpoint = sedp_.get_ice_endpoint();
+        if (endpoint) {
+          stop_ice(endpoint, part->first, part->second.pdata_.participantProxy.availableBuiltinEndpoints);
+        }
         remove_discovered_participant(part);
       }
     }
@@ -469,6 +473,10 @@ Spdp::handle_participant_data(DCPS::MessageId id, const ParticipantData_t& cpdat
 #endif
 
     if (id == DCPS::DISPOSE_INSTANCE || id == DCPS::DISPOSE_UNREGISTER_INSTANCE) {
+      ICE::Endpoint* endpoint = sedp_.get_ice_endpoint();
+      if (endpoint) {
+        stop_ice(endpoint, iter->first, iter->second.pdata_.participantProxy.availableBuiltinEndpoints);
+      }
       remove_discovered_participant(iter);
       return;
     }
@@ -544,105 +552,7 @@ Spdp::data_received(const DataSubmessage& data, const ParameterList& plist)
     return;
   }
 
-  const BuiltinEndpointSet_t& avail = pdata.participantProxy.availableBuiltinEndpoints;
-  RepoId r = guid, l = guid_;
-
-  // See RTPS v2.1 section 8.5.5.1
-  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_DETECTOR) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_DETECTOR) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_READER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_ANNOUNCER) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_ANNOUNCER) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_WRITER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-
-#ifdef OPENDDS_SECURITY
-  using namespace DDS::Security;
-  // See DDS-Security v1.1 section 7.3.7.1
-  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_READER) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER) {
-    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
-    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_WRITER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_READER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_WRITER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_READER) {
-    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
-    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_WRITER) {
-    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
-    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_READER) {
-    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
-    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
-    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
-  }
-#endif
+  start_ice(endpoint, guid, pdata.participantProxy.availableBuiltinEndpoints, agent_info);
 }
 
 void
@@ -920,6 +830,10 @@ Spdp::check_auth_states(const ACE_Time_Value& tv) {
     if (pit != participants_.end()) {
       ACE_DEBUG((LM_DEBUG, ACE_TEXT("(%P|%t) DEBUG: Spdp::check_auth_states()      - Removing discovered participant due to authentication timeout: %C\n"), std::string(DCPS::GuidConverter(*it)).c_str()));
       if (participant_sec_attr_.allow_unauthenticated_participants == false) {
+        ICE::Endpoint* endpoint = sedp_.get_ice_endpoint();
+        if (endpoint) {
+          stop_ice(endpoint, pit->first, pit->second.pdata_.participantProxy.availableBuiltinEndpoints);
+        }
         remove_discovered_participant(pit);
       } else {
         pit->second.auth_state_ = DCPS::AS_UNAUTHENTICATED;
@@ -1242,6 +1156,11 @@ Spdp::remove_expired_participants()
             ACE_TEXT("(%P|%t) Spdp::remove_expired_participants() - ")
             ACE_TEXT("participant %C exceeded lease duration, removing\n"),
             OPENDDS_STRING(conv).c_str()));
+        }
+        ICE::Endpoint* endpoint = sedp_.get_ice_endpoint();
+        if (endpoint) {
+          stop_ice(endpoint, part->first, part->second.pdata_.participantProxy.availableBuiltinEndpoints);
+
         }
         remove_discovered_participant(part);
       }
@@ -2088,6 +2007,208 @@ Spdp::add_sedp_unicast(const ACE_INET_Addr& addr)
   size_t idx = sedp_unicast_.length();
   sedp_unicast_.length(idx + 1);
   sedp_unicast_[idx] = locator;
+}
+
+void Spdp::start_ice(ICE::Endpoint * endpoint, RepoId r, BuiltinEndpointSet_t const & avail, ICE::AgentInfo const & agent_info) {
+  RepoId l = guid_;
+
+  // See RTPS v2.1 section 8.5.5.1
+  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_DETECTOR) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_DETECTOR) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_ANNOUNCER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_ANNOUNCER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+
+#ifdef OPENDDS_SECURITY
+  using namespace DDS::Security;
+  // See DDS-Security v1.1 section 7.3.7.1
+  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_READER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_WRITER) {
+    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
+    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_READER) {
+    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
+    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
+    ICE::Agent::instance()->start_ice(endpoint, l, r, agent_info);
+  }
+#endif
+}
+
+void Spdp::stop_ice(ICE::Endpoint * endpoint, DCPS::RepoId r, BuiltinEndpointSet_t const & avail) {
+  RepoId l = guid_;
+
+  // See RTPS v2.1 section 8.5.5.1
+  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_DETECTOR) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_DETECTOR) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_PUBLICATION_ANNOUNCER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & DISC_BUILTIN_ENDPOINT_SUBSCRIPTION_ANNOUNCER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_ENDPOINT_PARTICIPANT_MESSAGE_DATA_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+
+#ifdef OPENDDS_SECURITY
+  using namespace DDS::Security;
+  // See DDS-Security v1.1 section 7.3.7.1
+  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & SEDP_BUILTIN_PUBLICATIONS_SECURE_READER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_PUBLICATIONS_SECURE_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER) {
+    l.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_WRITER;
+    r.entityId = ENTITYID_SEDP_BUILTIN_SUBSCRIPTIONS_SECURE_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_MESSAGE_SECURE_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_PARTICIPANT_STATELESS_MESSAGE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_STATELESS_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_WRITER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & BUILTIN_PARTICIPANT_VOLATILE_MESSAGE_SECURE_READER) {
+    l.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_WRITER;
+    r.entityId = ENTITYID_P2P_BUILTIN_PARTICIPANT_VOLATILE_SECURE_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_WRITER) {
+    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
+    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+  if (avail & SPDP_BUILTIN_PARTICIPANT_SECURE_READER) {
+    l.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_WRITER;
+    r.entityId = ENTITYID_SPDP_RELIABLE_BUILTIN_PARTICIPANT_SECURE_READER;
+    ICE::Agent::instance()->stop_ice(endpoint, l, r);
+  }
+#endif
 }
 
 }

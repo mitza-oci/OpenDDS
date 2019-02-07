@@ -226,6 +226,8 @@ private:
   DDS::Security::ParticipantSecurityAttributes participant_sec_attr_;
 #endif
 
+  void start_ice(ICE::Endpoint * endpoint, DCPS::RepoId remote, BuiltinEndpointSet_t const & avail, ICE::AgentInfo const & agent_info);
+  void stop_ice(ICE::Endpoint * endpoint, DCPS::RepoId remote, BuiltinEndpointSet_t const & avail);
 };
 
 }

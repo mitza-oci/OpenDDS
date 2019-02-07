@@ -1757,6 +1757,25 @@ void Sedp::process_discovered_writer_data(DCPS::MessageId message_id,
              message_id == DCPS::DISPOSE_INSTANCE ||
              message_id == DCPS::DISPOSE_UNREGISTER_INSTANCE) {
     if (iter != discovered_publications_.end()) {
+      DiscoveredPublication const & dpub = iter->second;
+      if (dpub.have_ice_agent_info_) {
+        TopicDetails& td = topics_[wdata.ddsPublicationData.topic_name.in()];
+        for (DCPS::RepoIdSet::const_iterator it = td.endpoints_.begin(),
+               end = td.endpoints_.end(); it != end; ++it) {
+          const DCPS::GuidConverter conv(*it);
+          if (conv.isReader()) {
+            LocalSubscriptionIter lsi = local_subscriptions_.find(*it);
+            if (lsi != local_subscriptions_.end() &&
+                lsi->second.matched_endpoints_.count(guid)) {
+              ICE::Endpoint * endpoint = lsi->second.subscription_->get_ice_endpoint();
+              if (endpoint) {
+                ICE::Agent::instance()->stop_ice(endpoint, *it, guid);
+              }
+            }
+          }
+        }
+      }
+
       // Unmatch local subscription(s)
       topic_name = get_topic_name(iter->second);
       OPENDDS_MAP(OPENDDS_STRING, TopicDetails)::iterator top_it =
@@ -1808,7 +1827,7 @@ Sedp::data_received(DCPS::MessageId message_id,
 
   process_discovered_writer_data(message_id, wdata, guid);
 
-  if (dpub.have_ice_agent_info_) {
+  {
     TopicDetails& td = topics_[wdata.ddsPublicationData.topic_name.in()];
     for (DCPS::RepoIdSet::const_iterator it = td.endpoints_.begin(),
            end = td.endpoints_.end(); it != end; ++it) {
@@ -1819,7 +1838,11 @@ Sedp::data_received(DCPS::MessageId message_id,
             lsi->second.matched_endpoints_.count(guid)) {
           ICE::Endpoint * endpoint = lsi->second.subscription_->get_ice_endpoint();
           if (endpoint) {
-            ICE::Agent::instance()->start_ice(endpoint, *it, guid, dpub.ice_agent_info_);
+            if (dpub.have_ice_agent_info_) {
+              ICE::Agent::instance()->start_ice(endpoint, *it, guid, dpub.ice_agent_info_);
+            } else {
+              ICE::Agent::instance()->stop_ice(endpoint, *it, guid);
+            }
           }
         }
       }
@@ -2101,6 +2124,25 @@ void Sedp::process_discovered_reader_data(DCPS::MessageId message_id,
              message_id == DCPS::DISPOSE_INSTANCE ||
              message_id == DCPS::DISPOSE_UNREGISTER_INSTANCE) {
     if (iter != discovered_subscriptions_.end()) {
+      DiscoveredSubscription const & dsub = iter->second;
+      if (dsub.have_ice_agent_info_) {
+        TopicDetails& td = topics_[rdata.ddsSubscriptionData.topic_name.in()];
+        for (DCPS::RepoIdSet::const_iterator it = td.endpoints_.begin(),
+               end = td.endpoints_.end(); it != end; ++it) {
+          const DCPS::GuidConverter conv(*it);
+          if (conv.isWriter()) {
+            LocalPublicationIter lpi = local_publications_.find(*it);
+            if (lpi != local_publications_.end() &&
+                lpi->second.matched_endpoints_.count(guid)) {
+              ICE::Endpoint * endpoint = lpi->second.publication_->get_ice_endpoint();
+              if (endpoint) {
+                ICE::Agent::instance()->stop_ice(endpoint, *it, guid);
+              }
+            }
+          }
+        }
+      }
+
       // Unmatch local publication(s)
       topic_name = get_topic_name(iter->second);
       OPENDDS_MAP(OPENDDS_STRING, TopicDetails)::iterator top_it =
@@ -2160,7 +2202,7 @@ Sedp::data_received(DCPS::MessageId message_id,
 
   process_discovered_reader_data(message_id, rdata, guid);
 
-  if (dsub.have_ice_agent_info_) {
+  {
     TopicDetails& td = topics_[rdata.ddsSubscriptionData.topic_name.in()];
     for (DCPS::RepoIdSet::const_iterator it = td.endpoints_.begin(),
            end = td.endpoints_.end(); it != end; ++it) {
@@ -2171,7 +2213,11 @@ Sedp::data_received(DCPS::MessageId message_id,
             lpi->second.matched_endpoints_.count(guid)) {
           ICE::Endpoint * endpoint = lpi->second.publication_->get_ice_endpoint();
           if (endpoint) {
-            ICE::Agent::instance()->start_ice(endpoint, *it, guid, dsub.ice_agent_info_);
+            if (dsub.have_ice_agent_info_) {
+              ICE::Agent::instance()->start_ice(endpoint, *it, guid, dsub.ice_agent_info_);
+            } else {
+              ICE::Agent::instance()->stop_ice(endpoint, *it, guid);
+            }
           }
         }
       }

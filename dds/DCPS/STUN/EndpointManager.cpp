@@ -100,9 +100,10 @@ namespace ICE {
     GuidPair guidp(a_local_guid, a_remote_guid);
 
     GuidPairToChecklistType::const_iterator pos = m_guid_pair_to_checklist.find(guidp);
-    assert(pos != m_guid_pair_to_checklist.end());
-    Checklist * guid_checklist = pos->second;
-    guid_checklist->remove_guid(guidp);
+    if (pos != m_guid_pair_to_checklist.end()) {
+      Checklist * guid_checklist = pos->second;
+      guid_checklist->remove_guid(guidp);
+    }
   }
 
   ACE_INET_Addr EndpointManager::get_address(DCPS::RepoId const & a_local_guid,
