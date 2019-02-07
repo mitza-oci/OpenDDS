@@ -386,20 +386,46 @@ namespace ICE {
 
     ConnectivityCheck const cc = *pos;
 
+    std::vector<STUN::AttributeType> unknown_attributes = a_message.unknown_comprehension_required_attributes();
+    if (!unknown_attributes.empty()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::success_response: WARNING Unknown comprehension required attributes\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
+      return;
+    }
+
     if (!a_message.has_fingerprint()) {
-      // Let retry logic take over.
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::success_response: WARNING No FINGERPRINT attribute\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
       return;
     }
 
     ACE_INET_Addr mapped_address;
     if (!a_message.get_mapped_address(mapped_address)) {
-      // Let retry logic take over.
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::success_response: WARNING No (XOR_)MAPPED_ADDRESS attribute\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
+      return;
+    }
+
+    if (!a_message.has_message_integrity()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::success_response: WARNING No MESSAGE_INTEGRITY attribute\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
       return;
     }
 
     // Require integrity for checks.
     if (!a_message.verify_message_integrity(cc.request().password)) {
-      // Let retry logic take over.
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::success_response: WARNING MESSAGE_INTEGRITY check failed\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
       return;
     }
 
@@ -441,6 +467,63 @@ namespace ICE {
     CandidatePair vp(local, cp.remote, m_local_is_controlling, true);
 
     add_valid_pair(vp);
+  }
+
+  void Checklist::error_response(ACE_INET_Addr const & /*local_address*/,
+                                 ACE_INET_Addr const & /*remote_address*/,
+                                 STUN::Message const & a_message) {
+    ConnectivityChecksType::const_iterator pos = std::find(m_connectivity_checks.begin(), m_connectivity_checks.end(), a_message.transaction_id);
+    assert(pos != m_connectivity_checks.end());
+
+    ConnectivityCheck const cc = *pos;
+
+    if (!a_message.has_message_integrity()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::error_response: WARNING No MESSAGE_INTEGRITY attribute\n")));
+      // Retry.
+      return;
+    }
+
+    if (!a_message.verify_message_integrity(cc.request().password)) {
+      // Retry.
+      return;
+    }
+
+    // We have a verified error response.
+    std::vector<STUN::AttributeType> unknown_attributes = a_message.unknown_comprehension_required_attributes();
+    if (!unknown_attributes.empty()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::error_response: WARNING Unknown comprehension required attributes\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
+      return;
+    }
+
+    if (!a_message.has_fingerprint()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::error_response: WARNING No FINGERPRINT attribute\n")));
+      failed(cc);
+      m_connectivity_checks.erase(pos);
+      m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
+      return;
+    }
+
+    if (a_message.has_error_code()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::error_response: WARNING STUN error response code=%d reason=%s\n"), a_message.get_error_code(), a_message.get_error_reason().c_str()));
+      if (a_message.get_error_code() == 420 && a_message.has_unknown_attributes()) {
+        std::vector<STUN::AttributeType> unknown_attributes = a_message.get_unknown_attributes();
+        for (std::vector<STUN::AttributeType>::const_iterator pos = unknown_attributes.begin(),
+               limit = unknown_attributes.end(); pos != limit; ++pos) {
+          ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::error_response: WARNING Unknown STUN attribute %d\n"), *pos));
+        }
+      }
+      if (a_message.get_error_code() == 400 && a_message.get_error_code() == 420) {
+        // Waiting and/or resending won't fix these errors.
+        failed(cc);
+        m_connectivity_checks.erase(pos);
+        m_endpoint_manager->unset_responsible_checklist(cc.request().transaction_id, this);
+      }
+    } else {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) Checklist::error_response: WARNING STUN error response (no code)\n")));
+    }
   }
 
   void Checklist::do_next_check(ACE_Time_Value const & a_now) {

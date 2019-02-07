@@ -48,8 +48,8 @@ namespace STUN {
     MAPPED_ADDRESS     = 0x0001,
     USERNAME           = 0x0006,
     MESSAGE_INTEGRITY  = 0x0008,
-    // ERROR_CODE         = 0x0009,
-    // UNKNOWN_ATTRIBUTES = 0x000A,
+    ERROR_CODE         = 0x0009,
+    UNKNOWN_ATTRIBUTES = 0x000A,
     // REALM              = 0x0014,
     // NONCE              = 0x0015,
     XOR_MAPPED_ADDRESS = 0x0020,
@@ -78,7 +78,7 @@ namespace STUN {
       uint16_t code;
       std::string reason;
     } error;
-    std::vector<uint16_t> unknown_attributes;
+    std::vector<AttributeType> unknown_attributes;
 
     uint16_t unknown_length;
 
@@ -88,6 +88,8 @@ namespace STUN {
   Attribute make_mapped_address(const ACE_INET_Addr& addr);
   Attribute make_username(const std::string& username);
   Attribute make_message_integrity();
+  Attribute make_error_code(uint16_t code, const std::string& reason);
+  Attribute make_unknown_attributes(std::vector<AttributeType> const & unknown_attributes);
   Attribute make_xor_mapped_address(const ACE_INET_Addr& addr);
   Attribute make_unknown_attribute(uint16_t type, uint16_t length);
   Attribute make_priority(uint32_t priority);
@@ -133,13 +135,18 @@ namespace STUN {
     uint16_t length() const { return m_length; }
     uint16_t length_for_message_integrity() const { return m_length_for_message_integrity; }
 
-    bool contains_unknown_comprehension_required_attributes() const;
+    std::vector<AttributeType> unknown_comprehension_required_attributes() const;
     bool get_mapped_address(ACE_INET_Addr& address) const;
     bool get_priority(uint32_t& priority) const;
     bool get_username(std::string& username) const;
     bool has_message_integrity() const;
     bool verify_message_integrity(const std::string& password) const;
     void compute_message_integrity(const std::string& password, unsigned char message_integrity[20]) const;
+    bool has_error_code() const;
+    uint16_t get_error_code() const;
+    std::string get_error_reason() const;
+    bool has_unknown_attributes() const;
+    std::vector<AttributeType> get_unknown_attributes() const;
     bool has_fingerprint() const;
     uint32_t compute_fingerprint() const;
     bool has_ice_controlled() const;

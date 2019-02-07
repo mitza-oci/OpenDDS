@@ -112,6 +112,10 @@ namespace ICE {
                           ACE_INET_Addr const & a_remote_address,
                           STUN::Message const & a_message);
 
+    void error_response(ACE_INET_Addr const & a_local_address,
+                        ACE_INET_Addr const & a_remote_address,
+                        STUN::Message const & a_message);
+
     void add_guid(GuidPair const & a_guid_pair);
 
     void remove_guid(GuidPair const & a_guid_pair);

@@ -123,17 +123,19 @@ namespace ICE {
     switch (a_message.class_) {
     case STUN::REQUEST:
       request(a_local_address, a_remote_address, a_message);
-      break;
+      return;
     case STUN::INDICATION:
       indication(a_message);
-      break;
+      return;
     case STUN::SUCCESS_RESPONSE:
       success_response(a_local_address, a_remote_address, a_message);
-      break;
+      return;
     case STUN::ERROR_RESPONSE:
-      error_response(a_remote_address, a_message);
-      break;
+      error_response(a_local_address, a_remote_address, a_message);
+      return;
     }
+
+    ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::receive: WARNING Unknown ICE message class %d\n"), a_message.class_));
   }
 
   void EndpointManager::set_host_addresses(AddressListType const & a_host_addresses) {
@@ -253,7 +255,7 @@ namespace ICE {
       m_binding_request.class_ = m_requesting ? STUN::REQUEST : STUN::INDICATION;
       m_binding_request.method = STUN::BINDING;
       m_binding_request.generate_transaction_id();
-      // TODO(jrw972):  Consider using fingerprint.
+      m_binding_request.append_attribute(STUN::make_fingerprint());
 
       endpoint->send(m_next_stun_server_address, m_binding_request);
       if (!m_requesting && m_send_count == server_reflexive_indication_count - 1) {
@@ -287,21 +289,49 @@ namespace ICE {
     enqueue(a_now + server_reflexive_address_period);
   }
 
-  bool EndpointManager::success_response(STUN::Message const & message) {
-    if (message.transaction_id != m_binding_request.transaction_id) {
+  bool EndpointManager::success_response(STUN::Message const & a_message) {
+    if (a_message.transaction_id != m_binding_request.transaction_id) {
       return false;
     }
 
+    std::vector<STUN::AttributeType> unknown_attributes = a_message.unknown_comprehension_required_attributes();
+    if (!unknown_attributes.empty()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::success_response: WARNING Unknown comprehension required attributes\n")));
+      return true;
+    }
+
     ACE_INET_Addr server_reflexive_address;
-    if (message.get_mapped_address(server_reflexive_address)) {
+    if (a_message.get_mapped_address(server_reflexive_address)) {
       set_server_reflexive_address(server_reflexive_address, m_next_stun_server_address);
       m_requesting = false;
       m_send_count = 0;
     } else {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::success_response: WARNING No (XOR)_MAPPED_ADDRESS attribute\n")));
       set_server_reflexive_address(ACE_INET_Addr(), ACE_INET_Addr());
       m_requesting = true;
       m_send_count = 0;
     }
+    return true;
+  }
+
+  bool EndpointManager::error_response(STUN::Message const & a_message) {
+    if (a_message.transaction_id != m_binding_request.transaction_id) {
+      return false;
+    }
+
+    if (a_message.has_error_code()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::error_response: WARNING STUN error response code=%d reason=%s\n"), a_message.get_error_code(), a_message.get_error_reason().c_str()));
+      if (a_message.get_error_code() == 420 && a_message.has_unknown_attributes()) {
+        std::vector<STUN::AttributeType> unknown_attributes = a_message.get_unknown_attributes();
+        for (std::vector<STUN::AttributeType>::const_iterator pos = unknown_attributes.begin(),
+               limit = unknown_attributes.end(); pos != limit; ++pos) {
+          ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::error_response: WARNING Unknown STUN attribute %d\n"), *pos));
+        }
+      }
+    } else {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::error_response: WARNING STUN error response (no code)\n")));
+    }
+
     return true;
   }
 
@@ -323,135 +353,75 @@ namespace ICE {
     return checklist;
   }
 
-  // STUN Message processing.
-  void EndpointManager::request(ACE_INET_Addr const & local_address,
-                                ACE_INET_Addr const & remote_address,
-                                STUN::Message const & message) {
-    if (message.contains_unknown_comprehension_required_attributes()) {
-      std::cerr << "TODO: Send 420 with unknown attributes" << std::endl;
-      return;
-    }
-
-    if (!message.has_fingerprint()) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-
-    if (!message.has_ice_controlled() && !message.has_ice_controlling()) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-
-    bool use_candidate = message.has_use_candidate();
-    if (use_candidate && message.has_ice_controlled()) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-
-    uint32_t priority;
-    if (!message.get_priority(priority)) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-
-    std::string username;
-    if (!message.get_username(username)) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-    if (!message.has_message_integrity()) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-
-    size_t idx = username.find(':');
-    if (idx == std::string::npos) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
-
-    if (username.substr(0, idx) != m_agent_info.username) {
-      std::cerr << "TODO: Send 401 (Unauthorized)" << std::endl;
-      return;
-    }
-
-    const std::string remote_username = username.substr(++idx);
-
-    // Check the message_integrity.
-    if (!message.verify_message_integrity(m_agent_info.password)) {
-      std::cerr << "TODO: Send 401 (Unauthorized)" << std::endl;
-      return;
-    }
-
-    switch (message.method) {
-    case STUN::BINDING:
-      {
-        // 7.3
-        STUN::Message response;
-        response.class_ = STUN::SUCCESS_RESPONSE;
-        response.method = STUN::BINDING;
-        memcpy(response.transaction_id.data, message.transaction_id.data, sizeof(message.transaction_id.data));
-        response.append_attribute(STUN::make_mapped_address(remote_address));
-        response.append_attribute(STUN::make_xor_mapped_address(remote_address));
-        response.append_attribute(STUN::make_message_integrity());
-        response.password = m_agent_info.password;
-        response.append_attribute(STUN::make_fingerprint());
-        endpoint->send(remote_address, response);
-
-        // std::cout << local_agent_info_.username << " respond to " << remote_username << ' ' << remote_address << ' ' << message.transaction_id << " use_candidate=" << use_candidate << std::endl;
-
-        // Hack to get local port.
-        const_cast<ACE_INET_Addr&>(local_address).set(port(), local_address.get_ip_address());
-
-        // 7.3.1.3
-        UsernameToChecklistType::const_iterator pos = m_username_to_checklist.find(remote_username);
-        if (pos != m_username_to_checklist.end()) {
-          // We have a checklist.
-          Checklist* checklist = pos->second;
-          checklist->generate_triggered_check(local_address, remote_address, priority, use_candidate);
-        } else {
-          std::pair<DeferredTriggeredChecksType::iterator, bool> x = m_deferred_triggered_checks.insert(std::make_pair(remote_username, DeferredTriggeredCheckListType()));
-          x.first->second.push_back(DeferredTriggeredCheck(local_address, remote_address, priority, use_candidate, ACE_Time_Value().now() + deferred_triggered_check_ttl));
-          std::cout << "Deferred checks = " << m_deferred_triggered_checks.size() << std::endl;
-        }
-      }
-      break;
-    default:
-      // Unknown method.  Stop processing.
-      std::cerr << "TODO: Send error for unsupported method" << std::endl;
-      break;
-    }
+  STUN::Message EndpointManager::make_unknown_attributes_error_response(STUN::Message const & a_message,
+                                                                        std::vector<STUN::AttributeType> const & a_unknown_attributes) {
+    STUN::Message response;
+    response.class_ = STUN::ERROR_RESPONSE;
+    response.method = a_message.method;
+    memcpy(response.transaction_id.data, a_message.transaction_id.data, sizeof(a_message.transaction_id.data));
+    response.append_attribute(STUN::make_error_code(420, "Unknown Attributes"));
+    response.append_attribute(STUN::make_unknown_attributes(a_unknown_attributes));
+    response.append_attribute(STUN::make_message_integrity());
+    response.password = m_agent_info.password;
+    response.append_attribute(STUN::make_fingerprint());
+    return response;
   }
 
-  void EndpointManager::indication(STUN::Message const & a_message) {
-    if (a_message.contains_unknown_comprehension_required_attributes()) {
-      std::cerr << "TODO: Send 420 with unknown attributes" << std::endl;
-      return;
-    }
+  STUN::Message EndpointManager::make_bad_request_error_response(STUN::Message const & a_message,
+                                                                 std::string const & a_reason) {
+    STUN::Message response;
+    response.class_ = STUN::ERROR_RESPONSE;
+    response.method = a_message.method;
+    memcpy(response.transaction_id.data, a_message.transaction_id.data, sizeof(a_message.transaction_id.data));
+    response.append_attribute(STUN::make_error_code(400, a_reason));
+    response.append_attribute(STUN::make_message_integrity());
+    response.password = m_agent_info.password;
+    response.append_attribute(STUN::make_fingerprint());
+    return response;
+  }
 
-    if (!a_message.has_fingerprint()) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
-      return;
-    }
+  STUN::Message EndpointManager::make_unauthorized_error_response(STUN::Message const & a_message) {
+    STUN::Message response;
+    response.class_ = STUN::ERROR_RESPONSE;
+    response.method = a_message.method;
+    memcpy(response.transaction_id.data, a_message.transaction_id.data, sizeof(a_message.transaction_id.data));
+    response.append_attribute(STUN::make_error_code(401, "Unauthorized"));
+    response.append_attribute(STUN::make_message_integrity());
+    response.password = m_agent_info.password;
+    response.append_attribute(STUN::make_fingerprint());
+    return response;
+  }
 
-        std::string username;
+  // STUN Message processing.
+  void EndpointManager::request(ACE_INET_Addr const & a_local_address,
+                                ACE_INET_Addr const & a_remote_address,
+                                STUN::Message const & a_message) {
+    std::string username;
     if (!a_message.get_username(username)) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING No USERNAME attribute\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: USERNAME must be present"));
       return;
     }
     if (!a_message.has_message_integrity()) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING No MESSAGE_INTEGRITY attribute\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: MESSAGE_INTEGRITY must be present"));
       return;
     }
 
     size_t idx = username.find(':');
     if (idx == std::string::npos) {
-      std::cerr << "TODO: Send 400 (Bad Request)" << std::endl;
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING USERNAME does not contain a colon\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: USERNAME must be colon-separated"));
       return;
     }
 
     if (username.substr(0, idx) != m_agent_info.username) {
-      std::cerr << "TODO: Send 401 (Unauthorized)" << std::endl;
+      // We expect this to happen.
+      endpoint->send(a_remote_address,
+                     make_unauthorized_error_response(a_message));
       return;
     }
 
@@ -459,7 +429,130 @@ namespace ICE {
 
     // Check the message_integrity.
     if (!a_message.verify_message_integrity(m_agent_info.password)) {
-      std::cerr << "TODO: Send 401 (Unauthorized)" << std::endl;
+      // We expect this to happen.
+      endpoint->send(a_remote_address,
+                     make_unauthorized_error_response(a_message));
+      return;
+    }
+
+    std::vector<STUN::AttributeType> unknown_attributes = a_message.unknown_comprehension_required_attributes();
+    if (!unknown_attributes.empty()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING Unknown comprehension required attributes\n")));
+      endpoint->send(a_remote_address,
+                     make_unknown_attributes_error_response(a_message, unknown_attributes));
+      return;
+    }
+
+    if (!a_message.has_fingerprint()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING No FINGERPRINT attribute\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: FINGERPRINT must be present"));
+      return;
+    }
+
+    if (!a_message.has_ice_controlled() && !a_message.has_ice_controlling()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING No ICE_CONTROLLED/ICE_CONTROLLING attribute\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: Either ICE_CONTROLLED or ICE_CONTROLLING must be present"));
+      return;
+    }
+
+    bool use_candidate = a_message.has_use_candidate();
+    if (use_candidate && a_message.has_ice_controlled()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING USE_CANDIDATE without ICE_CONTROLLED\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: USE_CANDIDATE can only be present when ICE_CONTROLLED is present"));
+      return;
+    }
+
+    uint32_t priority;
+    if (!a_message.get_priority(priority)) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING No PRIORITY attribute\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: PRIORITY must be present"));
+      return;
+    }
+
+    switch (a_message.method) {
+    case STUN::BINDING:
+      {
+        // 7.3
+        STUN::Message response;
+        response.class_ = STUN::SUCCESS_RESPONSE;
+        response.method = STUN::BINDING;
+        memcpy(response.transaction_id.data, a_message.transaction_id.data, sizeof(a_message.transaction_id.data));
+        response.append_attribute(STUN::make_mapped_address(a_remote_address));
+        response.append_attribute(STUN::make_xor_mapped_address(a_remote_address));
+        response.append_attribute(STUN::make_message_integrity());
+        response.password = m_agent_info.password;
+        response.append_attribute(STUN::make_fingerprint());
+        endpoint->send(a_remote_address, response);
+
+        // std::cout << local_agent_info_.username << " respond to " << remote_username << ' ' << remote_address << ' ' << message.transaction_id << " use_candidate=" << use_candidate << std::endl;
+
+        // Hack to get local port.
+        const_cast<ACE_INET_Addr&>(a_local_address).set(port(), a_local_address.get_ip_address());
+
+        // 7.3.1.3
+        UsernameToChecklistType::const_iterator pos = m_username_to_checklist.find(remote_username);
+        if (pos != m_username_to_checklist.end()) {
+          // We have a checklist.
+          Checklist* checklist = pos->second;
+          checklist->generate_triggered_check(a_local_address, a_remote_address, priority, use_candidate);
+        } else {
+          std::pair<DeferredTriggeredChecksType::iterator, bool> x = m_deferred_triggered_checks.insert(std::make_pair(remote_username, DeferredTriggeredCheckListType()));
+          x.first->second.push_back(DeferredTriggeredCheck(a_local_address, a_remote_address, priority, use_candidate, ACE_Time_Value().now() + deferred_triggered_check_ttl));
+          std::cout << "Deferred checks = " << m_deferred_triggered_checks.size() << std::endl;
+        }
+      }
+      break;
+    default:
+      // Unknown method.  Stop processing.
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::request: WARNING Unknown ICE method\n")));
+      endpoint->send(a_remote_address,
+                     make_bad_request_error_response(a_message, "Bad Request: Unknown method"));
+      break;
+    }
+  }
+
+  void EndpointManager::indication(STUN::Message const & a_message) {
+    std::string username;
+    if (!a_message.get_username(username)) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::indication: WARNING No USERNAME attribute\n")));
+      return;
+    }
+    if (!a_message.has_message_integrity()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::indication: WARNING No MESSAGE_INTEGRITY attribute\n")));
+      return;
+    }
+
+    size_t idx = username.find(':');
+    if (idx == std::string::npos) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::indication: WARNING USERNAME does not contain a colon\n")));
+      return;
+    }
+
+    if (username.substr(0, idx) != m_agent_info.username) {
+      // We expect this to happen.
+      return;
+    }
+
+    const std::string remote_username = username.substr(++idx);
+
+    // Check the message_integrity.
+    if (!a_message.verify_message_integrity(m_agent_info.password)) {
+      // We expect this to happen.
+      return;
+    }
+
+    std::vector<STUN::AttributeType> unknown_attributes = a_message.unknown_comprehension_required_attributes();
+    if (!unknown_attributes.empty()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::indication: WARNING Unknown comprehension required attributes\n")));
+      return;
+    }
+
+    if (!a_message.has_fingerprint()) {
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::indication: WARNING No FINGERPRINT attribute\n")));
       return;
     }
 
@@ -476,55 +569,67 @@ namespace ICE {
       break;
     default:
       // Unknown method.  Stop processing.
-      std::cerr << "TODO: Send error for unsupported method" << std::endl;
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::indication: WARNING Unknown ICE method\n")));
       break;
     }
   }
 
-  void EndpointManager::success_response(ACE_INET_Addr const & local_address,
-                                         ACE_INET_Addr const & remote_address,
-                                         STUN::Message const & message) {
-    if (message.contains_unknown_comprehension_required_attributes()) {
-      std::cerr << "TODO: Success response with unknown attributes" << std::endl;
-      return;
-    }
-
-    switch (message.method) {
+  void EndpointManager::success_response(ACE_INET_Addr const & a_local_address,
+                                         ACE_INET_Addr const & a_remote_address,
+                                         STUN::Message const & a_message) {
+    switch (a_message.method) {
     case STUN::BINDING:
       {
-        if (success_response(message)) {
+        if (success_response(a_message)) {
           return;
         }
 
         // std::cout << local_agent_info_.username << " response from " << remote_address << ' ' << message.transaction_id << std::endl;
 
-        TransactionIdToChecklistType::const_iterator pos = m_transaction_id_to_checklist.find(message.transaction_id);
+        TransactionIdToChecklistType::const_iterator pos = m_transaction_id_to_checklist.find(a_message.transaction_id);
         if (pos == m_transaction_id_to_checklist.end()) {
           // Probably a check that got cancelled.
           return;
         }
 
         // Checklist is responsible for updating the map.
-        pos->second->success_response(local_address, remote_address, message);
+        // Checklist also checks for required parameters.
+        pos->second->success_response(a_local_address, a_remote_address, a_message);
       }
       break;
     default:
       // Unknown method.  Stop processing.
-      std::cerr << "TODO: Send error for unsupported method" << std::endl;
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::success_response: WARNING Unknown ICE method\n")));
       break;
     }
   }
 
-  void EndpointManager::error_response(ACE_INET_Addr const & /*address*/,
+  void EndpointManager::error_response(ACE_INET_Addr const & a_local_address,
+                                       ACE_INET_Addr const & a_remote_address,
                                        STUN::Message const & a_message) {
-    if (a_message.contains_unknown_comprehension_required_attributes()) {
-      std::cerr << "TODO: Error response with unknown attributes" << std::endl;
-      return;
-    }
+    switch (a_message.method) {
+    case STUN::BINDING:
+      {
+        if (error_response(a_message)) {
+          return;
+        }
 
-    // See section 7.2.5.2.4
-    std::cerr << "TODO: Agent::error_response" << std::endl;
-    assert(false);
+        TransactionIdToChecklistType::const_iterator pos = m_transaction_id_to_checklist.find(a_message.transaction_id);
+        if (pos == m_transaction_id_to_checklist.end()) {
+          // Probably a check that got cancelled.
+          return;
+        }
+
+        // Checklist is responsible for updating the map.
+        // Checklist also checks for required parameters.
+        pos->second->error_response(a_local_address, a_remote_address, a_message);
+      }
+      break;
+    default:
+      // Unknown method.  Stop processing.
+      ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::error_response: WARNING Unknown ICE method\n")));
+      break;
+    }
   }
 
   void EndpointManager::compute_active_foundations(ActiveFoundationSet & a_active_foundations) const {

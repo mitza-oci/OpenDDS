@@ -27,6 +27,10 @@ namespace STUN {
       return username.size();
     case MESSAGE_INTEGRITY:
       return 20;
+    case ERROR_CODE:
+      return 4 + error.reason.size();
+    case UNKNOWN_ATTRIBUTES:
+      return 2 * unknown_attributes.size();
     case XOR_MAPPED_ADDRESS:
       // TODO(jrw972):  Handle IPv6.
       return 8;
@@ -62,6 +66,21 @@ namespace STUN {
   Attribute make_message_integrity() {
     Attribute attribute;
     attribute.type = MESSAGE_INTEGRITY;
+    return attribute;
+  }
+
+  Attribute make_error_code(uint16_t code, const std::string& reason) {
+    Attribute attribute;
+    attribute.type = ERROR_CODE;
+    attribute.error.code = code;
+    attribute.error.reason = reason;
+    return attribute;
+  }
+
+  Attribute make_unknown_attributes(std::vector<AttributeType> const & unknown_attributes) {
+    Attribute attribute;
+    attribute.type = UNKNOWN_ATTRIBUTES;
+    attribute.unknown_attributes = unknown_attributes;
     return attribute;
   }
 
@@ -155,6 +174,9 @@ namespace STUN {
       break;
     case USERNAME:
       {
+        if (attribute_length > 512) {
+          return false;
+        }
         unsigned char buffer[512];
         if (!serializer.read_octet_array(buffer, attribute_length)) {
           return false;
@@ -168,6 +190,46 @@ namespace STUN {
         if (!serializer.read_octet_array(attribute.message_integrity, sizeof(attribute.message_integrity))) {
           return false;
         }
+      }
+      break;
+    case ERROR_CODE:
+      {
+        uint32_t x;
+        if (!(serializer >> x)) {
+          return false;
+        }
+        uint32_t class_ = (x & (0x7 << 8)) >> 8;
+        if (class_ < 3 || class_ >= 7) {
+          return false;
+        }
+        uint32_t num = x & 0xFF;
+        if (num > 100) {
+          return false;
+        }
+        uint16_t code = class_ * 100 + num;
+
+        size_t reason_length = attribute_length - 4;
+        if (reason_length > 763) {
+          return false;
+        }
+        unsigned char buffer[763];
+        if (!serializer.read_octet_array(buffer, reason_length)) {
+          return false;
+        }
+        attribute = make_error_code(code, std::string(reinterpret_cast<char*>(buffer), reason_length));
+      }
+      break;
+    case UNKNOWN_ATTRIBUTES:
+      {
+        std::vector<AttributeType> unknown_attributes;
+        for (size_t count = attribute_length / 2; count != 0; --count) {
+          uint16_t code;
+          if (!(serializer >> code)) {
+            return false;
+          }
+          unknown_attributes.push_back(static_cast<AttributeType>(code));
+        }
+        attribute = make_unknown_attributes(unknown_attributes);
       }
       break;
     case XOR_MAPPED_ADDRESS:
@@ -281,6 +343,25 @@ namespace STUN {
         serializer.write_octet_array(attribute.message_integrity, sizeof(attribute.message_integrity));
       }
       break;
+    case ERROR_CODE:
+      {
+        uint8_t class_ = attribute.error.code / 100;
+        uint8_t num = attribute.error.code % 100;
+        serializer << static_cast<ACE_CDR::Char>(0);
+        serializer << static_cast<ACE_CDR::Char>(0);
+        serializer << static_cast<ACE_CDR::Char>(class_);
+        serializer << static_cast<ACE_CDR::Char>(num);
+        serializer.write_octet_array(reinterpret_cast<const ACE_CDR::Octet*>(attribute.error.reason.c_str()), attribute.error.reason.size());
+      }
+      break;
+    case UNKNOWN_ATTRIBUTES:
+      {
+        for (std::vector<AttributeType>::const_iterator pos = attribute.unknown_attributes.begin(),
+               limit = attribute.unknown_attributes.end(); pos != limit; ++pos) {
+          serializer << static_cast<uint16_t>(*pos);
+        }
+      }
+      break;
     case XOR_MAPPED_ADDRESS:
       {
         serializer << static_cast<ACE_CDR::Char>(0);
@@ -337,30 +418,39 @@ namespace STUN {
 
   void Message::generate_transaction_id() {
     int rc = RAND_bytes(transaction_id.data, sizeof(transaction_id.data));
-    unsigned long err = ERR_get_error();
     if (rc != 1) {
-      /* RAND_bytes failed */
-      /* `err` is valid    */
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) Message::generate_transaction_id: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
     }
   }
 
-  bool Message::contains_unknown_comprehension_required_attributes() const {
+  std::vector<AttributeType> Message::unknown_comprehension_required_attributes() const {
+    std::vector<AttributeType> retval;
+
     for (const AttributesType::value_type& attribute : m_attributes) {
       switch (attribute.type) {
       case MAPPED_ADDRESS:
       case USERNAME:
       case MESSAGE_INTEGRITY:
+      case ERROR_CODE:
+      case UNKNOWN_ATTRIBUTES:
       case XOR_MAPPED_ADDRESS:
       case PRIORITY:
       case USE_CANDIDATE:
         break;
       default:
         if (attribute.type < 0x8000) {
-          return true;
+          retval.push_back(attribute.type);
         }
       }
     }
-    return false;
+
+    return retval;
   }
 
   bool Message::get_mapped_address(ACE_INET_Addr& address) const {
@@ -457,6 +547,57 @@ namespace STUN {
 
     block->release();
   }
+
+  bool Message::has_error_code() const {
+    for (STUN::Message::const_iterator pos = begin(), limit = end(); pos != limit; ++pos) {
+      if (pos->type == STUN::ERROR_CODE) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  uint16_t Message::get_error_code() const {
+    for (STUN::Message::const_iterator pos = begin(), limit = end(); pos != limit; ++pos) {
+      if (pos->type == STUN::ERROR_CODE) {
+        return pos->error.code;
+      }
+    }
+
+    return 0;
+  }
+
+  std::string Message::get_error_reason() const {
+    for (STUN::Message::const_iterator pos = begin(), limit = end(); pos != limit; ++pos) {
+      if (pos->type == STUN::ERROR_CODE) {
+        return pos->error.reason;
+      }
+    }
+
+    return std::string();
+  }
+
+  bool Message::has_unknown_attributes() const {
+    for (STUN::Message::const_iterator pos = begin(), limit = end(); pos != limit; ++pos) {
+      if (pos->type == STUN::UNKNOWN_ATTRIBUTES) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  std::vector<AttributeType> Message::get_unknown_attributes() const {
+    for (STUN::Message::const_iterator pos = begin(), limit = end(); pos != limit; ++pos) {
+      if (pos->type == STUN::UNKNOWN_ATTRIBUTES) {
+        return pos->unknown_attributes;
+      }
+    }
+
+    return std::vector<AttributeType>();
+  }
+
 
   bool Message::has_fingerprint() const {
     for (STUN::Message::const_iterator pos = begin(), limit = end(); pos != limit; ++pos) {

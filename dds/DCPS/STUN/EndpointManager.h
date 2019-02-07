@@ -171,9 +171,19 @@ namespace ICE {
 
     bool success_response(STUN::Message const & a_message);
 
+    bool error_response(STUN::Message const & a_message);
+
     Checklist* create_checklist(AgentInfo const & a_remote_agent_info);
 
     // STUN Message processing.
+    STUN::Message make_unknown_attributes_error_response(STUN::Message const & a_message,
+                                                         std::vector<STUN::AttributeType> const & a_unknown_attributes);
+
+    STUN::Message make_bad_request_error_response(STUN::Message const & a_message,
+                                                  std::string const & a_reason);
+
+    STUN::Message make_unauthorized_error_response(STUN::Message const & a_message);
+
     void request(ACE_INET_Addr const & a_local_address,
                  ACE_INET_Addr const & a_remote_address,
                  STUN::Message const & a_message);
@@ -184,7 +194,8 @@ namespace ICE {
                           ACE_INET_Addr const & a_remote_address,
                           STUN::Message const & a_message);
 
-    void error_response(ACE_INET_Addr const & /*address*/,
+    void error_response(ACE_INET_Addr const & a_local_address,
+                        ACE_INET_Addr const & a_remote_address,
                         STUN::Message const & a_message);
   };
 
