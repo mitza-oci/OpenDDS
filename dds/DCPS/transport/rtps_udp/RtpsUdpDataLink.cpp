@@ -95,11 +95,11 @@ RtpsUdpDataLink::RtpsUdpDataLink(RtpsUdpTransport& transport,
     heartbeatchecker_(make_rch<HeartBeat>(reactor_task->get_reactor(), reactor_task->get_reactor_owner(), this, &RtpsUdpDataLink::check_heartbeats)),
     relay_beacon_(make_rch<HeartBeat>(reactor_task->get_reactor(), reactor_task->get_reactor_owner(), this, &RtpsUdpDataLink::send_relay_beacon)),
 #ifdef OPENDDS_SECURITY
-  , held_data_delivery_handler_(this)
-  , security_config_(Security::SecurityRegistry::instance()->default_config())
-  , local_crypto_handle_(DDS::HANDLE_NIL)
+    held_data_delivery_handler_(this),
+    security_config_(Security::SecurityRegistry::instance()->default_config()),
+    local_crypto_handle_(DDS::HANDLE_NIL)
 #else
-  , held_data_delivery_handler_(this)
+  held_data_delivery_handler_(this)
 #endif
 {
   this->send_strategy_ = make_rch<RtpsUdpSendStrategy>(this, local_prefix);
