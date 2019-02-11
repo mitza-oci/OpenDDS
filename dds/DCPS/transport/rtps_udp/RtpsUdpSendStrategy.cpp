@@ -84,9 +84,6 @@ ssize_t
 RtpsUdpSendStrategy::send_bytes_i_helper(const iovec iov[], int n)
 {
   if (override_single_dest_) {
-    if (link_->config().rtps_relay_address() != ACE_INET_Addr()) {
-      send_single_i(iov, n, link_->config().rtps_relay_address());
-    }
     return send_single_i(iov, n, *override_single_dest_);
   }
 
@@ -101,18 +98,11 @@ RtpsUdpSendStrategy::send_bytes_i_helper(const iovec iov[], int n)
     return -1;
   }
 
-  const RepoId remote_id = elem->subscription_id();
   OPENDDS_SET(ACE_INET_Addr) addrs;
-
-  if (remote_id != GUID_UNKNOWN) {
-    const ACE_INET_Addr remote = link_->get_locator(remote_id);
-    if (remote != ACE_INET_Addr()) {
-      addrs.insert(remote);
-    }
-  }
-
-  if (addrs.empty()) {
-    link_->get_locators(elem->publication_id(), addrs);
+  if (elem->subscription_id() != GUID_UNKNOWN) {
+    addrs = link_->get_addresses(elem->publication_id(), elem->subscription_id());
+  } else {
+    addrs = link_->get_addresses(elem->publication_id());
   }
 
   if (addrs.empty()) {
