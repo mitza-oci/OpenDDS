@@ -712,6 +712,7 @@ namespace OpenDDS {
             lsi->second.remote_opendds_associations_.erase(removing);
             lsi->second.subscription_->remove_associations(writer_seq,
                                                            false /*notify_lost*/);
+            remove_assoc_i(remove_from, lsi->second, removing);
             // Update writer
             write_subscription_data(remove_from, lsi->second);
           }
@@ -726,9 +727,19 @@ namespace OpenDDS {
             lpi->second.remote_opendds_associations_.erase(removing);
             lpi->second.publication_->remove_associations(reader_seq,
                                                           false /*notify_lost*/);
+            remove_assoc_i(remove_from, lpi->second, removing);
           }
         }
       }
+
+      virtual void add_assoc_i(DCPS::RepoId const & /* local_guid */, LocalPublication const & /* lpub */,
+                               DCPS::RepoId const & /* remote_guid */, DiscoveredSubscription const & /* dsub */) {}
+      virtual void remove_assoc_i(DCPS::RepoId const & /* local_guid */, LocalPublication const & /* lpub */,
+                                  DCPS::RepoId const & /* remote_guid */) {}
+      virtual void add_assoc_i(DCPS::RepoId const & /* local_guid */, LocalSubscription const & /* lsub */,
+                               DCPS::RepoId const & /* remote_guid */, DiscoveredPublication const & /* dpub */) {}
+      virtual void remove_assoc_i(DCPS::RepoId const & /* local_guid */, LocalSubscription const & /* lsub */,
+                                  DCPS::RepoId const & /* remote_guid */) {}
 
 #ifdef OPENDDS_SECURITY
       virtual DDS::Security::DatawriterCryptoHandle
@@ -935,6 +946,14 @@ namespace OpenDDS {
           if (reader_local) {
             call_reader = lsi->second.matched_endpoints_.insert(writer).second;
           }
+
+          if (writer_local && !reader_local) {
+            add_assoc_i(writer, lpi->second, reader, dsi->second);
+          }
+          if (reader_local && !writer_local) {
+            add_assoc_i(reader, lsi->second, writer, dpi->second);
+          }
+
           if (!call_writer && !call_reader) {
             return; // nothing more to do
           }
@@ -1064,6 +1083,12 @@ namespace OpenDDS {
           if (reader_local) {
             lsi->second.matched_endpoints_.erase(writer);
             lsi->second.remote_opendds_associations_.erase(writer);
+          }
+          if (writer_local && !reader_local) {
+            remove_assoc_i(writer, lpi->second, reader);
+          }
+          if (reader_local && !writer_local) {
+            remove_assoc_i(reader, lsi->second, writer);
           }
           ACE_GUARD(ACE_Reverse_Lock<ACE_Thread_Mutex>, rg, rev_lock);
           if (writer_local) {

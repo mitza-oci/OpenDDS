@@ -22,8 +22,8 @@ namespace OpenDDS {
 namespace RTPS {
 
 #ifdef OPENDDS_SECURITY
-struct DiscoveredWriterData_SecurityWrapper;
-struct DiscoveredReaderData_SecurityWrapper;
+struct DiscoveredPublication_SecurityWrapper;
+struct DiscoveredSubscription_SecurityWrapper;
 #endif
 
 namespace ParameterListConverter {
@@ -145,27 +145,27 @@ OpenDDS_Rtps_Export
 int from_param_list(const ParameterList& param_list,
                     DDS::Security::DataTags& tags);
 
-// DiscoveredWriterData_SecurityWrapper
+// DiscoveredPublication_SecurityWrapper
 
 OpenDDS_Rtps_Export
-int to_param_list(const DiscoveredWriterData_SecurityWrapper& wrapper,
+int to_param_list(const DiscoveredPublication_SecurityWrapper& wrapper,
                   ParameterList& param_list,
                   bool map = false /*map IPV4 to IPV6 addr*/);
 
 OpenDDS_Rtps_Export
 int from_param_list(const ParameterList& param_list,
-                    DiscoveredWriterData_SecurityWrapper& wrapper);
+                    DiscoveredPublication_SecurityWrapper& wrapper);
 
-// DiscoveredReaderData_SecurityWrapper
+// DiscoveredSubscription_SecurityWrapper
 
 OpenDDS_Rtps_Export
-int to_param_list(const DiscoveredReaderData_SecurityWrapper& wrapper,
+int to_param_list(const DiscoveredSubscription_SecurityWrapper& wrapper,
                   ParameterList& param_list,
                   bool map = false /*map IPV4 to IPV6 addr*/);
 
 OpenDDS_Rtps_Export
 int from_param_list(const ParameterList& param_list,
-                    DiscoveredReaderData_SecurityWrapper& wrapper);
+                    DiscoveredSubscription_SecurityWrapper& wrapper);
 #endif
 
 

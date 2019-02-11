@@ -1499,7 +1499,7 @@ int from_param_list(const ParameterList& param_list,
   return 0;
 }
 
-int to_param_list(const DiscoveredWriterData_SecurityWrapper& wrapper,
+int to_param_list(const DiscoveredPublication_SecurityWrapper& wrapper,
                   ParameterList& param_list,
                   bool map)
 {
@@ -1512,7 +1512,7 @@ int to_param_list(const DiscoveredWriterData_SecurityWrapper& wrapper,
 }
 
 int from_param_list(const ParameterList& param_list,
-                    DiscoveredWriterData_SecurityWrapper& wrapper)
+                    DiscoveredPublication_SecurityWrapper& wrapper)
 {
   int result = from_param_list(param_list, wrapper.data) ||
                from_param_list(param_list, wrapper.security_info) ||
@@ -1521,7 +1521,7 @@ int from_param_list(const ParameterList& param_list,
   return result;
 }
 
-int to_param_list(const DiscoveredReaderData_SecurityWrapper& wrapper,
+int to_param_list(const DiscoveredSubscription_SecurityWrapper& wrapper,
                   ParameterList& param_list,
                   bool map)
 {
@@ -1534,7 +1534,7 @@ int to_param_list(const DiscoveredReaderData_SecurityWrapper& wrapper,
 }
 
 int from_param_list(const ParameterList& param_list,
-                    DiscoveredReaderData_SecurityWrapper& wrapper)
+                    DiscoveredSubscription_SecurityWrapper& wrapper)
 {
   int result = from_param_list(param_list, wrapper.data) ||
                from_param_list(param_list, wrapper.security_info) ||

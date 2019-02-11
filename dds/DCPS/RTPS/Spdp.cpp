@@ -548,11 +548,11 @@ Spdp::data_received(const DataSubmessage& data, const ParameterList& plist)
     return;
   }
 
-  if (!have_agent_info) {
-    return;
+  if (have_agent_info) {
+    start_ice(endpoint, guid, pdata.participantProxy.availableBuiltinEndpoints, agent_info);
+  } else {
+    stop_ice(endpoint, guid, pdata.participantProxy.availableBuiltinEndpoints);
   }
-
-  start_ice(endpoint, guid, pdata.participantProxy.availableBuiltinEndpoints, agent_info);
 }
 
 void
@@ -1135,6 +1135,7 @@ Spdp::attempt_authentication(const DCPS::RepoId& guid, DiscoveredParticipant& dp
 void
 Spdp::remove_expired_participants()
 {
+  std::cout << "REMOVE_EXPIRED_PARTICIPANTS" << std::endl;
   // Find and remove any expired discovered participant
   ACE_GUARD (ACE_Thread_Mutex, g, lock_);
   // Iterate through a copy of the repo Ids, rather than the map
@@ -1145,8 +1146,10 @@ Spdp::remove_expired_participants()
        participant_id != participant_ids.end();
        ++participant_id)
   {
+    std::cout << "REMOVE_EXPIRED_PARTICIPANTS 1" << std::endl;
     DiscoveredParticipantIter part = participants_.find(*participant_id);
     if (part != participants_.end()) {
+      std::cout << "REMOVE_EXPIRED_PARTICIPANTS 2 " << part->second.last_seen_ << ' ' << ACE_OS::gettimeofday() - ACE_Time_Value(part->second.pdata_.leaseDuration.seconds) << std::endl;
       if (part->second.last_seen_ <
           ACE_OS::gettimeofday() -
           ACE_Time_Value(part->second.pdata_.leaseDuration.seconds)) {

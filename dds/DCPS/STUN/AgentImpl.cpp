@@ -114,6 +114,7 @@ namespace ICE {
                              DCPS::RepoId const & a_local_guid,
                              DCPS::RepoId const & a_remote_guid,
                              AgentInfo const & a_remote_agent_info) {
+    std::cout << "START ICE " << a_local_guid << ' ' << a_remote_guid << std::endl;
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
     check_invariants();
     EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);
@@ -125,6 +126,7 @@ namespace ICE {
   void AgentImpl::stop_ice(Endpoint * a_endpoint,
                            DCPS::RepoId const & a_local_guid,
                            DCPS::RepoId const & a_remote_guid) {
+    std::cout << "STOP ICE " << a_local_guid << ' ' << a_remote_guid << std::endl;
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
     check_invariants();
     EndpointManagerMapType::const_iterator pos = m_endpoint_managers.find(a_endpoint);

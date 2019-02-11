@@ -698,6 +698,7 @@ TransportClient::get_ice_endpoint()
     if (endpoint) { return endpoint; }
   }
 
+  // TODO(jrw972):  This should return a set.  How would the semantics change?
   return 0;
 }
 

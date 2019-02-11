@@ -57,8 +57,8 @@ class Spdp;
 class WaitForAcks;
 
 #ifdef OPENDDS_SECURITY
-struct DiscoveredWriterData_SecurityWrapper;
-struct DiscoveredReaderData_SecurityWrapper;
+struct DiscoveredPublication_SecurityWrapper;
+struct DiscoveredSubscription_SecurityWrapper;
 typedef Security::SPDPdiscoveredParticipantData ParticipantData_t;
 #else
 typedef SPDPdiscoveredParticipantData ParticipantData_t;
@@ -189,13 +189,13 @@ private:
       const DiscoveredPublication* wdata_;
 
 #ifdef OPENDDS_SECURITY
-      const DiscoveredWriterData_SecurityWrapper* wdata_secure_;
+      const DiscoveredPublication_SecurityWrapper* wdata_secure_;
 #endif
 
       const DiscoveredSubscription* rdata_;
 
 #ifdef OPENDDS_SECURITY
-      const DiscoveredReaderData_SecurityWrapper* rdata_secure_;
+      const DiscoveredSubscription_SecurityWrapper* rdata_secure_;
 #endif
 
       const ParticipantMessageData* pmdata_;
@@ -213,7 +213,7 @@ private:
       : type_(mt), id_(id), wdata_(wdata) {}
 
 #ifdef OPENDDS_SECURITY
-    Msg(MsgType mt, DCPS::MessageId id, const DiscoveredWriterData_SecurityWrapper* wdata)
+    Msg(MsgType mt, DCPS::MessageId id, const DiscoveredPublication_SecurityWrapper* wdata)
       : type_(mt), id_(id), wdata_secure_(wdata) {}
 #endif
 
@@ -221,7 +221,7 @@ private:
       : type_(mt), id_(id), rdata_(rdata) {}
 
 #ifdef OPENDDS_SECURITY
-    Msg(MsgType mt, DCPS::MessageId id, const DiscoveredReaderData_SecurityWrapper* rdata)
+    Msg(MsgType mt, DCPS::MessageId id, const DiscoveredSubscription_SecurityWrapper* rdata)
       : type_(mt), id_(id), rdata_secure_(rdata) {}
 #endif
 
@@ -451,8 +451,8 @@ private:
     void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredSubscription> rdata);
 
 #ifdef OPENDDS_SECURITY
-    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredWriterData_SecurityWrapper> wrapper);
-    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredReaderData_SecurityWrapper> wrapper);
+    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredPublication_SecurityWrapper> wrapper);
+    void enqueue(DCPS::MessageId id, DCPS::unique_ptr<DiscoveredSubscription_SecurityWrapper> wrapper);
 #endif
 
     void enqueue(DCPS::MessageId id, DCPS::unique_ptr<ParticipantMessageData> data);
@@ -480,8 +480,8 @@ private:
     void svc_i(DCPS::MessageId id, const DiscoveredSubscription* rdata);
 
 #ifdef OPENDDS_SECURITY
-    void svc_i(DCPS::MessageId id, const DiscoveredWriterData_SecurityWrapper* wrapper);
-    void svc_i(DCPS::MessageId id, const DiscoveredReaderData_SecurityWrapper* wrapper);
+    void svc_i(DCPS::MessageId id, const DiscoveredPublication_SecurityWrapper* wrapper);
+    void svc_i(DCPS::MessageId id, const DiscoveredSubscription_SecurityWrapper* wrapper);
 #endif
 
     void svc_i(DCPS::MessageId id, const ParticipantMessageData* data);
@@ -527,7 +527,9 @@ private:
 
   void process_discovered_writer_data(DCPS::MessageId message_id,
                                       const DCPS::DiscoveredWriterData& wdata,
-                                      const DCPS::RepoId& guid
+                                      const DCPS::RepoId& guid,
+                                      bool have_ice_agent_info,
+                                      const ICE::AgentInfo& ice_agent_info
 #ifdef OPENDDS_SECURITY
                                       , const DDS::Security::EndpointSecurityInfo* security_info = NULL
 #endif
@@ -538,12 +540,14 @@ private:
 
 #ifdef OPENDDS_SECURITY
   void data_received(DCPS::MessageId message_id,
-                     const DiscoveredWriterData_SecurityWrapper& wrapper);
+                     const DiscoveredPublication_SecurityWrapper& wrapper);
 #endif
 
   void process_discovered_reader_data(DCPS::MessageId message_id,
                                       const DCPS::DiscoveredReaderData& rdata,
-                                      const DCPS::RepoId& guid
+                                      const DCPS::RepoId& guid,
+                                      bool have_ice_agent_info,
+                                      const ICE::AgentInfo& ice_agent_info
 #ifdef OPENDDS_SECURITY
                                       , const DDS::Security::EndpointSecurityInfo* security_info = NULL
 #endif
@@ -554,7 +558,7 @@ private:
 
 #ifdef OPENDDS_SECURITY
   void data_received(DCPS::MessageId message_id,
-                     const DiscoveredReaderData_SecurityWrapper& wrapper);
+                     const DiscoveredSubscription_SecurityWrapper& wrapper);
 #endif
 
   void data_received(DCPS::MessageId message_id,
@@ -716,6 +720,20 @@ protected:
                            ICE::AgentInfo const & a_agent_info);
   } subscription_agent_info_listener_;
 
+  void add_assoc_i(DCPS::RepoId const & local_guid, LocalPublication const & lpub,
+                   DCPS::RepoId const & remote_guid, DiscoveredSubscription const & dsub);
+  void remove_assoc_i(DCPS::RepoId const & local_guid, LocalPublication const &lpub,
+                      DCPS::RepoId const & remote_guid);
+  void add_assoc_i(DCPS::RepoId const & local_guid, LocalSubscription const & lsub,
+                   DCPS::RepoId const & remote_guid, DiscoveredPublication const & dpub);
+  void remove_assoc_i(DCPS::RepoId const & local_guid, LocalSubscription const &lsub,
+                      DCPS::RepoId const & remote_guid);
+  void start_ice(DCPS::RepoId const & guid, LocalPublication const & lpub);
+  void start_ice(DCPS::RepoId const & guid, LocalSubscription const & lsub);
+  void start_ice(DCPS::RepoId const & guid, DiscoveredPublication const & dpub);
+  void start_ice(DCPS::RepoId const & guid, DiscoveredSubscription const & dsub);
+  void stop_ice(DCPS::RepoId const & guid, DiscoveredPublication const & dpub);
+  void stop_ice(DCPS::RepoId const & guid, DiscoveredSubscription const & dsub);
 };
 
 /// A class to wait on acknowledgments from other threads
