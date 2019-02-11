@@ -51,6 +51,7 @@ namespace ICE {
   }
 
   int AgentImpl::handle_timeout(ACE_Time_Value const & a_now, const void* /*act*/) {
+    ACE_Guard<ACE_Recursive_Thread_Mutex> guard(m_mutex);
     check_invariants();
     if (m_tasks.empty()) {
       return 0;
