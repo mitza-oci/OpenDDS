@@ -64,6 +64,11 @@ namespace ICE {
   void EndpointManager::start_ice(DCPS::RepoId const & a_local_guid,
                                   DCPS::RepoId const & a_remote_guid,
                                   AgentInfo const & a_remote_agent_info) {
+    // Check for username collision.
+    if (a_remote_agent_info.username == m_agent_info.username) {
+      change_username();
+    }
+
     GuidPair guidp(a_local_guid, a_remote_guid);
 
     // Try to find by guid.
@@ -238,7 +243,6 @@ namespace ICE {
 
     // Start over.
     UsernameToChecklistType old_checklists = m_username_to_checklist;
-
     for (UsernameToChecklistType::const_iterator pos = old_checklists.begin(),
            limit = old_checklists.end();
          pos != limit; ++pos) {
