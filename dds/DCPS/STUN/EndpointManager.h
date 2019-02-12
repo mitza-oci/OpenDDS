@@ -47,7 +47,7 @@ namespace ICE {
     {}
   };
 
-  struct EndpointManager : public Task {
+  struct EndpointManager {
     AgentImpl * const agent_impl;
     Endpoint * const endpoint;
 
@@ -160,6 +160,10 @@ namespace ICE {
     typedef std::map<DCPS::RepoId, AgentInfoListener *, DCPS::GUID_tKeyLessThan> AgentInfoListenersType;
     AgentInfoListenersType m_agent_info_listeners;
 
+    void change_username();
+
+    void change_password();
+
     void set_host_addresses(AddressListType const & a_host_addresses);
 
     void set_server_reflexive_address(ACE_INET_Addr const & a_server_reflexive_address,
@@ -167,7 +171,7 @@ namespace ICE {
 
     void regenerate_agent_info();
 
-    void execute(ACE_Time_Value const & a_now);
+    void server_reflexive_task(ACE_Time_Value const & a_now);
 
     bool success_response(STUN::Message const & a_message);
 
@@ -197,6 +201,18 @@ namespace ICE {
     void error_response(ACE_INET_Addr const & a_local_address,
                         ACE_INET_Addr const & a_remote_address,
                         STUN::Message const & a_message);
+
+    struct ServerReflexiveTask : public Task {
+      EndpointManager * endpoint_manager;
+      ServerReflexiveTask(EndpointManager * a_endpoint_manager);
+      void execute(ACE_Time_Value const & a_now);
+    } m_server_reflexive_task;
+
+    struct ChangePasswordTask : public Task {
+      EndpointManager * endpoint_manager;
+      ChangePasswordTask(EndpointManager * a_endpoint_manager);
+      void execute(ACE_Time_Value const & a_now);
+    } m_change_password_task;
   };
 
 } // namespace ICE

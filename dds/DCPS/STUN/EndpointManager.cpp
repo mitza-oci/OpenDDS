@@ -23,24 +23,42 @@ namespace ICE {
   const size_t server_reflexive_indication_count = 10;
   // Lifetime of a deferred triggered check.
   const ACE_Time_Value deferred_triggered_check_ttl(5 * 60);
+  // Change the password this often.
+  const ACE_Time_Value change_password_period(5 * 60);
 
-  std::string stringify(unsigned char x[32]) {
+  std::string stringify(unsigned char x[16]) {
     char retval[32];
-    for (size_t idx = 0; idx != 32; ++idx) {
-      retval[idx] = (x[idx] % 26) + 97;
+    for (size_t idx = 0; idx != 16; ++idx) {
+      retval[2 * idx] = (x[idx] & 0x0F) + 97;
+      retval[2 * idx + 1] = ((x[idx] & 0xF0) >> 4) + 97;
     }
     return std::string(retval, 32);
   }
 
   EndpointManager::EndpointManager(AgentImpl * a_agent_impl, Endpoint * a_endpoint) :
-    Task(a_agent_impl),
     agent_impl(a_agent_impl),
     endpoint(a_endpoint),
     m_requesting(true),
-    m_send_count(0) {
+    m_send_count(0),
+    m_server_reflexive_task(this),
+    m_change_password_task(this) {
 
+    // Set the type.
+    m_agent_info.type = FULL;
+
+    int rc =  RAND_bytes(reinterpret_cast<unsigned char*>(&m_ice_tie_breaker), sizeof(m_ice_tie_breaker));
+    if (rc != 1) {
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
+    }
+
+    change_username();
     set_host_addresses(endpoint->host_addresses());
-    enqueue(ACE_Time_Value().now());
   }
 
   void EndpointManager::start_ice(DCPS::RepoId const & a_local_guid,
@@ -139,6 +157,39 @@ namespace ICE {
     ACE_ERROR((LM_WARNING, ACE_TEXT("(%P|%t) EndpointManager::receive: WARNING Unknown ICE message class %d\n"), a_message.class_));
   }
 
+  void EndpointManager::change_username() {
+    // Generate the username.
+    unsigned char username[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int rc = RAND_bytes(username, sizeof(username));
+    if (rc != 1) {
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) EndpointManager::EndpointManager: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
+    }
+    m_agent_info.username = stringify(username);
+    change_password();
+  }
+
+  void EndpointManager::change_password() {
+    unsigned char password[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int rc = RAND_bytes(password, sizeof(password));
+    if (rc != 1) {
+      unsigned long err = ERR_get_error();
+      char msg[256] = { 0 };
+      ERR_error_string_n(err, msg, sizeof(msg));
+
+      ACE_ERROR((LM_ERROR,
+                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
+                 msg));
+    }
+    m_agent_info.password = stringify(password);
+    regenerate_agent_info();
+  }
+
   void EndpointManager::set_host_addresses(AddressListType const & a_host_addresses) {
     // Section IETF RFC 8445 5.1.1.1
     // TODO(jrw972):  Handle IPv6.
@@ -183,47 +234,6 @@ namespace ICE {
     AgentInfo::CandidatesType::iterator last = std::unique(m_agent_info.candidates.begin (), m_agent_info.candidates.end (), candidates_equal);
     m_agent_info.candidates.erase(last, m_agent_info.candidates.end());
 
-    // Set the type.
-    m_agent_info.type = FULL;
-
-    // Generate the username, password, and tie breaker.
-    unsigned char username[32] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    int rc = RAND_bytes(username, sizeof(username));
-    if (rc != 1) {
-      unsigned long err = ERR_get_error();
-      char msg[256] = { 0 };
-      ERR_error_string_n(err, msg, sizeof(msg));
-
-      ACE_ERROR((LM_ERROR,
-                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
-                 msg));
-    }
-    m_agent_info.username = stringify(username);
-
-    unsigned char password[32] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    rc = RAND_bytes(password, sizeof(password));
-    if (rc != 1) {
-      unsigned long err = ERR_get_error();
-      char msg[256] = { 0 };
-      ERR_error_string_n(err, msg, sizeof(msg));
-
-      ACE_ERROR((LM_ERROR,
-                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
-                 msg));
-    }
-    m_agent_info.password = stringify(password);
-
-    rc =  RAND_bytes(reinterpret_cast<unsigned char*>(&m_ice_tie_breaker), sizeof(m_ice_tie_breaker));
-    if (rc != 1) {
-      unsigned long err = ERR_get_error();
-      char msg[256] = { 0 };
-      ERR_error_string_n(err, msg, sizeof(msg));
-
-      ACE_ERROR((LM_ERROR,
-                 ACE_TEXT("(%P|%t) EndpointManager::regenerate_agent_info: ERROR '%C' returned by RAND_bytes(...)\n"),
-                 msg));
-    }
-
     std::cout << m_agent_info << std::endl;
 
     // Start over.
@@ -248,7 +258,7 @@ namespace ICE {
     }
   }
 
-  void EndpointManager::execute(ACE_Time_Value const & a_now) {
+  void EndpointManager::server_reflexive_task(ACE_Time_Value const & a_now) {
     // Request and maintain a server-reflexive address.
     m_next_stun_server_address = endpoint->stun_server_address();
     if (m_next_stun_server_address != ACE_INET_Addr()) {
@@ -286,8 +296,6 @@ namespace ICE {
 
     // Repopulate the host addresses.
     set_host_addresses(endpoint->host_addresses());
-
-    enqueue(a_now + server_reflexive_address_period);
   }
 
   bool EndpointManager::success_response(STUN::Message const & a_message) {
@@ -654,6 +662,28 @@ namespace ICE {
            limit = m_username_to_checklist.end(); pos != limit; ++pos) {
       pos->second->unfreeze(a_foundation);
     }
+  }
+
+  EndpointManager::ServerReflexiveTask::ServerReflexiveTask(EndpointManager * a_endpoint_manager)
+    : Task(a_endpoint_manager->agent_impl),
+      endpoint_manager(a_endpoint_manager) {
+    enqueue(ACE_Time_Value().now());
+  }
+
+  void EndpointManager::ServerReflexiveTask::execute(ACE_Time_Value const & a_now) {
+    endpoint_manager->server_reflexive_task(a_now);
+    enqueue(a_now + server_reflexive_address_period);
+  }
+
+  EndpointManager::ChangePasswordTask::ChangePasswordTask(EndpointManager * a_endpoint_manager)
+    : Task(a_endpoint_manager->agent_impl),
+      endpoint_manager(a_endpoint_manager) {
+    enqueue(ACE_Time_Value().now() + change_password_period);
+  }
+
+  void EndpointManager::ChangePasswordTask::execute(ACE_Time_Value const & a_now) {
+    endpoint_manager->change_password();
+    enqueue(a_now + change_password_period);
   }
 
 } // namespace ICE

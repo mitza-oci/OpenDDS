@@ -609,7 +609,7 @@ namespace ICE {
       // We leave the cancelled checks in case we get a response.
       if (!cc.cancelled()) {
         std::cout << this << ' ' << m_local_agent_info.username << " retry send to " << m_remote_agent_info.username << ' ' << cc.candidate_pair().remote.address << ' ' << cc.request().transaction_id << std::endl;
-        // Reset the password in the event that in changed.
+        // Reset the password in the event that it changed.
         cc.password(m_remote_agent_info.password);
         m_endpoint_manager->endpoint->send(cc.candidate_pair().remote.address, cc.request());
       }
