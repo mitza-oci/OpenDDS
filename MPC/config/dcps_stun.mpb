@@ -1,4 +1,4 @@
-project : dcps {
+project: dcps, openssl {
   after += OpenDDS_Stun
   libs  += OpenDDS_Stun
 }

@@ -1,4 +1,4 @@
-project : dcps {
+project: dcps, dcps_stun {
   after += OpenDDS_Rtps
   libs  += OpenDDS_Rtps
 }

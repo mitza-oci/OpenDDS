@@ -45,7 +45,7 @@ namespace ICE {
     RELAYED = 0x3,
   };
 
-  struct Candidate {
+  struct OpenDDS_Stun_Export Candidate {
     ACE_INET_Addr address;
     // Transport - UDP or TCP
     std::string foundation;
