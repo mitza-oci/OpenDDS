@@ -45,7 +45,7 @@ matrix:
     - os: osx
       osx_image: xcode11.6
       compiler: clang
-      env: COMPILER=clang++ NO_INLINE=1 NO_DEBUG=1 CONFIGURE_CXX11=1
+      env: COMPILER=clang++ NO_INLINE=1 NO_DEBUG=1 CONFIGURE_CXX11=1 NO_MULTITOPIC=1
 
 addons:
   apt:
