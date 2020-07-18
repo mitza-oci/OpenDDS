@@ -89,7 +89,7 @@ before_script:
     fi
 
 script:
-  - make -s -j3
+  - make -s -j2
   - FILES=$(git clean -nd -e ext); if [ "$FILES" != "" ]; then
         echo ERROR These files should be gitignored;
         echo $FILES;
