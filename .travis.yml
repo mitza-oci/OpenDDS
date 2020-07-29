@@ -43,7 +43,7 @@ matrix:
             - g++-10
       env: COMPILER=g++-10 WIRESHARK=1 NO_TESTS=1
     - os: osx
-      osx_image: xcode11.5
+      osx_image: xcode11.6
       compiler: clang
       env: COMPILER=clang++ NO_INLINE=1 NO_DEBUG=1 CONFIGURE_CXX11=1 NO_MULTITOPIC=1
 
@@ -89,7 +89,7 @@ before_script:
     fi
 
 script:
-  - make -s -j2
+  - travis_wait 50 make -s -j2
   - FILES=$(git clean -nd -e ext); if [ "$FILES" != "" ]; then
         echo ERROR These files should be gitignored;
         echo $FILES;
