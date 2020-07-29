@@ -45,7 +45,7 @@ matrix:
     - os: osx
       osx_image: xcode11.6
       compiler: clang
-      env: COMPILER=clang++ NO_INLINE=1 NO_DEBUG=1 CONFIGURE_CXX11=1 NO_CSPROFILE=1
+      env: COMPILER=clang++ NO_INLINE=1 NO_DEBUG=1 CONFIGURE_CXX11=1 NO_CS_PROFILE=1 NO_OWNERSHIP_PROFILE=1 NO_OBJMODEL_PROFILE=1 NO_PERSISTENCE_PROFILE=1
 
 addons:
   apt:
@@ -73,7 +73,10 @@ before_script:
   - if [ "$NO_DEBUG" == "1" ]; then CONFIG_OPTIONS+=" --no-debug"; fi
   - if [ "$SAFETY_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --safety-profile"; fi
   - if [ "$NO_MULTITOPIC" == "1" ]; then CONFIG_OPTIONS+=" --no-multi-topic"; fi
-  - if [ "$NO_CSPROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-content-subscription"; fi
+  - if [ "$NO_CS_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-content-subscription"; fi
+  - if [ "$NO_OWNERSHIP_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-ownership-profile"; fi
+  - if [ "$NO_OBJMODEL_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-object-model-profile"; fi
+  - if [ "$NO_PERSISTENCE_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-persistence-profile"; fi
   - if [ "$USE_JAVA" == "1" ]; then CONFIG_OPTIONS+=" --java"; fi
   - if [ "$NO_TESTS" == "1" ]; then CONFIG_OPTIONS+=" --no-tests"; fi
   - if [ "$USES_WCHAR" == "1" ]; then CONFIG_OPTIONS+=" --features=uses_wchar=1"; fi
