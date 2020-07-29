@@ -77,7 +77,7 @@ before_script:
   - if [ "$NO_OWNERSHIP_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-ownership-profile"; fi
   - if [ "$NO_OBJMODEL_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-object-model-profile"; fi
   - if [ "$NO_PERSISTENCE_PROFILE" == "1" ]; then CONFIG_OPTIONS+=" --no-persistence-profile"; fi
-  - if [ "$USE_JAVA" == "1" ]; then CONFIG_OPTIONS+=" --java"; fi
+  - if [ "$USE_JAVA" == "1" ]; then CONFIG_OPTIONS+=" --java"; MAKE_PREFIX="travis_wait 50"; fi
   - if [ "$NO_TESTS" == "1" ]; then CONFIG_OPTIONS+=" --no-tests"; fi
   - if [ "$USES_WCHAR" == "1" ]; then CONFIG_OPTIONS+=" --features=uses_wchar=1"; fi
   - if [ "$XERCES3" == "1" ]; then CONFIG_OPTIONS+=" --xerces3"; fi
@@ -93,7 +93,7 @@ before_script:
     fi
 
 script:
-  - travis_wait 50 make -s -j2
+  - $MAKE_PREFIX make -s -j2
   - FILES=$(git clean -nd -e ext); if [ "$FILES" != "" ]; then
         echo ERROR These files should be gitignored;
         echo $FILES;
