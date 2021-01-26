@@ -97,7 +97,7 @@ Writer::svc()
     }
 
     SkipSerialize::Message message;
-    message.serialized_data.length(101340);
+    message.serialized_data.length(message_length);
     for (CORBA::ULong i = 0; i < message.serialized_data.length(); i++) {
       message.serialized_data[i] = '1';
     }
