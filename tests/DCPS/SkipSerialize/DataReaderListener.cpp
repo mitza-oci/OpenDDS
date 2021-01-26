@@ -75,7 +75,7 @@ void DataReaderListenerImpl::on_data_available(DDS::DataReader_ptr reader)
 
         for (CORBA::ULong j = 0; j < message.serialized_data.length(); ++j) {
           if (message.serialized_data[j] != ('1') ) {
-            std::cout << "ERROR: Bad data at index " << j << " value is " << ('1') << "\n";
+            std::cout << "ERROR: Bad data at index " << j << " value is " << message.serialized_data[j] << "\n";
             valid_ = false;
             break;
           }
