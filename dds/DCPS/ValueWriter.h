@@ -98,6 +98,9 @@ struct ValueWriter {
 template <typename T>
 void vwrite(ValueWriter& value_writer, const T& value);
 
+template <typename T>
+void vwrite(ValueWriter&, const T&) {}
+
 // Implementations of this interface will call vwrite(value_writer, v)
 // where v is the resulting of casting data to the appropriate type.
 struct ValueWriterDispatcher {

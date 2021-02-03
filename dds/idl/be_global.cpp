@@ -54,6 +54,8 @@ BE_GlobalData::BE_GlobalData()
   , generate_rapidjson_(false)
   , face_ts_(false)
   , printer_(false)
+  , value_reader_(false)
+  , value_writer_(false)
   , filename_only_includes_(false)
   , seq_("Seq")
   , language_mapping_(LANGMAP_NONE)
@@ -272,6 +274,26 @@ bool BE_GlobalData::printer() const
   return this->printer_;
 }
 
+void BE_GlobalData::value_reader(bool b)
+{
+  value_reader_ = b;
+}
+
+bool BE_GlobalData::value_reader() const
+{
+  return value_reader_;
+}
+
+void BE_GlobalData::value_writer(bool b)
+{
+  value_writer_ = b;
+}
+
+bool BE_GlobalData::value_writer() const
+{
+  return value_writer_;
+}
+
 void
 BE_GlobalData::open_streams(const char* filename)
 {
@@ -388,6 +410,10 @@ BE_GlobalData::parse_args(long& i, char** av)
       rapidjson(true);
     } else if (!ACE_OS::strcasecmp(av[i], "-Gprinter")) {
       printer(true);
+    } else if (!ACE_OS::strcasecmp(av[i], "-Gvwrite")) {
+      value_writer(true);
+    } else if (!ACE_OS::strcasecmp(av[i], "-Gvread")) {
+      value_reader(true);
     } else {
       invalid_option(av[i]);
     }

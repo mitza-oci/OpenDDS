@@ -145,6 +145,12 @@ public:
   bool printer() const;
   void printer(bool b);
 
+  bool value_reader() const;
+  void value_reader(bool b);
+
+  bool value_writer() const;
+  void value_writer(bool b);
+
   ACE_CString java_arg() const;
   void java_arg(const ACE_CString& str);
 
@@ -241,7 +247,7 @@ private:
 
   bool java_, suppress_idl_, suppress_typecode_, suppress_xtypes_,
     no_default_gen_, generate_itl_, generate_v8_,
-    generate_rapidjson_, face_ts_, printer_;
+    generate_rapidjson_, face_ts_, printer_, value_reader_, value_writer_;
 
   bool filename_only_includes_;
 

@@ -26,6 +26,7 @@ feature(no_opendds_safety_profile, built_in_topics) : dds_suppress_any_support, 
   }
 
   TypeSupport_Files {
+    dcps_ts_flags += -Gvwrite
     DdsDcpsGuid.idl
     DdsDcpsCore.idl
     DdsDcpsInfrastructure.idl
@@ -80,6 +81,7 @@ feature(no_opendds_safety_profile, !built_in_topics) : dds_suppress_any_support,
 
   TypeSupport_Files {
     dcps_ts_flags += -SI
+    dcps_ts_flags += -Gvwrite
     DdsDcpsGuid.idl
     DdsDcpsCore.idl
     DdsDcpsInfoUtils.idl
