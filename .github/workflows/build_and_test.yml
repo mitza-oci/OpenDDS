@@ -5365,7 +5365,6 @@ jobs:
         path: ${{ github.job }}.tar.xz
         key: ${{ github.job }}_ace6tao2_${{ env.ACE_COMMIT }}
     - name: install vcpkg packages
-      if: steps.cache-artifact.outputs.cache-hit != 'true'
       uses: lukka/run-vcpkg@v6
       with:
         vcpkgGitCommitId: ec6fe06
@@ -5383,7 +5382,6 @@ jobs:
         repository: DOCGroup/MPC
         path: MPC
     - name: set up msvc env
-      if: steps.cache-artifact.outputs.cache-hit != 'true'
       uses: ilammy/msvc-dev-cmd@v1.6.0
     - name: build WinFlexBison
       uses: lukka/run-cmake@v3
