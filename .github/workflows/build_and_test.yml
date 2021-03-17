@@ -2293,7 +2293,7 @@ jobs:
     - name: set Wireshark environment
       shell: cmd
       run: |
-        echo WIRESHARK_LIB_DIR=%CD%\wslibs>> %GITHUB_ENV%
+        echo WIRESHARK_LIB_DIR=%CD%\wireshark-win64-libs>> %GITHUB_ENV%
     - name: build Wireshark
       uses: lukka/run-cmake@v3
       with:
