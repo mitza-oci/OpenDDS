@@ -5387,6 +5387,16 @@ jobs:
       uses: lukka/run-cmake@v3
       with:
         cmakeListsTxtPath: winflexbison/CMakeLists.txt
+    - name: checkout Wireshark
+      shell: cmd
+      run: |
+        git clone --depth=1 https://gitlab.com/wireshark/wireshark.git
+    - name: build Wireshark
+      uses: lukka/run-cmake@v3
+      with:
+        cmakeListsTxtPath: wireshark/CMakeLists.txt
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeAppendedArgs: '-GNinja -DLEX_EXECUTABLE=%GITHUB_WORKSPACE%\winflexbison\bin\Debug\win_bison.exe'
     - name: configure OpenDDS
       if: steps.cache-artifact.outputs.cache-hit != 'true'
       shell: cmd
