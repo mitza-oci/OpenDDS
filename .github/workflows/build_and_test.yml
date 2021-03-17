@@ -2263,6 +2263,7 @@ jobs:
         path: ${{ github.job }}.tar.xz
         key: ${{ github.job }}_ace6tao2_${{ env.ACE_COMMIT }}
     - name: install vcpkg packages
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
       uses: lukka/run-vcpkg@v6
       with:
         vcpkgGitCommitId: ec6fe06
@@ -2296,6 +2297,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         buildDirectory: ${{ github.workspace }}/wsbuild
         cmakeAppendedArgs: '-GNinja -DLEX_EXECUTABLE=${{ github.workspace }}\winflexbison\bin\Debug\win_bison.exe'
+        buildWithCMakeArgs: '-t epan'
     - name: configure OpenDDS
       if: steps.cache-artifact.outputs.cache-hit != 'true'
       shell: cmd
