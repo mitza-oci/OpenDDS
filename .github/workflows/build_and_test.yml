@@ -2302,7 +2302,7 @@ jobs:
         cmakeListsTxtPath: wireshark/CMakeLists.txt
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         buildDirectory: ${{ github.workspace }}/wsbuild
-        cmakeAppendedArgs: '-GNinja -DLEX_EXECUTABLE=${{ github.workspace }}\winflexbison\bin\Debug\win_bison.exe'
+        cmakeAppendedArgs: '-GNinja -DLEX_EXECUTABLE=${{ github.workspace }}\winflexbison\bin\Debug\win_flex.exe'
         buildWithCMakeArgs: '-t epan'
     - name: configure OpenDDS
       if: steps.cache-artifact.outputs.cache-hit != 'true'
