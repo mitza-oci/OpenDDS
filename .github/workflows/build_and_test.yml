@@ -2304,7 +2304,7 @@ jobs:
   ACE_TAO_w19-release_j_FM-1f:
 
     runs-on: windows-2019
-    needs: wireshark_w19-release_j_FM-1f
+    needs: wait_cancel_previous
 
     steps:
     - name: checkout OpenDDS
