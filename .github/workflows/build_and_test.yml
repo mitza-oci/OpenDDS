@@ -2263,7 +2263,7 @@ jobs:
         path: ${{ github.job }}.tar.xz
         key: ${{ github.job }}_ace6tao2_${{ env.ACE_COMMIT }}
     - name: install vcpkg packages
-      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      id: runvcpkg
       uses: lukka/run-vcpkg@v6
       with:
         vcpkgGitCommitId: ec6fe06
@@ -2294,7 +2294,8 @@ jobs:
       shell: cmd
       run: |
         echo WIRESHARK_LIB_DIR=%CD%\wireshark-win64-libs>> %GITHUB_ENV%
-        echo QT5_BASE_DIR=%VCPKG_ROOT%\installed\x64-windows>> %GITHUB_ENV%
+        echo QT5_BASE_DIR=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}\installed\x64-windows>> %GITHUB_ENV%
+        type %GITHUB_ENV%
     - name: build Wireshark
       uses: lukka/run-cmake@v3
       with:
