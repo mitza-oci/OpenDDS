@@ -2276,7 +2276,7 @@ jobs:
       if: steps.cache-artifact.outputs.cache-hit != 'true'
       shell: cmd
       run: |
-        echo WIRESHARK_LIB_DIR=%CD%\wireshark-win64-libs>> %GITHUB_ENV%
+        echo WIRESHARK_LIB_DIR=%CD%\wireshark-win64-libs-3.4>> %GITHUB_ENV%
         echo QT5_BASE_DIR=${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}\installed\x64-windows>> %GITHUB_ENV%
         type %GITHUB_ENV%
     - name: build Wireshark
@@ -2293,7 +2293,7 @@ jobs:
       shell: bash
       run: |
         find . -iname "*\.obj" -delete
-        tar cvf ${{ github.job }}.tar winflexbison wireshark wsbuild wireshark-win64-libs
+        tar cvf ${{ github.job }}.tar winflexbison wireshark wsbuild wireshark-win64-libs*
         xz -3 ${{ github.job }}.tar
     - name: upload Wireshark artifact
       uses: actions/upload-artifact@v2
@@ -2430,9 +2430,9 @@ jobs:
     - name: configure OpenDDS
       shell: cmd
       run: |
-        for /d %%x in (wireshark-win64-libs\glib*) do set GLIB_ROOT=%%x
+        for /d %%x in (wireshark-win64-libs-3.4\glib*) do set GLIB_ROOT=%%x
         cd OpenDDS
-        configure --tests --java --no-built-in-topics --rapidjson --ace=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/ACE --tao=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/TAO --mpc=%GITHUB_WORKSPACE%/MPC --xerces3=%VCPKG_ROOT%/installed/x64-windows --wireshark-cmake --wireshark-build=%GITHUB_WORKSPACE%\wsbuild --wireshark-lib=%GITHUB_WORKSPACE%\wireshark-win64-libs
+        configure --tests --java --no-built-in-topics --rapidjson --ace=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/ACE --tao=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/TAO --mpc=%GITHUB_WORKSPACE%/MPC --xerces3=%VCPKG_ROOT%/installed/x64-windows --wireshark-cmake --wireshark-build=%GITHUB_WORKSPACE%\wsbuild --wireshark-lib=%GITHUB_WORKSPACE%\wireshark-win64-libs-3.4
     - name: check build configuration
       shell: cmd
       run: |
