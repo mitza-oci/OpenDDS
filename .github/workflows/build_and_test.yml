@@ -2241,9 +2241,9 @@ jobs:
     - name: checkout Wireshark
       shell: cmd
       run: |
-        git clone -b release-3.4 --depth=1 https://gitlab.com/wireshark/wireshark.git
+        git clone -q -b release-3.4 --depth=1 https://gitlab.com/wireshark/wireshark.git
         cd wireshark
-        for /f %x in ('git rev-parse HEAD') do @echo WIRESHARK_COMMIT=%x>> %GITHUB_ENV%
+        for /f %%x in ('git rev-parse HEAD') do @echo WIRESHARK_COMMIT=%%x>> %GITHUB_ENV%
     - name: Cache Artifact
       id: cache-artifact
       uses: actions/cache@v2.1.4
@@ -2430,7 +2430,7 @@ jobs:
     - name: configure OpenDDS
       shell: cmd
       run: |
-        for /d %x in (wireshark-win64-libs\glib*) do set GLIB_ROOT=%x
+        for /d %%x in (wireshark-win64-libs\glib*) do set GLIB_ROOT=%%x
         cd OpenDDS
         configure --tests --java --no-built-in-topics --rapidjson --ace=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/ACE --tao=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/TAO --mpc=%GITHUB_WORKSPACE%/MPC --xerces3=%VCPKG_ROOT%/installed/x64-windows --wireshark-cmake --wireshark-build=%GITHUB_WORKSPACE%\wsbuild --wireshark-lib=%GITHUB_WORKSPACE%\wireshark-win64-libs
     - name: check build configuration
