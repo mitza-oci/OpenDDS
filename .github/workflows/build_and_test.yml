@@ -2259,7 +2259,7 @@ jobs:
       id: runvcpkg
       uses: lukka/run-vcpkg@v6
       with:
-        wvpkgDirectory: '${{ github.workspace }}/vcpkg-qt'
+        vcpkgDirectory: '${{ github.workspace }}/vcpkg-qt'
         vcpkgGitCommitId: ec6fe06e8da05a8157dc8581fa96b36b571c1bd5
         vcpkgArguments: --recurse qt5-winextras qt5-tools qt5-svg qt5-multimedia qt5-declarative
         vcpkgTriplet: x64-windows
