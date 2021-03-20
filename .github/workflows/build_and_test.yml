@@ -2429,7 +2429,7 @@ jobs:
       run: |
         cd OpenDDS
         set VCPKG_INST=installed\x64-windows
-        configure -v --tests --java --no-built-in-topics --rapidjson --ace=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/ACE --tao=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/TAO --mpc=%GITHUB_WORKSPACE%/MPC --xerces3=%VCPKG_ROOT%\%VCPKG_INST% --wireshark-cmake --wireshark-build=%GITHUB_WORKSPACE%\wsbuild --wireshark-lib=%GITHUB_WORKSPACE%\wireshark-win64-libs-3.4 --qt=%GITHUB_WORKSPACE%\vcpkg-qt\%VCPKG_INST% --glib=%GITHUB_WORKSPACE%\wireshark-win64-libs-3.4\vcpkg-export\20190318-win64ws\%VCPKG_INST% --features glib_versioned_includes=0
+        configure -v --tests --java --no-built-in-topics --rapidjson --ace=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/ACE --tao=%GITHUB_WORKSPACE%/OpenDDS/ACE_TAO/TAO --mpc=%GITHUB_WORKSPACE%/MPC --xerces3=%VCPKG_ROOT%\%VCPKG_INST% --wireshark-cmake=%GITHUB_WORKSPACE%\wireshark --wireshark-build=%GITHUB_WORKSPACE%\wsbuild --wireshark-lib=%GITHUB_WORKSPACE%\wireshark-win64-libs-3.4 --glib=%GITHUB_WORKSPACE%\wireshark-win64-libs-3.4\vcpkg-export\20190318-win64ws\%VCPKG_INST% --features glib_versioned_includes=0
     - name: check build configuration
       shell: cmd
       run: |
