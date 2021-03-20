@@ -2300,8 +2300,7 @@ jobs:
         path: |
           wireshark
           wsbuild
-          wireshark-win64-libs*
-          vcpkg-qt/installed
+          wireshark-win64-libs-3.4
 
   ACE_TAO_w19-release_j_FM-1f:
 
