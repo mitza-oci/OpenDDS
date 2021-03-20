@@ -2294,13 +2294,11 @@ jobs:
         cmakeAppendedArgs: '-GNinja -DLEX_EXECUTABLE=${{ github.workspace }}\winflexbison\bin\Debug\win_flex.exe -DYACC_EXECUTABLE=${{ github.workspace }}\winflexbison\bin\Debug\win_bison.exe'
         buildWithCMakeArgs: '-t epan'
     - name: upload Wireshark artifact
-      if: steps.cache-artifact.outputs.cache-hit != 'true'
       uses: actions/upload-artifact@v2
       with:
         name: ${{ github.job }}_artifact
         path: |
           wireshark
-          winflexbison/bin/Debug
           wsbuild
           wireshark-win64-libs*
           vcpkg-qt/installed
