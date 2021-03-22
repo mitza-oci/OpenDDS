@@ -2396,8 +2396,7 @@ jobs:
     - name: checkout MPC
       uses: actions/checkout@v2.3.4
       with:
-        repository: mitza-oci/MPC
-        ref: glib-layout
+        repository: DOCGroup/MPC
         path: MPC
     - name: checkout OpenDDS
       uses: actions/checkout@v2.3.4
