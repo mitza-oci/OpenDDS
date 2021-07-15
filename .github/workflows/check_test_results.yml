@@ -86,7 +86,7 @@ jobs:
           sed '/<testcase name="/s/\.\///g' -i ${{ matrix.info[0] }}_autobuild_output/Tests_JUnit.xml
 
       - name: 'Publish Unit Test Results'
-        uses: simpsont-oci/action-junit-report@v2.2.0.1
+        uses: simpsont-oci/action-junit-report@v2.4.2
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
