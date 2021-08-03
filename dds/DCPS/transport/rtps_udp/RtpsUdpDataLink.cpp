@@ -1610,7 +1610,7 @@ RtpsUdpDataLink::RtpsReader::pre_stop_helper()
   guard.release();
   g.release();
 
-  preassociation_task_.cancel_and_wait();
+  preassociation_task_->cancel_and_wait();
 }
 
 RtpsUdpDataLink::RtpsReader::~RtpsReader()
@@ -2107,7 +2107,7 @@ RtpsUdpDataLink::RtpsReader::add_writer(const WriterInfo_rch& writer)
       return false;
     }
 
-    preassociation_task_.schedule(link->config().heartbeat_period_);
+    preassociation_task_->schedule(link->config().heartbeat_period_);
     if (link->config().responsive_mode_) {
       MetaSubmessageVec meta_submessages;
       gather_preassociation_acknack_i(meta_submessages, writer);
@@ -2192,7 +2192,7 @@ RtpsUdpDataLink::RtpsReader::send_preassociation_acknacks(const MonotonicTimePoi
 
   link->queue_submessages(meta_submessages);
 
-  preassociation_task_.schedule(link->config().heartbeat_period_);
+  preassociation_task_->schedule(link->config().heartbeat_period_);
 }
 
 void

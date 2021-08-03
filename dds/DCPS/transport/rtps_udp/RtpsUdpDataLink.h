@@ -570,7 +570,7 @@ private:
       , id_(id)
       , stopping_(false)
       , nackfrag_count_(0)
-      , preassociation_task_(link->reactor_task_->interceptor(), *this, &RtpsReader::send_preassociation_acknacks)
+      , preassociation_task_(make_rch<Sporadic>(link->reactor_task_->interceptor(), *this, &RtpsReader::send_preassociation_acknacks))
     {}
 
     ~RtpsReader();
@@ -625,7 +625,7 @@ private:
     bool stopping_;
     CORBA::Long nackfrag_count_;
     typedef PmfSporadicTask<RtpsReader> Sporadic;
-    Sporadic preassociation_task_;
+    RcHandle<Sporadic> preassociation_task_;
   };
   typedef RcHandle<RtpsReader> RtpsReader_rch;
 
