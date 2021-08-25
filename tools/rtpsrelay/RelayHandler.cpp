@@ -605,7 +605,7 @@ bool VerticalHandler::parse_message(OpenDDS::RTPS::MessageParser& message_parser
       all_valid_info_dst = all_valid_info_dst && valid_info_dst;
     }
 
-    if (check_submessages) {
+    if (check_submessages || track_submessage_stats_) {
 #ifdef OPENDDS_SECURITY
       switch (submessage_header.submessageId) {
       case OpenDDS::RTPS::SRTPS_PREFIX:
@@ -667,6 +667,24 @@ bool VerticalHandler::parse_message(OpenDDS::RTPS::MessageParser& message_parser
             HANDLER_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) ERROR: VerticalHandler::parse_message %C could not parse submessage from %C\n"), name_.c_str(), guid_to_string(src_guid).c_str()));
             return false;
           }
+
+          if (track_submessage_stats_) {
+            ++submessage_stats_[writerId][submessage_header.submessageId];
+            if (++submessage_stats_count_ == 1024) {
+              submessage_stats_count_ = 0;
+              for (const auto& e: submessage_stats_) {
+                ACE_DEBUG((LM_INFO, "(%P|%t) STAT SEDP Submsgs for Entity %02x%02x%02x%02x:\n",
+                           e.first.entityKey[0], e.first.entityKey[1], e.first.entityKey[2], e.first.entityKind));
+                for (const auto& m: e.second) {
+                  ACE_DEBUG((LM_INFO, "\tID %d Count %B\n", m.first, m.second));
+                }
+              }
+            }
+            if (!check_submessages) {
+              break;
+            }
+          }
+
           if (rtps_discovery_->get_crypto_handle(config_.application_domain(), config_.application_participant_guid()) != DDS::HANDLE_NIL &&
               !(OpenDDS::DCPS::RtpsUdpDataLink::separate_message(writerId) ||
                 writerId == OpenDDS::DCPS::ENTITYID_SPDP_BUILTIN_PARTICIPANT_WRITER)) {
@@ -1002,7 +1020,9 @@ SedpHandler::SedpHandler(const Config& config,
                          const ACE_INET_Addr& application_participant_addr,
                          HandlerStatisticsReporter& stats_reporter)
 : VerticalHandler(config, name, SEDP, address, reactor, guid_partition_table, relay_partition_table, guid_addr_set, rtps_discovery, crypto, application_participant_addr, stats_reporter)
-{}
+{
+  track_submessage_stats(config.collect_sedp_statistics());
+}
 
 bool SedpHandler::do_normal_processing(GuidAddrSet::Proxy& proxy,
                                        const ACE_INET_Addr& remote,

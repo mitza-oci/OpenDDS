@@ -25,6 +25,7 @@ public:
     , log_entries_(false)
     , log_discovery_(false)
     , log_activity_(false)
+    , collect_sedp_statistics_(false)
   {}
 
   void application_participant_guid(const OpenDDS::DCPS::GUID_t& value)
@@ -216,6 +217,16 @@ public:
   {
     return publish_domain_statistics_;
   }
+  
+  void collect_sedp_statistics(bool flag)
+  {
+    collect_sedp_statistics_ = flag;
+  }
+
+  bool collect_sedp_statistics() const
+  {
+    return collect_sedp_statistics_;
+  }
 
 private:
   OpenDDS::DCPS::GUID_t application_participant_guid_;
@@ -237,6 +248,7 @@ private:
   OpenDDS::DCPS::TimeDuration publish_handler_statistics_;
   OpenDDS::DCPS::TimeDuration publish_participant_statistics_;
   OpenDDS::DCPS::TimeDuration publish_domain_statistics_;
+  bool collect_sedp_statistics_;
 };
 
 }

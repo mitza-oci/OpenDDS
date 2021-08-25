@@ -308,6 +308,8 @@ protected:
   void populate_address_set(AddressSet& address_set,
                             const StringSet& to_partitions);
 
+  void track_submessage_stats(bool f) { track_submessage_stats_ = f; }
+
   const GuidPartitionTable& guid_partition_table_;
   const RelayPartitionTable& relay_partition_table_;
   GuidAddrSet& guid_addr_set_;
@@ -330,6 +332,11 @@ private:
   const DDS::Security::CryptoTransform_var crypto_;
   const DDS::Security::ParticipantCryptoHandle application_participant_crypto_handle_;
 #endif
+
+  using StatsPerMessageId = std::map<ACE_CDR::Octet, size_t>;
+  std::map<OpenDDS::DCPS::EntityId_t, StatsPerMessageId, OpenDDS::DCPS::EntityId_tKeyLessThan> submessage_stats_;
+  bool track_submessage_stats_ = false;
+  std::uint16_t submessage_stats_count_ = 0;
 };
 
 // Sends to and receives from other relays.
