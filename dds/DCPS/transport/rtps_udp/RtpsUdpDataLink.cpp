@@ -70,6 +70,15 @@ using RTPS::to_rtps_seqnum;
 
 const size_t ONE_SAMPLE_PER_PACKET = 1;
 
+namespace {
+  void inc_counter(ACE_CDR::ULongLong& counter, const char* name, const GUID_t& id)
+  {
+    if (++counter % 1000 == 0) {
+      ACE_DEBUG((LM_DEBUG, "(%P|%t) RtpsUdpDataLink counter %C %Q %C\n", name, counter, LogGuid(id).c_str()));
+    }
+  }
+}
+
 RtpsUdpDataLink::RtpsUdpDataLink(RtpsUdpTransport& transport,
                                  const GuidPrefix_t& local_prefix,
                                  const RtpsUdpInst& config,
@@ -90,6 +99,9 @@ RtpsUdpDataLink::RtpsUdpDataLink(RtpsUdpTransport& transport,
   , security_config_(Security::SecurityRegistry::instance()->default_config())
   , local_crypto_handle_(DDS::HANDLE_NIL)
 #endif
+  , total_data_count_(0)
+  , total_hb_count_(0)
+  , total_an_count_(0)
 {
 #ifdef OPENDDS_SECURITY
   const GUID_t guid = make_id(local_prefix, ENTITYID_PARTICIPANT);
@@ -1524,6 +1536,8 @@ RtpsUdpDataLink::received(const RTPS::DataSubmessage& data,
 {
   const RepoId local = make_id(local_prefix_, data.readerId);
   const RepoId src = make_id(src_prefix, data.writerId);
+  
+  inc_counter(total_data_count_, "Total DATA", make_id(local_prefix_, ENTITYID_UNKNOWN));
 
   update_last_recv_addr(src, remote_addr);
 
@@ -1845,6 +1859,8 @@ RtpsUdpDataLink::received(const RTPS::HeartBeatSubmessage& heartbeat,
 
   update_last_recv_addr(src, remote_addr);
 
+  inc_counter(total_hb_count_, "Total HB", make_id(local_prefix_, ENTITYID_UNKNOWN));
+
   MetaSubmessageVec meta_submessages;
   OPENDDS_VECTOR(InterestingRemote) callbacks;
   {
@@ -1934,6 +1950,7 @@ RtpsUdpDataLink::RtpsReader::process_heartbeat_i(const RTPS::HeartBeatSubmessage
   // Only valid heartbeats (see spec) will be "fully" applied to writer info
   if (!(hb_first < 1 || hb_last < 0 || hb_last < hb_first.previous())) {
     if (writer->recvd_.empty() && (directed || !writer->sends_directed_hb())) {
+      inc_counter(preassoc_hb_count_, "Preassoc HB", id_);
       OPENDDS_ASSERT(preassociation_writers_.count(writer));
       preassociation_writers_.erase(writer);
       if (transport_debug.log_progress) {
@@ -2897,6 +2914,8 @@ RtpsUdpDataLink::received(const RTPS::AckNackSubmessage& acknack,
 
   const RepoId remote = make_id(src_prefix, acknack.readerId);
 
+  inc_counter(total_an_count_, "Total AN", make_id(local_prefix_, ENTITYID_UNKNOWN));
+
   update_last_recv_addr(remote, remote_addr);
 
   const MonotonicTimePoint now = MonotonicTimePoint::now();
@@ -3052,6 +3071,7 @@ RtpsUdpDataLink::RtpsWriter::process_acknack(const RTPS::AckNackSubmessage& ackn
   const bool is_postassociation = count_is_not_zero && (is_final || bitmapNonEmpty(acknack.readerSNState) || ack != 1);
 
   if (preassociation_readers_.count(reader)) {
+    inc_counter(preassoc_an_count_, "Preassoc AN", id_);
     if (is_postassociation) {
       preassociation_readers_.erase(reader);
       if (transport_debug.log_progress) {
@@ -4204,6 +4224,7 @@ RtpsUdpDataLink::RtpsWriter::RtpsWriter(RcHandle<RtpsUdpDataLink> link, const Re
  , heartbeat_(link->reactor_task_->interceptor(), *this, &RtpsWriter::send_heartbeats)
  , nack_response_(link->reactor_task_->interceptor(), *this, &RtpsWriter::send_nack_responses)
  , fallback_(link->config().heartbeat_period_)
+ , preassoc_an_count_(0)
 {
   send_buff_->bind(link->send_strategy());
 }

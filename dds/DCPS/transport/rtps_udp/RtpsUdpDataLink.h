@@ -419,6 +419,7 @@ private:
     Sporadic nack_response_;
 
     FibonacciSequence<TimeDuration> fallback_;
+    ACE_CDR::ULongLong preassoc_an_count_;
 
     void send_heartbeats(const MonotonicTimePoint& now);
     void send_nack_responses(const MonotonicTimePoint& now);
@@ -547,6 +548,7 @@ private:
       , stopping_(false)
       , nackfrag_count_(0)
       , preassociation_task_(link->reactor_task_->interceptor(), *this, &RtpsReader::send_preassociation_acknacks)
+      , preassoc_hb_count_(0)
     {}
 
     ~RtpsReader();
@@ -602,6 +604,7 @@ private:
     CORBA::Long nackfrag_count_;
     typedef PmfSporadicTask<RtpsReader> Sporadic;
     Sporadic preassociation_task_;
+    ACE_CDR::ULongLong preassoc_hb_count_;
   };
   typedef RcHandle<RtpsReader> RtpsReader_rch;
 
@@ -823,6 +826,8 @@ private:
   Security::HandleRegistry_rch handle_registry_;
   DDS::Security::ParticipantCryptoHandle local_crypto_handle_;
 #endif
+
+  ACE_CDR::ULongLong total_data_count_, total_hb_count_, total_an_count_;
 
   void accumulate_addresses(const RepoId& local, const RepoId& remote, AddrSet& addresses, bool prefer_unicast = false) const;
 
