@@ -1,0 +1,30 @@
+module Service {
+
+    enum OS {
+        UNKNOWN,
+        ANDROID,
+        IOS
+    };
+
+    struct Paramters {
+		string param;
+	};
+
+    typedef sequence<Paramters> seqParamters;
+	struct Device {
+		string id;
+		string ip;
+		OS mOS;
+		seqParamters params;
+		boolean allow;
+	};
+
+
+    typedef sequence<Device> SeqDeviceList;
+	@topic
+	struct DeviceList {
+		@key string  id;
+		SeqDeviceList mDeviceList;
+	};
+
+};

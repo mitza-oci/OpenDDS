@@ -1,0 +1,5 @@
+project: dcps {
+  after += Issue3347_IDL
+  libs += Service_IDL
+  libpaths += ../IDL
+}

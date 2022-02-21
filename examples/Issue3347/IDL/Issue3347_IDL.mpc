@@ -1,0 +1,18 @@
+project: dcps_java {
+
+  idlflags      += -Wb,export_include=Service_IDL_Export.h \
+                   -Wb,export_macro=Service_IDL_Export -SS
+  dcps_ts_flags += -Wb,export_macro=Service_IDL_Export
+  idl2jniflags  += -Wb,export_include=Service_IDL_Export.h \
+                   -Wb,export_macro=Service_IDL_Export
+  dynamicflags  += SERVICE_IDL_BUILD_DLL
+  sharedname     = Service_IDL
+
+  specific {
+    jarname      = Service_IDL
+  }
+
+ TypeSupport_Files {
+    Service.idl
+  }
+}

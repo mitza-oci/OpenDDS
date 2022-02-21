@@ -1,0 +1,4 @@
+project: dcps_java {
+  after += Issue3347_IDL
+  javacflags += -classpath ../IDL/Service_IDL.jar
+}
