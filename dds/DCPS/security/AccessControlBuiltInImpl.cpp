@@ -586,7 +586,7 @@ AccessControlBuiltInImpl::~AccessControlBuiltInImpl()
 ::CORBA::Boolean AccessControlBuiltInImpl::check_local_datawriter_register_instance(
   ::DDS::Security::PermissionsHandle permissions_handle,
   ::DDS::DataWriter_ptr writer,
-  ::DDS::Security::DynamicData_ptr key,
+  ::DDS::DynamicData_ptr key,
   ::DDS::Security::SecurityException & ex)
 {
   if (DDS::HANDLE_NIL == permissions_handle) {
@@ -605,7 +605,7 @@ AccessControlBuiltInImpl::~AccessControlBuiltInImpl()
 ::CORBA::Boolean AccessControlBuiltInImpl::check_local_datawriter_dispose_instance(
   ::DDS::Security::PermissionsHandle permissions_handle,
   ::DDS::DataWriter_ptr writer,
-  ::DDS::Security::DynamicData_ptr key,
+  ::DDS::DynamicData_ptr key,
   ::DDS::Security::SecurityException & ex)
 {
   if (DDS::HANDLE_NIL == permissions_handle) {
@@ -993,13 +993,11 @@ AccessControlBuiltInImpl::~AccessControlBuiltInImpl()
   ::DDS::Security::PermissionsHandle permissions_handle,
   ::DDS::DataReader_ptr reader,
   ::DDS::InstanceHandle_t publication_handle,
-  ::DDS::Security::DynamicData_ptr key,
-  ::DDS::InstanceHandle_t instance_handle,
+  ::DDS::DynamicData_ptr key,
   ::DDS::Security::SecurityException & ex)
 {
   if (DDS::HANDLE_NIL == permissions_handle ||
-      DDS::HANDLE_NIL == publication_handle ||
-      DDS::HANDLE_NIL == instance_handle) {
+      DDS::HANDLE_NIL == publication_handle) {
     return CommonUtilities::set_security_error(ex, -1, 0, "AccessControlBuiltInImpl::check_remote_datawriter_register_instance: Invalid handle");
   }
   if (0 == reader) {
@@ -1016,7 +1014,7 @@ AccessControlBuiltInImpl::~AccessControlBuiltInImpl()
   ::DDS::Security::PermissionsHandle permissions_handle,
   ::DDS::DataReader_ptr reader,
   ::DDS::InstanceHandle_t publication_handle,
-  ::DDS::Security::DynamicData_ptr key,
+  ::DDS::DynamicData_ptr key,
   ::DDS::Security::SecurityException & ex)
 {
   if (DDS::HANDLE_NIL == permissions_handle ||
