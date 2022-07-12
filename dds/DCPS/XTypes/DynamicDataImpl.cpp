@@ -916,7 +916,7 @@ bool DynamicDataImpl::skip_to_array_element(MemberId id, DDS::DynamicType_ptr co
 
   if (!coll_type) {
     elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
-    coll_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+    coll_type = get_base_type(type_);
     if (coll_type->get_descriptor(coll_descriptor) != DDS::RETCODE_OK) {
       return false;
     }
