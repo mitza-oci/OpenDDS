@@ -82,12 +82,6 @@ RecorderImpl::RecorderImpl()
 RecorderImpl::~RecorderImpl()
 {
   DBG_ENTRY_LVL("RecorderImpl","~RecorderImpl",6);
-
-#ifndef OPENDDS_SAFETY_PROFILE
-  for (DynamicTypeByPubId::const_iterator pos = dt_map_.begin(), limit = dt_map_.end(); pos != limit; ++pos) {
-    pos->second->clear();
-  }
-#endif
 }
 
 
@@ -237,8 +231,7 @@ void
 RecorderImpl::add_to_dynamic_type_map(const PublicationId& pub_id, const XTypes::TypeIdentifier& ti)
 {
   XTypes::TypeLookupService_rch tls = participant_servant_->get_type_lookup_service();
-  XTypes::TypeObject cto = tls->get_type_object(ti);
-  DDS::DynamicType_var dt = tls->complete_to_dynamic(cto.complete, pub_id);
+  DDS::DynamicType_var dt = tls->type_identifier_to_dynamic(ti, pub_id);
   if (DCPS_debug_level >= 4) {
     ACE_DEBUG((LM_DEBUG,
                "(%P|%t) RecorderImpl::add_association: "

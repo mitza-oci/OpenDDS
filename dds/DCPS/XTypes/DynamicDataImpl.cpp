@@ -2824,8 +2824,8 @@ bool DynamicDataImpl::check_xcdr1_mutable_i(DDS::DynamicType_ptr dt, DynamicType
     return false;
   }
   dtns.insert(descriptor->name());
-  DDS::DynamicTypeMember_var dtm;
   for (ACE_CDR::ULong i = 0; i < dt->get_member_count(); ++i) {
+    DDS::DynamicTypeMember_var dtm;
     if (dt->get_member_by_index(dtm, i) != DDS::RETCODE_OK) {
       if (DCPS::log_level >= DCPS::LogLevel::Notice) {
         ACE_ERROR((LM_NOTICE, "(%P|%t) NOTICE: DynamicDataImpl::check_xcdr1_mutable: "
@@ -2873,13 +2873,13 @@ bool print_struct(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Stri
     if (member_base_type->get_descriptor(member_base_type_descriptor) != DDS::RETCODE_OK) {
       return false;
     }
-    const DCPS::String member_type_name = member_type->get_name();
+    const CORBA::String_var member_type_name = member_type->get_name();
     if ((member_base_type->get_kind() == TK_STRUCTURE ||
          member_base_type->get_kind() == TK_UNION) &&
         true /*iter->second->get_parent()->get_descriptor().kind == TK_STRUCTURE*/) {
       type_string += indent;
     } else {
-      type_string += indent + member_type_name + " " + member_name;
+      type_string += indent + DCPS::String(member_type_name.in()) + " " + member_name;
     }
     if (member_base_type_descriptor->kind() == TK_SEQUENCE ||
         member_base_type_descriptor->kind() == TK_ARRAY) {
@@ -2945,13 +2945,13 @@ bool print_union(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Strin
         return false;
       }
 
-      const DCPS::String member_type_name = member_type->get_name();
+      const CORBA::String_var member_type_name = member_type->get_name();
       if ((member_base_type->get_kind() == TK_STRUCTURE ||
            member_base_type->get_kind() == TK_UNION) &&
           true /*iter->second->get_parent()->get_descriptor().kind == TK_UNION*/) {
         type_string += indent;
       } else {
-        type_string += indent + member_type_name + " " + member_name;
+        type_string += indent + DCPS::String(member_type_name.in()) + " " + member_name;
       }
       if (member_base_type_descriptor->kind() == TK_SEQUENCE ||
           member_base_type_descriptor->kind() == TK_ARRAY) {
