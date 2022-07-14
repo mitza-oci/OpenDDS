@@ -42,7 +42,7 @@ public:
     XTypes::TypeMap::const_iterator pos = com_map.find(com_ti);
     EXPECT_TRUE(pos != com_map.end());
     const XTypes::TypeObject& com_to = pos->second;
-    DCPS::GUID_t fake_guid;
+    DCPS::GUID_t fake_guid = OpenDDS::DCPS::GUID_UNKNOWN;
     DDS::DynamicType_var converted_dt = tls_->complete_to_dynamic(com_to.complete, fake_guid);
     EXPECT_TRUE(expected_dynamic_type->equals(converted_dt));
     converted_dt->clear();
