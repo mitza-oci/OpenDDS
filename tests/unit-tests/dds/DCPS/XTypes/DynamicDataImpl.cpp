@@ -1,3 +1,5 @@
+#ifndef OPENDDS_SAFETY_PROFILE
+
 #include "../../../DynamicDataTypeSupportImpl.h"
 
 #include <dds/DCPS/XTypes/TypeLookupService.h>
@@ -871,7 +873,7 @@ void verify_array_struct(DDS::DynamicData_ptr data)
 }
 
 /////////////////////////// Mutable tests ///////////////////////////
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadValueFromStruct)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_ReadValueFromStruct)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableSingleValueStruct_xtag>();
@@ -913,7 +915,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadValueFromStruct)
   verify_single_value_struct<MutableSingleValueStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_StructWithOptionalMembers)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_StructWithOptionalMembers)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableSingleValueStruct_xtag>();
@@ -960,7 +962,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_StructWithOptionalMembers)
   verify_index_mapping(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadValueFromUnion)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_ReadValueFromUnion)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableSingleValueUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableSingleValueUnion_xtag>();
@@ -1178,7 +1180,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadValueFromUnion)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadSequenceFromStruct)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_ReadSequenceFromStruct)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableSequenceStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableSequenceStruct_xtag>();
@@ -1219,7 +1221,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadSequenceFromStruct)
   verify_sequence_value_struct<MutableSequenceStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadSequenceFromUnion)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_ReadSequenceFromUnion)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableSequenceUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableSequenceUnion_xtag>();
@@ -1256,7 +1258,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadSequenceFromUnion)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadValueFromArray)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_ReadValueFromArray)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableArrayStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableArrayStruct_xtag>();
@@ -1279,7 +1281,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_ReadValueFromArray)
   verify_array_struct(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Mutable_SkipNestedMembers)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Mutable_SkipNestedMembers)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::MutableStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::MutableStruct_xtag>();
@@ -1373,7 +1375,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Mutable_SkipNestedMembers)
 }
 
 /////////////////////////////// Appendable tests ////////////////////////////
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromStruct)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadValueFromStruct)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSingleValueStruct_xtag>();
@@ -1413,7 +1415,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromStruct)
   verify_single_value_struct<AppendableSingleValueStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromStructXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadValueFromStructXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSingleValueStruct_xtag>();
@@ -1452,7 +1454,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromStructXCDR1)
   verify_single_value_struct<AppendableSingleValueStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_StructWithOptionalMembers)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_StructWithOptionalMembers)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSingleValueStruct_xtag>();
@@ -1495,7 +1497,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_StructWithOptionalMembers)
   verify_index_mapping(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromUnion)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadValueFromUnion)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSingleValueUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSingleValueUnion_xtag>();
@@ -1710,7 +1712,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromUnion)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromUnionXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadValueFromUnionXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSingleValueUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSingleValueUnion_xtag>();
@@ -1907,7 +1909,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromUnionXCDR1)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromStruct)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadSequenceFromStruct)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSequenceStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSequenceStruct_xtag>();
@@ -1948,7 +1950,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromStruct)
   verify_sequence_value_struct<AppendableSequenceStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromStructXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadSequenceFromStructXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSequenceStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSequenceStruct_xtag>();
@@ -1988,7 +1990,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromStructXCDR1)
   verify_sequence_value_struct<AppendableSequenceStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromUnion)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadSequenceFromUnion)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSequenceUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSequenceUnion_xtag>();
@@ -2023,7 +2025,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromUnion)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromUnionXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadSequenceFromUnionXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableSequenceUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableSequenceUnion_xtag>();
@@ -2056,7 +2058,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadSequenceFromUnionXCDR1)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromArray)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadValueFromArray)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableArrayStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableArrayStruct_xtag>();
@@ -2079,7 +2081,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromArray)
   verify_array_struct(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromArrayXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_ReadValueFromArrayXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableArrayStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableArrayStruct_xtag>();
@@ -2101,7 +2103,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_ReadValueFromArrayXCDR1)
   verify_array_struct(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_SkipNestedMembers)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_SkipNestedMembers)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableStruct_xtag>();
@@ -2180,7 +2182,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_SkipNestedMembers)
   EXPECT_EQ(expected.i, i);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Appendable_SkipNestedMembersXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Appendable_SkipNestedMembersXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::AppendableStructXCDR1_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::AppendableStructXCDR1_xtag>();
@@ -2257,7 +2259,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Appendable_SkipNestedMembersXCDR1)
 }
 
 /////////////////////////////// Final tests /////////////////////////////
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromStruct)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadValueFromStruct)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSingleValueStruct_xtag>();
@@ -2296,7 +2298,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromStruct)
   verify_single_value_struct<FinalSingleValueStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromStructXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadValueFromStructXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSingleValueStruct_xtag>();
@@ -2335,7 +2337,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromStructXCDR1)
   verify_single_value_struct<FinalSingleValueStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_StructWithOptionalMembers)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_StructWithOptionalMembers)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSingleValueStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSingleValueStruct_xtag>();
@@ -2377,7 +2379,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_StructWithOptionalMembers)
   verify_index_mapping(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromUnion)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadValueFromUnion)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSingleValueUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSingleValueUnion_xtag>();
@@ -2574,7 +2576,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromUnion)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromUnionXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadValueFromUnionXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSingleValueUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSingleValueUnion_xtag>();
@@ -2771,7 +2773,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromUnionXCDR1)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromStruct)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadSequenceFromStruct)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSequenceStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSequenceStruct_xtag>();
@@ -2811,7 +2813,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromStruct)
   verify_sequence_value_struct<FinalSequenceStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromStructXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadSequenceFromStructXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSequenceStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSequenceStruct_xtag>();
@@ -2851,7 +2853,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromStructXCDR1)
   verify_sequence_value_struct<FinalSequenceStruct>(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromUnion)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadSequenceFromUnion)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSequenceUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSequenceUnion_xtag>();
@@ -2884,7 +2886,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromUnion)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromUnionXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadSequenceFromUnionXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalSequenceUnion_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalSequenceUnion_xtag>();
@@ -2917,7 +2919,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadSequenceFromUnionXCDR1)
   }
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromArray)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadValueFromArray)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalArrayStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalArrayStruct_xtag>();
@@ -2939,7 +2941,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromArray)
   verify_array_struct(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromArrayXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_ReadValueFromArrayXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalArrayStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalArrayStruct_xtag>();
@@ -2961,7 +2963,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_ReadValueFromArrayXCDR1)
   verify_array_struct(&data);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_SkipNestedMembers)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_SkipNestedMembers)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalStruct_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalStruct_xtag>();
@@ -3038,7 +3040,7 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_SkipNestedMembers)
   EXPECT_EQ(expected.i, i);
 }
 
-TEST(DDS_DCPS_XTypes_DynamicData, Final_SkipNestedMembersXCDR1)
+TEST(DDS_DCPS_XTypes_DynamicDataImpl, Final_SkipNestedMembersXCDR1)
 {
   const XTypes::TypeIdentifier& ti = DCPS::getCompleteTypeIdentifier<DCPS::FinalStructXCDR1_xtag>();
   const XTypes::TypeMap& type_map = DCPS::getCompleteTypeMap<DCPS::FinalStructXCDR1_xtag>();
@@ -3113,3 +3115,5 @@ TEST(DDS_DCPS_XTypes_DynamicData, Final_SkipNestedMembersXCDR1)
   EXPECT_EQ(DDS::RETCODE_OK, ret);
   EXPECT_EQ(expected.i, i);
 }
+
+#endif // OPENDDS_SAFETY_PROFILE

@@ -21,7 +21,7 @@ Bitset
 
 using namespace OpenDDS;
 
-class dds_DCPS_XTypes_DynamicType : public ::testing::Test {
+class dds_DCPS_XTypes_DynamicTypeImpl : public ::testing::Test {
   void SetUp()
   {
     tls_ = DCPS::make_rch<XTypes::TypeLookupService>();
@@ -49,7 +49,7 @@ public:
   }
 };
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyInnerStruct)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyInnerStruct)
 {
   XTypes::DynamicTypeImpl* expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var expected_dt_var = expected_dt;
@@ -81,7 +81,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyInnerStruct)
   test_conversion<DCPS::MyModCompleteToDynamic_MyInnerStruct_xtag>(expected_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyOuterStruct)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyOuterStruct)
 {
   XTypes::DynamicTypeImpl* expected_outer_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var expected_outer_dt_var = expected_outer_dt;
@@ -133,7 +133,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyOuterStruct)
   test_conversion<DCPS::MyModCompleteToDynamic_MyOuterStruct_xtag>(expected_outer_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyAliasStruct)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyAliasStruct)
 {
   XTypes::DynamicTypeImpl* expected_alias_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var expected_alias_dt_var = expected_alias_dt;
@@ -195,7 +195,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyAliasStruct)
   test_conversion<DCPS::MyModCompleteToDynamic_MyAliasStruct_xtag>(expected_alias_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_PrimitiveKind)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_PrimitiveKind)
 {
   XTypes::DynamicTypeImpl* expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var expected_dt_var = expected_dt;
@@ -235,7 +235,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_PrimitiveKind)
   expected_dt_var->clear();
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyUnion)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyUnion)
 {
   XTypes::DynamicTypeImpl* expected_union_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var expected_union_dt_var = expected_union_dt;
@@ -353,7 +353,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyUnion)
   enum_expected_dt_var->clear();
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyInnerArray)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyInnerArray)
 {
   XTypes::DynamicTypeImpl* alias_inner_expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var alias_inner_expected_dt_var = alias_inner_expected_dt;
@@ -385,7 +385,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyInnerArray)
   test_conversion<DCPS::MyModCompleteToDynamic_MyInnerArray_xtag>(alias_inner_expected_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyOuterArray)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyOuterArray)
 {
   XTypes::DynamicTypeImpl* alias_outer_expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var alias_outer_expected_dt_var = alias_outer_expected_dt;
@@ -437,7 +437,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyOuterArray)
   test_conversion<DCPS::MyModCompleteToDynamic_MyOuterArray_xtag>(alias_outer_expected_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MySeq)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MySeq)
 {
   XTypes::DynamicTypeImpl* alias_expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var alias_expected_dt_var = alias_expected_dt;
@@ -469,7 +469,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MySeq)
   test_conversion<DCPS::MyModCompleteToDynamic_MySeq_xtag>(alias_expected_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyAnonStruct)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyAnonStruct)
 {
   XTypes::DynamicTypeImpl* expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var expected_dt_var = expected_dt;
@@ -533,7 +533,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_MyAnonStruct)
   test_conversion<DCPS::MyModCompleteToDynamic_MyAnonStruct_xtag>(expected_dt);
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_CircularStruct)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_CircularStruct)
 {
   XTypes::DynamicTypeImpl* struct_expected_dt = new XTypes::DynamicTypeImpl();
   DDS::DynamicType_var struct_expected_dt_var = struct_expected_dt;
@@ -600,7 +600,7 @@ TEST_F(dds_DCPS_XTypes_DynamicType, CompleteToDynamicType_CircularStruct)
   struct_expected_dt_var->clear();
 }
 
-void dds_DCPS_XTypes_DynamicType::MoreSetup()
+void dds_DCPS_XTypes_DynamicTypeImpl::MoreSetup()
 {
   XTypes::TypeIdentifierPairSeq tid_pairs;
 
@@ -981,7 +981,7 @@ bool operator==(const TypeObject& lhs, const TypeObject& rhs)
 
 OPENDDS_END_VERSIONED_NAMESPACE_DECL
 
-class dds_DCPS_XTypes_DynamicType_CompleteToMinimal : public ::testing::Test {
+class dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal : public ::testing::Test {
   void SetUp()
   {
     tls_ = DCPS::make_rch<XTypes::TypeLookupService>();
@@ -1016,39 +1016,39 @@ public:
 };
 
 
-TEST_F(dds_DCPS_XTypes_DynamicType_CompleteToMinimal, MyStruct)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal, MyStruct)
 {
   test_conversion<DCPS::MyModCompleteToMinimal_MyStruct_xtag>();
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType_CompleteToMinimal, MyUnion)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal, MyUnion)
 {
   test_conversion<DCPS::MyModCompleteToMinimal_MyUnion_xtag>();
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType_CompleteToMinimal, SCC)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal, SCC)
 {
   // TODO(sonndinh): Verify conversion of the types in the SCC including
   // CircularStruct, CircularStruct2, sequence<CircularStruct>,
   // sequence<CircularStruct2>, and CircularStruct[3].
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType_CompleteToMinimal, LSeq)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal, LSeq)
 {
   test_conversion<DCPS::MyModCompleteToMinimal_LSeq_xtag>();
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType_CompleteToMinimal, LArr)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal, LArr)
 {
   test_conversion<DCPS::MyModCompleteToMinimal_LArr_xtag>();
 }
 
-TEST_F(dds_DCPS_XTypes_DynamicType_CompleteToMinimal, MyEnum)
+TEST_F(dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal, MyEnum)
 {
   test_conversion<DCPS::MyModCompleteToMinimal_MyEnum_xtag>();
 }
 
-void dds_DCPS_XTypes_DynamicType_CompleteToMinimal::MoreSetup()
+void dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal::MoreSetup()
 {
   XTypes::TypeIdentifierPairSeq tid_pairs;
 
