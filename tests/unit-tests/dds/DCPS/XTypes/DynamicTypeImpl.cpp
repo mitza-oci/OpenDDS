@@ -1,3 +1,5 @@
+#ifndef OPENDDS_SAFETY_PROFILE
+
 /*
 TODO Untested Types:
 Map
@@ -1089,3 +1091,5 @@ void dds_DCPS_XTypes_DynamicTypeImpl_CompleteToMinimal::MoreSetup()
 
   tls_->update_type_identifier_map(tid_pairs);
 }
+
+#endif // OPENDDS_SAFETY_PROFILE
