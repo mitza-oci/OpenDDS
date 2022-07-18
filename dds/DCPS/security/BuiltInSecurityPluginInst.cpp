@@ -27,14 +27,13 @@ BuiltInSecurityPluginInst::BuiltInSecurityPluginInst()
   , key_factory_(new CryptoBuiltInImpl)
   , key_exchange_(CryptoKeyExchange::_narrow(key_factory_))
   , transform_(CryptoTransform::_narrow(key_factory_))
-  , utility_(new UtilityImpl())
+  , utility_(new UtilityImpl)
 #endif
 {
 }
 
 BuiltInSecurityPluginInst::~BuiltInSecurityPluginInst()
 {
-  delete utility_;
 }
 
 #ifdef OPENDDS_SECURITY

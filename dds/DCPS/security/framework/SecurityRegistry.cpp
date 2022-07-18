@@ -189,7 +189,7 @@ SecurityRegistry::create_config(const OPENDDS_STRING& config_name)
                                    crypto_plugin_inst->create_crypto_key_exchange(),
                                    crypto_plugin_inst->create_crypto_key_factory(),
                                    crypto_plugin_inst->create_crypto_transform(),
-                                   static_cast<Utility*>(0),
+                                   DCPS::RcHandle<Utility>(),
 #endif
                                    entry->get_properties());
 
@@ -260,7 +260,7 @@ SecurityRegistry::default_config() const
     CryptoKeyFactory_var d;
     CryptoTransform_var e;
     default_config_ = DCPS::make_rch<SecurityConfig>("NoPlugins", a, b, c, d, e,
-                                                     static_cast<Utility*>(0),
+                                                     DCPS::RcHandle<Utility>(),
                                                      ConfigPropertyList());
   }
 #endif
