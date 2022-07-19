@@ -198,14 +198,14 @@ AccessControlBuiltInImpl::~AccessControlBuiltInImpl()
     return DDS::HANDLE_NIL;
   }
 
+  ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, handle_mutex_, DDS::HANDLE_NIL);
+
   ACIdentityMap::iterator iter = local_identity_map_.find(local_identity_handle);
 
   if (iter == local_identity_map_.end()) {
     CommonUtilities::set_security_error(ex,-1, 0, "AccessControlBuiltInImpl::validate_remote_permissions: No matching local identity handle present");
     return DDS::HANDLE_NIL;
   }
-
-  ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, handle_mutex_, DDS::HANDLE_NIL);
 
   ACPermsMap::iterator piter = local_ac_perms_.find(iter->second);
 
@@ -1719,6 +1719,19 @@ AccessControlBuiltInImpl::RevokePermissionsTask::execute(const DCPS::MonotonicTi
     const TimeDuration duration = std::min(TimeDuration(expiration_to_handle_.begin()->first - cur_utc_time), MAX_DURATION);
     schedule(duration);
   }
+}
+
+SSL::SubjectName
+AccessControlBuiltInImpl::get_subject_name(DDS::Security::PermissionsHandle permissions_handle) const
+{
+  ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, handle_mutex_, SSL::SubjectName());
+
+  ACPermsMap::const_iterator pos = local_ac_perms_.find(permissions_handle);
+  if (pos != local_ac_perms_.end()) {
+    return pos->second.subject;
+  }
+
+  return SSL::SubjectName();
 }
 
 } // namespace Security

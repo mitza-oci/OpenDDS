@@ -236,6 +236,8 @@ public:
 
   static bool pattern_match(const char* string, const char* pattern);
 
+  SSL::SubjectName get_subject_name(DDS::Security::PermissionsHandle permissions_handle) const;
+
 private:
 
   AccessControlBuiltInImpl(const AccessControlBuiltInImpl&);
