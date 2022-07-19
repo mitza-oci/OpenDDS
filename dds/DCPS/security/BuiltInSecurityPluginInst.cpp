@@ -27,7 +27,7 @@ BuiltInSecurityPluginInst::BuiltInSecurityPluginInst()
   , key_factory_(new CryptoBuiltInImpl)
   , key_exchange_(CryptoKeyExchange::_narrow(key_factory_))
   , transform_(CryptoTransform::_narrow(key_factory_))
-  , utility_(new UtilityImpl)
+  , utility_(DCPS::make_rch<UtilityImpl>())
 #endif
 {
 }
@@ -62,7 +62,7 @@ CryptoTransform_var BuiltInSecurityPluginInst::create_crypto_transform()
   return transform_;
 }
 
-Utility* BuiltInSecurityPluginInst::create_utility()
+DCPS::RcHandle<Utility> BuiltInSecurityPluginInst::create_utility()
 {
   return utility_;
 }
