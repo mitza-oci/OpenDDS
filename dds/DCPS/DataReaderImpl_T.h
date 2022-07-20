@@ -1656,8 +1656,8 @@ void store_instance_data(unique_ptr<MessageTypeWithAllocator> instance_data,
       // The remote participant might not be using security.
       if (remote_participant_permissions_handle != DDS::HANDLE_NIL &&
           !security_config_->get_access_control()->check_remote_datawriter_register_instance(remote_participant_permissions_handle, this, publication_handle, &ddh, ex)) {
-        ACE_ERROR((LM_ERROR,
-                   "(%P|%t) ERROR: DataReaderImpl_T::store_instance_data: unable to register instance SecurityException[%d.%d]: %C\n",
+        ACE_ERROR((LM_WARNING,
+                   "(%P|%t) WARNING: DataReaderImpl_T::store_instance_data: unable to register instance SecurityException[%d.%d]: %C\n",
                    ex.code, ex.minor_code, ex.message.in()));
         return;
       }
@@ -1672,8 +1672,8 @@ void store_instance_data(unique_ptr<MessageTypeWithAllocator> instance_data,
       // The remote participant might not be using security.
       if (remote_participant_permissions_handle != DDS::HANDLE_NIL &&
           !security_config_->get_access_control()->check_remote_datawriter_dispose_instance(remote_participant_permissions_handle, this, publication_handle, &ddh, ex)) {
-        ACE_ERROR((LM_ERROR,
-                   "(%P|%t) ERROR: DataReaderImpl_T::store_instance_data: unable to dispose instance SecurityException[%d.%d]: %C\n",
+        ACE_ERROR((LM_WARNING,
+                   "(%P|%t) WARNING: DataReaderImpl_T::store_instance_data: unable to dispose instance SecurityException[%d.%d]: %C\n",
                    ex.code, ex.minor_code, ex.message.in()));
         return;
       }

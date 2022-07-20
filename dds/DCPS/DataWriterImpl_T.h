@@ -131,8 +131,8 @@ public:
     if (security_config_ &&
         participant_permissions_handle_ != DDS::HANDLE_NIL &&
         !security_config_->get_access_control()->check_local_datawriter_register_instance(participant_permissions_handle_, this, &ddh, ex)) {
-      ACE_ERROR((LM_ERROR,
-                 "(%P|%t) ERROR: DataWriterImpl_T::register_instance_w_timestamp: unable to register instance SecurityException[%d.%d]: %C\n",
+      ACE_ERROR((LM_WARNING,
+                 "(%P|%t) WARNING: DataWriterImpl_T::register_instance_w_timestamp: unable to register instance SecurityException[%d.%d]: %C\n",
                  ex.code, ex.minor_code, ex.message.in()));
       return DDS::HANDLE_NIL;
     }
@@ -208,8 +208,8 @@ public:
     if (security_config_ &&
         participant_permissions_handle_ != DDS::HANDLE_NIL &&
         !security_config_->get_access_control()->check_local_datawriter_register_instance(participant_permissions_handle_, this, &ddh, ex)) {
-      ACE_ERROR((LM_ERROR,
-                 "(%P|%t) ERROR: DataWriterImpl_T::write_w_timestamp: unable to register instance SecurityException[%d.%d]: %C\n",
+      ACE_ERROR((LM_WARNING,
+                 "(%P|%t) WARNING: DataWriterImpl_T::write_w_timestamp: unable to register instance SecurityException[%d.%d]: %C\n",
                  ex.code, ex.minor_code, ex.message.in()));
       return DDS::HANDLE_NIL;
     }
@@ -280,8 +280,8 @@ public:
     if (security_config_ &&
         participant_permissions_handle_ != DDS::HANDLE_NIL &&
         !security_config_->get_access_control()->check_local_datawriter_dispose_instance(participant_permissions_handle_, this, &ddh, ex)) {
-      ACE_ERROR((LM_ERROR,
-                 "(%P|%t) ERROR: DataWriterImpl_T::dispose_instance_w_timestamp: unable to dispose instance SecurityException[%d.%d]: %C\n",
+      ACE_ERROR((LM_WARNING,
+                 "(%P|%t) WARNING: DataWriterImpl_T::dispose_instance_w_timestamp: unable to dispose instance SecurityException[%d.%d]: %C\n",
                  ex.code, ex.minor_code, ex.message.in()));
       return DDS::Security::RETCODE_NOT_ALLOWED_BY_SECURITY;
     }
