@@ -43,7 +43,7 @@ public:
   typedef AttrMap::const_iterator const_iterator;
   const_iterator begin() const { return map_.begin(); }
   const_iterator end() const { return map_.end(); }
-  const_iterator find(const std::string& key) { return map_.find(key); }
+  const_iterator find(const std::string& key) const { return map_.find(key); }
 
 private:
   /**
