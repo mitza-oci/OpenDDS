@@ -436,7 +436,7 @@ private:
   ///
   bool skip_to_struct_member(DDS::MemberDescriptor* member_desc, MemberId id);
 
-  bool get_from_struct_common_checks(DDS::MemberDescriptor*& md, MemberId id,
+  bool get_from_struct_common_checks(DDS::MemberDescriptor_var& md, MemberId id,
                                      TypeKind kind, bool is_sequence = false);
 
   /// Return the member descriptor for the selected member from a union data or null.

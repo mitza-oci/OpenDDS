@@ -676,15 +676,11 @@ template<TypeKind MemberTypeKind, typename MemberType>
 bool DynamicDataImpl::get_value_from_struct(MemberType& value, MemberId id,
                                             TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  {
-    // Scoped because reusing md creates a memory leak.
-    DDS::MemberDescriptor_var md;
-    if (get_from_struct_common_checks(md, id, MemberTypeKind)) {
-      return skip_to_struct_member(md, id) && read_value(value, MemberTypeKind);
-    }
+  DDS::MemberDescriptor_var md;
+  if (get_from_struct_common_checks(md, id, MemberTypeKind)) {
+    return skip_to_struct_member(md, id) && read_value(value, MemberTypeKind);
   }
 
-  DDS::MemberDescriptor_var md;
   if (get_from_struct_common_checks(md, id, enum_or_bitmask)) {
     const DDS::DynamicType_ptr member_type = md->type();
     if (member_type) {
@@ -1562,8 +1558,7 @@ bool DynamicDataImpl::get_values_from_struct(SequenceType& value, MemberId id,
   if (get_from_struct_common_checks(md, id, ElementTypeKind, true)) {
     return skip_to_struct_member(md, id) && read_values(value, ElementTypeKind);
   }
-  // Need to reset md before next call.
-  md = 0;
+
   if (get_from_struct_common_checks(md, id, enum_or_bitmask, true)) {
     const DDS::DynamicType_ptr member_type = md->type();
     if (member_type) {
@@ -2075,7 +2070,7 @@ bool DynamicDataImpl::skip_to_struct_member(DDS::MemberDescriptor* member_desc, 
   }
 }
 
-bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor*& md, MemberId id, TypeKind kind, bool is_sequence)
+bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor_var& md, MemberId id, TypeKind kind, bool is_sequence)
 {
   const DDS::DynamicType_var base_type = get_base_type(type_);
 
