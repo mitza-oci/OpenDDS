@@ -572,7 +572,6 @@ void TypeLookupService::complete_to_dynamic_i(DynamicTypeImpl* dt,
       md->is_default_label(cto.enumerated_type.literal_seq[i].common.flags & IS_DEFAULT);
       md->index(i);
       dtm->set_descriptor(md);
-      //dtm->set_parent(dt);
       dt->insert_dynamic_member(dtm);
     }
     break;
@@ -593,7 +592,6 @@ void TypeLookupService::complete_to_dynamic_i(DynamicTypeImpl* dt,
       md->type(temp);
       md->index(i);
       dtm->set_descriptor(md);
-      //dtm->set_parent(dt);
       dt->insert_dynamic_member(dtm);
     }
     }
@@ -609,7 +607,6 @@ void TypeLookupService::complete_to_dynamic_i(DynamicTypeImpl* dt,
       DynamicTypeMemberImpl* dtm = new DynamicTypeMemberImpl();
       DDS::DynamicTypeMember_var dtm_var = dtm;
       dtm->set_descriptor(md);
-      //dtm->set_parent(dt);
       dt->insert_dynamic_member(dtm);
     }
     break;
@@ -636,7 +633,6 @@ void TypeLookupService::complete_to_dynamic_i(DynamicTypeImpl* dt,
       DDS::MemberDescriptor_var md = complete_struct_member_to_member_descriptor(cto.struct_type.member_seq[i], guid);
       md->index(i);
       dtm->set_descriptor(md);
-      //dtm->set_parent(dt);
       dt->insert_dynamic_member(dtm);
     }
     }
@@ -664,7 +660,6 @@ void TypeLookupService::complete_to_dynamic_i(DynamicTypeImpl* dt,
       DynamicTypeMemberImpl* dtm = new DynamicTypeMemberImpl();
       DDS::DynamicTypeMember_var dtm_var = dtm;
       dtm->set_descriptor(md);
-      //dtm->set_parent(dt);
       dt->insert_dynamic_member(dtm);
     }
     }

@@ -7,7 +7,7 @@ use lib "$ENV{DDS_ROOT}/bin";
 use PerlDDS::Run_Test;
 use strict;
 
-PerlDDS::add_lib_path('$ENV{DDS_ROOT}/tess/DCPS/ConsolidatedMessengerIdl');
+PerlDDS::add_lib_path("$ENV{DDS_ROOT}/tests/DCPS/ConsolidatedMessengerIdl");
 
 my $test = new PerlDDS::TestFramework();
 

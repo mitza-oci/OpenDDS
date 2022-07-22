@@ -3,8 +3,8 @@
  * See: http://www.opendds.org/license.html
  */
 
-#ifndef OPENDDS_DCPS_XTYPES_DYNAMIC_DATA_HOLDER_H
-#define OPENDDS_DCPS_XTYPES_DYNAMIC_DATA_HOLDER_H
+#ifndef OPENDDS_DCPS_XTYPES_DYNAMIC_DATA_ADAPTER_H
+#define OPENDDS_DCPS_XTYPES_DYNAMIC_DATA_ADAPTER_H
 
 #ifndef OPENDDS_SAFETY_PROFILE
 #ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
@@ -18,9 +18,9 @@ namespace OpenDDS {
 namespace XTypes {
 
 template <typename T>
-class DynamicDataHolder : public DDS::DynamicData {
+class DynamicDataAdapter : public DDS::DynamicData {
 public:
-  DynamicDataHolder(DDS::DynamicType_ptr type,
+  DynamicDataAdapter(DDS::DynamicType_ptr type,
                     const DCPS::MetaStruct& meta_struct,
                     const T& value)
     : type_(DDS::DynamicType::_duplicate(type))
@@ -52,7 +52,7 @@ public:
 
   CORBA::Boolean equals(DDS::DynamicData_ptr)
   {
-    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: ConstDynamicDataHolder::equals is not implemented\n"));
+    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: DynamicDataAdapter::equals is not implemented\n"));
     return 0;
   }
 
@@ -78,7 +78,7 @@ public:
 
   CORBA::ULong get_item_count()
   {
-    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: ConstDynamicDataHolder::get_item_count is not implemented\n"));
+    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: DynamicDataAdapter::get_item_count is not implemented\n"));
     return 0;
   }
 
@@ -99,19 +99,19 @@ public:
 
   DDS::DynamicData_ptr loan_value(DDS::MemberId)
   {
-    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: ConstDynamicDataHolder::loan_value is not implemented\n"));
+    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: DynamicDataAdapter::loan_value is not implemented\n"));
     return 0;
   }
 
   DDS::ReturnCode_t return_loaned_value(DDS::DynamicData_ptr)
   {
-    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: ConstDynamicDataHolder::return_loaned_value is not implemented\n"));
+    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: DynamicDataAdapter::return_loaned_value is not implemented\n"));
     return DDS::RETCODE_UNSUPPORTED;
   }
 
   DDS::DynamicData_ptr clone()
   {
-    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: ConstDynamicDataHolder::clone is not implemented\n"));
+    ACE_ERROR((LM_ERROR, "(%P|%t) ERROR: DynamicDataAdapter::clone is not implemented\n"));
     return 0;
   }
 
@@ -128,7 +128,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_INT32) {
       return DDS::RETCODE_ERROR;
     }
@@ -157,7 +157,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_UINT32) {
       return DDS::RETCODE_ERROR;
     }
@@ -186,7 +186,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_INT8) {
       return DDS::RETCODE_ERROR;
     }
@@ -215,7 +215,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_UINT8) {
       return DDS::RETCODE_ERROR;
     }
@@ -244,7 +244,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_INT16) {
       return DDS::RETCODE_ERROR;
     }
@@ -273,7 +273,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_UINT16) {
       return DDS::RETCODE_ERROR;
     }
@@ -302,7 +302,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_INT64) {
       return DDS::RETCODE_ERROR;
     }
@@ -331,7 +331,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_UINT64) {
       return DDS::RETCODE_ERROR;
     }
@@ -360,7 +360,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_FLOAT32) {
       return DDS::RETCODE_ERROR;
     }
@@ -390,7 +390,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_FLOAT64) {
       return DDS::RETCODE_ERROR;
     }
@@ -419,7 +419,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_FLOAT128) {
       return DDS::RETCODE_ERROR;
     }
@@ -448,7 +448,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_CHAR8) {
       return DDS::RETCODE_ERROR;
     }
@@ -503,7 +503,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_BOOLEAN) {
       return DDS::RETCODE_ERROR;
     }
@@ -532,7 +532,7 @@ public:
       return DDS::RETCODE_ERROR;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(get_base_type(md->type()));
+    DDS::DynamicType_var type = get_base_type(md->type());
     if (type->get_kind() != TK_STRING8) {
       return DDS::RETCODE_ERROR;
     }
@@ -809,4 +809,4 @@ OPENDDS_END_VERSIONED_NAMESPACE_DECL
 #endif // OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
 #endif // OPENDDS_SAFETY_PROFILE
 
-#endif
+#endif // OPENDDS_DCPS_XTYPES_DYNAMIC_DATA_ADAPTER_H

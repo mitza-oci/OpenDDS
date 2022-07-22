@@ -15,7 +15,7 @@
 #include "TypeSupportImpl.h"
 #include "dcps_export.h"
 #include "GuidConverter.h"
-#include "XTypes/DynamicDataHolder.h"
+#include "XTypes/DynamicDataAdapter.h"
 
 #ifndef OPENDDS_HAS_STD_SHARED_PTR
 #  include <ace/Bound_Ptr.h>
@@ -1240,6 +1240,62 @@ protected:
 
 private:
 
+  bool store_instance_data_check(unique_ptr<MessageTypeWithAllocator>& instance_data,
+                                 DDS::InstanceHandle_t publication_handle,
+                                 const OpenDDS::DCPS::DataSampleHeader& header,
+                                 OpenDDS::DCPS::SubscriptionInstance_rch& instance_ptr)
+  {
+#if defined(OPENDDS_SECURITY) && !defined(OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE)
+    const bool is_dispose_msg =
+      header.message_id_ == OpenDDS::DCPS::DISPOSE_INSTANCE ||
+      header.message_id_ == OpenDDS::DCPS::DISPOSE_UNREGISTER_INSTANCE;
+
+    if (!is_bit() && security_config_) {
+      if (header.message_id_ == SAMPLE_DATA ||
+          header.message_id_ == INSTANCE_REGISTRATION) {
+
+        // Pubulisher has already gone through the check.
+        if (instance_ptr->instance_state_->writes_instance(header.publication_id_)) {
+          return true;
+        }
+
+        DDS::Security::SecurityException ex;
+        const RepoId local_participant = make_id(get_repo_id(), ENTITYID_PARTICIPANT);
+        const RepoId remote_participant = make_id(header.publication_id_, ENTITYID_PARTICIPANT);
+        const DDS::Security::ParticipantCryptoHandle remote_participant_permissions_handle = security_config_->get_handle_registry(local_participant)->get_remote_participant_permissions_handle(remote_participant);
+        // Construct a DynamicData around the deserialized sample.
+        XTypes::DynamicDataAdapter<MessageType> dda(dynamic_type_, getMetaStruct<MessageType>(), *instance_data);
+        // The remote participant might not be using security.
+        if (remote_participant_permissions_handle != DDS::HANDLE_NIL &&
+            !security_config_->get_access_control()->check_remote_datawriter_register_instance(remote_participant_permissions_handle, this, publication_handle, &dda, ex)) {
+          ACE_ERROR((LM_WARNING,
+                     "(%P|%t) WARNING: DataReaderImpl_T::store_instance_data_check: unable to register instance SecurityException[%d.%d]: %C\n",
+                     ex.code, ex.minor_code, ex.message.in()));
+          return false;
+        }
+      } else if (is_dispose_msg) {
+
+        DDS::Security::SecurityException ex;
+        const RepoId local_participant = make_id(get_repo_id(), ENTITYID_PARTICIPANT);
+        const RepoId remote_participant = make_id(header.publication_id_, ENTITYID_PARTICIPANT);
+        const DDS::Security::ParticipantCryptoHandle remote_participant_permissions_handle = security_config_->get_handle_registry(local_participant)->get_remote_participant_permissions_handle(remote_participant);
+        // Construct a DynamicData around the deserialized sample.
+        XTypes::DynamicDataAdapter<MessageType> dda(dynamic_type_, getMetaStruct<MessageType>(), *instance_data);
+        // The remote participant might not be using security.
+        if (remote_participant_permissions_handle != DDS::HANDLE_NIL &&
+            !security_config_->get_access_control()->check_remote_datawriter_dispose_instance(remote_participant_permissions_handle, this, publication_handle, &dda, ex)) {
+          ACE_ERROR((LM_WARNING,
+                     "(%P|%t) WARNING: DataReaderImpl_T::store_instance_data_check: unable to dispose instance SecurityException[%d.%d]: %C\n",
+                     ex.code, ex.minor_code, ex.message.in()));
+          return false;
+        }
+      }
+    }
+#endif
+
+    return true;
+  }
+
   DDS::ReturnCode_t read_i(MessageSequenceType& received_data,
                            DDS::SampleInfoSeq& info_seq,
                            CORBA::Long max_samples,
@@ -1641,46 +1697,9 @@ void store_instance_data(unique_ptr<MessageTypeWithAllocator> instance_data,
     header.message_id_ == OpenDDS::DCPS::UNREGISTER_INSTANCE ||
     header.message_id_ == OpenDDS::DCPS::DISPOSE_UNREGISTER_INSTANCE;
 
-#if defined(OPENDDS_SECURITY)
-#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
-  if (!is_bit() && security_config_) {
-    if (header.message_id_ == SAMPLE_DATA ||
-        header.message_id_ == INSTANCE_REGISTRATION) {
-
-      DDS::Security::SecurityException ex;
-      const RepoId local_participant = make_id(get_repo_id(), ENTITYID_PARTICIPANT);
-      const RepoId remote_participant = make_id(header.publication_id_, ENTITYID_PARTICIPANT);
-      const DDS::Security::ParticipantCryptoHandle remote_participant_permissions_handle = security_config_->get_handle_registry(local_participant)->get_remote_participant_permissions_handle(remote_participant);
-      // Since the data is deserialized, we will "fake it" and use the reader's dynamic type.
-      XTypes::DynamicDataHolder<MessageType> ddh(dynamic_type_, getMetaStruct<MessageType>(), *instance_data);
-      // The remote participant might not be using security.
-      if (remote_participant_permissions_handle != DDS::HANDLE_NIL &&
-          !security_config_->get_access_control()->check_remote_datawriter_register_instance(remote_participant_permissions_handle, this, publication_handle, &ddh, ex)) {
-        ACE_ERROR((LM_WARNING,
-                   "(%P|%t) WARNING: DataReaderImpl_T::store_instance_data: unable to register instance SecurityException[%d.%d]: %C\n",
-                   ex.code, ex.minor_code, ex.message.in()));
-        return;
-      }
-    } else if (is_dispose_msg) {
-
-      DDS::Security::SecurityException ex;
-      const RepoId local_participant = make_id(get_repo_id(), ENTITYID_PARTICIPANT);
-      const RepoId remote_participant = make_id(header.publication_id_, ENTITYID_PARTICIPANT);
-      const DDS::Security::ParticipantCryptoHandle remote_participant_permissions_handle = security_config_->get_handle_registry(local_participant)->get_remote_participant_permissions_handle(remote_participant);
-      // Since the data is deserialized, we will "fake it" and use the reader's dynamic type.
-      XTypes::DynamicDataHolder<MessageType> ddh(dynamic_type_, getMetaStruct<MessageType>(), *instance_data);
-      // The remote participant might not be using security.
-      if (remote_participant_permissions_handle != DDS::HANDLE_NIL &&
-          !security_config_->get_access_control()->check_remote_datawriter_dispose_instance(remote_participant_permissions_handle, this, publication_handle, &ddh, ex)) {
-        ACE_ERROR((LM_WARNING,
-                   "(%P|%t) WARNING: DataReaderImpl_T::store_instance_data: unable to dispose instance SecurityException[%d.%d]: %C\n",
-                   ex.code, ex.minor_code, ex.message.in()));
-        return;
-      }
-    }
+  if (!store_instance_data_check(instance_data, publication_handle, header, instance_ptr)) {
+    return;
   }
-#endif
-#endif
 
   // not filtering any data, except what is specifically identified as filtered below
   filtered = false;

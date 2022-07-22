@@ -53,7 +53,6 @@ public:
                                                 DDS::DynamicData_ptr key,
                                                 DDS::Security::SecurityException& ex)
   {
-    ACE_DEBUG((LM_DEBUG, "TRACE: %C\n", __func__));
     ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, mutex_, false);
 
     if (!OpenDDS::Security::AccessControlBuiltInImpl::check_local_datawriter_register_instance(permissions_handle, writer, key, ex)) {
@@ -98,7 +97,6 @@ public:
                                                DDS::DynamicData_ptr key,
                                                DDS::Security::SecurityException& ex)
   {
-    ACE_DEBUG((LM_DEBUG, "TRACE: %C\n", __func__));
     ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, mutex_, false);
 
     if (!OpenDDS::Security::AccessControlBuiltInImpl::check_local_datawriter_dispose_instance(permissions_handle, writer, key, ex)) {
@@ -144,7 +142,6 @@ public:
                                                  DDS::DynamicData_ptr key,
                                                  DDS::Security::SecurityException& ex)
   {
-    ACE_DEBUG((LM_DEBUG, "TRACE: %C\n", __func__));
     ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, mutex_, false);
 
     if (!OpenDDS::Security::AccessControlBuiltInImpl::check_remote_datawriter_register_instance(permissions_handle, reader, publication_handle, key, ex)) {
@@ -190,7 +187,6 @@ public:
                                                 DDS::DynamicData_ptr key,
                                                 DDS::Security::SecurityException& ex)
   {
-    ACE_DEBUG((LM_DEBUG, "TRACE: %C\n", __func__));
     ACE_GUARD_RETURN(ACE_Thread_Mutex, guard, mutex_, false);
 
     if (!OpenDDS::Security::AccessControlBuiltInImpl::check_remote_datawriter_dispose_instance(permissions_handle, reader, publication_handle, key, ex)) {

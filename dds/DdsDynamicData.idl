@@ -24,7 +24,7 @@ module DDS {
 
   // FUTURE: Define TypeOjbect.
   local interface TypeObject;
-  // FUTURE: Find correct definition of BoundSeq.
+  // FUTURE: Use correct definition of BoundSeq once defined by spec.
   typedef sequence<unsigned long> BoundSeq;
 
   // ---------- TypeKinds (begin) -------------------

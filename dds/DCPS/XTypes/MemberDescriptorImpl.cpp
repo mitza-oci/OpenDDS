@@ -28,7 +28,7 @@ MemberDescriptorImpl::~MemberDescriptorImpl()
 bool MemberDescriptorImpl::equals(DDS::MemberDescriptor* other)
 {
   DynamicTypePtrPairSeen dt_ptr_pair;
-  return test_equality_i(this, other, dt_ptr_pair);
+  return test_equality(this, other, dt_ptr_pair);
 }
 
 CORBA::ValueBase* MemberDescriptorImpl::_copy_value()
@@ -68,14 +68,27 @@ DDS::ReturnCode_t MemberDescriptorImpl::copy_from(DDS::MemberDescriptor*)
   return false;
 }
 
-bool test_equality_i(DDS::MemberDescriptor* lhs, DDS::MemberDescriptor* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
+inline bool operator==(const DDS::UnionCaseLabelSeq& lhs, const DDS::UnionCaseLabelSeq& rhs)
 {
-  DDS::DynamicType_var lhs_type = DDS::DynamicType::_duplicate(lhs->type());
-  DDS::DynamicType_var rhs_type = DDS::DynamicType::_duplicate(rhs->type());
+  if (lhs.length() == rhs.length()) {
+    for (ACE_CDR::ULong i = 0; i < lhs.length(); ++i) {
+      if (lhs[i] != rhs[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+bool test_equality(DDS::MemberDescriptor* lhs, DDS::MemberDescriptor* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
+{
+  const DDS::DynamicType_ptr lhs_type = lhs->type();
+  const DDS::DynamicType_ptr rhs_type = rhs->type();
   return
     std::strcmp(lhs->name(), rhs->name()) == 0 &&
     lhs->id() == rhs->id() &&
-    test_equality_i(lhs_type, rhs_type, dt_ptr_pair) &&
+    test_equality(lhs_type, rhs_type, dt_ptr_pair) &&
     lhs->default_value() == rhs->default_value() &&
     lhs->index() == rhs->index() &&
     lhs->label() == rhs->label() &&

@@ -122,7 +122,7 @@ void DynamicDataImpl::copy(const DynamicDataImpl& other)
 
 DDS::ReturnCode_t DynamicDataImpl::get_descriptor(DDS::MemberDescriptor*& value, MemberId id)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::DynamicTypeMember_var dtm;
   if (type_->get_member(dtm, id) != DDS::RETCODE_OK) {
     return DDS::RETCODE_ERROR;
@@ -138,7 +138,7 @@ DDS::ReturnCode_t DynamicDataImpl::set_descriptor(MemberId, DDS::MemberDescripto
 
 MemberId DynamicDataImpl::get_member_id_by_name(const char* name)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   const TypeKind tk = base_type->get_kind();
   switch (tk) {
@@ -200,7 +200,7 @@ MemberId DynamicDataImpl::get_member_id_by_name(const char* name)
 
 bool DynamicDataImpl::has_optional_member(bool& has_optional) const
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   if (base_type->get_kind() != TK_STRUCTURE) {
     return false;
@@ -236,7 +236,7 @@ MemberId DynamicDataImpl::get_member_id_at_index(ACE_CDR::ULong index)
 
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   const TypeKind tk = base_type->get_kind();
   switch (tk) {
@@ -332,12 +332,12 @@ MemberId DynamicDataImpl::get_member_id_at_index(ACE_CDR::ULong index)
             good = false;
             break;
           }
-          DDS::DynamicType_var member = DDS::DynamicType::_duplicate(descriptor->type());
-          if (!member) {
+          const DDS::DynamicType_ptr mt = descriptor->type();
+          if (!mt) {
             good = false;
             break;
           }
-          member = DDS::DynamicType::_duplicate(get_base_type(member));
+          const DDS::DynamicType_var member = get_base_type(mt);
           if (member->get_kind() == TK_SEQUENCE) {
             if (!skip_sequence_member(member)) {
               good = false;
@@ -386,7 +386,7 @@ ACE_CDR::ULong DynamicDataImpl::get_item_count()
 
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return 0;
@@ -477,12 +477,12 @@ ACE_CDR::ULong DynamicDataImpl::get_item_count()
             actual_count = 0;
             break;
           }
-          DDS::DynamicType_var member = DDS::DynamicType::_duplicate(descriptor->type());
-          if (!member) {
+          const DDS::DynamicType_ptr mt = descriptor->type();
+          if (!mt) {
             actual_count = 0;
             break;
           }
-          member = DDS::DynamicType::_duplicate(get_base_type(member));
+          const DDS::DynamicType_var member = get_base_type(mt);
           if (member->get_kind() == TK_SEQUENCE) {
             if (!skip_sequence_member(member)) {
               actual_count = 0;
@@ -506,7 +506,7 @@ ACE_CDR::ULong DynamicDataImpl::get_item_count()
           return 0;
         }
       }
-      DDS::DynamicType_var disc_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->discriminator_type()));
+      const DDS::DynamicType_var disc_type = get_base_type(descriptor->discriminator_type());
       const DDS::ExtensibilityKind extend = descriptor->extensibility_kind();
       ACE_CDR::Long label;
       if (!read_discriminator(disc_type, extend, label)) {
@@ -537,7 +537,7 @@ ACE_CDR::ULong DynamicDataImpl::get_item_count()
     }
   case TK_SEQUENCE:
     {
-      DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+      const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
       if (!is_primitive(elem_type->get_kind())) {
         size_t dheader;
         if (!strm_.read_delimiter(dheader)) {
@@ -560,8 +560,8 @@ ACE_CDR::ULong DynamicDataImpl::get_item_count()
     }
   case TK_MAP:
     {
-      DDS::DynamicType_var key_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->key_element_type()));
-      DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+      const DDS::DynamicType_var key_type = get_base_type(descriptor->key_element_type());
+      const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
       if (is_primitive(key_type->get_kind()) &&
           is_primitive(elem_type->get_kind())) {
         ACE_CDR::ULong length;
@@ -676,14 +676,17 @@ template<TypeKind MemberTypeKind, typename MemberType>
 bool DynamicDataImpl::get_value_from_struct(MemberType& value, MemberId id,
                                             TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  DDS::MemberDescriptor_var md;
-  if (get_from_struct_common_checks(md, id, MemberTypeKind)) {
-    return skip_to_struct_member(md, id) && read_value(value, MemberTypeKind);
+  {
+    // Scoped because reusing md creates a memory leak.
+    DDS::MemberDescriptor_var md;
+    if (get_from_struct_common_checks(md, id, MemberTypeKind)) {
+      return skip_to_struct_member(md, id) && read_value(value, MemberTypeKind);
+    }
   }
-  // Reset md.
-  md = 0;
+
+  DDS::MemberDescriptor_var md;
   if (get_from_struct_common_checks(md, id, enum_or_bitmask)) {
-    DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(md->type());
+    const DDS::DynamicType_ptr member_type = md->type();
     if (member_type) {
       DDS::TypeDescriptor_var td;
       if (get_base_type(member_type)->get_descriptor(td) != DDS::RETCODE_OK) {
@@ -700,7 +703,7 @@ bool DynamicDataImpl::get_value_from_struct(MemberType& value, MemberId id,
 
 DDS::MemberDescriptor* DynamicDataImpl::get_union_selected_member()
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return 0;
@@ -714,7 +717,7 @@ DDS::MemberDescriptor* DynamicDataImpl::get_union_selected_member()
     }
   }
 
-  DDS::DynamicType_var disc_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->discriminator_type()));
+  const DDS::DynamicType_var disc_type = get_base_type(descriptor->discriminator_type());
   ACE_CDR::Long label;
   if (!read_discriminator(disc_type, ek, label)) {
     return 0;
@@ -736,8 +739,7 @@ DDS::MemberDescriptor* DynamicDataImpl::get_union_selected_member()
     const DDS::UnionCaseLabelSeq& labels = md->label();
     for (ACE_CDR::ULong i = 0; i < labels.length(); ++i) {
       if (label == labels[i]) {
-        CORBA::add_ref(md);
-        return md;
+        return md._retn();
       }
     }
 
@@ -748,9 +750,7 @@ DDS::MemberDescriptor* DynamicDataImpl::get_union_selected_member()
   }
 
   if (has_default) {
-    CORBA::add_ref(default_member);
-    return default_member;
-
+    return default_member._retn();;
   }
 
   // The union has no selected member.
@@ -791,7 +791,7 @@ template<TypeKind MemberTypeKind, typename MemberType>
 bool DynamicDataImpl::get_value_from_union(MemberType& value, MemberId id,
                                            TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -806,14 +806,14 @@ bool DynamicDataImpl::get_value_from_union(MemberType& value, MemberId id,
         return false;
       }
     }
-    member_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->discriminator_type()));
+    member_type = get_base_type(descriptor->discriminator_type());
   } else {
     DDS::MemberDescriptor_var md = get_from_union_common_checks(id, "get_value_from_union");
     if (!md) {
       return false;
     }
 
-    DDS::DynamicType_var type = DDS::DynamicType::_duplicate(md->type());
+    const DDS::DynamicType_ptr type = md->type();
     if (!type) {
       if (DCPS::DCPS_debug_level >= 1) {
         ACE_DEBUG((LM_DEBUG, ACE_TEXT("(%P|%t) DynamicDataImpl::get_value_from_union -")
@@ -821,7 +821,7 @@ bool DynamicDataImpl::get_value_from_union(MemberType& value, MemberId id,
       }
       return false;
     }
-    member_type = DDS::DynamicType::_duplicate(get_base_type(type));
+    member_type = get_base_type(type);
   }
 
   const TypeKind member_tk = member_type->get_kind();
@@ -858,7 +858,7 @@ bool DynamicDataImpl::get_value_from_union(MemberType& value, MemberId id,
 
 bool DynamicDataImpl::skip_to_sequence_element(MemberId id, DDS::DynamicType_ptr coll_type)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -867,13 +867,13 @@ bool DynamicDataImpl::skip_to_sequence_element(MemberId id, DDS::DynamicType_ptr
   DDS::DynamicType_var elem_type;
   bool skip_all = false;
   if (!coll_type) {
-    elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+    elem_type = get_base_type(descriptor->element_type());
   } else {
     DDS::TypeDescriptor_var descriptor;
     if (coll_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
       return false;
     }
-    elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+    elem_type = get_base_type(descriptor->element_type());
     skip_all = true;
   }
   ACE_CDR::ULong size;
@@ -904,7 +904,7 @@ bool DynamicDataImpl::skip_to_sequence_element(MemberId id, DDS::DynamicType_ptr
 
 bool DynamicDataImpl::skip_to_array_element(MemberId id, DDS::DynamicType_ptr coll_type)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -915,7 +915,7 @@ bool DynamicDataImpl::skip_to_array_element(MemberId id, DDS::DynamicType_ptr co
   DDS::TypeDescriptor_var coll_descriptor;
 
   if (!coll_type) {
-    elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+    elem_type = get_base_type(descriptor->element_type());
     coll_type = get_base_type(type_);
     if (coll_type->get_descriptor(coll_descriptor) != DDS::RETCODE_OK) {
       return false;
@@ -924,7 +924,7 @@ bool DynamicDataImpl::skip_to_array_element(MemberId id, DDS::DynamicType_ptr co
     if (coll_type->get_descriptor(coll_descriptor) != DDS::RETCODE_OK) {
       return false;
     }
-    elem_type = DDS::DynamicType::_duplicate(get_base_type(coll_descriptor->element_type()));
+    elem_type = get_base_type(coll_descriptor->element_type());
     skip_all = true;
   }
 
@@ -959,14 +959,14 @@ bool DynamicDataImpl::skip_to_array_element(MemberId id, DDS::DynamicType_ptr co
 
 bool DynamicDataImpl::skip_to_map_element(MemberId id)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
 
-  DDS::DynamicType_var key_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->key_element_type()));
-  DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  const DDS::DynamicType_var key_type = get_base_type(descriptor->key_element_type());
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
   ACE_CDR::ULong key_size, elem_size;
 
   if (get_primitive_size(key_type, key_size) &&
@@ -1003,13 +1003,13 @@ template<TypeKind ElementTypeKind, typename ElementType>
 bool DynamicDataImpl::get_value_from_collection(ElementType& value, MemberId id, TypeKind collection_tk,
                                                 TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
 
-  DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
   const TypeKind elem_tk = elem_type->get_kind();
 
   if (elem_tk != ElementTypeKind && elem_tk != enum_or_bitmask) {
@@ -1088,7 +1088,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_single_value(ValueType& value, MemberId i
 
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -1198,7 +1198,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_char_common(CharT& value, MemberId id)
 {
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   const TypeKind tk = base_type->get_kind();
   bool good = true;
@@ -1272,17 +1272,14 @@ DDS::ReturnCode_t DynamicDataImpl::get_char8_value(ACE_CDR::Char& value, MemberI
   return get_char_common<TK_CHAR8, TK_STRING8, ACE_InputCDR::to_char>(value, id);
 }
 
-#ifdef DDS_HAS_WCHAR
 DDS::ReturnCode_t DynamicDataImpl::get_char16_value(ACE_CDR::WChar& value, MemberId id)
 {
-  #ifdef DDS_HAS_WCHAR
+#ifdef DDS_HAS_WCHAR
   return get_char_common<TK_CHAR16, TK_STRING16, ACE_InputCDR::to_wchar>(value, id);
-  #else
+#else
   return DDS::RETCODE_UNSUPPORTED;
-  #endif
-
-}
 #endif
+}
 
 DDS::ReturnCode_t DynamicDataImpl::get_byte_value(ACE_CDR::Octet& value, MemberId id)
 {
@@ -1306,7 +1303,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_boolean_value(ACE_CDR::Boolean& value, Me
 {
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -1401,7 +1398,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_complex_value(DDS::DynamicData_ptr& value
 {
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -1432,7 +1429,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_complex_value(DDS::DynamicData_ptr& value
       if (!skip_to_struct_member(md, id)) {
         good = false;
       } else {
-        DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(md->type());
+        DDS::DynamicType_ptr member_type = md->type();
         if (!member_type) {
           good = false;
         } else {
@@ -1452,7 +1449,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_complex_value(DDS::DynamicData_ptr& value
           }
         }
 
-        DDS::DynamicType_var disc_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->discriminator_type()));
+        const DDS::DynamicType_var disc_type = get_base_type(descriptor->discriminator_type());
         if (descriptor->extensibility_kind() == DDS::MUTABLE) {
           unsigned id;
           size_t size;
@@ -1481,7 +1478,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_complex_value(DDS::DynamicData_ptr& value
           break;
         }
       }
-      DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(md->type());
+      const DDS::DynamicType_ptr member_type = md->type();
       if (!member_type) {
         good = false;
       } else {
@@ -1568,7 +1565,7 @@ bool DynamicDataImpl::get_values_from_struct(SequenceType& value, MemberId id,
   // Need to reset md before next call.
   md = 0;
   if (get_from_struct_common_checks(md, id, enum_or_bitmask, true)) {
-    DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(md->type());
+    const DDS::DynamicType_ptr member_type = md->type();
     if (member_type) {
       DDS::TypeDescriptor_var td;
       if (get_base_type(member_type)->get_descriptor(td) != DDS::RETCODE_OK) {
@@ -1596,7 +1593,7 @@ bool DynamicDataImpl::get_values_from_union(SequenceType& value, MemberId id,
     return false;
   }
 
-  DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(md->type());
+  const DDS::DynamicType_ptr member_type = md->type();
   if (!member_type) {
     if (DCPS::DCPS_debug_level >= 1) {
       ACE_DEBUG((LM_DEBUG, ACE_TEXT("(%P|%t) DynamicDataImpl::get_values_from_union -")
@@ -1605,7 +1602,7 @@ bool DynamicDataImpl::get_values_from_union(SequenceType& value, MemberId id,
     return false;
   }
 
-  DDS::DynamicType_var selected_type = DDS::DynamicType::_duplicate(get_base_type(member_type));
+  DDS::DynamicType_var selected_type = get_base_type(member_type);
   const TypeKind selected_tk = selected_type->get_kind();
   if (selected_tk != TK_SEQUENCE) {
     if (DCPS::DCPS_debug_level >= 1) {
@@ -1620,7 +1617,7 @@ bool DynamicDataImpl::get_values_from_union(SequenceType& value, MemberId id,
   if (selected_type->get_descriptor(td) != DDS::RETCODE_OK) {
     return false;
   }
-  DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(td->element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(td->element_type());
   const TypeKind elem_tk = elem_type->get_kind();
   if (elem_tk != ElementTypeKind && elem_tk != enum_or_bitmask) {
     if (DCPS::DCPS_debug_level >= 1) {
@@ -1631,7 +1628,7 @@ bool DynamicDataImpl::get_values_from_union(SequenceType& value, MemberId id,
     return false;
   }
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -1663,13 +1660,13 @@ template<TypeKind ElementTypeKind, typename SequenceType>
 bool DynamicDataImpl::get_values_from_sequence(SequenceType& value, MemberId id,
                                                TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
 
-  DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
   const TypeKind elem_tk = elem_type->get_kind();
 
   if (elem_tk == ElementTypeKind) {
@@ -1688,7 +1685,7 @@ bool DynamicDataImpl::get_values_from_sequence(SequenceType& value, MemberId id,
     if (elem_type->get_descriptor(td) != DDS::RETCODE_OK) {
       return false;
     }
-    DDS::DynamicType_var nested_elem_type = DDS::DynamicType::_duplicate(get_base_type(td->element_type()));
+    const DDS::DynamicType_var nested_elem_type = get_base_type(td->element_type());
     const TypeKind nested_elem_tk = nested_elem_type->get_kind();
     if (nested_elem_tk == ElementTypeKind) {
       // Read from a sequence of sequence of ElementTypeKind.
@@ -1717,13 +1714,13 @@ template<TypeKind ElementTypeKind, typename SequenceType>
 bool DynamicDataImpl::get_values_from_array(SequenceType& value, MemberId id,
                                             TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
 
-  DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
   if (elem_type->get_kind() != TK_SEQUENCE) {
     if (DCPS::DCPS_debug_level >= 1) {
       ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) DynamicDataImpl::get_values_from_array -")
@@ -1737,7 +1734,7 @@ bool DynamicDataImpl::get_values_from_array(SequenceType& value, MemberId id,
   if (elem_type->get_descriptor(td) != DDS::RETCODE_OK) {
     return false;
   }
-  DDS::DynamicType_var nested_elem_type = DDS::DynamicType::_duplicate(get_base_type(td->element_type()));
+  const DDS::DynamicType_var nested_elem_type = get_base_type(td->element_type());
   const TypeKind nested_elem_tk = nested_elem_type->get_kind();
   if (nested_elem_tk == ElementTypeKind) {
     return skip_to_array_element(id) && read_values(value, nested_elem_tk);
@@ -1763,13 +1760,13 @@ template<TypeKind ElementTypeKind, typename SequenceType>
 bool DynamicDataImpl::get_values_from_map(SequenceType& value, MemberId id,
                                           TypeKind enum_or_bitmask, LBound lower, LBound upper)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
 
-  DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
   if (elem_type->get_kind() != TK_SEQUENCE) {
     if (DCPS::DCPS_debug_level >= 1) {
       ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) DynamicDataImpl::get_values_from_map -")
@@ -1783,7 +1780,7 @@ bool DynamicDataImpl::get_values_from_map(SequenceType& value, MemberId id,
   if (elem_type->get_descriptor(td) != DDS::RETCODE_OK) {
     return false;
   }
-  DDS::DynamicType_var nested_elem_type = DDS::DynamicType::_duplicate(get_base_type(td->element_type()));
+  const DDS::DynamicType_var nested_elem_type = get_base_type(td->element_type());
   const TypeKind nested_elem_tk = nested_elem_type->get_kind();
   if (nested_elem_tk == ElementTypeKind) {
     return skip_to_map_element(id) && read_values(value, nested_elem_tk);
@@ -1815,7 +1812,7 @@ DDS::ReturnCode_t DynamicDataImpl::get_sequence_values(SequenceType& value, Memb
 
   ScopedChainManager chain_manager(*this);
 
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   const TypeKind tk = base_type->get_kind();
   bool good = true;
@@ -1966,7 +1963,7 @@ CORBA::Boolean DynamicDataImpl::equals(DDS::DynamicData_ptr)
 
 bool DynamicDataImpl::skip_to_struct_member(DDS::MemberDescriptor* member_desc, MemberId id)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -2047,15 +2044,15 @@ bool DynamicDataImpl::skip_to_struct_member(DDS::MemberDescriptor* member_desc, 
         }
         return false;
       }
-      DDS::DynamicType_var member = DDS::DynamicType::_duplicate(descriptor->type());
-      if (!member) {
+      const DDS::DynamicType_ptr mt = descriptor->type();
+      if (!mt) {
         if (DCPS::DCPS_debug_level >= 1) {
           ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) DynamicDataImpl::skip_to_struct_member -")
                      ACE_TEXT(" Failed to get DynamicType for member at ID %d\n"), member_id));
         }
         return false;
       }
-      member = DDS::DynamicType::_duplicate(get_base_type(member));
+      const DDS::DynamicType_var member = get_base_type(mt);
       if (member->get_kind() == TK_SEQUENCE) {
         // Sequence is a special case where the NEXTINT header can also be used for
         // the length of the sequence (when LC is 5, 6, or 7). And thus skipping such a
@@ -2080,7 +2077,7 @@ bool DynamicDataImpl::skip_to_struct_member(DDS::MemberDescriptor* member_desc, 
 
 bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor*& md, MemberId id, TypeKind kind, bool is_sequence)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   DDS::DynamicTypeMember_var member;
   const DDS::ReturnCode_t retcode = base_type->get_member(member, id);
@@ -2099,7 +2096,7 @@ bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor*& md, 
     }
     return false;
   }
-  const DDS::DynamicType_var member_dt = DDS::DynamicType::_duplicate(md->type());
+  const DDS::DynamicType_ptr member_dt = md->type();
   if (!member_dt) {
     if (DCPS::DCPS_debug_level >= 1) {
       ACE_DEBUG((LM_DEBUG, ACE_TEXT("(%P|%t) DynamicDataImpl::get_from_struct_common_checks -")
@@ -2108,7 +2105,7 @@ bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor*& md, 
     return false;
   }
 
-  const DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(get_base_type(member_dt));
+  const DDS::DynamicType_var member_type = get_base_type(member_dt);
   const TypeKind member_kind = member_type->get_kind();
 
   if ((!is_sequence && member_kind != kind) || (is_sequence && member_kind != TK_SEQUENCE)) {
@@ -2147,7 +2144,7 @@ bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor*& md, 
 
 bool DynamicDataImpl::skip_struct_member_at_index(ACE_CDR::ULong index, ACE_CDR::ULong& num_skipped)
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   DDS::DynamicTypeMember_var member;
   if (base_type->get_member_by_index(member, index) != DDS::RETCODE_OK) {
@@ -2175,13 +2172,13 @@ bool DynamicDataImpl::skip_struct_member_at_index(ACE_CDR::ULong index, ACE_CDR:
   }
 
   num_skipped = 1;
-  const DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(md->type());
+  const DDS::DynamicType_ptr member_type = md->type();
   return member_type && skip_member(member_type);
 }
 
 bool DynamicDataImpl::skip_member(DDS::DynamicType_ptr type)
 {
-  DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(get_base_type(type));
+  const DDS::DynamicType_var member_type = get_base_type(type);
   const TypeKind member_kind = member_type->get_kind();
 
   switch (member_kind) {
@@ -2304,7 +2301,7 @@ bool DynamicDataImpl::skip_sequence_member(DDS::DynamicType_ptr seq_type)
   if (seq_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
-  const DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
 
   ACE_CDR::ULong primitive_size = 0;
   if (get_primitive_size(elem_type, primitive_size)) {
@@ -2330,7 +2327,7 @@ bool DynamicDataImpl::skip_array_member(DDS::DynamicType_ptr array_type)
   if (array_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
-  const DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
 
   ACE_CDR::ULong primitive_size = 0;
   if (get_primitive_size(elem_type, primitive_size)) {
@@ -2353,8 +2350,8 @@ bool DynamicDataImpl::skip_map_member(DDS::DynamicType_ptr map_type)
   if (map_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
   }
-  const DDS::DynamicType_var elem_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->element_type()));
-  const DDS::DynamicType_var key_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->key_element_type()));
+  const DDS::DynamicType_var elem_type = get_base_type(descriptor->element_type());
+  const DDS::DynamicType_var key_type = get_base_type(descriptor->key_element_type());
 
   ACE_CDR::ULong key_primitive_size = 0, elem_primitive_size = 0;
   if (get_primitive_size(key_type, key_primitive_size) &&
@@ -2566,7 +2563,7 @@ bool DynamicDataImpl::read_discriminator(const DDS::DynamicType_ptr disc_type, D
 
 bool DynamicDataImpl::skip_all()
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
   DDS::TypeDescriptor_var descriptor;
   if (base_type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -2602,7 +2599,7 @@ bool DynamicDataImpl::skip_all()
       }
       return good;
     } else { // Union
-      const DDS::DynamicType_var disc_type = DDS::DynamicType::_duplicate(get_base_type(descriptor->discriminator_type()));
+      const DDS::DynamicType_var disc_type = get_base_type(descriptor->discriminator_type());
       ACE_CDR::Long label;
       if (!read_discriminator(disc_type, extensibility, label)) {
         return false;
@@ -2624,7 +2621,7 @@ bool DynamicDataImpl::skip_all()
         const DDS::UnionCaseLabelSeq& labels = md->label();
         for (ACE_CDR::ULong i = 0; i < labels.length(); ++i) {
           if (label == labels[i]) {
-            const DDS::DynamicType_var selected_member = DDS::DynamicType::_duplicate(md->type());
+            const DDS::DynamicType_ptr selected_member = md->type();
             bool good = selected_member && skip_member(selected_member);
             return good;
           }
@@ -2637,7 +2634,7 @@ bool DynamicDataImpl::skip_all()
       }
 
       if (has_default) {
-        const DDS::DynamicType_var default_dt = DDS::DynamicType::_duplicate(default_member->type());
+        const DDS::DynamicType_ptr default_dt = default_member->type();
         bool good = default_dt && skip_member(default_dt);
         return good;
       }
@@ -2723,7 +2720,7 @@ bool DynamicDataImpl::get_primitive_size(DDS::DynamicType_ptr dt, ACE_CDR::ULong
 
 bool DynamicDataImpl::get_index_from_id(MemberId id, ACE_CDR::ULong& index, ACE_CDR::ULong bound) const
 {
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type_));
+  const DDS::DynamicType_var base_type = get_base_type(type_);
 
   switch (base_type->get_kind()) {
   case TK_STRING8:
@@ -2853,7 +2850,7 @@ bool print_struct(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Stri
   DCPS::String temp_indent = indent;
   indent += "  ";
   const DDS::DynamicType_var type = dd->type();
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type));
+  const DDS::DynamicType_var base_type = get_base_type(type);
   CORBA::String_var type_name = type->get_name();
   type_string += "struct " + DCPS::String(type_name) + "\n";
 
@@ -2867,16 +2864,15 @@ bool print_struct(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Stri
       return false;
     }
     const DCPS::String member_name = member_descriptor->name();
-    const DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(member_descriptor->type());
-    const DDS::DynamicType_var member_base_type = DDS::DynamicType::_duplicate(get_base_type(member_descriptor->type()));
+    const DDS::DynamicType_ptr member_type = member_descriptor->type();
+    const DDS::DynamicType_var member_base_type = get_base_type(member_descriptor->type());
     DDS::TypeDescriptor_var member_base_type_descriptor;
     if (member_base_type->get_descriptor(member_base_type_descriptor) != DDS::RETCODE_OK) {
       return false;
     }
     const CORBA::String_var member_type_name = member_type->get_name();
-    if ((member_base_type->get_kind() == TK_STRUCTURE ||
-         member_base_type->get_kind() == TK_UNION) &&
-        true /*iter->second->get_parent()->get_descriptor().kind == TK_STRUCTURE*/) {
+    if (member_base_type->get_kind() == TK_STRUCTURE ||
+        member_base_type->get_kind() == TK_UNION) {
       type_string += indent;
     } else {
       type_string += indent + DCPS::String(member_type_name.in()) + " " + member_name;
@@ -2906,7 +2902,7 @@ bool print_union(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Strin
   DCPS::String temp_indent = indent;
   indent += "  ";
   const DDS::DynamicType_var type = dd->type();
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type));
+  const DDS::DynamicType_var base_type = get_base_type(type);
   DDS::TypeDescriptor_var type_descriptor;
   if (base_type->get_descriptor(type_descriptor) != DDS::RETCODE_OK) {
     return false;
@@ -2919,8 +2915,8 @@ bool print_union(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Strin
     const MemberId member_id = dd->get_member_id_at_index(idx);
 
     if (member_id == DISCRIMINATOR_ID) {
-      const DDS::DynamicType_var discriminator_type = DDS::DynamicType::_duplicate(type_descriptor->discriminator_type());
-      const DDS::DynamicType_var discriminator_base_type = DDS::DynamicType::_duplicate(get_base_type(discriminator_type));
+      const DDS::DynamicType_ptr discriminator_type = type_descriptor->discriminator_type();
+      const DDS::DynamicType_var discriminator_base_type = get_base_type(discriminator_type);
       DDS::TypeDescriptor_var discriminator_descriptor;
       if (discriminator_base_type->get_descriptor(discriminator_descriptor) != DDS::RETCODE_OK) {
         return false;
@@ -2938,17 +2934,16 @@ bool print_union(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Strin
       }
 
       const DCPS::String member_name = member_descriptor->name();
-      const DDS::DynamicType_var member_type = DDS::DynamicType::_duplicate(member_descriptor->type());
-      const DDS::DynamicType_var member_base_type = DDS::DynamicType::_duplicate(get_base_type(member_type));
+      const DDS::DynamicType_ptr member_type = member_descriptor->type();
+      const DDS::DynamicType_var member_base_type = get_base_type(member_type);
       DDS::TypeDescriptor_var member_base_type_descriptor;
       if (member_base_type->get_descriptor(member_base_type_descriptor) != DDS::RETCODE_OK) {
         return false;
       }
 
       const CORBA::String_var member_type_name = member_type->get_name();
-      if ((member_base_type->get_kind() == TK_STRUCTURE ||
-           member_base_type->get_kind() == TK_UNION) &&
-          true /*iter->second->get_parent()->get_descriptor().kind == TK_UNION*/) {
+      if (member_base_type->get_kind() == TK_STRUCTURE ||
+          member_base_type->get_kind() == TK_UNION) {
         type_string += indent;
       } else {
         type_string += indent + DCPS::String(member_type_name.in()) + " " + member_name;
@@ -3309,7 +3304,7 @@ bool print_member(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::Stri
 bool print_dynamic_data(DDS::DynamicData_ptr dd, DCPS::String& type_string, DCPS::String& indent)
 {
   const DDS::DynamicType_var type = dd->type();
-  const DDS::DynamicType_var base_type = DDS::DynamicType::_duplicate(get_base_type(type));
+  const DDS::DynamicType_var base_type = get_base_type(type);
 
   switch (base_type->get_kind()) {
   case TK_STRUCTURE:

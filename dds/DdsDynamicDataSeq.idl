@@ -43,6 +43,7 @@ module DDS {
   typedef sequence<wchar> WcharSeq;
   typedef sequence<boolean> BooleanSeq;
   typedef sequence<octet> ByteSeq;
+  // Already defined in DdsDcpsCore.idl
   // typedef sequence<string> StringSeq;
   typedef sequence<wstring> WstringSeq;
 

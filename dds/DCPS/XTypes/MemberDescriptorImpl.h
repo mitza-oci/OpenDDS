@@ -13,9 +13,6 @@ OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
 namespace OpenDDS {
 namespace XTypes {
 
-typedef std::pair<const DDS::DynamicType*, const DDS::DynamicType*> DynamicTypePtrPair;
-typedef OPENDDS_SET(DynamicTypePtrPair) DynamicTypePtrPairSeen;
-
 class OpenDDS_Dcps_Export MemberDescriptorImpl
   : public virtual OBV_DDS::MemberDescriptor
   , public virtual CORBA::DefaultValueRefCountBase
@@ -37,7 +34,7 @@ public:
   }
 
   bool equals(DDS::MemberDescriptor* other);
-  DDS::ReturnCode_t copy_from(DDS::MemberDescriptor* );
+  DDS::ReturnCode_t copy_from(DDS::MemberDescriptor*);
   ::CORBA::Boolean is_consistent();
 
   CORBA::ValueBase* _copy_value();
@@ -48,20 +45,10 @@ private:
   ::CORBA::Boolean _tao_unmarshal__DDS_MemberDescriptor(TAO_InputCDR &, TAO_ChunkInfo &);
 };
 
-inline bool operator==(const DDS::UnionCaseLabelSeq& lhs, const DDS::UnionCaseLabelSeq& rhs)
-{
-  if (lhs.length() == rhs.length()) {
-    for (ACE_CDR::ULong i = 0; i < lhs.length(); ++i) {
-      if (lhs[i] != rhs[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-  return false;
-}
+typedef std::pair<const DDS::DynamicType*, const DDS::DynamicType*> DynamicTypePtrPair;
+typedef OPENDDS_SET(DynamicTypePtrPair) DynamicTypePtrPairSeen;
 
-bool test_equality_i(DDS::MemberDescriptor* lhs, DDS::MemberDescriptor* rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
+bool test_equality(DDS::MemberDescriptor* lhs, DDS::MemberDescriptor* rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
 
 } // namespace XTypes
 } // namespace OpenDDS
@@ -74,7 +61,7 @@ namespace DDS {
 
 class MemberDescriptor {
 public:
-
+  // a_name should be shallow-copyable, e.g., a string literal.
   MemberDescriptor(const char* a_name, bool a_is_key)
     : name_(a_name)
     , is_key_(a_is_key)

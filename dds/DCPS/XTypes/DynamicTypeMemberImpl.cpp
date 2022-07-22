@@ -55,17 +55,6 @@ DDS::ReturnCode_t DynamicTypeMemberImpl::get_verbatim_text(DDS::VerbatimTextDesc
   return DDS::RETCODE_UNSUPPORTED;
 }
 
-
-// void DynamicTypeMemberImpl::set_parent(DDS::DynamicType_ptr dt)
-// {
-//   parent_ = dt;
-// }
-
-// DDS::DynamicType_ptr DynamicTypeMemberImpl::get_parent()
-// {
-//   return parent_;
-// }
-
 bool DynamicTypeMemberImpl::equals(DDS::DynamicTypeMember_ptr other)
 {
   //7.5.2.6.3 Operation: equals
@@ -83,8 +72,7 @@ bool DynamicTypeMemberImpl::equals(DDS::DynamicTypeMember_ptr other)
   }
 
   DynamicTypePtrPairSeen dt_ptr_pair;
-  return //test_equality_i(parent_.lock(), other.parent_.lock(), dt_ptr_pair) &&
-    test_equality_i(descriptor_, other_md, dt_ptr_pair);
+  return test_equality(descriptor_, other_md, dt_ptr_pair);
 }
 
 MemberId DynamicTypeMemberImpl::get_id()

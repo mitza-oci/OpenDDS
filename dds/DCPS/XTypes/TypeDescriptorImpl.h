@@ -13,9 +13,6 @@ OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
 namespace OpenDDS {
 namespace XTypes {
 
-typedef std::pair<const DDS::DynamicType*, const DDS::DynamicType*> DynamicTypePtrPair;
-typedef OPENDDS_SET(DynamicTypePtrPair) DynamicTypePtrPairSeen;
-
 class OpenDDS_Dcps_Export TypeDescriptorImpl
   : public virtual OBV_DDS::TypeDescriptor
   , public virtual CORBA::DefaultValueRefCountBase
@@ -24,7 +21,7 @@ public:
   TypeDescriptorImpl();
   ~TypeDescriptorImpl();
 
-  CORBA::Boolean equals(DDS::TypeDescriptor *);
+  CORBA::Boolean equals(DDS::TypeDescriptor*);
   DDS::ReturnCode_t copy_from(DDS::TypeDescriptor*);
   CORBA::Boolean is_consistent();
 
@@ -36,22 +33,12 @@ private:
   CORBA::Boolean _tao_unmarshal__DDS_TypeDescriptor(TAO_InputCDR&, TAO_ChunkInfo&);
 };
 
-  inline bool operator==(const DDS::BoundSeq& lhs, const DDS::BoundSeq& rhs)
-{
-  if (lhs.length() == rhs.length()) {
-    for (ACE_CDR::ULong i = 0 ; i < lhs.length() ; ++i) {
-      if (lhs[i] != rhs[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-  return false;
-}
+typedef std::pair<const DDS::DynamicType*, const DDS::DynamicType*> DynamicTypePtrPair;
+typedef OPENDDS_SET(DynamicTypePtrPair) DynamicTypePtrPairSeen;
 
-bool test_equality_i(DDS::TypeDescriptor* lhs,
-                     DDS::TypeDescriptor* rhs,
-                     DynamicTypePtrPairSeen& dt_ptr_pair);
+bool test_equality(DDS::TypeDescriptor* lhs,
+                   DDS::TypeDescriptor* rhs,
+                   DynamicTypePtrPairSeen& dt_ptr_pair);
 
 } // namespace XTypes
 } // namespace OpenDDS

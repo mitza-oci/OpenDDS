@@ -128,10 +128,10 @@ public:
   DDS::TypeDescriptor_var descriptor_;
 };
 
-OpenDDS_Dcps_Export DDS::DynamicType* get_base_type(DDS::DynamicType* type);
-bool test_equality_i(DDS::DynamicType_ptr lhs, DDS::DynamicType_ptr rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
-bool test_equality_i(DynamicTypeMembersByNameImpl* lhs, DynamicTypeMembersByNameImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
-bool test_equality_i(DynamicTypeMembersByIdImpl* lhs, DynamicTypeMembersByIdImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
+OpenDDS_Dcps_Export DDS::DynamicType_var get_base_type(DDS::DynamicType_ptr type);
+bool test_equality(DDS::DynamicType_ptr lhs, DDS::DynamicType_ptr rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
+bool test_equality(DynamicTypeMembersByNameImpl* lhs, DynamicTypeMembersByNameImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
+bool test_equality(DynamicTypeMembersByIdImpl* lhs, DynamicTypeMembersByIdImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair);
 
 } // namespace XTypes
 } // namespace OpenDDS

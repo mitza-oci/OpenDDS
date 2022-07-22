@@ -21,14 +21,11 @@ public:
   DDS::ReturnCode_t get_annotation(DDS::AnnotationDescriptor*& descriptor, CORBA::ULong idx);
   CORBA::ULong get_verbatim_text_count();
   DDS::ReturnCode_t get_verbatim_text(DDS::VerbatimTextDescriptor*& descriptor, CORBA::ULong idx);
-  // void set_parent(DDS::DynamicType_ptr dt);
-  // DDS::DynamicType_ptr get_parent();
   bool equals(DDS::DynamicTypeMember_ptr other);
   MemberId get_id();
   char* get_name();
 
 private:
-  //DDS::DynamicType_ptr parent_;
   DDS::MemberDescriptor_var descriptor_;
 };
 

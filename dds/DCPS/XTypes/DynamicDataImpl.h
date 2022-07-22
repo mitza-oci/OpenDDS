@@ -180,7 +180,7 @@ public:
     return DDS::RETCODE_UNSUPPORTED;
   }
 
-  DDS::ReturnCode_t get_string_value(char *& value,
+  DDS::ReturnCode_t get_string_value(char*& value,
                                      DDS::MemberId id);
   DDS::ReturnCode_t set_string_value(DDS::MemberId,
                                      const char*)
@@ -188,7 +188,7 @@ public:
     return DDS::RETCODE_UNSUPPORTED;
   }
 
-  DDS::ReturnCode_t get_wstring_value(CORBA::WChar *& value,
+  DDS::ReturnCode_t get_wstring_value(CORBA::WChar*& value,
                                       DDS::MemberId id);
   DDS::ReturnCode_t set_wstring_value(DDS::MemberId,
                                       const CORBA::WChar *)

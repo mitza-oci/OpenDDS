@@ -23,7 +23,7 @@ TypeDescriptorImpl::~TypeDescriptorImpl()
 bool TypeDescriptorImpl::equals(DDS::TypeDescriptor* other)
 {
   DynamicTypePtrPairSeen dt_ptr_pair;
-  return test_equality_i(this, other, dt_ptr_pair);
+  return test_equality(this, other, dt_ptr_pair);
 }
 
 CORBA::ValueBase* TypeDescriptorImpl::_copy_value()
@@ -63,7 +63,20 @@ CORBA::Boolean TypeDescriptorImpl::_tao_unmarshal__DDS_TypeDescriptor(TAO_InputC
   return false;
 }
 
-bool test_equality_i(DDS::TypeDescriptor* lhs, DDS::TypeDescriptor* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
+inline bool operator==(const DDS::BoundSeq& lhs, const DDS::BoundSeq& rhs)
+{
+  if (lhs.length() == rhs.length()) {
+    for (ACE_CDR::ULong i = 0 ; i < lhs.length() ; ++i) {
+      if (lhs[i] != rhs[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+bool test_equality(DDS::TypeDescriptor* lhs, DDS::TypeDescriptor* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
 {
   if (lhs == rhs) {
     return true;
@@ -76,11 +89,11 @@ bool test_equality_i(DDS::TypeDescriptor* lhs, DDS::TypeDescriptor* rhs, Dynamic
   return
     lhs->kind() == rhs->kind() &&
     std::strcmp(lhs->name(), rhs->name()) == 0 &&
-    test_equality_i(lhs->base_type(), rhs->base_type(), dt_ptr_pair) &&
-    test_equality_i(lhs->discriminator_type(), rhs->discriminator_type(), dt_ptr_pair) &&
+    test_equality(lhs->base_type(), rhs->base_type(), dt_ptr_pair) &&
+    test_equality(lhs->discriminator_type(), rhs->discriminator_type(), dt_ptr_pair) &&
     lhs->bound() == rhs->bound() &&
-    test_equality_i(lhs->element_type(), rhs->element_type(), dt_ptr_pair) &&
-    test_equality_i(lhs->key_element_type(), rhs->key_element_type(), dt_ptr_pair) &&
+    test_equality(lhs->element_type(), rhs->element_type(), dt_ptr_pair) &&
+    test_equality(lhs->key_element_type(), rhs->key_element_type(), dt_ptr_pair) &&
     lhs->extensibility_kind() == rhs->extensibility_kind() &&
     lhs->is_nested() == rhs->is_nested();
 }

@@ -484,8 +484,6 @@ module DDS {
         in    DataReader          reader,
         in    InstanceHandle_t    publication_handle,
         in    DynamicData         key,
-        // The spec is not consistent about this parameter.  Logically, it may not exist during the check.
-        // in    InstanceHandle_t    instance_handle,
         inout SecurityException   ex);
 
       boolean

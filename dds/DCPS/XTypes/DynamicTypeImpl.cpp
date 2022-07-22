@@ -127,7 +127,7 @@ bool DynamicTypeImpl::equals(DDS::DynamicType_ptr other)
   //as a property in table 54. This is done to allow the recursive comparison required by the changes
   //to DynamicTypeMember::equals.
   DynamicTypePtrPairSeen dt_ptr_pair;
-  return test_equality_i(this, other, dt_ptr_pair);
+  return test_equality(this, other, dt_ptr_pair);
 }
 
 void DynamicTypeImpl::insert_dynamic_member(DDS::DynamicTypeMember_ptr dtm)
@@ -153,21 +153,23 @@ void DynamicTypeImpl::clear()
   descriptor_ = 0;
 }
 
-DDS::DynamicType_ptr get_base_type(DDS::DynamicType_ptr type)
+DDS::DynamicType_var get_base_type(DDS::DynamicType_ptr type)
 {
-  if (type->get_kind() != TK_ALIAS) {
-    return type;
+  DDS::DynamicType_var t = DDS::DynamicType::_duplicate(type);
+
+  if (t->get_kind() != TK_ALIAS) {
+    return t;
   }
 
   DDS::TypeDescriptor_var descriptor;
-  if (type->get_descriptor(descriptor) != DDS::RETCODE_OK) {
+  if (t->get_descriptor(descriptor) != DDS::RETCODE_OK) {
     return 0;
   }
 
   return get_base_type(descriptor->base_type());
 }
 
-bool test_equality_i(DDS::DynamicType_ptr lhs, DDS::DynamicType_ptr rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
+bool test_equality(DDS::DynamicType_ptr lhs, DDS::DynamicType_ptr rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
 {
   if (lhs == rhs) {
     return true;
@@ -180,7 +182,6 @@ bool test_equality_i(DDS::DynamicType_ptr lhs, DDS::DynamicType_ptr rhs, Dynamic
     return false;
   }
 
-  //check pair seen
   const DynamicTypePtrPair this_pair = std::make_pair(lhs, rhs);
   DynamicTypePtrPairSeen::const_iterator have_seen = dt_ptr_pair.find(this_pair);
   if (have_seen == dt_ptr_pair.end()) {
@@ -203,17 +204,17 @@ bool test_equality_i(DDS::DynamicType_ptr lhs, DDS::DynamicType_ptr rhs, Dynamic
     }
 
     return
-      OpenDDS::XTypes::test_equality_i(lhs_descriptor, rhs_descriptor, dt_ptr_pair) &&
-      OpenDDS::XTypes::test_equality_i(dynamic_cast<DynamicTypeMembersByNameImpl*>(lhs_members_by_name.in()),
-                                       dynamic_cast<DynamicTypeMembersByNameImpl*>(rhs_members_by_name.in()), dt_ptr_pair) &&
-      OpenDDS::XTypes::test_equality_i(dynamic_cast<DynamicTypeMembersByIdImpl*>(lhs_members_by_id.in()),
-                                       dynamic_cast<DynamicTypeMembersByIdImpl*>(rhs_members_by_id.in()), dt_ptr_pair);
+      test_equality(lhs_descriptor, rhs_descriptor, dt_ptr_pair) &&
+      test_equality(dynamic_cast<DynamicTypeMembersByNameImpl*>(lhs_members_by_name.in()),
+                    dynamic_cast<DynamicTypeMembersByNameImpl*>(rhs_members_by_name.in()), dt_ptr_pair) &&
+      test_equality(dynamic_cast<DynamicTypeMembersByIdImpl*>(lhs_members_by_id.in()),
+                    dynamic_cast<DynamicTypeMembersByIdImpl*>(rhs_members_by_id.in()), dt_ptr_pair);
   }
 
   return true;
 }
 
-bool test_equality_i(DynamicTypeMembersByNameImpl* lhs, DynamicTypeMembersByNameImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
+bool test_equality(DynamicTypeMembersByNameImpl* lhs, DynamicTypeMembersByNameImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
 {
   if (lhs == rhs) {
     return true;
@@ -238,14 +239,14 @@ bool test_equality_i(DynamicTypeMembersByNameImpl* lhs, DynamicTypeMembersByName
         rhs_it->second->get_descriptor(rhs_md) != DDS::RETCODE_OK) {
       return false;
     }
-    if (!test_equality_i(lhs_md, rhs_md, dt_ptr_pair)) {
+    if (!test_equality(lhs_md, rhs_md, dt_ptr_pair)) {
       return false;
     }
   }
   return true;
 }
 
-bool test_equality_i(DynamicTypeMembersByIdImpl* lhs, DynamicTypeMembersByIdImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
+bool test_equality(DynamicTypeMembersByIdImpl* lhs, DynamicTypeMembersByIdImpl* rhs, DynamicTypePtrPairSeen& dt_ptr_pair)
 {
   if (lhs == rhs) {
     return true;
@@ -270,7 +271,7 @@ bool test_equality_i(DynamicTypeMembersByIdImpl* lhs, DynamicTypeMembersByIdImpl
         rhs_it->second->get_descriptor(rhs_md) != DDS::RETCODE_OK) {
       return false;
     }
-    if (!test_equality_i(lhs_md, rhs_md, dt_ptr_pair)) {
+    if (!test_equality(lhs_md, rhs_md, dt_ptr_pair)) {
       return false;
     }
   }

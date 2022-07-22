@@ -9,7 +9,7 @@
 #include "dcps_export.h"
 #include "SafetyProfileStreams.h"
 #include "DCPS_Utils.h"
-#include "XTypes/DynamicDataHolder.h"
+#include "XTypes/DynamicDataAdapter.h"
 
 #ifdef OPENDDS_SECURITY
 #include "dds/DdsSecurityCoreC.h"
@@ -123,22 +123,6 @@ public:
   virtual DDS::InstanceHandle_t register_instance_w_timestamp(
     const MessageType& instance, const DDS::Time_t& timestamp)
   {
-#if defined(OPENDDS_SECURITY)
-#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
-    XTypes::DynamicDataHolder<MessageType> ddh(dynamic_type_, getMetaStruct<MessageType>(), instance);
-    DDS::Security::SecurityException ex;
-
-    if (security_config_ &&
-        participant_permissions_handle_ != DDS::HANDLE_NIL &&
-        !security_config_->get_access_control()->check_local_datawriter_register_instance(participant_permissions_handle_, this, &ddh, ex)) {
-      ACE_ERROR((LM_WARNING,
-                 "(%P|%t) WARNING: DataWriterImpl_T::register_instance_w_timestamp: unable to register instance SecurityException[%d.%d]: %C\n",
-                 ex.code, ex.minor_code, ex.message.in()));
-      return DDS::HANDLE_NIL;
-    }
-#endif
-#endif
-
     DDS::InstanceHandle_t registered_handle = DDS::HANDLE_NIL;
 
     const DDS::ReturnCode_t ret = get_or_create_instance_handle(registered_handle, instance, timestamp);
@@ -200,22 +184,6 @@ public:
     //  This operation assumes the provided handle is valid. The handle
     //  provided will not be verified.
 
-#if defined(OPENDDS_SECURITY)
-#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
-    XTypes::DynamicDataHolder<MessageType> ddh(dynamic_type_, getMetaStruct<MessageType>(), instance_data);
-    DDS::Security::SecurityException ex;
-
-    if (security_config_ &&
-        participant_permissions_handle_ != DDS::HANDLE_NIL &&
-        !security_config_->get_access_control()->check_local_datawriter_register_instance(participant_permissions_handle_, this, &ddh, ex)) {
-      ACE_ERROR((LM_WARNING,
-                 "(%P|%t) WARNING: DataWriterImpl_T::write_w_timestamp: unable to register instance SecurityException[%d.%d]: %C\n",
-                 ex.code, ex.minor_code, ex.message.in()));
-      return DDS::HANDLE_NIL;
-    }
-#endif
-#endif
-
     if (handle == DDS::HANDLE_NIL) {
       DDS::InstanceHandle_t registered_handle = DDS::HANDLE_NIL;
       const DDS::ReturnCode_t ret =
@@ -272,20 +240,18 @@ public:
     DDS::InstanceHandle_t instance_handle,
     const DDS::Time_t& source_timestamp)
   {
-#if defined(OPENDDS_SECURITY)
-#ifndef OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE
-    XTypes::DynamicDataHolder<MessageType> ddh(dynamic_type_, getMetaStruct<MessageType>(), instance_data);
+#if defined(OPENDDS_SECURITY) && !defined(OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE)
+    XTypes::DynamicDataAdapter<MessageType> dda(dynamic_type_, getMetaStruct<MessageType>(), instance_data);
     DDS::Security::SecurityException ex;
 
     if (security_config_ &&
         participant_permissions_handle_ != DDS::HANDLE_NIL &&
-        !security_config_->get_access_control()->check_local_datawriter_dispose_instance(participant_permissions_handle_, this, &ddh, ex)) {
+        !security_config_->get_access_control()->check_local_datawriter_dispose_instance(participant_permissions_handle_, this, &dda, ex)) {
       ACE_ERROR((LM_WARNING,
                  "(%P|%t) WARNING: DataWriterImpl_T::dispose_instance_w_timestamp: unable to dispose instance SecurityException[%d.%d]: %C\n",
                  ex.code, ex.minor_code, ex.message.in()));
       return DDS::Security::RETCODE_NOT_ALLOWED_BY_SECURITY;
     }
-#endif
 #endif
 
     if (instance_handle == DDS::HANDLE_NIL) {
@@ -642,6 +608,20 @@ private:
     }
 
     if (needs_registration) {
+#if defined(OPENDDS_SECURITY) && !defined(OPENDDS_NO_CONTENT_SUBSCRIPTION_PROFILE)
+      XTypes::DynamicDataAdapter<MessageType> dda(dynamic_type_, getMetaStruct<MessageType>(), instance_data);
+      DDS::Security::SecurityException ex;
+
+      if (security_config_ &&
+          participant_permissions_handle_ != DDS::HANDLE_NIL &&
+          !security_config_->get_access_control()->check_local_datawriter_register_instance(participant_permissions_handle_, this, &dda, ex)) {
+        ACE_ERROR((LM_WARNING,
+                   "(%P|%t) WARNING: DataWriterImpl_T::get_or_create_instance_handle: unable to register instance SecurityException[%d.%d]: %C\n",
+                   ex.code, ex.minor_code, ex.message.in()));
+        return DDS::Security::RETCODE_NOT_ALLOWED_BY_SECURITY;
+      }
+#endif
+
       // don't use fast allocator for registration.
       Message_Block_Ptr marshalled(
         this->dds_marshal(instance_data,
