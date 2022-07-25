@@ -69,4 +69,4 @@ tests/DCPS/XTypes/run_test.pl --secure
 
 tests/security/ConcurrentAuthLimit/run_test.pl
 tests/security/ConcurrentAuthLimit/run_test.pl no_limit
-tests/security/CheckInstance
+tests/security/CheckInstance: !DDS_NO_CONTENT_SUBSCRIPTION

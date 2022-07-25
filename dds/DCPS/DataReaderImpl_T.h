@@ -1291,6 +1291,11 @@ private:
         }
       }
     }
+#else
+    ACE_UNUSED_ARG(instance_data);
+    ACE_UNUSED_ARG(publication_handle);
+    ACE_UNUSED_ARG(header);
+    ACE_UNUSED_ARG(instance_ptr);
 #endif
 
     return true;
