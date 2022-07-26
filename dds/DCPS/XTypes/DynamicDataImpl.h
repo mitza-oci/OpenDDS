@@ -11,8 +11,9 @@
 #include "TypeObject.h"
 #include "DynamicTypeImpl.h"
 
-#include <dds/DCPS/Serializer.h>
+#include <dds/DCPS/LocalObject.h>
 #include <dds/DCPS/PoolAllocator.h>
+#include <dds/DCPS/Serializer.h>
 
 OPENDDS_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -24,7 +25,7 @@ namespace XTypes {
 // is enabled, these sequences are defined in OpenDDS.  Otherwise they come from
 // TAO since they are part of the IDL-to-C++ mapping spec.
 
-class OpenDDS_Dcps_Export DynamicDataImpl : public DDS::DynamicData {
+class OpenDDS_Dcps_Export DynamicDataImpl : public virtual DCPS::LocalObject<DDS::DynamicData> {
 public:
   DynamicDataImpl();
 
