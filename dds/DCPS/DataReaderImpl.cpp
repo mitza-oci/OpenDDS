@@ -1290,6 +1290,11 @@ DataReaderImpl::enable()
         exprParams,
         type_info);
 
+#if defined(OPENDDS_SECURITY)
+    security_config_ = participant->get_security_config();
+    dynamic_type_ = type_lookup_service->type_identifier_to_dynamic(typesupport->getCompleteTypeIdentifier(), subscription_id);
+#endif
+
     {
       ACE_Guard<ACE_Thread_Mutex> guard(subscription_id_mutex_);
       subscription_id_ = subscription_id;
@@ -1311,11 +1316,6 @@ DataReaderImpl::enable()
         LogGuid(get_repo_id()).c_str(),
         topic_servant_->topic_name(), topic_servant_->type_name()));
     }
-
-#if defined(OPENDDS_SECURITY)
-    security_config_ = participant->get_security_config();
-    dynamic_type_ = type_lookup_service->type_identifier_to_dynamic(typesupport->getCompleteTypeIdentifier(), subscription_id);
-#endif
   }
 
   DDS::ReturnCode_t return_value = DDS::RETCODE_OK;
