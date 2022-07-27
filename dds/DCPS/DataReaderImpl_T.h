@@ -1255,7 +1255,8 @@ private:
           header.message_id_ == INSTANCE_REGISTRATION) {
 
         // Pubulisher has already gone through the check.
-        if (instance_ptr->instance_state_ &&
+        if (instance_ptr &&
+            instance_ptr->instance_state_ &&
             instance_ptr->instance_state_->writes_instance(header.publication_id_)) {
           return true;
         }
