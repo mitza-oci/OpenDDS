@@ -16,7 +16,6 @@
 
 module DDS {
   local interface DynamicType;
-  local interface DynamicTypeBuilder;
   valuetype TypeDescriptor;
 
   typedef sequence<string> IncludePathSeq;
@@ -29,38 +28,6 @@ module DDS {
 
   // ---------- TypeKinds (begin) -------------------
   typedef octet TypeKind;
-
-  local interface DynamicTypeBuilderFactory {
-    /*static*/ DynamicTypeBuilderFactory get_instance();
-    /*static*/ DDS::ReturnCode_t delete_instance();
-    DynamicType get_primitive_type(in TypeKind kind);
-    DynamicTypeBuilder create_type(in TypeDescriptor descriptor);
-    DynamicTypeBuilder create_type_copy(in DynamicType type);
-    DynamicTypeBuilder create_type_w_type_object(
-                                                 in TypeObject type_object);
-    DynamicTypeBuilder create_string_type(in unsigned long bound);
-    DynamicTypeBuilder create_wstring_type(in unsigned long bound);
-    DynamicTypeBuilder create_sequence_type(
-                                            in DynamicType element_type,
-                                            in unsigned long bound);
-    DynamicTypeBuilder create_array_type(
-                                         in DynamicType element_type,
-                                         in BoundSeq bound);
-    DynamicTypeBuilder create_map_type(
-                                       in DynamicType key_element_type,
-                                       in DynamicType element_type,
-                                       in unsigned long bound);
-    DynamicTypeBuilder create_bitmask_type(in unsigned long bound);
-    DynamicTypeBuilder create_type_w_uri(
-                                         in string document_url,
-                                         in string type_name,
-                                         in IncludePathSeq include_paths);
-    DynamicTypeBuilder create_type_w_document(
-                                              in string document,
-                                              in string type_name,
-                                              in IncludePathSeq include_paths);
-    DDS::ReturnCode_t delete_type(in DynamicType type);
-  };
 
   // FUTURE: Support map.
   //typedef map<ObjectName, ObjectName> Parameters;
@@ -160,36 +127,6 @@ module DDS {
   // typedef map<MemberId, DynamicTypeMember> DynamicTypeMembersById;
   local interface DynamicTypeMembersById {};
 
-  local interface DynamicTypeBuilder {
-    DDS::ReturnCode_t get_descriptor(
-                                     inout TypeDescriptor descriptor);
-    ObjectName get_name();
-    TypeKind get_kind();
-    DDS::ReturnCode_t get_member_by_name(
-                                         inout DynamicTypeMember member,
-                                         in ObjectName name);
-    DDS::ReturnCode_t get_all_members_by_name(
-                                              inout DynamicTypeMembersByName member);
-    DDS::ReturnCode_t get_member(
-                                 inout DynamicTypeMember member,
-                                 in MemberId id);
-    DDS::ReturnCode_t get_all_members(
-                                      inout DynamicTypeMembersById member);
-    unsigned long get_member_count();
-    DDS::ReturnCode_t get_member_by_index(
-                                          inout DynamicTypeMember member,
-                                          in unsigned long index);
-    unsigned long get_annotation_count();
-    DDS::ReturnCode_t get_annotation(
-                                     inout AnnotationDescriptor descriptor,
-                                     in unsigned long idx);
-    boolean equals(in DynamicType other);
-    DDS::ReturnCode_t add_member(in MemberDescriptor descriptor);
-    DDS::ReturnCode_t apply_annotation(
-                                       in AnnotationDescriptor descriptor);
-    DynamicType build();
-  };
-
   local interface DynamicType {
     DDS::ReturnCode_t get_descriptor(
                                      inout TypeDescriptor descriptor);
@@ -223,13 +160,6 @@ module DDS {
   };
 
   local interface DynamicData;
-
-  local interface DynamicDataFactory {
-    /*static*/ DynamicDataFactory get_instance();
-    /*static*/ DDS::ReturnCode_t delete_instance();
-    DynamicData create_data();
-    DDS::ReturnCode_t delete_data(in DynamicData data);
-  };
 
   local interface DynamicData {
     readonly attribute DynamicType type;
