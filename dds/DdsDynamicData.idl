@@ -74,8 +74,8 @@ module DDS {
     public DynamicType base_type;
     public DynamicType discriminator_type;
     public BoundSeq bound;
-    @optional public DynamicType element_type;
-    @optional public DynamicType key_element_type;
+    /*@optional*/ public DynamicType element_type;
+    /*@optional*/ public DynamicType key_element_type;
     public ExtensibilityKind extensibility_kind;
     public boolean is_nested;
     DDS::ReturnCode_t copy_from(in TypeDescriptor other);
