@@ -89,7 +89,11 @@ DynamicDataImpl::DynamicDataImpl(DCPS::Serializer& ser, DDS::DynamicType_ptr typ
 }
 
 DynamicDataImpl::DynamicDataImpl(const DynamicDataImpl& other)
-  : chain_(0)
+  : CORBA::Object()
+  , DDS::DynamicData()
+  , CORBA::LocalObject()
+  , RcObject()
+  , chain_(0)
   , strm_(0, other.encoding_)
 {
   copy(other);
