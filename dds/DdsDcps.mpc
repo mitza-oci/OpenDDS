@@ -30,6 +30,13 @@ project(OpenDDS_Dcps): core, coverage_optional, \
     DdsDynamicDataSeq.idl
   }
 
+  IDL_Files {
+    // valuetypes in DdsDynamicData.idl require -Scdr
+    // -Scdr requires -Sa whether or not the dds_suppress_anys feature is on
+    idlflags += -Scdr -Sa
+    DdsDynamicData.idl
+  }
+
   TypeSupport_Files {
     DdsDynamicDataSeq.idl
   }
