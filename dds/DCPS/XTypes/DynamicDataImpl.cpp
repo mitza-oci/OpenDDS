@@ -2089,6 +2089,9 @@ bool DynamicDataImpl::get_from_struct_common_checks(DDS::MemberDescriptor_var& m
   }
 
   if (member->get_descriptor(md) != DDS::RETCODE_OK) {
+    // md will be converted to a reference to a pointer.
+    // Reset to avoid memory leaks.
+    md = 0;
     if (DCPS::DCPS_debug_level >= 1) {
       ACE_ERROR((LM_ERROR, ACE_TEXT("(%P|%t) DynamicDataImpl::get_from_struct_common_checks -")
                  ACE_TEXT(" Failed to get member descriptor for member with ID %d\n"), id));
