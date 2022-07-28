@@ -1291,8 +1291,11 @@ DataReaderImpl::enable()
         type_info);
 
 #if defined(OPENDDS_SECURITY)
-    security_config_ = participant->get_security_config();
-    dynamic_type_ = type_lookup_service->type_identifier_to_dynamic(typesupport->getCompleteTypeIdentifier(), subscription_id);
+    {
+      ACE_GUARD(ACE_Recursive_Thread_Mutex, guard, sample_lock_);
+      security_config_ = participant->get_security_config();
+      dynamic_type_ = type_lookup_service->type_identifier_to_dynamic(typesupport->getCompleteTypeIdentifier(), subscription_id);
+    }
 #endif
 
     {
