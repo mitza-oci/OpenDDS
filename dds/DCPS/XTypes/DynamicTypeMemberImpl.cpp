@@ -26,6 +26,7 @@ DDS::ReturnCode_t DynamicTypeMemberImpl::set_descriptor(DDS::MemberDescriptor* d
 
 DDS::ReturnCode_t DynamicTypeMemberImpl::get_descriptor(DDS::MemberDescriptor*& descriptor)
 {
+  DDS::MemberDescriptor_var descriptor_v(descriptor);
   descriptor = descriptor_;
   CORBA::add_ref(descriptor);
   return DDS::RETCODE_OK;

@@ -77,6 +77,17 @@ TEST_F(dds_DCPS_XTypes_DynamicTypeImpl, CompleteToDynamicType_MyInnerStruct)
   long_td->name("Int32");
   expected_md->type(long_expected_dt);
   expected_dt->set_descriptor(expected_td);
+
+  DDS::TypeDescriptor_var td2;
+  EXPECT_EQ(DDS::RETCODE_OK, expected_dt->get_descriptor(td2));
+  EXPECT_EQ(expected_td, td2);
+  // get_descriptor can be called with the argument already pointing to an object.
+  // It yields the same result but we'll check the reference count as well.
+  const unsigned int refcount = expected_td->_refcount_value();
+  EXPECT_EQ(DDS::RETCODE_OK, expected_dt->get_descriptor(td2));
+  EXPECT_EQ(expected_td, td2);
+  EXPECT_EQ(refcount, expected_td->_refcount_value());
+
   expected_dtm->set_descriptor(expected_md);
   long_expected_dt->set_descriptor(long_td);
   expected_dt->insert_dynamic_member(expected_dtm);

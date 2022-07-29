@@ -30,6 +30,7 @@ void DynamicTypeImpl::set_descriptor(DDS::TypeDescriptor* descriptor)
 
 DDS::ReturnCode_t DynamicTypeImpl::get_descriptor(DDS::TypeDescriptor*& descriptor)
 {
+  DDS::TypeDescriptor_var descriptor_v(descriptor);
   descriptor = descriptor_;
   CORBA::add_ref(descriptor);
   return DDS::RETCODE_OK;
@@ -50,6 +51,7 @@ DDS::ReturnCode_t DynamicTypeImpl::get_member_by_name(DDS::DynamicTypeMember_ptr
 {
   const DynamicTypeMembersByNameImpl::const_iterator pos = member_by_name_.find(name);
   if (pos != member_by_name_.end()) {
+    DDS::DynamicTypeMember_var member_v(member);
     member = DDS::DynamicTypeMember::_duplicate(pos->second);
     return DDS::RETCODE_OK;
   }
@@ -58,6 +60,7 @@ DDS::ReturnCode_t DynamicTypeImpl::get_member_by_name(DDS::DynamicTypeMember_ptr
 
 DDS::ReturnCode_t DynamicTypeImpl::get_all_members_by_name(DDS::DynamicTypeMembersByName_ptr& member)
 {
+  DDS::DynamicTypeMembersByName_var member_v(member);
   member = DDS::DynamicTypeMembersByName::_duplicate(&member_by_name_);
   return DDS::RETCODE_OK;
 }
@@ -66,6 +69,7 @@ DDS::ReturnCode_t DynamicTypeImpl::get_member(DDS::DynamicTypeMember_ptr& member
 {
   const DynamicTypeMembersByIdImpl::const_iterator pos = member_by_id_.find(id);
   if (pos != member_by_id_.end()) {
+    DDS::DynamicTypeMember_var member_v(member);
     member = DDS::DynamicTypeMember::_duplicate(pos->second);
     return DDS::RETCODE_OK;
   }
@@ -74,6 +78,7 @@ DDS::ReturnCode_t DynamicTypeImpl::get_member(DDS::DynamicTypeMember_ptr& member
 
 DDS::ReturnCode_t DynamicTypeImpl::get_all_members(DDS::DynamicTypeMembersById_ptr& member)
 {
+  DDS::DynamicTypeMembersById_var member_v(member);
   member = DDS::DynamicTypeMembersById::_duplicate(&member_by_id_);
   return DDS::RETCODE_OK;
 }
@@ -86,6 +91,7 @@ ACE_CDR::ULong DynamicTypeImpl::get_member_count()
 DDS::ReturnCode_t DynamicTypeImpl::get_member_by_index(DDS::DynamicTypeMember_ptr& member, ACE_CDR::ULong index)
 {
   if (index < member_by_index_.size()) {
+    DDS::DynamicTypeMember_var member_v(member);
     member = DDS::DynamicTypeMember::_duplicate(member_by_index_[index]);
     return DDS::RETCODE_OK;
   }
