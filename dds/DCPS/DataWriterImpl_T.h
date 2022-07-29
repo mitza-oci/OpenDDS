@@ -247,9 +247,11 @@ public:
     if (security_config_ &&
         participant_permissions_handle_ != DDS::HANDLE_NIL &&
         !security_config_->get_access_control()->check_local_datawriter_dispose_instance(participant_permissions_handle_, this, &dda, ex)) {
-      ACE_ERROR((LM_WARNING,
-                 "(%P|%t) WARNING: DataWriterImpl_T::dispose_instance_w_timestamp: unable to dispose instance SecurityException[%d.%d]: %C\n",
-                 ex.code, ex.minor_code, ex.message.in()));
+      if (log_level >= LogLevel::Notice) {
+        ACE_ERROR((LM_NOTICE,
+                   "(%P|%t) NOTICE: DataWriterImpl_T::dispose_instance_w_timestamp: unable to dispose instance SecurityException[%d.%d]: %C\n",
+                   ex.code, ex.minor_code, ex.message.in()));
+      }
       return DDS::Security::RETCODE_NOT_ALLOWED_BY_SECURITY;
     }
 #endif
@@ -615,9 +617,11 @@ private:
       if (security_config_ &&
           participant_permissions_handle_ != DDS::HANDLE_NIL &&
           !security_config_->get_access_control()->check_local_datawriter_register_instance(participant_permissions_handle_, this, &dda, ex)) {
-        ACE_ERROR((LM_WARNING,
-                   "(%P|%t) WARNING: DataWriterImpl_T::get_or_create_instance_handle: unable to register instance SecurityException[%d.%d]: %C\n",
-                   ex.code, ex.minor_code, ex.message.in()));
+        if (log_level >= LogLevel::Notice) {
+          ACE_ERROR((LM_NOTICE,
+                     "(%P|%t) NOTICE: DataWriterImpl_T::get_or_create_instance_handle: unable to register instance SecurityException[%d.%d]: %C\n",
+                     ex.code, ex.minor_code, ex.message.in()));
+        }
         return DDS::Security::RETCODE_NOT_ALLOWED_BY_SECURITY;
       }
 #endif
