@@ -12646,3 +12646,95 @@ jobs:
       with:
         name: ${{ github.job }}_artifact
         path: ${{ github.job }}.tar.xz
+
+  ACE_TAO_m12-arm64:
+
+    runs-on: macos-12
+
+    steps:
+    - name: checkout OpenDDS
+      uses: actions/checkout@v3
+      with:
+        path: OpenDDS
+        submodules: true
+    - name: checkout ACE_TAO
+      uses: actions/checkout@v3
+      with:
+        repository: DOCGroup/ACE_TAO
+        ref: ace6tao2
+        path: OpenDDS/ACE_TAO
+    - name: get ACE_TAO commit and compiler version
+      shell: bash
+      run: |
+        cd OpenDDS/ACE_TAO
+        echo ACE_COMMIT=$(git rev-parse HEAD) >> $GITHUB_ENV
+        echo COMPILER_VERSION=$(c++ --version 2>&1 | head -n 1) >> $GITHUB_ENV
+    - name: Cache Artifact
+      id: cache-artifact
+      uses: actions/cache@v3
+      with:
+        path: ${{ github.job }}.tar.xz
+        key: c01_${{ github.job }}_ace6tao2_${{ env.ACE_COMMIT }}_${{ env.COMPILER_VERSION }}
+    - name: install xerces-c and openssl (arm64)
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      run: |
+        PKGS="openssl xerces-c"
+        TAG=arm64_monterey
+        mkdir -p arm-target/{bin,brew-cache,arm-homebrew}
+        cd arm-target
+        ARM_TARGET=$(pwd)
+        curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C arm-homebrew
+        export HOMEBREW_CACHE=$ARM_TARGET/brew-cache
+        export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+        ARM_BREW=$ARM_TARGET/arm-homebrew/bin/brew
+        $ARM_BREW fetch --deps --bottle_tag=$TAG $PKGS
+        $ARM_BREW --cache --bottle-tag=$TAG $PKGS | xargs -n 1 $ARM_BREW install --ignore-dependencies --force-bottle
+        echo OPENSSL_ROOT=$ARM_TARGET/arm-homebrew/opt/openssl >> $GITHUB_ENV
+        echo XERCESC_ROOT=$ARM_TARGET/arm-homebrew/opt/xerces-c >> $GITHUB_ENV
+    - name: checkout MPC
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      uses: actions/checkout@v3
+      with:
+        repository: DOCGroup/MPC
+        path: MPC
+    - name: configure OpenDDS
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      run: |
+        cd OpenDDS
+        ./configure -v --target=macos-cross --target-arch=arm64-apple-macos --std=c++11 --tests --java --security --mpc=$GITHUB_WORKSPACE/MPC --xerces3=$XERCESC_ROOT --openssl=$OPENSSL_ROOT
+        tools/scripts/show_build_config.pl
+    - name: build ACE and TAO (host)
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      run: |
+        cd OpenDDS/build/host
+        . setenv.sh
+        cd ACE_TAO/ACE
+        make -j4
+        cd ../TAO
+        make -j4
+    - name: build ACE and TAO (target)
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      run: |
+        cd OpenDDS/build/target
+        . setenv.sh
+        cd ACE_TAO/ACE
+        make -j4
+        cd ../TAO
+        make -j4
+    - name: create ACE_TAO tar.xz artifact
+      if: steps.cache-artifact.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE/OpenDDS/build/host/ACE_TAO
+        perl -ni.bak -e "print unless /opendds/" ACE/bin/MakeProjectCreator/config/default.features # remove opendds features from here, let individual build configure scripts handle those
+        cd $GITHUB_WORKSPACE/OpenDDS/build/target/ACE_TAO
+        perl -ni.bak -e "print unless /opendds/" ACE/bin/MakeProjectCreator/config/default.features # remove opendds features from here, let individual build configure scripts handle those
+        cd $GITHUB_WORKSPACE
+        find OpenDDS -iname "*\.o" -delete
+        gtar cvf ${{ github.job }}.tar OpenDDS/build/*/ACE_TAO arm-target/arm-homebrew/{Cellar,opt}
+        xz -3 ${{ github.job }}.tar
+    - name: upload ACE_TAO artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ github.job }}_artifact
+        path: ${{ github.job }}.tar.xz
