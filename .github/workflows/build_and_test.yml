@@ -12738,3 +12738,49 @@ jobs:
       with:
         name: ${{ github.job }}_artifact
         path: ${{ github.job }}.tar.xz
+
+  build_m12-arm64: # rename
+
+    runs-on: macos-12
+
+    needs: ACE_TAO_m12-arm64
+
+    steps:
+    - name: checkout OpenDDS
+      uses: actions/checkout@v3
+      with:
+        path: OpenDDS
+        submodules: true
+    - name: checkout MPC
+      uses: actions/checkout@v3
+      with:
+        repository: DOCGroup/MPC
+        path: MPC
+    - name: checkout ACE_TAO
+      uses: actions/checkout@v3
+      with:
+        repository: DOCGroup/ACE_TAO
+        ref: ace6tao2
+        path: OpenDDS/ACE_TAO
+    - name: download ACE_TAO artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ACE_TAO_m12-arm64_artifact
+    - name: extract ACE_TAO artifact
+      shell: bash
+      run: |
+        gtar xfJ ACE_TAO_m12-arm64.tar.xz
+    - name: configure OpenDDS
+      run: |
+        ARM_TARGET=$GITHUB_WORKSPACE/arm-target
+        OPENSSL_ROOT=$ARM_TARGET/arm-homebrew/opt/openssl
+        XERCESC_ROOT=$ARM_TARGET/arm-homebrew/opt/xerces-c
+        cd OpenDDS
+        ./configure -v --target=macos-cross --target-arch=arm64-apple-macos --std=c++11 --tests --java --security --mpc=$GITHUB_WORKSPACE/MPC --xerces3=$XERCESC_ROOT --openssl=$OPENSSL_ROOT
+        tools/scripts/show_build_config.pl
+    - uses: ammaraskar/gcc-problem-matcher@0.2.0
+    - name: build OpenDDS
+      shell: bash
+      run: |
+        cd OpenDDS
+        make -j4
