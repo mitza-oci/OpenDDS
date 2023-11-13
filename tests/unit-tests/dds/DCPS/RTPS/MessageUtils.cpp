@@ -138,6 +138,7 @@ TEST(dds_DCPS_RTPS_MessageUtils, maintest)
     RtpsSampleHeader header1(*f.head_);
     EXPECT_TRUE(header1.valid());
     EXPECT_TRUE(header1.submessage_._d() == INFO_TS);
+    header1.pdu_remaining(f.head_->total_length());
     header1 = *f.head_;
     EXPECT_TRUE(header1.valid());
     EXPECT_TRUE(header1.submessage_._d() == DATA_FRAG);
@@ -158,6 +159,7 @@ TEST(dds_DCPS_RTPS_MessageUtils, maintest)
     RtpsSampleHeader header2(*f.tail_);
     EXPECT_TRUE(header2.valid());
     EXPECT_TRUE(header2.submessage_._d() == INFO_TS);
+    header2.pdu_remaining(f.tail_->total_length());
     header2 = *f.tail_;
     EXPECT_TRUE(header2.valid());
     EXPECT_TRUE(header2.submessage_._d() == DATA_FRAG);
@@ -180,6 +182,7 @@ TEST(dds_DCPS_RTPS_MessageUtils, maintest)
     RtpsSampleHeader header3(*f2.head_);
     EXPECT_TRUE(header3.valid());
     EXPECT_TRUE(header3.submessage_._d() == INFO_TS);
+    header3.pdu_remaining(f2.head_->total_length());
     header3 = *f2.head_;
     EXPECT_TRUE(header3.valid());
     EXPECT_TRUE(header3.submessage_._d() == DATA_FRAG);
@@ -193,6 +196,7 @@ TEST(dds_DCPS_RTPS_MessageUtils, maintest)
     RtpsSampleHeader header4(*f2.tail_);
     EXPECT_TRUE(header4.valid());
     EXPECT_TRUE(header4.submessage_._d() == INFO_TS);
+    header4.pdu_remaining(f2.tail_->total_length());
     header4 = *f2.tail_;
     EXPECT_TRUE(header4.valid());
     EXPECT_TRUE(header4.submessage_._d() == DATA_FRAG);
