@@ -171,7 +171,9 @@ RtpsSampleHeader::init(ACE_Message_Block& mb)
       if (frag_) {
         const DataFragSubmessage& df = submessage_.data_frag_sm();
         if (df.fragmentSize == 0 || df.fragmentStartingNum.value == 0 ||
-            df.fragmentsInSubmessage == 0 || last_fragment(df) > total_fragments(df)) {
+            df.fragmentsInSubmessage == 0 || last_fragment(df) > total_fragments(df) ||
+            message_length_ > df.sampleSize ||
+            message_length_ > df.fragmentsInSubmessage * df.fragmentSize) {
           valid_ = false;
           return;
         }
@@ -181,7 +183,7 @@ RtpsSampleHeader::init(ACE_Message_Block& mb)
       // (from a newer minor version of the RTPS spec).  Either way, indicate
       // to the TransportReceiveStrategy that there is no data payload here.
       message_length_ = 0;
-      ACE_CDR::UShort marshaled = static_cast<ACE_CDR::UShort>(serialized_size_);
+      const ACE_CDR::UShort marshaled = static_cast<ACE_CDR::UShort>(serialized_size_);
       if (octetsToNextHeader + SMHDR_SZ > marshaled) {
         valid_ = ser.skip(octetsToNextHeader + SMHDR_SZ - marshaled);
         serialized_size_ = octetsToNextHeader + SMHDR_SZ;
