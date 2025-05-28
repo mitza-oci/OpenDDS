@@ -11,6 +11,8 @@ module Messenger {
 // but the file is copied here to more accurately reflect a
 // user's project setup.
 
+  typedef sequence<double> DoubleSeq;
+
   @topic
   struct Message {
     string from;
@@ -18,5 +20,6 @@ module Messenger {
     @key long subject_id;
     string text;
     unsigned long count;
+    DoubleSeq values;
   };
 };

@@ -113,6 +113,7 @@ public class Both {
         MessageDataWriter mdw = MessageDataWriterHelper.narrow(dw);
         Message msg = new Message();
         msg.subject_id = 99;
+        msg.values = new double[]{3.14, 2.17};
         int handle = mdw.register_instance(msg);
         msg.from = "OpenDDS-Java";
         msg.subject = "Review";
