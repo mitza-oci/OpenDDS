@@ -12,11 +12,13 @@ use PerlDDS::Run_Test;
 use File::Path;
 use strict;
 
-my $test = new PerlDDS::TestFramework();
-$test->setup_discovery();
+my $orb_debug = '-ORBDebugLevel 10 -ORBVerboseLogging 1';
 
-$test->process('subscriber', 'subscriber');
-$test->process('publisher', 'publisher');
+my $test = new PerlDDS::TestFramework();
+$test->setup_discovery($orb_debug);
+
+$test->process('subscriber', 'subscriber', $orb_debug);
+$test->process('publisher', 'publisher', $orb_debug);
 
 rmtree('./DCS');
 
