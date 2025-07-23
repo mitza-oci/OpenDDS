@@ -15,6 +15,7 @@ use strict;
 my $orb_debug = '-ORBDebugLevel 10 -ORBVerboseLogging 1';
 
 my $test = new PerlDDS::TestFramework();
+$test->{'dcps_debug_level'} = $test->{'dcps_transport_debug_level'} = 10;
 $test->setup_discovery($orb_debug);
 
 $test->process('subscriber', 'subscriber', $orb_debug);
