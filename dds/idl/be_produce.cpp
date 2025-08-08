@@ -393,7 +393,7 @@ BE_produce()
 
   const bool java_ts_only = be_global->java_arg().length() > 0;
 
-  dds_visitor visitor(d, java_ts_only);
+  codegen_visitor visitor(d, java_ts_only);
 
   if (root->ast_accept(&visitor) == -1) {
     ACE_ERROR((LM_ERROR,
