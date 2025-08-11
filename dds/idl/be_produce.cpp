@@ -68,6 +68,7 @@ trademarks or registered trademarks of Sun Microsystems, Inc.
 
 #include "be_extern.h"
 #include "dds_visitor.h"
+#include "symbol_table.h"
 
 #include "ast_root.h"
 #include "utl_string.h"
@@ -388,6 +389,9 @@ BE_produce()
 
     BE_abort();
   }
+
+  const symbol_table st;
+  st.dump();
 
   be_global->set_inc_paths(idl_global->idl_flags());
 

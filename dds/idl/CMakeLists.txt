@@ -25,6 +25,7 @@ add_executable(opendds_idl
   marshal_generator.cpp
   metaclass_generator.cpp
   opendds_idl.cpp
+  symbol_table.cpp
   topic_keys.cpp
   ts_generator.cpp
   typeobject_generator.cpp
