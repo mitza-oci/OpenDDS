@@ -1,0 +1,5 @@
+project {
+  Define_Custom(Build) {
+    inputext = .mpc, .mpb, .mwc, CMakeLists.txt
+  }
+}
