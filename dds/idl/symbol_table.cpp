@@ -14,15 +14,24 @@ symbol_table::symbol_table()
   const auto root = idl_global->root();
   collect_decls c(root, *this);
   root->ast_accept(&c);
-  fill_details f(root, *this);
-  root->ast_accept(&f);
+}
+
+namespace {
+  const char* node_type_name(AST_Decl* node)
+  {
+    switch (node->node_type()) {
+    case AST_Decl::NT_union_branch: return "union_branch";
+    case AST_Decl::NT_field: return "field";
+    default: return node->node_type_name();
+    }
+  }
 }
 
 void symbol_table::dump() const
 {
   for (const auto& entry : entries_) {
     std::cout << "Symbol: " << entry.first
-              << ", Kind: " << entry.second.decl->node_type_name() << '\n';
+              << ", Kind: " << node_type_name(entry.second.decl) << '\n';
   }
 }
 
@@ -80,7 +89,19 @@ int symbol_table::collect_decls::visit_enum(AST_Enum* e)
   return recursive_visitor::visit_enum(e);
 }
 
-inline void symbol_table::collect_decls::add(AST_Decl* decl)
+int symbol_table::collect_decls::visit_field(AST_Field* f)
+{
+  add(f);
+  return recursive_visitor::visit_field(f);
+}
+
+int symbol_table::collect_decls::visit_union_branch(AST_UnionBranch* b)
+{
+  add(b);
+  return recursive_visitor::visit_union_branch(b);
+}
+
+void symbol_table::collect_decls::add(AST_Decl* decl)
 {
   st_.entries_[decl->full_name()] = {decl};
   st_.names_[decl] = decl->full_name();

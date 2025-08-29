@@ -112,6 +112,28 @@ int recursive_visitor::visit_exception(AST_Exception* node)
   return 0;
 }
 
+int recursive_visitor::visit_structure(AST_Structure* node)
+{
+  if (node->imported()) {
+    return 0;
+  }
+  if (visit_scope(node) == -1) {
+    ACE_ERROR_RETURN((LM_ERROR, "(%N:%l) recursive_visitor::visit_structure - visit_scope failed\n"), -1);
+  }
+  return 0;
+}
+
+int recursive_visitor::visit_union(AST_Union* node)
+{
+  if (node->imported()) {
+    return 0;
+  }
+  if (visit_scope(node) == -1) {
+    ACE_ERROR_RETURN((LM_ERROR, "(%N:%l) recursive_visitor::visit_union - visit_scope failed\n"), -1);
+  }
+  return 0;
+}
+
 int recursive_visitor::visit_root(AST_Root* node)
 {
   if (visit_scope(node) == -1) {

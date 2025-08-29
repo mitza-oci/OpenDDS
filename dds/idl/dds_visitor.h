@@ -80,6 +80,8 @@ public:
   int visit_module(AST_Module* node) override;
   int visit_interface(AST_Interface* node) override;
   int visit_exception(AST_Exception* node) override;
+  int visit_structure(AST_Structure* node) override;
+  int visit_union(AST_Union* node) override;
 
 protected:
   AST_Decl* scope_;

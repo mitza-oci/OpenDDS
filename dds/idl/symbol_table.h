@@ -28,24 +28,22 @@ private:
   struct collect_decls : recursive_visitor {
     collect_decls(AST_Decl* scope, symbol_table& st);
     ~collect_decls() override = default;
-    int visit_module(AST_Module*) override;
-    int visit_constant(AST_Constant*) override;
-    int visit_typedef(AST_Typedef*) override;
-    int visit_interface(AST_Interface*) override;
-    int visit_valuetype(AST_ValueType*) override;
-    int visit_structure(AST_Structure*) override;
-    int visit_union(AST_Union*) override;
-    int visit_enum(AST_Enum*) override;
-    symbol_table& st_;
+
+    int visit_module(AST_Module* node) override;
+    int visit_constant(AST_Constant* node) override;
+    int visit_typedef(AST_Typedef* node) override;
+    int visit_interface(AST_Interface* node) override;
+    int visit_valuetype(AST_ValueType* node) override;
+    int visit_structure(AST_Structure* node) override;
+    int visit_union(AST_Union* node) override;
+    int visit_enum(AST_Enum* node) override;
+    int visit_field(AST_Field* node) override;
+    int visit_union_branch(AST_UnionBranch* node) override;
 
     void add(AST_Decl* decl);
-  };
-
-  struct fill_details : recursive_visitor {
-    fill_details(AST_Decl* scope, symbol_table& st);
-    ~fill_details() override = default;
     symbol_table& st_;
   };
+
 };
 
 #endif
