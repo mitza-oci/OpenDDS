@@ -100,7 +100,7 @@ namespace {
     const std::string& op_type, bool is_complex, const std::string& value,
     const char* rc_dest = "return")
   {
-    RefWrapper type_wrapper(type, type_name, "");
+    RefWrapper type_wrapper(type, type_name, "", "");
     type_wrapper.dynamic_data_adapter_ = true;
     type_wrapper.done();
     std::string template_params;
@@ -252,7 +252,7 @@ namespace {
       if ((key_cls & CL_STRING) && be_global->language_mapping() == BE_GlobalData::LANGMAP_CXX11) {
         elem = (key_cls & CL_WIDE) ? "std::wstring" : "std::string";
       }
-      RefWrapper key(map_node->value_type(), elem, "key");
+      RefWrapper key(map_node->value_type(), elem, "", "key");
       be_global->impl_ <<
         "  " << elem << " id_to_key(DDS::MemberId)\n"
         "  {\n"
@@ -431,7 +431,7 @@ namespace {
     }
     const std::string cpp_name = use_scoped_name ? *use_scoped_name : scoped(node->name());
     const bool generate = be_global->dynamic_data_adapter(typedef_node ? typedef_node : node);
-    RefWrapper wrapper(dynamic_cast<AST_Type*>(node), cpp_name, "value_", false);
+    RefWrapper wrapper(dynamic_cast<AST_Type*>(node), cpp_name, "", "value_", false);
     wrapper.dynamic_data_adapter_ = true;
     wrapper.done();
 
@@ -562,7 +562,7 @@ namespace {
           be_global->impl_ <<
             "    ACE_UNUSED_ARG(ext);\n";
           if (distinct_type) { // sequence, map, or array (C++11 mapping)
-            RefWrapper distinct_type_wrapper(node_as_type, cpp_name, "");
+            RefWrapper distinct_type_wrapper(node_as_type, cpp_name, "", "");
             distinct_type_wrapper.done();
             be_global->impl_ <<
               "    using namespace OpenDDS::DCPS;\n"
@@ -608,7 +608,7 @@ namespace {
             "    ACE_UNUSED_ARG(ext);\n"
             "    using namespace OpenDDS::DCPS;\n";
           if (distinct_type) {
-            RefWrapper distinct_type_wrapper(node_as_type, cpp_name, "");
+            RefWrapper distinct_type_wrapper(node_as_type, cpp_name, "", "");
             distinct_type_wrapper.done();
             be_global->impl_ <<
               "    " << distinct_type_wrapper.wrapped_type_name() << " distinct_value(value_);\n"

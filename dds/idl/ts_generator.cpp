@@ -571,7 +571,7 @@ bool ts_generator::gen_struct(AST_Structure* node, UTL_ScopedName* name,
 
 namespace {
   std::string generateEqual(const std::string&, AST_Decl*, const std::string& name, AST_Type* field_type,
-                            const std::string&, bool, Intro&,
+                            const std::string&, bool, bool, Intro&,
                             const std::string&)
   {
     std::stringstream ss;

@@ -602,7 +602,7 @@ metaclass_generator::gen_typedef(AST_Typedef*, UTL_ScopedName* name,
 }
 
 std::string metaclass_generator::gen_union_branch(const std::string&, AST_Decl* branch, const std::string&,
-                                                  AST_Type* br_type, const std::string&, bool, Intro&, const std::string&)
+                                                  AST_Type* br_type, const std::string&, bool, bool, Intro&, const std::string&)
 {
   std::stringstream ss;
   const Classification br_cls = classify(br_type);

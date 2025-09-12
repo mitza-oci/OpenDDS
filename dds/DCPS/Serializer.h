@@ -619,7 +619,7 @@ public:
    *
    * Returns true if successful.
    */
-  bool write_parameter_id(const unsigned id, size_t size, bool must_understand = false);
+  bool write_parameter_id(unsigned id, size_t size, bool must_understand = false);
 
   /**
    * Write the parameter ID that marks the end of XCDR1 parameter lists.
@@ -838,6 +838,28 @@ struct NestedKeyOnly {
 
   Type& value;
 };
+
+
+struct OpenDDS_Dcps_Export OptionalHeader {
+  explicit OptionalHeader(unsigned int id = 0, size_t size = 0, bool a_must_understand = false)
+    : member_id(id)
+    , member_size(size)
+    , must_understand(a_must_understand)
+    , has_value(size)
+  {
+  }
+
+  unsigned int member_id;
+  size_t member_size;
+  bool must_understand;
+  bool has_value;
+};
+
+// caller must handle alignment reset for member (XCDR1)
+OpenDDS_Dcps_Export void serialized_size(const Encoding& encoding, size_t& size, const OptionalHeader& opt);
+
+OpenDDS_Dcps_Export bool operator<<(Serializer& strm, const OptionalHeader& opt);
+OpenDDS_Dcps_Export bool operator>>(Serializer& strm, OptionalHeader& opt);
 
 namespace IDL {
   // Although similar to C++11 reference_wrapper, this template has the

@@ -611,6 +611,54 @@ bool Serializer::write_parameter_id(const unsigned id, const size_t size, const 
   return true;
 }
 
+void serialized_size(const Encoding& encoding, size_t& size, const OptionalHeader&)
+{
+  switch (encoding.kind()) {
+  case Encoding::KIND_XCDR1:
+    encoding.align(size, xcdr1_pid_alignment);
+    size += uint16_cdr_size * 2;
+    return;
+  case Encoding::KIND_XCDR2:
+    primitive_serialized_size_boolean(encoding, size);
+    return;
+  default:
+    return;
+  }
+}
+
+bool operator<<(Serializer& strm, const OptionalHeader& opt)
+{
+  switch (strm.encoding().kind()) {
+  case Encoding::KIND_XCDR1:
+    return strm.write_parameter_id(opt.member_id, opt.has_value ? opt.member_size : 0, opt.must_understand);
+  case Encoding::KIND_XCDR2:
+    return strm << ACE_OutputCDR::from_boolean(opt.has_value);
+  default:
+    return false;
+  }
+}
+
+bool operator>>(Serializer& strm, OptionalHeader& opt)
+{
+  switch (strm.encoding().kind()) {
+  case Encoding::KIND_XCDR1:
+    {
+      unsigned int pid = 0; // ignored
+      size_t size = 0;
+      bool must_understand = false; // ignored
+      if (!strm.read_parameter_id(pid, size, must_understand)) {
+        return false;
+      }
+      opt.has_value = size > 0;
+    }
+  return true;
+  case Encoding::KIND_XCDR2:
+    return strm >> ACE_InputCDR::to_boolean(opt.has_value);
+  default:
+    return false;
+  }
+}
+
 } // namespace DCPS
 } // namespace OpenDDS
 

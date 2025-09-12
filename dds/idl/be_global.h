@@ -235,6 +235,7 @@ public:
   OpenDDS::XTypes::MemberId compute_id(AST_Structure* stru, AST_Field* field, AutoidKind auto_id,
     OpenDDS::XTypes::MemberId& member_id);
   OpenDDS::XTypes::MemberId get_id(AST_Field* field);
+  std::string get_id_string(AST_Field* field);
 
   bool is_nested(AST_Decl* node);
 

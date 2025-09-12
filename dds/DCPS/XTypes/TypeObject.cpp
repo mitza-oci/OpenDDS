@@ -1714,6 +1714,43 @@ bool operator>>(Serializer& strm, XTypes::EquivalenceHash_forany& arr)
   return strm.read_octet_array(arr.out(), 14);
 }
 
+namespace {
+  template<typename T>
+  void serialized_size(const Encoding& encoding, size_t& size,
+                       const OPENDDS_OPTIONAL_NS::optional<T>& opt)
+  {
+    size += DCPS::boolean_cdr_size;
+    if (opt) {
+      serialized_size(encoding, size, opt.value());
+    }
+  }
+
+  template<typename T>
+  bool operator<<(Serializer& strm, const OPENDDS_OPTIONAL_NS::optional<T>& opt)
+  {
+    if (!(strm << ACE_OutputCDR::from_boolean(opt.has_value()))) {
+      return false;
+    }
+    return !opt.has_value() || strm << opt.value();
+  }
+
+  template<typename T>
+  bool operator>>(Serializer& strm, OPENDDS_OPTIONAL_NS::optional<T>& opt)
+  {
+    bool present;
+    if (!(strm >> ACE_InputCDR::to_boolean(present))) {
+      return false;
+    }
+    if (present) {
+      T value;
+      const bool status = strm >> value;
+      opt = OPENDDS_OPTIONAL_NS::optional<T>(value);
+      return status;
+    }
+
+    return true;
+  }
+}
 
 void serialized_size(const Encoding& encoding, size_t& size,
   const XTypes::CompleteTypeDetail& stru)

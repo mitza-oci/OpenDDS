@@ -11,6 +11,7 @@
 #include "be_extern.h"
 #include "dds_generator.h"
 
+#include "dds/DCPS/SafetyProfileStreams.h"
 #include "dds/DCPS/XTypes/TypeObject.h"
 
 #include <ast_generator.h>
@@ -1080,6 +1081,12 @@ OpenDDS::XTypes::MemberId BE_GlobalData::get_id(AST_Field* field)
   }
   be_util::misc_error_and_abort("Could not get member id for field");
   return OpenDDS::XTypes::MEMBER_ID_INVALID;
+}
+
+std::string BE_GlobalData::get_id_string(AST_Field* field)
+{
+  OpenDDS::XTypes::MemberId id = get_id(field);
+  return OpenDDS::DCPS::to_dds_string(id);
 }
 
 bool BE_GlobalData::dynamic_data_adapter(AST_Decl* node) const

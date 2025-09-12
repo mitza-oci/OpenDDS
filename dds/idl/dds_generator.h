@@ -819,14 +819,15 @@ struct Intro {
 typedef std::string (*CommonFn)(
   const std::string& indent, AST_Decl* node,
   const std::string& name, AST_Type* type,
-  const std::string& prefix, bool wrap_nested_key_only, Intro& intro,
-  const std::string&);
+  const std::string& prefix, bool wrap_nested_key_only, bool is_mutable,
+  Intro& intro, const std::string& struct_name);
 
 inline
 void generateCaseBody(
   CommonFn commonFn, CommonFn commonFn2,
   AST_UnionBranch* branch,
-  const char* statementPrefix, const char* namePrefix, const char* uni, bool generateBreaks, bool parens)
+  const char* statementPrefix, const char* namePrefix, const char* uni,
+  bool generateBreaks, bool parens, bool is_mutable)
 {
   using namespace AstTypeClassification;
   const BE_GlobalData::LanguageMapping lmap = be_global->language_mapping();
@@ -930,14 +931,15 @@ void generateCaseBody(
     if (commonFn2) {
       const OpenDDS::XTypes::MemberId id = be_global->get_id(branch);
       contents
-        << commonFn2(indent, branch, name + (parens ? "()" : ""), branch->field_type(), "uni", false, intro, "")
+        << commonFn2(indent, branch, name + (parens ? "()" : ""), branch->field_type(),
+                     "uni", false, is_mutable, intro, "")
         << indent << "if (!strm.write_parameter_id(" << id << ", size)) {\n"
         << indent << "  return false;\n"
         << indent << "}\n";
     }
     const std::string expr = commonFn(indent, branch,
       name + (parens ? "()" : ""), branch->field_type(),
-      std::string(namePrefix) + "uni", false, intro, uni);
+      std::string(namePrefix) + "uni", false, is_mutable, intro, uni);
     if (*statementPrefix) {
       contents <<
         indent << statementPrefix << " " << expr << ";\n" <<
@@ -951,13 +953,14 @@ void generateCaseBody(
 }
 
 inline
-bool generateSwitchBody(AST_Union*, CommonFn commonFn,
+bool generateSwitchBody(AST_Union* astUnion, CommonFn commonFn,
                         const std::vector<AST_UnionBranch*>& branches,
                         AST_Type* discriminator, const char* statementPrefix,
                         const char* namePrefix = "", const char* uni = "",
                         bool forceDisableDefault = false, bool parens = true,
                         bool breaks = true, CommonFn commonFn2 = 0)
 {
+  const bool is_mutable = be_global->extensibility(astUnion) == extensibilitykind_mutable;
   size_t n_labels = 0;
   bool has_default = false;
   for (size_t i = 0; i < branches.size(); ++i) {
@@ -976,7 +979,7 @@ bool generateSwitchBody(AST_Union*, CommonFn commonFn,
     }
     generateBranchLabels(branch, discriminator, n_labels, has_default);
     generateCaseBody(commonFn, commonFn2, branch, statementPrefix, namePrefix,
-                     uni, breaks, parens);
+                     uni, breaks, parens, is_mutable);
     be_global->impl_ <<
       "  }\n";
   }
@@ -1029,16 +1032,18 @@ bool generateSwitchForUnion(AST_Union* u, const char* switchExpr, CommonFn commo
         "  {\n";
     }
 
+    const bool is_mutable = be_global->extensibility(u) == extensibilitykind_mutable;
+
     if (true_branch || default_branch) {
       generateCaseBody(commonFn, commonFn2, true_branch ? true_branch : default_branch,
-                       statementPrefix, namePrefix, uni, false, parens);
+                       statementPrefix, namePrefix, uni, false, parens, is_mutable);
     }
 
     if (false_branch || (default_branch && true_branch)) {
       be_global->impl_ <<
         "  } else {\n";
       generateCaseBody(commonFn, commonFn2, false_branch ? false_branch : default_branch,
-                       statementPrefix, namePrefix, uni, false, parens);
+                       statementPrefix, namePrefix, uni, false, parens, is_mutable);
     }
 
     be_global->impl_ <<
@@ -1049,13 +1054,13 @@ bool generateSwitchForUnion(AST_Union* u, const char* switchExpr, CommonFn commo
   } else {
     be_global->impl_ <<
       "  switch (" << switchExpr << ") {\n";
-    bool b(generateSwitchBody(u, commonFn, branches, discriminator,
-                              statementPrefix, namePrefix, uni,
-                              forceDisableDefault, parens, breaks,
-                              commonFn2));
+    const bool ret = generateSwitchBody(u, commonFn, branches, discriminator,
+                                        statementPrefix, namePrefix, uni,
+                                        forceDisableDefault, parens, breaks,
+                                        commonFn2);
     be_global->impl_ <<
       "  }\n";
-    return b;
+    return ret;
   }
 }
 
@@ -1481,6 +1486,7 @@ struct RefWrapper {
   const bool cpp11_;
   AST_Type* const type_;
   const std::string type_name_;
+  const std::string member_name_;
   const std::string to_wrap_;
   const char* const shift_op_;
   const std::string fieldref_;
@@ -1494,11 +1500,12 @@ struct RefWrapper {
   std::string classic_array_copy_var_;
   AST_Typedef* typedef_node_;
 
-  RefWrapper(AST_Type* type, const std::string& type_name,
+  RefWrapper(AST_Type* type, const std::string& type_name, const std::string& member_name,
     const std::string& to_wrap, bool is_const = true)
     : cpp11_(be_global->language_mapping() == BE_GlobalData::LANGMAP_CXX11)
     , type_(type)
     , type_name_(type_name)
+    , member_name_(member_name)
     , to_wrap_(strip_shift_op(to_wrap))
     , shift_op_(get_shift_op(to_wrap))
     , is_const_(is_const)
@@ -1514,11 +1521,12 @@ struct RefWrapper {
   {
   }
 
-  RefWrapper(AST_Type* type, const std::string& type_name,
+  RefWrapper(AST_Type* type, const std::string& type_name, const std::string& member_name,
     const std::string& fieldref, const std::string& local, bool is_const = true)
     : cpp11_(be_global->language_mapping() == BE_GlobalData::LANGMAP_CXX11)
     , type_(type)
     , type_name_(type_name)
+    , member_name_(member_name)
     , shift_op_("")
     , fieldref_(strip_shift_op(fieldref))
     , local_(local)
@@ -1556,13 +1564,11 @@ struct RefWrapper {
       ref_ = to_wrap_;
     } else {
       ref_ = fieldref_;
-      if (local_.size()) {
+      if (!is_const_ && is_optional_ ) {
+        ref_ += member_name_;
+      } else if (local_.size()) {
         ref_ += '.' + local_;
       }
-    }
-
-    if (is_optional_) {
-      ref_ += ".value()";
     }
 
     if (forany && !dynamic_data_adapter_) {
@@ -1618,7 +1624,8 @@ struct RefWrapper {
       } else {
         ref_ = dds_generator::valid_var_name(ref_) + "_distinct_type";
         if (intro) {
-          intro->insert(wrapped_type_name_ + " " + ref_ + idt_arg + ";");
+          const std::string initializer = is_optional_ ? "(tmp_" + member_name_ + ")" : idt_arg;
+          intro->insert(wrapped_type_name_ + " " + ref_ + initializer + ";");
         }
       }
       by_ref = false;
@@ -1742,7 +1749,7 @@ inline
 std::string key_only_type_name(AST_Type* type, const std::string& type_name,
                                FieldFilter field_filter, bool writing)
 {
-  RefWrapper wrapper(type, type_name, "", writing ? true : false);
+  RefWrapper wrapper(type, type_name, "", "", writing ? true : false);
   wrapper.field_filter_ = field_filter;
   const bool has_wrapper = field_filter != FieldFilter_All;
   return (has_wrapper && !writing ? "const " : "") + wrapper.done().wrapped_type_name();

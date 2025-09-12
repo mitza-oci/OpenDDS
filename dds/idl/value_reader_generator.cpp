@@ -276,7 +276,7 @@ namespace {
                             const std::string& field_name,
                             AST_Type* type,
                             const std::string&,
-                            bool,
+                            bool, bool,
                             Intro&,
                             const std::string&)
   {
